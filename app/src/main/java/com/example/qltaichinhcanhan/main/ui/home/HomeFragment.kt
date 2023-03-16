@@ -201,11 +201,12 @@ class HomeFragment : BaseFragment() {
         val listIcon = IconCategoryData.iconList
         var listCa = arrayListOf<Category1>(
             Category1(0, "Thêm", 1, 1F, listIcon[0].name, 1, false),
+            Category1(0, "Thêm", 2, 1F, listIcon[0].name, 1, false),
             Category1(0, "category1", 1, 1F, listIcon[1].name, 1, false),
             Category1(0, "category2", 1, 1F, listIcon[2].name, 2, false),
-            Category1(0, "category3", 1, 1F, listIcon[3].name, 3, false),
-            Category1(0, "category4", 1, 1F, listIcon[4].name, 4, false),
-            Category1(0, "category5", 1, 1F, listIcon[4].name, 5, false),
+            Category1(0, "category3", 2, 1F, listIcon[3].name, 3, false),
+            Category1(0, "category4", 2, 1F, listIcon[4].name, 4, false),
+            Category1(0, "category5", 2, 1F, listIcon[4].name, 5, false),
         )
 
         var listTransaction = arrayListOf<Transaction>(

@@ -59,18 +59,18 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginLeft="10dp"
-                android:background="@drawable/color_icon_5"
+                android:background="@drawable/color_icon_1"
                 android:padding="10dp"
                 android:src="@drawable/ic_ms2" />
 
             <EditText
-                android:id="@+id/text_name_category"
+                android:id="@+id/edt_name_category"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:background="@drawable/rounded_edittext"
+                android:hint="@string/category_name"
                 android:padding="9dp"
-                android:text="@string/category"
                 android:textSize="16sp" />
 
         </LinearLayout>
@@ -92,10 +92,49 @@
                 android:id="@+id/txt_type_category"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
+                android:layout_marginHorizontal="10dp"
                 android:text="@string/expense"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
+
+            <LinearLayout
+                android:visibility="gone"
+                android:layout_marginHorizontal="10dp"
+                android:id="@+id/ll_type_category"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/img_expense"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/click_color_0" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:text="@string/expense"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:id="@+id/img_in_come"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/click_color_0" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="@string/in_come"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
         </LinearLayout>
 
         <LinearLayout
@@ -117,8 +156,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:background="@drawable/rounded_edittext"
+                android:hint="@string/text_planned"
                 android:padding="9dp"
-                android:text="@string/category"
                 android:textSize="16sp" />
         </LinearLayout>
 
@@ -169,12 +208,14 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <LinearLayout
+            android:id="@+id/ll_update_category"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:padding="10dp">
 
             <TextView
+                android:id="@+id/text_delete_category"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
                 android:layout_marginRight="5dp"
@@ -185,6 +226,7 @@
                 android:textColor="#FF0000" />
 
             <TextView
+                android:id="@+id/text_save_category"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
                 android:layout_marginLeft="5dp"
@@ -193,7 +235,17 @@
                 android:gravity="center"
                 android:text="Lưu"
                 android:textColor="#FFFFFF" />
-
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/text_create_category"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginHorizontal="60dp"
+            android:background="@drawable/button_save_category"
+            android:gravity="center"
+            android:text="@string/create_category"
+            android:textColor="#FFFFFF"
+            android:visibility="gone" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

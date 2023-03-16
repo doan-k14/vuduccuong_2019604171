@@ -64,5 +64,8 @@
     <string name="color">Màu sắc</string>
     <string name="delete_category">Xóa</string>
     <string name="icon_catalog">Icon Catalog</string>
+    <string name="category_name">Tên danh mục</string>
+    <string name="text_planned">Nhập hạn mức</string>
+    <string name="create_category">Tạo danh mục</string>
 
 </resources>

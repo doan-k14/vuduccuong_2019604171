@@ -23,4 +23,9 @@ class Category1Repository(private val categoryDao: Category1Dao) {
     fun getCategoryById(categoryId: Int): LiveData<Category1> {
         return categoryDao.getCategoryById(categoryId)
     }
+
+    fun getCategory1ListByType(type: Int): List<Category1> {
+        return categoryDao.getCategoryByType(type)
+    }
+
 }

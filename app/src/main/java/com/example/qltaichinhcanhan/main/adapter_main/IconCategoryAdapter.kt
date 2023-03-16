@@ -31,7 +31,13 @@ class IconCategoryAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val category = categories[position]
         holder.categoryName.text = category.name
-        val layoutManager = GridLayoutManager(context, 4, RecyclerView.VERTICAL, false)
+
+        val layoutManager =
+            object : GridLayoutManager(context, 4, RecyclerView.VERTICAL, false) {
+                override fun canScrollVertically(): Boolean {
+                    return false
+                }
+            }
         holder.iconList.layoutManager = layoutManager
         holder.iconList.adapter = IconAdapter(category.icons,iconClickListener)
     }

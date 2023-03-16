@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.qltaichinhcanhan.R
@@ -15,12 +16,14 @@ import com.example.qltaichinhcanhan.main.inf.IconClickListener
 import com.example.qltaichinhcanhan.main.m.DataColor
 import com.example.qltaichinhcanhan.main.m.Icon
 import com.example.qltaichinhcanhan.main.m.IconCategoryData
+import com.example.qltaichinhcanhan.main.rdb.vm_data.CategoryViewMode
 
 
-class IconCatalogFragment : Fragment(),IconClickListener {
+class IconCatalogFragment : Fragment(), IconClickListener {
 
     lateinit var binding: FragmentIconCatalogBinding
     private lateinit var iconCategoryAdapter: IconCategoryAdapter
+    lateinit var categoryViewMode: CategoryViewMode
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -31,10 +34,12 @@ class IconCatalogFragment : Fragment(),IconClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        categoryViewMode = ViewModelProvider(requireActivity())[CategoryViewMode::class.java]
 
         val layoutManager = LinearLayoutManager(activity)
         binding.rcvIcon.layoutManager = layoutManager
-        iconCategoryAdapter = IconCategoryAdapter(requireContext(),IconCategoryData.getIconCategoryList1(),this)
+        iconCategoryAdapter =
+            IconCategoryAdapter(requireContext(), IconCategoryData.getIconCategoryList1(), this)
         binding.rcvIcon.adapter = iconCategoryAdapter
 
         binding.btnNavigation.setOnClickListener {
@@ -45,6 +50,7 @@ class IconCatalogFragment : Fragment(),IconClickListener {
 
     override fun onIconClick(icon: Icon) {
         Toast.makeText(context, "Selected icon: ${icon.name}", Toast.LENGTH_SHORT).show()
+        categoryViewMode.icon.name = icon.name
     }
 
 

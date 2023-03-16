@@ -4,7 +4,7 @@ import android.content.Context
 import com.example.qltaichinhcanhan.R
 
 
-data class Icon(val id: Int, val name: String, val url: Int, val color: Int)
+data class Icon(val id: Int, var name: String, val url: Int, var color: Int)
 
 data class IconCategory(val id: Int, val name: String, val icons: List<Icon>)
 

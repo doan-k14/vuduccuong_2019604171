@@ -18,7 +18,8 @@ data class Color(
 
 data class BackgroundColorCircle(
     var id: Int,
-    var name: String,
+    var nameBackground: String,
+    var nameColor: String,
     var color: Int,
 )
 
@@ -45,14 +46,14 @@ object DataColor {
     )
 
     val listBackgroundColorCircle = arrayListOf<BackgroundColorCircle>(
-        BackgroundColorCircle(0, "color_icon_br", R.drawable.color_icon_br),
-        BackgroundColorCircle(1, "color_icon_1", R.drawable.color_icon_1),
-        BackgroundColorCircle(2, "color_icon_2", R.drawable.color_icon_2),
-        BackgroundColorCircle(3, "color_icon_3", R.drawable.color_icon_3),
-        BackgroundColorCircle(4, "color_icon_4", R.drawable.color_icon_4),
-        BackgroundColorCircle(5, "color_icon_5", R.drawable.color_icon_5),
-        BackgroundColorCircle(6, "color_icon_6", R.drawable.color_icon_6),
-        BackgroundColorCircle(7, "color_icon_7", R.drawable.color_icon_7)
+        BackgroundColorCircle(0, "color_icon_br", "bg_color", R.drawable.color_icon_br),
+        BackgroundColorCircle(1, "color_icon_1", "color1", R.drawable.color_icon_1),
+        BackgroundColorCircle(2, "color_icon_2", "color2", R.drawable.color_icon_2),
+        BackgroundColorCircle(3, "color_icon_3", "color3", R.drawable.color_icon_3),
+        BackgroundColorCircle(4, "color_icon_4", "color4", R.drawable.color_icon_4),
+        BackgroundColorCircle(5, "color_icon_5", "color5", R.drawable.color_icon_5),
+        BackgroundColorCircle(6, "color_icon_6", "color6", R.drawable.color_icon_6),
+        BackgroundColorCircle(7, "color_icon_7", "color7", R.drawable.color_icon_7)
     )
 
     fun showBackgroundColorCircle(context: Context, name: String): Int {
@@ -62,8 +63,29 @@ object DataColor {
 
     fun getIdColorById(id: Int): String? {
         val backgroundColorCircle = listBackgroundColorCircle.find { it.id == id }
-        return backgroundColorCircle?.name
+        return backgroundColorCircle?.nameBackground
     }
 
 
+    fun setCustomBackgroundColorCircleById(context: Context, id: Int): Int {
+        val backgroundColorCircle = listBackgroundColorCircle.find { it.id == id }
+        val resources = context.resources
+        return resources.getIdentifier(backgroundColorCircle!!.nameBackground,
+            "drawable",
+            context.packageName)
+    }
+    fun setColorById(id: Int): Int {
+        val color = listColor.find { it.id == id }
+        return color!!.color
+    }
+
+    val listIcon = IconCategoryData.iconList
+    var listCategory = arrayListOf<Category1>(
+        Category1(2, "category1", 1, 1F, listIcon[1].name, 1, false),
+        Category1(3, "category2", 1, 1F, listIcon[2].name, 1, false),
+        Category1(4, "category3", 1, 1F, listIcon[3].name, 1, false),
+        Category1(5, "category4", 1, 1F, listIcon[4].name, 1, false),
+        Category1(6, "category5", 1, 1F, listIcon[4].name, 1, false),
+        Category1(1, "Thêm", 1, 1F, listIcon[0].name, 2, false),
+        )
 }

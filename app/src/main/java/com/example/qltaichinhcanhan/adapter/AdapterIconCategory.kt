@@ -2,15 +2,17 @@ package com.example.qltaichinhcanhan.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import com.example.qltaichinhcanhan.R
 import com.example.qltaichinhcanhan.databinding.*
 import com.example.qltaichinhcanhan.main.m.Category1
+import com.example.qltaichinhcanhan.main.m.DataColor
 import com.example.qltaichinhcanhan.main.m.IconCategoryData
+import androidx.core.content.ContextCompat
 
 class AdapterIconCategory(
     var context: Context,
@@ -60,54 +62,18 @@ class AdapterIconCategory(
                     binding.imgIcon.setImageResource(imageResourceId)
 
                     binding.textNameCategory.text = item.nameCategory
-                    when (item.color) {
-                        0 -> {
-                            binding.imgIcon.setBackgroundResource(R.drawable.color_icon_br)
-                            binding.textNameCategory.setTextColor(ContextCompat.getColor(context,
-                                R.color.bg_color))
-                        }
-                        1 -> {
-                            binding.imgIcon.setBackgroundResource(R.drawable.color_icon_1)
-                            binding.textNameCategory.setTextColor(ContextCompat.getColor(context,
-                                R.color.color6))
-                        }
-                        2 -> {
-                            binding.imgIcon.setBackgroundResource(R.drawable.color_icon_2)
-                            binding.textNameCategory.setTextColor(ContextCompat.getColor(context,
-                                R.color.yellow))
-                        }
-                        3 -> {
-                            binding.imgIcon.setBackgroundResource(R.drawable.color_icon_3)
-                            binding.textNameCategory.setTextColor(ContextCompat.getColor(context,
-                                R.color.color3))
-                        }
-                        4 -> {
-                            binding.imgIcon.setBackgroundResource(R.drawable.color_icon_4)
-                            binding.textNameCategory.setTextColor(ContextCompat.getColor(context,
-                                R.color.color4))
-                        }
-                        5 -> {
-                            binding.imgIcon.setBackgroundResource(R.drawable.color_icon_5)
-                            binding.textNameCategory.setTextColor(ContextCompat.getColor(context,
-                                R.color.color5))
-                        }
-                        6 -> {
-                            binding.imgIcon.setBackgroundResource(R.drawable.color_icon_6)
-                            binding.textNameCategory.setTextColor(ContextCompat.getColor(context,
-                                R.color.color6))
-                        }
-                        7 -> {
-                            binding.imgIcon.setBackgroundResource(R.drawable.color_icon_7)
-                            binding.textNameCategory.setTextColor(ContextCompat.getColor(context,
-                                R.color.color7))
-                        }
-                    }
+                    binding.imgIcon.setBackgroundResource(DataColor.setCustomBackgroundColorCircleById(
+                        context,
+                        item.color!!))
+                    binding.textNameCategory.setTextColor(ContextCompat.getColor(binding.textNameCategory.context,
+                        DataColor.setColorById(item.color!!)))
 
                     binding.root.setOnClickListener {
                         clickItemSelect?.let {
                             it(item)
                         }
                     }
+
 
                 }
                 LayoutType.TYPE2 -> {
@@ -118,43 +84,19 @@ class AdapterIconCategory(
                     binding.imgIcon.setImageResource(imageResourceId)
 
                     if (item.select == true) {
-                        binding.imgIcon.setBackgroundResource(R.drawable.color_icon_7)
+                        binding.imgIcon.setBackgroundResource(DataColor.setCustomBackgroundColorCircleById(context, item.color!!))
                         binding.root.setBackgroundResource(R.drawable.custom_icon_while)
                     } else {
                         binding.imgIcon.setBackgroundResource(R.drawable.color_icon_br)
                         binding.root.background = null
                     }
-
-                    when (item.color) {
-                        0 -> {
-                            binding.imgIcon.setBackgroundResource(R.drawable.color_icon_br)
-                        }
-                        1 -> {
-                            binding.imgIcon.setBackgroundResource(R.drawable.color_icon_1)
-                        }
-                        2 -> {
-                            binding.imgIcon.setBackgroundResource(R.drawable.color_icon_2)
-                        }
-                        3 -> {
-                            binding.imgIcon.setBackgroundResource(R.drawable.color_icon_3)
-                        }
-                        4 -> {
-                            binding.imgIcon.setBackgroundResource(R.drawable.color_icon_4)
-                        }
-                        5 -> {
-                            binding.imgIcon.setBackgroundResource(R.drawable.color_icon_5)
-                        }
-                        6 -> {
-                            binding.imgIcon.setBackgroundResource(R.drawable.color_icon_6)
-                        }
-                        7 -> {
-                            binding.imgIcon.setBackgroundResource(R.drawable.color_icon_7)
-                        }
+                    if(item.id==1){
+                        binding.imgIcon.setBackgroundResource(R.drawable.color_icon_2)
                     }
 
                     binding.root.setOnClickListener {
                         clickItemSelect?.let {
-                            for (i in listCategory.indices) {
+                            for(i in 0 until listCategory.size-1){
                                 listCategory[i].select = (i == position)
                             }
                             notifyDataSetChanged()
@@ -167,21 +109,17 @@ class AdapterIconCategory(
     }
 
     override fun getItemCount(): Int {
-        return when (layoutType) {
-            LayoutType.TYPE1 -> {
-                listCategory.size
-            }
-            LayoutType.TYPE2 -> {
-                6
-            }
-            else -> {
-                listCategory.size
-            }
-        }
+        return listCategory.size
     }
 
     fun updateData(newList: ArrayList<Category1>) {
         this.listCategory = newList
+        reloadData()
+    }
+    fun updateColor(idColor:Int) {
+       for(i in this.listCategory){
+           i.color = idColor
+       }
         reloadData()
     }
 
@@ -196,6 +134,4 @@ class AdapterIconCategory(
     fun setClickItemSelect(listener: (Category1) -> Unit) {
         clickItemSelect = listener
     }
-
-
 }

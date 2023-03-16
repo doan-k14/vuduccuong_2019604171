@@ -2,11 +2,13 @@ package com.example.qltaichinhcanhan.main.rdb.vm_data
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
 import com.example.qltaichinhcanhan.database.CategoryDatabase
 import com.example.qltaichinhcanhan.database.CategoryRepository
 import com.example.qltaichinhcanhan.main.m.Account
 import com.example.qltaichinhcanhan.main.m.Category1
+import com.example.qltaichinhcanhan.main.m.Icon
 import com.example.qltaichinhcanhan.main.rdb.datab.AppDatabase
 import com.example.qltaichinhcanhan.main.rdb.reposi.Category1Repository
 import com.example.qltaichinhcanhan.mode.Category
@@ -55,7 +57,16 @@ class CategoryViewMode(application: Application) : AndroidViewModel(application)
         }
     }
 
+//    fun getCategory1ListByType(type: Int): LiveData<List<Category1>> {
+//        return repository.getCategory1ListByType(type) as LiveData<List<Category1>>
+//    }
+
+    fun getCategory1ListByType(type: Int): List<Category1> {
+        return repository.getCategory1ListByType(type)
+    }
+
     var category: Category1 = Category1()
+    var icon: Icon = Icon(0, "default", 0, 0)
 }
 
 

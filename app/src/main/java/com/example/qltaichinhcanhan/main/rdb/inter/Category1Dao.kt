@@ -24,4 +24,9 @@ interface Category1Dao {
 
     @Query("SELECT * FROM category1 WHERE id=:categoryId")
     fun getCategoryById(categoryId: Int): LiveData<Category1>
+
+    @Query("SELECT * FROM category1 WHERE type = :type ORDER BY id DESC")
+    fun getCategoryByType(type: Int): List<Category1>
+
+
 }

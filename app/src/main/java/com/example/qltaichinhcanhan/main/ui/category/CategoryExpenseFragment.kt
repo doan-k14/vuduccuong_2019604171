@@ -44,7 +44,7 @@ class CategoryExpenseFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         categoryViewModel = ViewModelProvider(requireActivity())[CategoryViewMode::class.java]
 
-        val list = categoryViewModel.readAllData
+        val list = categoryViewModel.getCategory1ListByType(2)
 
         adapterIconCategory = AdapterIconCategory(requireContext(), list as ArrayList<Category1>,
             AdapterIconCategory.LayoutType.TYPE1)
