@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/custom_button_o"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/txt_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="10/1/2023"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/txt_category"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=" - "
+            android:textColor="@color/white"
+            app:layout_constraintTop_toBottomOf="@id/txt_date" />
+
+
+        <TextView
+            android:id="@+id/txt_money"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="1000000"
+            android:textColor="@color/white"
+            app:layout_constraintTop_toBottomOf="@id/txt_category" />
+
+        <TextView
+            android:id="@+id/txt_note"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tiền đi chơi"
+            android:textColor="@color/white"
+            app:layout_constraintTop_toBottomOf="@id/txt_money" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center|bottom"
+    android:orientation="vertical"
+    tools:context=".fragment.on_boarding.OnBoarding1Fragment">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:layout_width="375dp"
+        android:layout_height="250dp"
+        android:src="@drawable/search" />
+
+    <TextView
+        android:id="@+id/txt_title_money"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_marginTop="40dp"
+        android:gravity="center|top"
+        android:paddingHorizontal="36dp"
+        android:text="@string/manager"
+        android:textColor="@color/black"
+        android:textSize="16sp" />
+</LinearLayout>

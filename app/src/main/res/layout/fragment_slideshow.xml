@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_color"
+    tools:context=".main.ui.slideshow.SlideshowFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_action_bar_top"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/blu_mani"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/btn_navigation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
+            android:padding="10dp"
+            android:src="@drawable/ic_menu"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/text_title_total"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="@string/menu_slideshow"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/btn_navigation"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/img_money_bag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
+            android:padding="10dp"
+            android:src="@drawable/ic_money_bag"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tab_layout"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/blu_mani"
+        app:layout_constraintTop_toBottomOf="@id/cl_action_bar_top"
+        app:tabGravity="fill"
+        app:tabIndicator="@drawable/tab_indicator_bottom"
+        app:tabIndicatorColor="@color/white"
+        app:tabIndicatorGravity="bottom"
+        app:tabIndicatorHeight="5dp"
+        app:tabInlineLabel="true"
+        app:tabMinWidth="20dp"
+        app:tabMode="fixed"
+        app:tabPaddingEnd="9dp"
+        app:tabPaddingStart="9dp"
+        app:tabSelectedTextColor="@color/white"
+        app:tabTextAppearance="@style/MyTabLayoutTextAppearance"
+        app:tabTextColor="@color/white_50" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@drawable/custom_layout_top"
+        app:layout_constraintTop_toBottomOf="@id/tab_layout" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tab_layout">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/custom_button_white"
+            android:orientation="vertical"
+            android:paddingVertical="10dp">
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tab_layout_chart"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:textAllCaps="true"
+                app:layout_constraintTop_toBottomOf="@id/cl_action_bar_top"
+                app:tabGravity="fill"
+                app:tabIndicator="@drawable/tab_indicator_chart"
+                app:tabIndicatorColor="@color/blu_mani"
+                app:tabIndicatorGravity="bottom"
+                app:tabInlineLabel="true"
+                app:tabMode="fixed"
+                app:tabPaddingTop="5dp"
+                app:tabRippleColor="@android:color/transparent"
+                app:tabSelectedTextColor="@color/blu_mani"
+                app:tabTextAppearance="@style/MyTabLayoutChart"
+                app:tabTextColor="@color/text_hide" />
+
+            <com.github.mikephil.charting.charts.BarChart
+                android:id="@+id/bar_chart"
+                android:layout_width="match_parent"
+                android:layout_height="220dp" />
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rcv_m"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

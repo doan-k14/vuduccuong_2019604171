@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/img_icon_color"
+        android:layout_width="29dp"
+        android:layout_height="29dp"
+        android:layout_marginLeft="7dp"
+        android:background="@drawable/click_color_1" />
+</LinearLayout>
