@@ -1,8 +1,12 @@
 package com.example.qltaichinhcanhan.main.base
 
+import android.app.Activity
 import android.content.Context
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import com.example.qltaichinhcanhan.main.inf.MyCallback
+import com.example.qltaichinhcanhan.main.m.Icon
 
 
 abstract class BaseFragment : Fragment() {
@@ -13,6 +17,11 @@ abstract class BaseFragment : Fragment() {
     open fun onCallback() {}
     open fun onCallbackCategoryToEditC() {}
 
+//    interface CallFragment {
+//        open fun onCallBackICon(icon: Icon) {}
+//    }
+
+    open fun onCallBackICon(icon: Icon) {}
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -32,6 +41,17 @@ abstract class BaseFragment : Fragment() {
         myCallback = null
     }
 
-    // viewmodel
+    open fun hideKeyboard(){
+        val inputMethodManager = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val currentFocusedView = requireActivity().currentFocus
+        currentFocusedView?.let {
+            inputMethodManager.hideSoftInputFromWindow(
+                currentFocusedView.windowToken, InputMethodManager.HIDE_NOT_ALWAYS
+            )
+        }
+    }
+
+
+
 
 }

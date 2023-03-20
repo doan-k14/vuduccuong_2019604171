@@ -7,15 +7,18 @@ import androidx.room.RoomDatabase
 import com.example.qltaichinhcanhan.database.CategoryDatabase
 import com.example.qltaichinhcanhan.main.m.Account
 import com.example.qltaichinhcanhan.main.m.Category1
+import com.example.qltaichinhcanhan.main.m.Country
 import com.example.qltaichinhcanhan.main.m.Transaction
 import com.example.qltaichinhcanhan.main.rdb.inter.AccountDao
 import com.example.qltaichinhcanhan.main.rdb.inter.Category1Dao
+import com.example.qltaichinhcanhan.main.rdb.inter.CountryDao
 import com.example.qltaichinhcanhan.main.rdb.inter.TransactionDao
 
-@Database(entities = [Account::class, Transaction::class, Category1::class], version = 1)
+@Database(entities = [Account::class, Transaction::class, Category1::class, Country::class],
+    version = 1)
 abstract class AppDatabase : RoomDatabase() {
     companion object {
-        private const val DATABASE_NAME = "app_database3.db"
+        private const val DATABASE_NAME = "app_database4.db"
         private var instance: AppDatabase? = null
 
         @Synchronized
@@ -36,5 +39,6 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun accountDao(): AccountDao
     abstract fun transactionDao(): TransactionDao
     abstract fun category1Dao(): Category1Dao
+    abstract fun countryDao(): CountryDao
 
 }

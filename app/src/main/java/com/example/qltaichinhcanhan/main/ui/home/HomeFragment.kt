@@ -145,7 +145,8 @@ class HomeFragment : BaseFragment() {
         })
 
 
-        adapterTransaction = AdapterTransaction(requireActivity(), transactionViewMode.readData1 as ArrayList)
+        adapterTransaction =
+            AdapterTransaction(requireActivity(), transactionViewMode.readData1 as ArrayList)
         binding.rcvM.adapter = adapterTransaction
         binding.rcvM.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
@@ -190,15 +191,16 @@ class HomeFragment : BaseFragment() {
 
     private fun createData() {
 
+        val listIcon = IconCategoryData.iconList
+
         var listAccount = arrayListOf<Account>(
-            Account(0, "account1", 1, 10000F, R.drawable.ic_add, 1, false),
-            Account(0, "account2", 2, 20000F, R.drawable.ic_ms2, 2, false),
-            Account(0, "account3", 3, 30000F, R.drawable.ic_ms3, 3, false),
-            Account(0, "account4", 1, 40000F, R.drawable.ic_sk, 4, false),
-            Account(0, "account5", 1, 50000F, R.drawable.ic_gt, 5, false),
+            Account(0, "account1", "VND", 10000F, "ic_account1", 1, false),
+            Account(0, "account2", "USD", 20000F, "ic_account2", 2, false),
+            Account(0, "account3", "VND", 30000F, "ic_account3", 3, false),
+            Account(0, "account4", "VND", 40000F, "ic_account4", 4, false),
+            Account(0, "account5", "VND", 50000F, "ic_account5", 5, false),
         )
 
-        val listIcon = IconCategoryData.iconList
         var listCa = arrayListOf<Category1>(
             Category1(0, "Thêm", 1, 1F, listIcon[0].name, 1, false),
             Category1(0, "Thêm", 2, 1F, listIcon[0].name, 1, false),
@@ -223,7 +225,7 @@ class HomeFragment : BaseFragment() {
         if (isFirstTime) {
             accountViewMode.addListAccount(listAccount)
             categoryViewMode.addListCategory(listCa)
-            transactionViewMode.addListTransaction(listTransaction)
+
             sharedPref.edit().putBoolean("isFirstTime", false).apply()
         }
 

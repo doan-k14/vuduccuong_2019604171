@@ -7,42 +7,72 @@
     android:background="@color/white"
     android:gravity="center"
     android:orientation="vertical"
+    android:padding="18dp"
     tools:context=".fragment.splash.CreatsMoneyFragment">
 
 
     <ImageView
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:src="@drawable/ic_logo" />
 
     <TextView
         android:id="@+id/txt_title_money"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="50dp"
         android:layout_marginTop="50dp"
         android:gravity="center"
         android:text="@string/gioi_thieu"
         android:textColor="@color/black"
         android:textSize="16sp" />
 
-    <EditText
-        android:id="@+id/edt_initial_balance"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="50dp"
         android:layout_marginTop="20dp"
-        android:gravity="center"
-        android:hint="Nhập số tiền VNĐ"
-        android:imeOptions="actionDone"
-        android:inputType="number" />
+        android:orientation="horizontal"
+        android:weightSum="10">
 
-    <Button
+        <EditText
+            android:id="@+id/edt_initial_balance"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+            android:layout_weight="7"
+            android:background="@drawable/rounded_edittext"
+            android:gravity="center"
+            android:hint="@string/vaule_total"
+            android:imeOptions="actionDone"
+            android:inputType="number"
+            android:maxLength="20"
+            android:maxLines="1"
+            android:paddingVertical="9dp"
+            android:paddingLeft="10dp"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/edt_type_account"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="3"
+            android:background="@drawable/rounded_edittext"
+            android:drawableRight="@drawable/ic_arrow_drop_down"
+            android:gravity="center"
+            android:padding="9dp"
+            android:text="VND"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <TextView
         android:id="@+id/start_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:backgroundTint="@color/main_color"
-        android:text="Bắt đầu" />
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/button_save_category"
+        android:gravity="center"
+        android:text="@string/start"
+        android:textColor="#FFFFFF" />
 
 </LinearLayout>

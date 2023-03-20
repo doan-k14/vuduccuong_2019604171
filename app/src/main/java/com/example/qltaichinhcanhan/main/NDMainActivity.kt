@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.qltaichinhcanhan.R
 import com.example.qltaichinhcanhan.databinding.ActivityNdmainBinding
 import com.example.qltaichinhcanhan.main.inf.MyCallback
+import com.example.qltaichinhcanhan.main.m.Icon
 
 class NDMainActivity : AppCompatActivity(), MyCallback {
 
@@ -50,7 +51,8 @@ class NDMainActivity : AppCompatActivity(), MyCallback {
     }
 
     override fun onCallbackCategoryToEditC() {
-//        val navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_ndmain)
-//        navController.navigate(R.id.action_nav_home_to_editCategoryFragment)
+    }
+
+    override fun onIconClick(icon: Icon) {
     }
 }

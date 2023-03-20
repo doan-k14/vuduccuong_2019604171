@@ -74,18 +74,92 @@ object DataColor {
             "drawable",
             context.packageName)
     }
+
     fun setColorById(id: Int): Int {
         val color = listColor.find { it.id == id }
         return color!!.color
     }
 
     val listIcon = IconCategoryData.iconList
-    var listCategory = arrayListOf<Category1>(
+    private var listCategory = arrayListOf<Category1>(
         Category1(2, "category1", 1, 1F, listIcon[1].name, 1, false),
         Category1(3, "category2", 1, 1F, listIcon[2].name, 1, false),
         Category1(4, "category3", 1, 1F, listIcon[3].name, 1, false),
         Category1(5, "category4", 1, 1F, listIcon[4].name, 1, false),
         Category1(6, "category5", 1, 1F, listIcon[4].name, 1, false),
         Category1(1, "Thêm", 1, 1F, listIcon[0].name, 2, false),
+    )
+
+    fun getListCategory(): ArrayList<Category1> {
+        return arrayListOf(
+            Category1(2, "category1", 1, 1F, listIcon[1].name, 1, false),
+            Category1(3, "category2", 1, 1F, listIcon[2].name, 1, false),
+            Category1(4, "category3", 1, 1F, listIcon[3].name, 1, false),
+            Category1(5, "category4", 1, 1F, listIcon[4].name, 1, false),
+            Category1(6, "category5", 1, 1F, listIcon[4].name, 1, false),
+            Category1(1, "Thêm", 1, 1F, listIcon[0].name, 2, false),
         )
+    }
+
+    fun getListCheckCircle(): ArrayList<ImageCheckCircle> {
+        return arrayListOf(
+            ImageCheckCircle(0, 1, R.drawable.click_color_1, true),
+            ImageCheckCircle(1, 2, R.drawable.click_color_2, false),
+            ImageCheckCircle(2, 3, R.drawable.click_color_3, false),
+            ImageCheckCircle(3, 4, R.drawable.click_color_4, false),
+            ImageCheckCircle(4, 5, R.drawable.click_color_5, false),
+            ImageCheckCircle(5, 6, R.drawable.click_color_6, false),
+            ImageCheckCircle(6, 7, R.drawable.click_color_7, false)
+        )
+    }
+
+
+    var listAccount = arrayListOf<Account>(
+        Account(0, "account1", "VND", 10000F, "ic_account1", 1, false),
+        Account(0, "account1", "VND", 10000F, "ic_account2", 1, false),
+        Account(0, "account1", "VND", 10000F, "ic_account3", 1, false),
+        Account(0, "account1", "VND", 10000F, "ic_account4", 1, false),
+        Account(0, "account1", "VND", 10000F, "ic_account5", 1, false),
+        Account(0, "account1", "VND", 10000F, "ic_account6", 1, false),
+        Account(0, "account1", "VND", 10000F, "ic_account7", 1, false),
+        Account(0, "account1", "VND", 10000F, "ic_account8", 1, false),
+        Account(0, "account1", "VND", 10000F, "ic_account9", 1, false),
+        Account(0, "account1", "VND", 10000F, "ic_account10", 1, false),
+        Account(0, "account1", "VND", 10000F, "ic_account11", 1, false),
+        Account(0, "account1", "VND", 10000F, "ic_account12", 1, false),
+        Account(0, "account1", "VND", 10000F, "ic_account13", 1, false),
+        Account(0, "account1", "VND", 10000F, "ic_account14", 1, false),
+        Account(0, "account1", "VND", 10000F, "ic_account15", 1, false),
+        Account(0, "account1", "VND", 10000F, "ic_account16", 1, false),
+        Account(0, "account1", "VND", 10000F, "ic_account17", 1, false),
+        Account(0, "account1", "VND", 10000F, "ic_account18", 1, false),
+        Account(0, "account1", "VND", 10000F, "ic_account19", 1, false),
+        Account(0, "account1", "VND", 10000F, "ic_account20", 1, false),
+        Account(0, "account1", "VND", 10000F, "ic_account21", 1, false),
+    )
+
+    fun getListIconAccount(): ArrayList<IconAccount> {
+        return arrayListOf(
+            IconAccount(1, "ic_account1", R.drawable.ic_account1, 1, false),
+            IconAccount(2, "ic_account2", R.drawable.ic_account2, 1, false),
+            IconAccount(5, "ic_account5", R.drawable.ic_account5, 1, false),
+            IconAccount(6, "ic_account6", R.drawable.ic_account6, 1, false),
+            IconAccount(7, "ic_account7", R.drawable.ic_account7, 1, false),
+            IconAccount(8, "ic_account8", R.drawable.ic_account8, 1, false),
+            IconAccount(9, "ic_account9", R.drawable.ic_account9, 1, false),
+            IconAccount(10, "ic_account10", R.drawable.ic_account10, 1, false),
+            IconAccount(11, "ic_account11", R.drawable.ic_account11, 1, false),
+            IconAccount(12, "ic_account12", R.drawable.ic_account12, 1, false),
+            IconAccount(13, "ic_account13", R.drawable.ic_account13, 1, false),
+            IconAccount(14, "ic_account14", R.drawable.ic_account14, 1, false),
+            IconAccount(15, "ic_account15", R.drawable.ic_account15, 1, false),
+            IconAccount(16, "ic_account16", R.drawable.ic_account16, 1, false),
+            IconAccount(17, "ic_account17", R.drawable.ic_account17, 1, false),
+            IconAccount(18, "ic_account18", R.drawable.ic_account18, 1, false),
+            IconAccount(19, "ic_account19", R.drawable.ic_account19, 1, false),
+            IconAccount(20, "ic_account20", R.drawable.ic_account20, 1, false),
+            IconAccount(21, "ic_account21", R.drawable.ic_account21, 1, false)
+        )
+    }
+
 }

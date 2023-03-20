@@ -1,59 +1,117 @@
 package com.example.qltaichinhcanhan.main.ui.category
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.qltaichinhcanhan.R
+import com.example.qltaichinhcanhan.adapter.AdapterIconCategory
 import com.example.qltaichinhcanhan.adapter.ViewPagerAdapter
 import com.example.qltaichinhcanhan.databinding.FragmentCategoryBinding
 import com.example.qltaichinhcanhan.main.base.BaseFragment
+import com.example.qltaichinhcanhan.main.m.Category1
+import com.example.qltaichinhcanhan.main.rdb.vm_data.CategoryViewMode
+import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
 
 class CategoryFragment : BaseFragment() {
     lateinit var binding: FragmentCategoryBinding
-    private lateinit var viewPagerAdapter: ViewPagerAdapter
+    private lateinit var adapterIconCategory: AdapterIconCategory
+    private lateinit var categoryViewModel: CategoryViewMode
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
         binding = FragmentCategoryBinding.inflate(inflater, container, false)
+        Log.e("test", "Category: onCreateView")
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        categoryViewModel = ViewModelProvider(requireActivity())[CategoryViewMode::class.java]
 
-        val listFragment =
-            listOf(CategoryExpenseFragment(), CategoryInComeFragment())
+        initView()
+
+        initEvent()
+
+    }
+
+    private fun initView() {
+        val tabChiPhi = binding.tabLayout.newTab().setText("Chi Phí")
+        val tabThuNhap = binding.tabLayout.newTab().setText("Thu Nhập")
+        binding.tabLayout.addTab(tabChiPhi)
+        binding.tabLayout.addTab(tabThuNhap)
+
+        var list = listOf<Category1>()
+
+        if (categoryViewModel.checkTypeCategory) {
+            binding.tabLayout.selectTab(binding.tabLayout.getTabAt(0))
+            list = categoryViewModel.getCategory1ListByType(1)
+        } else {
+            binding.tabLayout.selectTab(binding.tabLayout.getTabAt(1))
+            list = categoryViewModel.getCategory1ListByType(2)
+        }
 
 
-        viewPagerAdapter = ViewPagerAdapter(requireActivity(), listFragment)
+        adapterIconCategory = AdapterIconCategory(requireContext(), list as ArrayList<Category1>,
+            AdapterIconCategory.LayoutType.TYPE1)
+
+        binding.rcvIconCategory.adapter = adapterIconCategory
+
+        binding.rcvIconCategory.layoutManager =
+            GridLayoutManager(requireContext(), 3, RecyclerView.VERTICAL, false)
 
 
-        binding.viewPager.adapter = viewPagerAdapter
+    }
 
-
-        TabLayoutMediator(
-            binding.tabLayout,
-            binding.viewPager
-        ) { tab, position ->
-            when (position) {
-                0 -> tab.text = resources.getString(R.string.expense)
-                1 -> tab.text = resources.getString(R.string.in_come)
-            }
-        }.attach()
-
-        binding.viewPager.isUserInputEnabled = false
-
-
+    private fun initEvent() {
         binding.btnNavigation.setOnClickListener {
             myCallback?.onCallback()
         }
 
+        adapterIconCategory.setClickItemSelect {
+            findNavController().navigate(R.id.actionExpenseToEditCategoryFragment)
+            categoryViewModel.category = it
+        }
+
+        binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                val position = tab?.position
+                if (position == 0) {
+                    val list = categoryViewModel.getCategory1ListByType(1)
+                    adapterIconCategory.updateData(list as ArrayList<Category1> /* = java.util.ArrayList<com.example.qltaichinhcanhan.main.m.Category1> */)
+                    categoryViewModel.checkTypeCategory = true
+                } else if (position == 1) {
+                    val list = categoryViewModel.getCategory1ListByType(2)
+                    adapterIconCategory.updateData(list as ArrayList<Category1> /* = java.util.ArrayList<com.example.qltaichinhcanhan.main.m.Category1> */)
+                    categoryViewModel.checkTypeCategory = false
+                }
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+                // Xử lý khi một tab bị bỏ chọn
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+                // Xử lý khi một tab đã được chọn lại
+            }
+        })
+//https://viblo.asia/p/navigation-architecture-component-phan-i-gAm5yX9Vldb
     }
 
+    override fun onDestroy() {
+        Log.e("test", "Category: onDestroy")
+        categoryViewModel.resetDataCategory()
+        super.onDestroy()
+    }
 
 }

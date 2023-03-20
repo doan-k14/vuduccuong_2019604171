@@ -16,7 +16,10 @@ interface AccountDao {
     suspend fun update(account: Account)
 
     @Query("SELECT * FROM account")
-    fun getAllAccounts(): LiveData<List<Account>>
+    fun getAllAccountsLive(): LiveData<List<Account>>
+
+    @Query("SELECT * FROM account")
+    fun getAllAccounts(): List<Account>
 
     @Query("SELECT * FROM account WHERE id=:accountId")
     fun getAccountById(accountId: Int): LiveData<Account>

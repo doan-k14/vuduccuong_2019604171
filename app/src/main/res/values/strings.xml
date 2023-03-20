@@ -67,5 +67,10 @@
     <string name="category_name">Tên danh mục</string>
     <string name="text_planned">Nhập hạn mức</string>
     <string name="create_category">Tạo danh mục</string>
+    <string name="acounts_name">Tên account</string>
+    <string name="vaule_total">Số tiền của bạn</string>
+    <string name="menu_currency">Tỉ giá</string>
+    <string name="text_sreach">Tìm kiếm</string>
+    <string name="start">Bắt đầu</string>
 
 </resources>

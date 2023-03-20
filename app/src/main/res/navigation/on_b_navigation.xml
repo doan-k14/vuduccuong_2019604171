@@ -79,5 +79,14 @@
         android:id="@+id/creatsMoneyFragment"
         android:name="com.example.qltaichinhcanhan.fragment.splash.CreatsMoneyFragment"
         android:label="fragment_creats_money"
-        tools:layout="@layout/fragment_creats_money" />
+        tools:layout="@layout/fragment_creats_money" >
+        <action
+            android:id="@+id/action_creatsMoneyFragment_to_currencyFragment"
+            app:destination="@id/currencyFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/currencyFragment"
+        android:name="com.example.qltaichinhcanhan.main.ui.currency.CurrencyFragment"
+        android:label="fragment_currency"
+        tools:layout="@layout/fragment_currency" />
 </navigation>

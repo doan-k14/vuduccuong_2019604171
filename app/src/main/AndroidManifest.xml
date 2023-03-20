@@ -17,15 +17,12 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:launchMode="singleTop"
             android:name=".main.NDMainActivity"
             android:exported="true"
             android:label="@string/title_activity_ndmain"
             android:theme="@style/Theme.QLTaiChinhCaNhan.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
 
@@ -33,7 +30,11 @@
             android:name=".fragment.on_boarding.OnBoardingScreenActivity"
             android:exported="true"
             android:theme="@style/SplashTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".MainActivity"

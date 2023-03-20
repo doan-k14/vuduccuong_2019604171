@@ -24,8 +24,8 @@ class IconAdapter(private val icons: List<Icon>, private val iconClickListener: 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val icon = icons[position]
-        holder.iconImage.setImageResource(icon.url)
-        holder.iconImage.setColorFilter(icon.color)
+        holder.iconImage.setImageResource(icon.url!!)
+        holder.iconImage.setColorFilter(icon.color!!)
 
         holder.itemView.setOnClickListener {
             iconClickListener.onIconClick(icon)

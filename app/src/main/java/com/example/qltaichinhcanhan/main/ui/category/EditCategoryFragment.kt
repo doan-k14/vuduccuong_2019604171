@@ -20,6 +20,8 @@ import com.example.qltaichinhcanhan.R
 import com.example.qltaichinhcanhan.adapter.AdapterIConColor
 import com.example.qltaichinhcanhan.adapter.AdapterIconCategory
 import com.example.qltaichinhcanhan.databinding.FragmentEditCategoryBinding
+import com.example.qltaichinhcanhan.main.base.BaseFragment
+import com.example.qltaichinhcanhan.main.inf.IconClickListener
 import com.example.qltaichinhcanhan.main.m.Category1
 import com.example.qltaichinhcanhan.main.m.DataColor
 import com.example.qltaichinhcanhan.main.m.Icon
@@ -28,17 +30,18 @@ import com.example.qltaichinhcanhan.main.rdb.vm_data.CategoryViewMode
 import com.example.qltaichinhcanhan.mode.Category
 
 
-class EditCategoryFragment : Fragment() {
+class EditCategoryFragment : BaseFragment() {
     lateinit var binding: FragmentEditCategoryBinding
     private lateinit var adapterIconCategory: AdapterIconCategory
     private lateinit var adapterIConColor: AdapterIConColor
 
     private lateinit var categoryViewModel: CategoryViewMode
-    var category1 = Category1()
+    var category = Category1()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
+        Log.e("test", "edt: onCreateView")
         binding = FragmentEditCategoryBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -47,38 +50,26 @@ class EditCategoryFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         categoryViewModel = ViewModelProvider(requireActivity())[CategoryViewMode::class.java]
+        initView()
+        initEvent()
+    }
 
-        val selectedCategory = categoryViewModel.category
-        // checklaij vi dang co 2 id = 1,2
-        if (selectedCategory.id != 2) {
-            binding.imgIconCategory.setImageResource(IconCategoryData.showICon(requireContext(),
-                selectedCategory.icon!!))
-            binding.edtNameCategory.setText(selectedCategory.nameCategory)
-            binding.edtPlannedOutlay.setText(selectedCategory.lave.toString())
-            categoryViewModel.icon.name = selectedCategory.icon!!
-            binding.llUpdateCategory.visibility = View.VISIBLE
-            binding.txtTypeCategory.visibility = View.VISIBLE
-            binding.textCreateCategory.visibility = View.GONE
-            binding.llTypeCategory.visibility = View.GONE
-        } else {
-            binding.textTitleTotal.setText(R.string.create_category)
-            binding.llUpdateCategory.visibility = View.GONE
-            binding.txtTypeCategory.visibility = View.GONE
-            binding.textCreateCategory.visibility = View.VISIBLE
-            binding.llTypeCategory.visibility = View.VISIBLE
+    private fun initView() {
+        category = categoryViewModel.category
+        categoryViewModel.icon.name = category.icon!!
+        categoryViewModel.icon.color = category.color!!
+        if (categoryViewModel.nameIcon != null) {
+            categoryViewModel.icon.name = categoryViewModel.nameIcon
+            category.icon = categoryViewModel.nameIcon
         }
 
+        checkTypeCategory(category)
 
-        binding.btnNavigation.setOnClickListener {
-            findNavController().popBackStack()
-        }
+        val list = DataColor.getListCategory()
+        val listColor = DataColor.getListCheckCircle()
 
-        val list = DataColor.listCategory
-
-        adapterIconCategory = AdapterIconCategory(requireContext(),
-            list,
-            AdapterIconCategory.LayoutType.TYPE2)
-
+        adapterIconCategory =
+            AdapterIconCategory(requireContext(), list, AdapterIconCategory.LayoutType.TYPE2)
         binding.rcvIconCategory.adapter = adapterIconCategory
 
         val myLinearLayoutManager1 =
@@ -89,6 +80,17 @@ class EditCategoryFragment : Fragment() {
             }
         binding.rcvIconCategory.layoutManager = myLinearLayoutManager1
 
+        adapterIConColor = AdapterIConColor(requireContext(), listColor)
+        binding.rcvColor.adapter = adapterIConColor
+        binding.rcvColor.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+
+    }
+
+    private fun initEvent() {
+        binding.btnNavigation.setOnClickListener {
+            findNavController().popBackStack()
+        }
 
         adapterIconCategory.setClickItemSelect {
             if (it.id == 1) {
@@ -102,12 +104,6 @@ class EditCategoryFragment : Fragment() {
         }
 
 
-        adapterIConColor =
-            AdapterIConColor(requireContext(), DataColor.listImageCheckCircle)
-        binding.rcvColor.adapter = adapterIConColor
-        binding.rcvColor.layoutManager =
-            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-
         adapterIConColor.setClickItemSelect {
             val id = DataColor.getIdColorById(it.idColor)
             binding.imgIconCategory.setBackgroundResource(DataColor.showBackgroundColorCircle(
@@ -118,35 +114,57 @@ class EditCategoryFragment : Fragment() {
         }
 
         binding.textSaveCategory.setOnClickListener {
-            if (checkData("default")) {
-                categoryViewModel.updateCategory(category1)
-                findNavController().popBackStack()
-                clearData()
-            }
+            checkData(1)
+            categoryViewModel.updateCategory(category)
+            findNavController().popBackStack()
         }
 
         binding.textCreateCategory.setOnClickListener {
-            if (checkData("Thêm")) {
-                categoryViewModel.addCategory(category1)
-                findNavController().popBackStack()
-                clearData()
-            }
+            checkData(2)
+            categoryViewModel.addCategory(category)
+            findNavController().popBackStack()
         }
 
         binding.textDeleteCategory.setOnClickListener {
-            createDialogDelete(Gravity.CENTER, category1)
+            createDialogDelete(Gravity.CENTER, category)
         }
+    }
 
-
+    private fun checkTypeCategory(category: Category1) {
+        binding.imgIconCategory.setImageResource(IconCategoryData.showICon(requireContext(),
+            category.icon!!))
+        if (category.id == 1 || category.id == 2) {
+            binding.textTitleTotal.setText(R.string.create_category)
+            binding.llUpdateCategory.visibility = View.GONE
+            binding.txtTypeCategory.visibility = View.GONE
+            binding.textCreateCategory.visibility = View.VISIBLE
+            binding.llTypeCategory.visibility = View.VISIBLE
+            if (category.type!! == 1) {
+                binding.imgExpense.isActivated = true
+                binding.imgInCome.isActivated = false
+            } else {
+                binding.imgExpense.isActivated = false
+                binding.imgInCome.isActivated = true
+            }
+        } else {
+            binding.edtNameCategory.setText(category.nameCategory)
+            binding.edtPlannedOutlay.setText(category.lave.toString())
+            categoryViewModel.icon.name = category.icon!!
+            binding.llUpdateCategory.visibility = View.VISIBLE
+            binding.txtTypeCategory.visibility = View.VISIBLE
+            binding.textCreateCategory.visibility = View.GONE
+            binding.llTypeCategory.visibility = View.GONE
+            binding.txtTypeCategory.text = getTypeCategory(category.type!!)
+        }
     }
 
     private fun clearData() {
         categoryViewModel.category = Category1()
-        categoryViewModel.icon = Icon(0, "default", 0, 0)
+        categoryViewModel.icon = Icon()
+        categoryViewModel.nameIcon = null
     }
 
-    private fun checkData(name: String): Boolean {
-        category1 = categoryViewModel.category
+    private fun checkData(typeCick: Int): Boolean {
         val textName = binding.edtNameCategory.text
         if (textName.isEmpty()) {
             Toast.makeText(requireContext(),
@@ -154,22 +172,23 @@ class EditCategoryFragment : Fragment() {
                 Toast.LENGTH_SHORT).show()
             return false
         }
-        category1.nameCategory = textName.toString()
+        category.nameCategory = textName.toString()
 
         var textPlannedOutlay = binding.edtPlannedOutlay.text
-
-        if (categoryViewModel.icon.name == name) {
-            Toast.makeText(requireContext(),
-                "Tên danh mục không được bỏ trống!",
-                Toast.LENGTH_SHORT).show()
-            return false
+        if (typeCick == 2) {
+            category.id = 0
+            if (categoryViewModel.icon.name == "ic_add") {
+                Toast.makeText(requireContext(),
+                    "Tên danh mục không được bỏ trống!",
+                    Toast.LENGTH_SHORT).show()
+                return false
+            }
         }
-        category1.icon = categoryViewModel.icon.name
-        category1.color = categoryViewModel.icon.color
-        // sau khi lưu hoặc xóa thì clear data categpory, icon
+
+        category.icon = categoryViewModel.icon.name
+        category.color = categoryViewModel.icon.color
         return true
     }
-
 
     private fun createDialogDelete(gravity: Int, category: Category1) {
         val dialog = Dialog(requireActivity())
@@ -205,4 +224,31 @@ class EditCategoryFragment : Fragment() {
             dialog.dismiss()
         }
     }
+
+    private fun getTypeCategory(type: Int): String {
+        if (type == 1) {
+            return "Chi phí"
+        } else if (type == 2) {
+            return "Thu nhập"
+        }
+        return ""
+    }
+
+    override fun onCallBackICon(icon: Icon) {
+        Log.e("test", "Edt: onCallBackICon ${icon.name}")
+        categoryViewModel.icon.name = icon.name
+        super.onCallBackICon(icon)
+    }
+
+    override fun onDestroyView() {
+        Log.e("test", "Edt: onDestroyView")
+        super.onDestroyView()
+    }
+
+    override fun onDestroy() {
+        Log.e("test", "Edt: onDestroy")
+        clearData()
+        super.onDestroy()
+    }
+
 }

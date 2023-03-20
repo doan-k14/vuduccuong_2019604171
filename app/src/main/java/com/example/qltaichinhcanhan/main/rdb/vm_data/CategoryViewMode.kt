@@ -66,7 +66,17 @@ class CategoryViewMode(application: Application) : AndroidViewModel(application)
     }
 
     var category: Category1 = Category1()
-    var icon: Icon = Icon(0, "default", 0, 0)
+    var icon: Icon = Icon()
+    var nameIcon: String?=null
+    var checkTypeCategory = true
+
+    fun resetDataCategory(){
+        category = Category1()
+        checkTypeCategory = true
+        icon = Icon()
+        nameIcon = null
+    }
+
 }
 
 

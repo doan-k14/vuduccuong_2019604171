@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.qltaichinhcanhan.R
 import com.example.qltaichinhcanhan.databinding.FragmentIconCatalogBinding
 import com.example.qltaichinhcanhan.main.adapter_main.IconCategoryAdapter
+import com.example.qltaichinhcanhan.main.base.BaseFragment
 import com.example.qltaichinhcanhan.main.inf.IconClickListener
 import com.example.qltaichinhcanhan.main.m.DataColor
 import com.example.qltaichinhcanhan.main.m.Icon
@@ -19,7 +20,7 @@ import com.example.qltaichinhcanhan.main.m.IconCategoryData
 import com.example.qltaichinhcanhan.main.rdb.vm_data.CategoryViewMode
 
 
-class IconCatalogFragment : Fragment(), IconClickListener {
+class IconCatalogFragment : BaseFragment(), IconClickListener {
 
     lateinit var binding: FragmentIconCatalogBinding
     private lateinit var iconCategoryAdapter: IconCategoryAdapter
@@ -43,15 +44,15 @@ class IconCatalogFragment : Fragment(), IconClickListener {
         binding.rcvIcon.adapter = iconCategoryAdapter
 
         binding.btnNavigation.setOnClickListener {
-            findNavController().popBackStack("C", true)
+            findNavController().popBackStack()
         }
 
     }
 
     override fun onIconClick(icon: Icon) {
         Toast.makeText(context, "Selected icon: ${icon.name}", Toast.LENGTH_SHORT).show()
-        categoryViewMode.icon.name = icon.name
+        categoryViewMode.nameIcon = icon.name
+        findNavController().popBackStack()
     }
-
 
 }

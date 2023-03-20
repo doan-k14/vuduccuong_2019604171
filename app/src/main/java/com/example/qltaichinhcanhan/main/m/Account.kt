@@ -15,9 +15,9 @@ data class Account(
     val id: Int = 0,
     @ColumnInfo(name = "nameAccount")
     var nameAccount: String? = null,
-    var typeMoney: Int? = null, // 1: VND, USD
+    var typeMoney: String? = null, // 1: VND, USD
     var amountAccount: Float? = null,
-    var icon: Int? = null,
+    var icon: String? = null,
     var color: Int? = null,
     var select: Boolean? = null,
 ): Parcelable

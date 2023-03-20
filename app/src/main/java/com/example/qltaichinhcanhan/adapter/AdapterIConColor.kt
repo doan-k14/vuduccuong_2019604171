@@ -54,6 +54,13 @@ class AdapterIConColor(
         reloadData()
     }
 
+    fun updateSelectColor(idColor: Int) {
+        for (i in listIConColor) {
+            i.select = (i.idColor == idColor)
+        }
+        reloadData()
+    }
+
     @SuppressLint("NotifyDataSetChanged")
     fun reloadData() {
         notifyDataSetChanged()

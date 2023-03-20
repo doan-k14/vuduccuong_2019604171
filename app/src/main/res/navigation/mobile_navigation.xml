@@ -15,7 +15,11 @@
         android:id="@+id/nav_accounts"
         android:name="com.example.qltaichinhcanhan.main.ui.accounts.AccountsFragment"
         android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_accounts" />
+        tools:layout="@layout/fragment_accounts">
+        <action
+            android:id="@+id/action_nav_accounts_to_editAccountFragment"
+            app:destination="@id/editAccountFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_slideshow"
@@ -30,34 +34,35 @@
         <action
             android:id="@+id/actionExpenseToEditCategoryFragment"
             app:destination="@id/editCategoryFragment" />
-        <fragment
-            android:id="@+id/categoryExpenseFragment"
-            android:name="com.example.qltaichinhcanhan.main.ui.category.CategoryExpenseFragment"
-            android:label="fragment_category_expense"
-            tools:layout="@layout/fragment_category_expense" />
-
-        <fragment
-            android:id="@+id/categoryInComeFragment"
-            android:name="com.example.qltaichinhcanhan.main.ui.category.CategoryInComeFragment"
-            android:label="fragment_category_in_come"
-            tools:layout="@layout/fragment_category_in_come" />
-
     </fragment>
 
     <fragment
-        android:tag="B"
         android:id="@+id/editCategoryFragment"
         android:name="com.example.qltaichinhcanhan.main.ui.category.EditCategoryFragment"
         android:label="fragment_edit_category"
-        tools:layout="@layout/fragment_edit_category" >
+        tools:layout="@layout/fragment_edit_category">
         <action
             android:id="@+id/action_editCategoryFragment_to_iconCatalogFragment"
             app:destination="@id/iconCatalogFragment" />
     </fragment>
     <fragment
-        android:tag="C"
         android:id="@+id/iconCatalogFragment"
         android:name="com.example.qltaichinhcanhan.main.ui.category.IconCatalogFragment"
         android:label="fragment_icon_catalog"
+        android:tag="C"
         tools:layout="@layout/fragment_icon_catalog" />
+    <fragment
+        android:id="@+id/editAccountFragment"
+        android:name="com.example.qltaichinhcanhan.main.ui.accounts.EditAccountFragment"
+        android:label="fragment_edit_account"
+        tools:layout="@layout/fragment_edit_account" >
+        <action
+            android:id="@+id/action_editAccountFragment_to_nav_currency"
+            app:destination="@id/nav_currency" />
+    </fragment>
+    <fragment
+        android:id="@+id/nav_currency"
+        android:name="com.example.qltaichinhcanhan.main.ui.currency.CurrencyFragment"
+        android:label="fragment_currency"
+        tools:layout="@layout/fragment_currency" />
 </navigation>

@@ -7,6 +7,8 @@ import com.example.qltaichinhcanhan.database.CategoryDatabase
 import com.example.qltaichinhcanhan.database.CategoryRepository
 import com.example.qltaichinhcanhan.main.m.Account
 import com.example.qltaichinhcanhan.main.m.Category1
+import com.example.qltaichinhcanhan.main.m.Icon
+import com.example.qltaichinhcanhan.main.m.IconAccount
 import com.example.qltaichinhcanhan.main.rdb.datab.AppDatabase
 import com.example.qltaichinhcanhan.main.rdb.reposi.AccountRepository
 import com.example.qltaichinhcanhan.main.rdb.reposi.Category1Repository
@@ -20,6 +22,7 @@ class AccountViewMode(application: Application) : AndroidViewModel(application) 
     private var accountDao = db.accountDao()
 
     private val repository: AccountRepository = AccountRepository(accountDao)
+    val readAllDataLive = repository.allAccountsLive
     val readAllData = repository.allAccounts
 
     fun addAccount(account: Account) {
@@ -53,6 +56,18 @@ class AccountViewMode(application: Application) : AndroidViewModel(application) 
         viewModelScope.launch(Dispatchers.IO) {
             repository.getAccountById(it)
         }
+    }
+
+    var account: Account = Account()
+    var icon: IconAccount = IconAccount()
+    var nameIcon: String?=null
+    var checkTypeCategory = true
+
+    fun resetDataAccount(){
+        account = Account()
+        checkTypeCategory = true
+        icon = IconAccount()
+        nameIcon = null
     }
 }
 

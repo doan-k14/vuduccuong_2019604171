@@ -5,7 +5,8 @@ import com.example.qltaichinhcanhan.main.m.Account
 import com.example.qltaichinhcanhan.main.rdb.inter.AccountDao
 
 class AccountRepository(private val accountDao: AccountDao) {
-    val allAccounts: LiveData<List<Account>> = accountDao.getAllAccounts()
+    val allAccountsLive: LiveData<List<Account>> = accountDao.getAllAccountsLive()
+    val allAccounts: List<Account> = accountDao.getAllAccounts()
 
     suspend fun insert(account: Account) {
         accountDao.insert(account)
