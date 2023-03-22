@@ -5,12 +5,14 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.qltaichinhcanhan.R
 import com.example.qltaichinhcanhan.databinding.*
 import com.example.qltaichinhcanhan.main.m.*
 
 class AdapterCountry(
     var context: Context,
     var listCategory: ArrayList<Country>,
+    var nameCountry: String? = null,
 ) : RecyclerView.Adapter<AdapterCountry.ViewHolder>() {
 
     inner class ViewHolder(binding: ItemTransactionBinding) :
@@ -35,9 +37,14 @@ class AdapterCountry(
 //            val color = DataColor.getIdColorById(item.color!!)
 //            binding.imgCategory.setBackgroundResource(DataColor.showBackgroundColorCircle(context,
 //                color.toString()))
+            if (item.select == true) {
+                binding.root.setBackgroundResource(R.drawable.button_delete_category)
+            }else{
+                binding.root.setBackgroundResource(R.drawable.custom_button_white)
+            }
 
             binding.textNameCategory.text = item.name
-            binding.textValueCategory.text = item.currencyCode
+            binding.textValueCategory.text = item.exchangeRate.toString()+" - " +item.currencyCode
 
 
             binding.root.setOnClickListener {
@@ -63,7 +70,6 @@ class AdapterCountry(
         this.listCategory = newList
         reloadData()
     }
-
 
     @SuppressLint("NotifyDataSetChanged")
     fun reloadData() {

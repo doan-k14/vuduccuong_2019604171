@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
@@ -46,17 +47,17 @@ class HomeFragment : BaseFragment() {
         savedInstanceState: Bundle?,
     ): View {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
-
-        initView()
         return binding.root
     }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.imgMenu.setOnClickListener {
-            myCallback?.onCallback()
-        }
+
+        initView()
+        initEvent()
+
+
 
         val tabLayout = binding.tabLayout
         val tabChiPhi = tabLayout.newTab().setText("Chi Phí")
@@ -181,6 +182,16 @@ class HomeFragment : BaseFragment() {
 
     }
 
+    private fun initEvent() {
+        binding.imgMenu.setOnClickListener {
+            myCallback?.onCallback()
+        }
+
+        binding.imgAdd1.setOnClickListener {
+            findNavController().navigate(R.id.action_nav_home_to_addTransactionFragment)
+        }
+    }
+
 
     private fun initView() {
         accountViewMode = ViewModelProvider(requireActivity())[AccountViewMode::class.java]
@@ -193,14 +204,6 @@ class HomeFragment : BaseFragment() {
 
         val listIcon = IconCategoryData.iconList
 
-        var listAccount = arrayListOf<Account>(
-            Account(0, "account1", "VND", 10000F, "ic_account1", 1, false),
-            Account(0, "account2", "USD", 20000F, "ic_account2", 2, false),
-            Account(0, "account3", "VND", 30000F, "ic_account3", 3, false),
-            Account(0, "account4", "VND", 40000F, "ic_account4", 4, false),
-            Account(0, "account5", "VND", 50000F, "ic_account5", 5, false),
-        )
-
         var listCa = arrayListOf<Category1>(
             Category1(0, "Thêm", 1, 1F, listIcon[0].name, 1, false),
             Category1(0, "Thêm", 2, 1F, listIcon[0].name, 1, false),
@@ -211,24 +214,12 @@ class HomeFragment : BaseFragment() {
             Category1(0, "category5", 2, 1F, listIcon[4].name, 5, false),
         )
 
-        var listTransaction = arrayListOf<Transaction>(
-            Transaction(0, "transaction 1", 11111F, 1, "ffff", 1, 1),
-            Transaction(0, "transaction 2", 11111F, 1, "ffff", 1, 1),
-            Transaction(0, "transaction 3", 11111F, 1, "ffff", 1, 1),
-            Transaction(0, "transaction 4", 11111F, 1, "ffff", 3, 3),
-            Transaction(0, "transaction 5", 11111F, 1, "ffff", 3, 3),
-        )
-
-
         val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
         val isFirstTime = sharedPref.getBoolean("isFirstTime", true)
         if (isFirstTime) {
-            accountViewMode.addListAccount(listAccount)
             categoryViewMode.addListCategory(listCa)
-
             sharedPref.edit().putBoolean("isFirstTime", false).apply()
         }
-
     }
 
     fun pieChart(data: List<DataChart>, pieChart: PieChart, type: String) {

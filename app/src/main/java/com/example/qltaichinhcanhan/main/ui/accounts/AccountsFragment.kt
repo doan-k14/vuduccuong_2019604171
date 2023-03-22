@@ -19,9 +19,7 @@ import com.example.qltaichinhcanhan.main.m.Account
 import com.example.qltaichinhcanhan.main.rdb.vm_data.AccountViewMode
 import com.example.qltaichinhcanhan.main.retrofit.ExchangeRateApi
 import com.github.aachartmodel.aainfographics.aachartcreator.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -43,6 +41,7 @@ class AccountsFragment : BaseFragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        Log.e("data", "AccountsFragment: onViewCreated")
         super.onViewCreated(view, savedInstanceState)
         accountViewMode = ViewModelProvider(requireActivity())[AccountViewMode::class.java]
 
@@ -55,19 +54,73 @@ class AccountsFragment : BaseFragment() {
     }
 
     private fun initView() {
-        val list = accountViewMode.readAllData
-        adapterAccount = AdapterAccount(requireContext(), list as ArrayList<Account>)
 
+        adapterAccount = AdapterAccount(requireContext(), arrayListOf<Account>(),AdapterAccount.LayoutType.TYPE1)
         binding.rcvCategory.adapter = adapterAccount
-
         binding.rcvCategory.layoutManager =
             GridLayoutManager(requireContext(), 1, RecyclerView.VERTICAL, false)
+
+        accountViewMode.readAllDataLive.observe(requireActivity()) { accounts ->
+            adapterAccount.updateData(accounts as ArrayList<Account>)
+
+            var totalAmount = 0.0
+            val typeDefaul = accounts[0]
+
+            for(i in accounts){
+                totalAmount += i.amountAccount!!.toFloat()
+            }
+            binding.textValueTotal.text = totalAmount.toString()+" - "+typeDefaul.typeMoney
+
+//            CoroutineScope(Dispatchers.IO).launch {
+//                coroutineScope {
+//                    val deferredList = accounts.map { account ->
+//                        async {
+//                            if (account.typeMoney != typeDefaul.typeMoney) {
+//                                val retrofit = Retrofit.Builder()
+//                                    .baseUrl("https://api.exchangerate-api.com/v4/")
+//                                    .addConverterFactory(GsonConverterFactory.create())
+//                                    .build()
+//
+//                                val exchangeRateApi = retrofit.create(ExchangeRateApi::class.java)
+//                                val exchangeRate = exchangeRateApi.getExchangeRate(typeDefaul.typeMoney!!)
+//                                val vndRate = exchangeRate.rates[account.typeMoney]
+//                                account.amountAccount!! * vndRate!!
+//                                Log.e("data", "tỉ giá tiền: ${ account.amountAccount}")
+//
+//                            } else {
+//                                account.amountAccount!!
+//                            }
+//                        }
+//                    }
+//
+//                    totalAmount = deferredList.awaitAll()
+//                        .filterIsInstance<Double>()
+//                        .sum()
+//                }
+//
+//                withContext(Dispatchers.Main) {
+////                    binding.textValueTotal.text = totalAmount.toString()
+//                }
+//            }
+        }
+
 
         adapterAccount.setClickItemSelect {
             accountViewMode.account = it
             findNavController().navigate(R.id.action_nav_accounts_to_editAccountFragment)
         }
 
+
+
+        binding.imgAddAccount.setOnClickListener {
+            accountViewMode.account = Account()
+            findNavController().navigate(R.id.action_nav_accounts_to_editAccountFragment)
+        }
+
+
+    }
+
+    fun convertMoney(type1: String, type2: String) {
         val retrofit = Retrofit.Builder()
             .baseUrl("https://api.exchangerate-api.com/v4/")
             .addConverterFactory(GsonConverterFactory.create())
@@ -75,19 +128,11 @@ class AccountsFragment : BaseFragment() {
 
         val exchangeRateApi = retrofit.create(ExchangeRateApi::class.java)
 
-        binding.imgAddAccount.setOnClickListener {
-            accountViewMode.account = Account()
-            findNavController().navigate(R.id.action_nav_accounts_to_editAccountFragment)
-
-//            CoroutineScope(Dispatchers.IO).launch {
-//                val exchangeRate = exchangeRateApi.getExchangeRate("JPY")
-//                val vndRate = exchangeRate.rates["VND"]
-//                Log.e("data", "tỉ giá ${vndRate}")
-//            }
-
+        CoroutineScope(Dispatchers.IO).launch {
+            val exchangeRate = exchangeRateApi.getExchangeRate(type1)
+            val vndRate = exchangeRate.rates[type2]
+            Log.e("data", "tỉ giá ${vndRate}")
         }
-
-
     }
 
     fun viewChart() {
@@ -122,7 +167,6 @@ class AccountsFragment : BaseFragment() {
     }
 
     override fun onDestroy() {
-
         super.onDestroy()
     }
 }

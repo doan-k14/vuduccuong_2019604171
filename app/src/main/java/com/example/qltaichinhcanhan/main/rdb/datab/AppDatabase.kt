@@ -18,7 +18,7 @@ import com.example.qltaichinhcanhan.main.rdb.inter.TransactionDao
     version = 1)
 abstract class AppDatabase : RoomDatabase() {
     companion object {
-        private const val DATABASE_NAME = "app_database4.db"
+        private const val DATABASE_NAME = "app_database41.db"
         private var instance: AppDatabase? = null
 
         @Synchronized

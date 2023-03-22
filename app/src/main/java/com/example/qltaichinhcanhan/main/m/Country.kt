@@ -9,10 +9,12 @@ data class Country(
     @PrimaryKey(autoGenerate = true)
     @SerializedName("id")
     val id: Int,
-    val name: String?=null,
-    val currencyCode: String?=null,
-    val currencyName: String?=null,
-    val currencySymbol: String?=null,
-    val flagUrl: String?=null
+    var name: String?=null,
+    var currencyCode: String?=null,
+    var currencyName: String?=null,
+    var currencySymbol: String?=null,
+    var flagUrl: String?=null,
+    var exchangeRate: Float?=null,
+    var select: Boolean?=null
 )
 

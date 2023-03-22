@@ -100,6 +100,8 @@ class CreatsMoneyFragment : Fragment() {
                     1,
                     false)
                 accountViewMode.addAccount(account)
+                country.select = true
+                countryViewMode.updateAccount(country)
                 val sharedPreferences: SharedPreferences =
                     requireActivity().getSharedPreferences("default_account_initialization_check",
                         Context.MODE_PRIVATE)

@@ -21,7 +21,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="6dp"
             android:padding="10dp"
-            android:src="@drawable/ic_menu"
+            android:src="@drawable/icon_back_currency"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -116,6 +116,17 @@
 
         <ProgressBar
             android:id="@+id/pressed_loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:visibility="gone"
+            android:text="@string/not_data"
+            android:textColor="@color/red"
+            android:id="@+id/text_not_data"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"

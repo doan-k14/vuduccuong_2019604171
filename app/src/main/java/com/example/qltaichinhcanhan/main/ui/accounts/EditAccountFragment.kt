@@ -1,11 +1,13 @@
 package com.example.qltaichinhcanhan.main.ui.accounts
 
+import android.app.Dialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -19,6 +21,7 @@ import com.example.qltaichinhcanhan.databinding.FragmentEditAccountBinding
 import com.example.qltaichinhcanhan.main.adapter_main.AdapterAccount
 import com.example.qltaichinhcanhan.main.adapter_main.AdapterIconAccount
 import com.example.qltaichinhcanhan.main.m.Account
+import com.example.qltaichinhcanhan.main.m.Category1
 import com.example.qltaichinhcanhan.main.m.DataColor
 import com.example.qltaichinhcanhan.main.rdb.vm_data.AccountViewMode
 import com.example.qltaichinhcanhan.main.rdb.vm_data.CountryViewMode
@@ -79,15 +82,28 @@ class EditAccountFragment : Fragment() {
             val drawable = resources.getDrawable(R.drawable.ic_arrow_drop_down, null)
             binding.edtTypeAccount.setCompoundDrawablesWithIntrinsicBounds(null, null, drawable, null)
         } else {
+            binding.textCreate.visibility = View.GONE
+            if(account.id == 1){
+                binding.llUpdate.visibility = View.GONE
+                binding.textSaveId1.visibility = View.VISIBLE
+            }else{
+                binding.llUpdate.visibility = View.VISIBLE
+                binding.textSaveId1.visibility = View.GONE
+            }
             binding.edtNameAccount.setText(account.nameAccount)
             binding.edtTypeAccount.text = account.typeMoney
             binding.edtTotal.setText(account.amountAccount.toString())
             adapterIconAccount.updateSelect(account.icon!!)
             adapterIConColor.updateSelectColor(account.color!!)
             adapterIconAccount.updateColor(account.color!!)
-            binding.textCreate.visibility = View.GONE
-            binding.llUpdate.visibility = View.VISIBLE
             binding.edtTypeAccount.isEnabled = false
+        }
+
+        val country = countryViewMode.country
+        if (country.id != 0) {
+            binding.edtTypeAccount.text = countryViewMode.country.currencyCode
+        }else{
+            binding.edtTypeAccount.text = account.typeMoney
         }
     }
 
@@ -109,8 +125,14 @@ class EditAccountFragment : Fragment() {
                 findNavController().popBackStack()
             }
         }
+        binding.textSaveId1.setOnClickListener {
+            if (checkData()) {
+                accountViewMode.updateAccount(account)
+                findNavController().popBackStack()
+            }
+        }
         binding.textDelete.setOnClickListener {
-
+            createDialogDelete(Gravity.CENTER,account)
         }
         binding.textCreate.setOnClickListener {
             if (checkData()) {
@@ -152,7 +174,44 @@ class EditAccountFragment : Fragment() {
 
         account.icon = accountViewMode.icon.name
         account.color = accountViewMode.icon.color
+        account.typeMoney = binding.edtTypeAccount.text.toString()
+        account.select = false
         return true
+    }
+
+    private fun createDialogDelete(gravity: Int, account: Account) {
+        val dialog = Dialog(requireActivity())
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.custom_dialog_layout)
+
+        val window = dialog.window ?: return
+        window.setLayout(
+            WindowManager.LayoutParams.WRAP_CONTENT,
+            WindowManager.LayoutParams.WRAP_CONTENT
+        )
+        window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        val wLayoutParams = window.attributes
+        wLayoutParams.gravity = gravity
+        window.attributes = wLayoutParams
+
+        if (Gravity.BOTTOM == gravity) {
+            dialog.setCancelable(false)
+        } else {
+            dialog.setCancelable(false)
+        }
+        dialog.show()
+
+        val textCo = dialog.findViewById<TextView>(R.id.text_co)
+        val textKhong = dialog.findViewById<TextView>(R.id.text_khong)
+
+        textCo.setOnClickListener {
+            accountViewMode.deleteAccount(account)
+            dialog.dismiss()
+            findNavController().popBackStack()
+        }
+        textKhong.setOnClickListener {
+            dialog.dismiss()
+        }
     }
 
     override fun onDestroy() {

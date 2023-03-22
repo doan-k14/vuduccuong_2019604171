@@ -10,16 +10,23 @@ import androidx.viewbinding.ViewBinding
 import com.example.qltaichinhcanhan.R
 import com.example.qltaichinhcanhan.databinding.*
 import androidx.core.content.ContextCompat
+import com.example.qltaichinhcanhan.adapter.AdapterIconCategory
 import com.example.qltaichinhcanhan.main.m.*
 
 class AdapterAccount(
     var context: Context,
     var listCategory: ArrayList<Account>,
+    var layoutType: LayoutType,
 ) : RecyclerView.Adapter<AdapterAccount.ViewHolder>() {
 
-    inner class ViewHolder(binding: ItemTransactionBinding) :
+    enum class LayoutType {
+        TYPE1,
+        TYPE2
+    }
+
+    inner class ViewHolder(binding: ViewBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        internal val binding: ItemTransactionBinding
+        internal val binding: ViewBinding
 
         init {
             this.binding = binding
@@ -27,32 +34,65 @@ class AdapterAccount(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding = ItemTransactionBinding.inflate(LayoutInflater.from(context), parent, false)
+        val inflater = LayoutInflater.from(parent.context)
+        val binding: ViewBinding
+
+        when (layoutType) {
+            LayoutType.TYPE1 -> {
+                binding = ItemTransactionBinding.inflate(inflater, parent, false)
+            }
+            LayoutType.TYPE2 -> {
+                binding = ItemTransactionDialogBinding.inflate(inflater, parent, false)
+            }
+        }
+
         return ViewHolder(binding)
+
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = listCategory[position]
         with(holder) {
-            binding.imgCategory.setImageResource(DataColor.showBackgroundColorCircle(context,
-                item.icon!!))
-            val color = DataColor.getIdColorById(item.color!!)
-            binding.imgCategory.setBackgroundResource(DataColor.showBackgroundColorCircle(context,
-                color.toString()))
-            binding.textNameCategory.text = item.nameAccount
-            binding.textValueCategory.text = item.amountAccount.toString()
+            when (layoutType) {
+                LayoutType.TYPE1 -> {
+                    binding.imgCategory.setImageResource(DataColor.showBackgroundColorCircle(context,
+                        item.icon!!))
+                    val color = DataColor.getIdColorById(item.color!!)
+                    binding.imgCategory.setBackgroundResource(DataColor.showBackgroundColorCircle(
+                        context,
+                        color.toString()))
+                    binding.textNameCategory.text = item.nameAccount
+                    binding.textValueCategory.text = item.amountAccount.toString() + item.typeMoney
 
-            binding.root.setOnClickListener {
-                clickItemSelect?.let {
-                    it(item)
-                }
-            }
+                    binding.root.setOnClickListener {
+                        clickItemSelect?.let {
+                            it(item)
+                        }
+                    }
 
-            binding.root.setOnLongClickListener {
-                clickLongItemSelect?.let {
-                    it(item)
+                    binding.root.setOnLongClickListener {
+                        clickLongItemSelect?.let {
+                            it(item)
+                        }
+                        true
+                    }
                 }
-                true
+                LayoutType.TYPE2 -> {
+                    binding.imgCategory.setImageResource(DataColor.showBackgroundColorCircle(context,
+                        item.icon!!))
+                    val color = DataColor.getIdColorById(item.color!!)
+                    binding.imgCategory.setBackgroundResource(DataColor.showBackgroundColorCircle(
+                        context,
+                        color.toString()))
+                    binding.textNameCategory.text = item.nameAccount
+                    binding.textValueCategory.text = item.amountAccount.toString() + item.typeMoney
+
+                    binding.root.setOnClickListener {
+                        clickItemSelect?.let {
+                            it(item)
+                        }
+                    }
+                }
             }
         }
     }

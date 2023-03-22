@@ -1,6 +1,7 @@
 package com.example.qltaichinhcanhan.main.rdb.vm_data
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.qltaichinhcanhan.database.CategoryDatabase
@@ -36,7 +37,14 @@ class CountryViewMode(application: Application) : AndroidViewModel(application) 
             }
         }
     }
-
+    fun updateListAccount(list: List<Country>) {
+        Log.e("data","update")
+        viewModelScope.launch(Dispatchers.IO) {
+            for (i in list) {
+                repository.update(country)
+            }
+        }
+    }
 
     fun updateAccount(country: Country) {
         viewModelScope.launch(Dispatchers.IO) {

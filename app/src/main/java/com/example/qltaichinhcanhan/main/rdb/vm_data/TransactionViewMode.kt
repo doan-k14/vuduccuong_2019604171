@@ -58,6 +58,7 @@ class TransactionViewMode(application: Application) : AndroidViewModel(applicati
         }
     }
 
+    var exchangeRate = 0F
 
 
 }

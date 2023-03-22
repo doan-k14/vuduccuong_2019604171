@@ -2,6 +2,7 @@ package com.example.qltaichinhcanhan.main.rdb.vm_data
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.qltaichinhcanhan.database.CategoryDatabase
 import com.example.qltaichinhcanhan.database.CategoryRepository
@@ -52,9 +53,10 @@ class AccountViewMode(application: Application) : AndroidViewModel(application) 
         }
     }
 
+    val accountLiveData = MutableLiveData<Account>()
     fun getAccountById(it: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.getAccountById(it)
+            accountLiveData.postValue(repository.getAccountById(it).value)
         }
     }
 

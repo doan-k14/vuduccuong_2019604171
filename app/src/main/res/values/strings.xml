@@ -72,5 +72,11 @@
     <string name="menu_currency">Tỉ giá</string>
     <string name="text_sreach">Tìm kiếm</string>
     <string name="start">Bắt đầu</string>
+    <string name="add_transaction">Thêm giao dịch</string>
+    <string name="text_comment">Ghi chú</string>
+    <string name="not_selected">Chưa chọn</string>
+    <string name="not_data">Không tồn lại quốc gia</string>
+    <string name="text_select_account">Lựa chọn tài khoản</string>
+    <string name="text_cancel">Kết thúc</string>
 
 </resources>
