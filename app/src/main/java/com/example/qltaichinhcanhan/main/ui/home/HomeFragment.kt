@@ -1,6 +1,6 @@
 package com.example.qltaichinhcanhan.main.ui.home
 
-import android.graphics.*
+import android.graphics.Color
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.util.Log
@@ -11,23 +11,16 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.room.Room
 import com.example.qltaichinhcanhan.R
-import com.example.qltaichinhcanhan.adapter.AdapterCategory
 import com.example.qltaichinhcanhan.databinding.FragmentHomeBinding
 import com.example.qltaichinhcanhan.main.DataChart
 import com.example.qltaichinhcanhan.main.ItemColor
 import com.example.qltaichinhcanhan.main.adapter_main.AdapterTransaction
 import com.example.qltaichinhcanhan.main.base.BaseFragment
-import com.example.qltaichinhcanhan.main.m.Account
-import com.example.qltaichinhcanhan.main.m.Category1
-import com.example.qltaichinhcanhan.main.m.IconCategoryData
-import com.example.qltaichinhcanhan.main.m.Transaction
-import com.example.qltaichinhcanhan.main.rdb.datab.AppDatabase
+import com.example.qltaichinhcanhan.main.m.*
 import com.example.qltaichinhcanhan.main.rdb.vm_data.AccountViewMode
 import com.example.qltaichinhcanhan.main.rdb.vm_data.CategoryViewMode
 import com.example.qltaichinhcanhan.main.rdb.vm_data.TransactionViewMode
-import com.example.qltaichinhcanhan.mode.Category
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.data.*
@@ -56,7 +49,6 @@ class HomeFragment : BaseFragment() {
 
         initView()
         initEvent()
-
 
 
         val tabLayout = binding.tabLayout
@@ -204,14 +196,14 @@ class HomeFragment : BaseFragment() {
 
         val listIcon = IconCategoryData.iconList
 
-        var listCa = arrayListOf<Category1>(
-            Category1(0, "Thêm", 1, 1F, listIcon[0].name, 1, false),
-            Category1(0, "Thêm", 2, 1F, listIcon[0].name, 1, false),
-            Category1(0, "category1", 1, 1F, listIcon[1].name, 1, false),
-            Category1(0, "category2", 1, 1F, listIcon[2].name, 2, false),
-            Category1(0, "category3", 2, 1F, listIcon[3].name, 3, false),
-            Category1(0, "category4", 2, 1F, listIcon[4].name, 4, false),
-            Category1(0, "category5", 2, 1F, listIcon[4].name, 5, false),
+        var listCa = arrayListOf<Category>(
+            Category(0, "Thêm", 1, 1F, listIcon[0].name, 1, false),
+            Category(0, "Thêm", 2, 1F, listIcon[0].name, 1, false),
+            Category(0, "category1", 1, 1F, listIcon[1].name, 1, false),
+            Category(0, "category2", 1, 1F, listIcon[2].name, 2, false),
+            Category(0, "category3", 2, 1F, listIcon[3].name, 3, false),
+            Category(0, "category4", 2, 1F, listIcon[4].name, 4, false),
+            Category(0, "category5", 2, 1F, listIcon[4].name, 5, false),
         )
 
         val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
@@ -260,6 +252,4 @@ class HomeFragment : BaseFragment() {
         }
         pieChart.setCenterTextColor(Color.BLACK)
     }
-
-
 }

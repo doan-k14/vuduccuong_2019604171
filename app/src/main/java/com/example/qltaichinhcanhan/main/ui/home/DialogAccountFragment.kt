@@ -4,13 +4,12 @@ import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.*
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.qltaichinhcanhan.R
 import com.example.qltaichinhcanhan.databinding.FragmentDialogAccountBinding
 import com.example.qltaichinhcanhan.main.adapter_main.AdapterAccount
 import com.example.qltaichinhcanhan.main.m.Account
@@ -28,18 +27,12 @@ class DialogAccountFragment : DialogFragment() {
         val window = dialog.window!!
         window.setLayout(
             WindowManager.LayoutParams.MATCH_PARENT,
-            WindowManager.LayoutParams.WRAP_CONTENT
+            WindowManager.LayoutParams.MATCH_PARENT
         )
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         val wLayoutParams = window.attributes
-        wLayoutParams.gravity = Gravity.CENTER
         window.attributes = wLayoutParams
-
-        if (Gravity.BOTTOM == Gravity.CENTER) {
-            dialog.setCancelable(false)
-        } else {
-            dialog.setCancelable(false)
-        }
+        dialog.setCanceledOnTouchOutside(false)
         return dialog
     }
 
@@ -64,18 +57,32 @@ class DialogAccountFragment : DialogFragment() {
             arrayListOf<Account>(),
             AdapterAccount.LayoutType.TYPE2)
         binding.rcvAccount.adapter = adapterAccount
-        binding.rcvAccount.layoutManager =
-            GridLayoutManager(requireContext(), 1, RecyclerView.VERTICAL, false)
+
+        val myLinearLayoutManager1 =
+            object : GridLayoutManager(requireContext(), 1, RecyclerView.VERTICAL, false) {
+                override fun canScrollVertically(): Boolean {
+                    return false
+                }
+            }
+
+        binding.rcvAccount.layoutManager = myLinearLayoutManager1
 
         accountViewMode.readAllDataLive.observe(requireActivity()) { accounts ->
             adapterAccount.updateData(accounts as ArrayList<Account>)
         }
+        accountViewMode.accountLiveAddTransaction.observe(requireActivity()) {
+            adapterAccount.updateSelectTransaction(it.id)
+        }
+
     }
 
     private fun initEvent() {
         binding.textCancel.setOnClickListener {
             dismiss()
         }
+        adapterAccount.setClickItemSelect {
+            accountViewMode.accountLiveAddTransaction.postValue(it)
+            dismiss()
+        }
     }
-
 }

@@ -4,7 +4,6 @@ import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import android.widget.TextView
@@ -15,13 +14,10 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.qltaichinhcanhan.R
-import com.example.qltaichinhcanhan.adapter.AdapterIConColor
-import com.example.qltaichinhcanhan.adapter.AdapterIconCategory
+import com.example.qltaichinhcanhan.splash.adapter.AdapterIConColor
 import com.example.qltaichinhcanhan.databinding.FragmentEditAccountBinding
-import com.example.qltaichinhcanhan.main.adapter_main.AdapterAccount
 import com.example.qltaichinhcanhan.main.adapter_main.AdapterIconAccount
 import com.example.qltaichinhcanhan.main.m.Account
-import com.example.qltaichinhcanhan.main.m.Category1
 import com.example.qltaichinhcanhan.main.m.DataColor
 import com.example.qltaichinhcanhan.main.rdb.vm_data.AccountViewMode
 import com.example.qltaichinhcanhan.main.rdb.vm_data.CountryViewMode

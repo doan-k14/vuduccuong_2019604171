@@ -5,20 +5,17 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.qltaichinhcanhan.R
-import com.example.qltaichinhcanhan.adapter.AdapterIconCategory
-import com.example.qltaichinhcanhan.adapter.ViewPagerAdapter
+import com.example.qltaichinhcanhan.splash.adapter.AdapterIconCategory
 import com.example.qltaichinhcanhan.databinding.FragmentCategoryBinding
 import com.example.qltaichinhcanhan.main.base.BaseFragment
-import com.example.qltaichinhcanhan.main.m.Category1
+import com.example.qltaichinhcanhan.main.m.Category
 import com.example.qltaichinhcanhan.main.rdb.vm_data.CategoryViewMode
 import com.google.android.material.tabs.TabLayout
-import com.google.android.material.tabs.TabLayoutMediator
 
 
 class CategoryFragment : BaseFragment() {
@@ -51,7 +48,7 @@ class CategoryFragment : BaseFragment() {
         binding.tabLayout.addTab(tabChiPhi)
         binding.tabLayout.addTab(tabThuNhap)
 
-        var list = listOf<Category1>()
+        var list = listOf<Category>()
 
         if (categoryViewModel.checkTypeCategory) {
             binding.tabLayout.selectTab(binding.tabLayout.getTabAt(0))
@@ -62,7 +59,7 @@ class CategoryFragment : BaseFragment() {
         }
 
 
-        adapterIconCategory = AdapterIconCategory(requireContext(), list as ArrayList<Category1>,
+        adapterIconCategory = AdapterIconCategory(requireContext(), list as ArrayList<Category>,
             AdapterIconCategory.LayoutType.TYPE1)
 
         binding.rcvIconCategory.adapter = adapterIconCategory
@@ -88,11 +85,11 @@ class CategoryFragment : BaseFragment() {
                 val position = tab?.position
                 if (position == 0) {
                     val list = categoryViewModel.getCategory1ListByType(1)
-                    adapterIconCategory.updateData(list as ArrayList<Category1> /* = java.util.ArrayList<com.example.qltaichinhcanhan.main.m.Category1> */)
+                    adapterIconCategory.updateData(list as ArrayList<Category> /* = java.util.ArrayList<com.example.qltaichinhcanhan.main.m.Category1> */)
                     categoryViewModel.checkTypeCategory = true
                 } else if (position == 1) {
                     val list = categoryViewModel.getCategory1ListByType(2)
-                    adapterIconCategory.updateData(list as ArrayList<Category1> /* = java.util.ArrayList<com.example.qltaichinhcanhan.main.m.Category1> */)
+                    adapterIconCategory.updateData(list as ArrayList<Category> /* = java.util.ArrayList<com.example.qltaichinhcanhan.main.m.Category1> */)
                     categoryViewModel.checkTypeCategory = false
                 }
             }

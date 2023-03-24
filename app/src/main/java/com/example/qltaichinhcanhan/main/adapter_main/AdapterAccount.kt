@@ -2,15 +2,11 @@ package com.example.qltaichinhcanhan.main.adapter_main
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
-import com.example.qltaichinhcanhan.R
 import com.example.qltaichinhcanhan.databinding.*
-import androidx.core.content.ContextCompat
-import com.example.qltaichinhcanhan.adapter.AdapterIconCategory
 import com.example.qltaichinhcanhan.main.m.*
 
 class AdapterAccount(
@@ -55,6 +51,7 @@ class AdapterAccount(
         with(holder) {
             when (layoutType) {
                 LayoutType.TYPE1 -> {
+                    binding as ItemTransactionBinding
                     binding.imgCategory.setImageResource(DataColor.showBackgroundColorCircle(context,
                         item.icon!!))
                     val color = DataColor.getIdColorById(item.color!!)
@@ -78,6 +75,9 @@ class AdapterAccount(
                     }
                 }
                 LayoutType.TYPE2 -> {
+                    binding as ItemTransactionDialogBinding
+
+                    binding.imgSelect.isActivated = item.select == true
                     binding.imgCategory.setImageResource(DataColor.showBackgroundColorCircle(context,
                         item.icon!!))
                     val color = DataColor.getIdColorById(item.color!!)
@@ -88,9 +88,13 @@ class AdapterAccount(
                     binding.textValueCategory.text = item.amountAccount.toString() + item.typeMoney
 
                     binding.root.setOnClickListener {
+                        for (i in listCategory.indices) {
+                            listCategory[i].select = (i == position)
+                        }
                         clickItemSelect?.let {
                             it(item)
                         }
+                        notifyDataSetChanged()
                     }
                 }
             }
@@ -103,6 +107,13 @@ class AdapterAccount(
 
     fun updateData(newList: ArrayList<Account>) {
         this.listCategory = newList
+        reloadData()
+    }
+
+    fun updateSelectTransaction(idTransaction: Int) {
+        for (i in listCategory) {
+            i.select = (i.id == idTransaction)
+        }
         reloadData()
     }
 

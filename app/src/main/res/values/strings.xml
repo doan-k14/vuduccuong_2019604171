@@ -78,5 +78,6 @@
     <string name="not_data">Không tồn lại quốc gia</string>
     <string name="text_select_account">Lựa chọn tài khoản</string>
     <string name="text_cancel">Kết thúc</string>
+    <string name="add_category">Thêm danh mục</string>
 
 </resources>

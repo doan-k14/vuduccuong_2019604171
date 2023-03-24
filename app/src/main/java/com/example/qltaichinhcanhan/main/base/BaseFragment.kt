@@ -56,5 +56,4 @@ abstract class BaseFragment : Fragment() {
         imm.hideSoftInputFromWindow(editText.windowToken, 0)
     }
 
-
 }

@@ -16,18 +16,15 @@
         android:theme="@style/Theme.QLTaiChinhCaNhan"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+
         <activity
-            android:launchMode="singleTop"
             android:name=".main.NDMainActivity"
             android:exported="true"
             android:label="@string/title_activity_ndmain"
-            android:theme="@style/Theme.QLTaiChinhCaNhan.NoActionBar">
-
-        </activity>
-
-
+            android:launchMode="singleTop"
+            android:theme="@style/Theme.QLTaiChinhCaNhan.NoActionBar"/>
         <activity
-            android:name=".fragment.on_boarding.OnBoardingScreenActivity"
+            android:name="com.example.qltaichinhcanhan.splash.OnBoardingScreenActivity"
             android:exported="true"
             android:theme="@style/SplashTheme">
             <intent-filter>
@@ -36,17 +33,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".MainActivity"
-            android:exported="true">
 
-        </activity>
-        <activity
-            android:name=".SplashActivity"
-            android:exported="true"
-            android:theme="@style/SplashTheme">
-
-        </activity>
     </application>
 
 </manifest>

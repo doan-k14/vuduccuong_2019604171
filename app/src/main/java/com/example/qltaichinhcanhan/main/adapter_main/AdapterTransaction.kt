@@ -6,11 +6,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.qltaichinhcanhan.databinding.ItemTransactionBinding
-import com.example.qltaichinhcanhan.main.m.Category1
 import com.example.qltaichinhcanhan.main.m.DataColor
-import com.example.qltaichinhcanhan.main.m.Transaction
 import com.example.qltaichinhcanhan.main.m.TransactionWithAccountAndCategoryName
-import com.example.qltaichinhcanhan.mode.Category
 
 class AdapterTransaction(
     var context: Context,
@@ -34,11 +31,11 @@ class AdapterTransaction(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = listCategory[position]
         with(holder) {
-            binding.imgCategory.setImageResource(DataColor.showBackgroundColorCircle(context, item.category1.icon!!))
-            val color = DataColor.getIdColorById(item.category1.color!!)
+            binding.imgCategory.setImageResource(DataColor.showBackgroundColorCircle(context, item.category.icon!!))
+            val color = DataColor.getIdColorById(item.category.color!!)
             binding.imgCategory.setBackgroundResource(DataColor.showBackgroundColorCircle(context,
                 color.toString()))
-            binding.textNameCategory.text = item.category1.nameCategory
+            binding.textNameCategory.text = item.category.nameCategory
             binding.textValueCategory.text = item.transaction.amountTransaction.toString()
 
             binding.root.setOnClickListener {

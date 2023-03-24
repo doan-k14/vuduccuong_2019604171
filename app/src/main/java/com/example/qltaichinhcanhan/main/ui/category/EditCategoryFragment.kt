@@ -1,14 +1,11 @@
 package com.example.qltaichinhcanhan.main.ui.category
 
-import android.app.AlertDialog
 import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import androidx.fragment.app.Fragment
-import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
@@ -17,17 +14,15 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.qltaichinhcanhan.R
-import com.example.qltaichinhcanhan.adapter.AdapterIConColor
-import com.example.qltaichinhcanhan.adapter.AdapterIconCategory
+import com.example.qltaichinhcanhan.splash.adapter.AdapterIConColor
+import com.example.qltaichinhcanhan.splash.adapter.AdapterIconCategory
 import com.example.qltaichinhcanhan.databinding.FragmentEditCategoryBinding
 import com.example.qltaichinhcanhan.main.base.BaseFragment
-import com.example.qltaichinhcanhan.main.inf.IconClickListener
-import com.example.qltaichinhcanhan.main.m.Category1
+import com.example.qltaichinhcanhan.main.m.Category
 import com.example.qltaichinhcanhan.main.m.DataColor
 import com.example.qltaichinhcanhan.main.m.Icon
 import com.example.qltaichinhcanhan.main.m.IconCategoryData
 import com.example.qltaichinhcanhan.main.rdb.vm_data.CategoryViewMode
-import com.example.qltaichinhcanhan.mode.Category
 
 
 class EditCategoryFragment : BaseFragment() {
@@ -36,7 +31,7 @@ class EditCategoryFragment : BaseFragment() {
     private lateinit var adapterIConColor: AdapterIConColor
 
     private lateinit var categoryViewModel: CategoryViewMode
-    var category = Category1()
+    var category = Category()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -130,7 +125,7 @@ class EditCategoryFragment : BaseFragment() {
         }
     }
 
-    private fun checkTypeCategory(category: Category1) {
+    private fun checkTypeCategory(category: Category) {
         binding.imgIconCategory.setImageResource(IconCategoryData.showICon(requireContext(),
             category.icon!!))
         if (category.id == 1 || category.id == 2) {
@@ -159,7 +154,7 @@ class EditCategoryFragment : BaseFragment() {
     }
 
     private fun clearData() {
-        categoryViewModel.category = Category1()
+        categoryViewModel.category = Category()
         categoryViewModel.icon = Icon()
         categoryViewModel.nameIcon = null
     }
@@ -190,7 +185,7 @@ class EditCategoryFragment : BaseFragment() {
         return true
     }
 
-    private fun createDialogDelete(gravity: Int, category: Category1) {
+    private fun createDialogDelete(gravity: Int, category: Category) {
         val dialog = Dialog(requireActivity())
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setContentView(R.layout.custom_dialog_layout)

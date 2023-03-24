@@ -5,6 +5,8 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.qltaichinhcanhan.R
 import com.example.qltaichinhcanhan.databinding.*
 import com.example.qltaichinhcanhan.main.m.*
@@ -15,9 +17,9 @@ class AdapterCountry(
     var nameCountry: String? = null,
 ) : RecyclerView.Adapter<AdapterCountry.ViewHolder>() {
 
-    inner class ViewHolder(binding: ItemTransactionBinding) :
+    inner class ViewHolder(binding: ItemCountryBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        internal val binding: ItemTransactionBinding
+        internal val binding: ItemCountryBinding
 
         init {
             this.binding = binding
@@ -25,26 +27,37 @@ class AdapterCountry(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding = ItemTransactionBinding.inflate(LayoutInflater.from(context), parent, false)
+        val binding = ItemCountryBinding.inflate(LayoutInflater.from(context), parent, false)
         return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = listCategory[position]
+
+
         with(holder) {
-//            binding.imgCategory.setImageResource(DataColor.showBackgroundColorCircle(context,
-//                item.icon!!))
-//            val color = DataColor.getIdColorById(item.color!!)
-//            binding.imgCategory.setBackgroundResource(DataColor.showBackgroundColorCircle(context,
-//                color.toString()))
+            var pngUrl = ""
+            pngUrl = if (item.id == 1) {
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Flag_of_the_Taliban.svg/320px-Flag_of_the_Taliban.svg.png"
+            } else {
+                val svgUrl = item.flagUrl.toString()
+                svgUrl.replace(".svg", ".png").replace("flagcdn.com", "flagcdn.com/w320")
+            }
+            Glide.with(context)
+                .load(pngUrl)
+                .placeholder(R.drawable.ic_error_b)
+                .error(R.drawable.ic_picturel_andscape)
+                .transform(RoundedCorners(16))
+                .into(binding.imgCategory)
+
             if (item.select == true) {
                 binding.root.setBackgroundResource(R.drawable.button_delete_category)
-            }else{
+            } else {
                 binding.root.setBackgroundResource(R.drawable.custom_button_white)
             }
 
-            binding.textNameCategory.text = item.name
-            binding.textValueCategory.text = item.exchangeRate.toString()+" - " +item.currencyCode
+            binding.textNameCategory.text = item.name + " - " + item.exchangeRate.toString()
+            binding.textValueCategory.text = item.currencyCode
 
 
             binding.root.setOnClickListener {

@@ -23,13 +23,17 @@ import com.example.qltaichinhcanhan.main.base.BaseFragment
 import com.example.qltaichinhcanhan.main.m.Account
 import com.example.qltaichinhcanhan.main.m.Country
 import com.example.qltaichinhcanhan.main.m.CountryResponse
+import com.example.qltaichinhcanhan.main.m.CurrencyDataAPI
 import com.example.qltaichinhcanhan.main.rdb.vm_data.AccountViewMode
 import com.example.qltaichinhcanhan.main.rdb.vm_data.CountryViewMode
 import com.example.qltaichinhcanhan.main.retrofit.CountryService
+import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import okhttp3.OkHttpClient
+import okhttp3.Request
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -97,6 +101,11 @@ class CurrencyFragment : BaseFragment() {
             binding.pressedLoading.visibility = View.GONE
             binding.rcvCategory.visibility = View.VISIBLE
         }
+
+//        binding.textTitleAccount.setOnClickListener {
+//            getExchangeRate(listCountry)
+//        }
+
     }
 
     private fun initEvent() {
@@ -210,7 +219,7 @@ class CurrencyFragment : BaseFragment() {
                                     i.currencies[0].code,
                                     i.currencies[0].name,
                                     i.currencies[0].symbol,
-                                    i.flag, 1F,false))
+                                    i.flag, 1F, false))
                             }
                         }
                         Log.e("data", "Số lượng quốc gia đã được conver: ${listCountryNew.size}")
@@ -239,9 +248,43 @@ class CurrencyFragment : BaseFragment() {
         }
     }
 
+    private fun getExchangeRate(countryList: List<Country>) {
+        val currencyCodes = countryList.map { it.currencyCode }
+        val position = countryList.indexOfFirst { it.select == true }
+        if (countryList.isEmpty()) {
+            Log.e("data", "Chauw goi dc data")
+        } else {
+            val client = OkHttpClient().newBuilder().build()
+            CoroutineScope(Dispatchers.IO).launch {
+                val request = Request.Builder()
+                    .url("https://api.apilayer.com/currency_data/live?source=${currencyCodes[position]}&currencies=${currencyCodes}")
+                    .addHeader("apikey", "RBoOmM3hdqp3wjPJuhZxg6MSjcsEqg4D")
+                    .method("GET", null)
+                    .build()
+                val response = client.newCall(request).execute()
+                val json = response.body()?.string()
+                val currencyData = Gson().fromJson(json, CurrencyDataAPI::class.java)
+
+                countryList.forEach { country ->
+                    val exchangeRate =
+                        currencyData.quotes["${currencyData.source}${country.currencyCode}"]
+                    if (exchangeRate != null) {
+                        country.exchangeRate = exchangeRate.toFloat()
+                    }
+                }
+                listCountry = listOf()
+                listCountry = countryList
+                for (i in listCountry) {
+                    countryViewMode.updateAccount(i)
+                }
+            }
+        }
+    }
+
+
     // https://openexchangerates.org/api/currencies.json
     override fun onDestroy() {
-        Log.e("data","currency: onDestroy")
+        Log.e("data", "currency: onDestroy")
         countryViewMode.checkInputScreen = 0
         super.onDestroy()
     }

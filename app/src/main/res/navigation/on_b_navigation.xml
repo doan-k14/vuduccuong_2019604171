@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/splashFragment"
-        android:name="com.example.qltaichinhcanhan.fragment.splash.SplashFragment"
+        android:name="com.example.qltaichinhcanhan.splash.category.SplashFragment"
         android:label="fragment_splash"
         tools:layout="@layout/fragment_splash">
         <action
@@ -18,7 +18,7 @@
     </fragment>
     <fragment
         android:id="@+id/onBoardingFragment"
-        android:name="com.example.qltaichinhcanhan.fragment.on_boarding.OnBoardingFragment"
+        android:name="com.example.qltaichinhcanhan.splash.boarding.OnBoardingFragment"
         android:label="fragment_on_boarding"
         tools:layout="@layout/fragment_on_boarding">
 
@@ -33,24 +33,24 @@
 
         <fragment
             android:id="@+id/onBoarding1Fragment"
-            android:name="com.example.qltaichinhcanhan.fragment.on_boarding.OnBoarding1Fragment"
+            android:name="com.example.qltaichinhcanhan.splash.boarding.OnBoarding1Fragment"
             android:label="fragment_on_boarding1"
             tools:layout="@layout/fragment_on_boarding1" />
         <fragment
             android:id="@+id/onBoarding2Fragment"
-            android:name="com.example.qltaichinhcanhan.fragment.on_boarding.OnBoarding2Fragment"
+            android:name="com.example.qltaichinhcanhan.splash.boarding.OnBoarding2Fragment"
             android:label="OnBoarding2Fragment" />
 
         <fragment
             android:id="@+id/onBoarding3Fragment"
-            android:name="com.example.qltaichinhcanhan.fragment.on_boarding.OnBoarding3Fragment"
+            android:name="com.example.qltaichinhcanhan.splash.boarding.OnBoarding3Fragment"
             android:label="OnBoarding3Fragment" />
 
     </fragment>
 
     <fragment
         android:id="@+id/signUpFragment"
-        android:name="com.example.qltaichinhcanhan.fragment.login.SignUpFragment"
+        android:name="com.example.qltaichinhcanhan.splash.login.SignUpFragment"
         android:label="fragment_signup"
         tools:layout="@layout/fragment_signup">
         <action
@@ -64,7 +64,7 @@
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.example.qltaichinhcanhan.fragment.login.LoginFragment"
+        android:name="com.example.qltaichinhcanhan.splash.login.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login">
         <action
@@ -77,7 +77,7 @@
 
     <fragment
         android:id="@+id/creatsMoneyFragment"
-        android:name="com.example.qltaichinhcanhan.fragment.splash.CreatsMoneyFragment"
+        android:name="com.example.qltaichinhcanhan.splash.category.CreatsMoneyFragment"
         android:label="fragment_creats_money"
         tools:layout="@layout/fragment_creats_money" >
         <action

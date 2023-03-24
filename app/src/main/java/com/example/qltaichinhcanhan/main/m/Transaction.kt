@@ -3,11 +3,10 @@ package com.example.qltaichinhcanhan.main.m
 import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.ForeignKey
-import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
-import java.util.*
+
 @Parcelize
 @Entity(tableName = "transaction",
     foreignKeys = [
@@ -15,7 +14,7 @@ import java.util.*
             parentColumns = ["id"],
             childColumns = ["idAccount"],
             onDelete = ForeignKey.CASCADE),
-        ForeignKey(entity = Category1::class,
+        ForeignKey(entity = Category::class,
             parentColumns = ["id"],
             childColumns = ["idCategory1"],
             onDelete = ForeignKey.CASCADE)

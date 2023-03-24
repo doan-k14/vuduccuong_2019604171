@@ -71,37 +71,6 @@ class AccountsFragment : BaseFragment() {
             }
             binding.textValueTotal.text = totalAmount.toString()+" - "+typeDefaul.typeMoney
 
-//            CoroutineScope(Dispatchers.IO).launch {
-//                coroutineScope {
-//                    val deferredList = accounts.map { account ->
-//                        async {
-//                            if (account.typeMoney != typeDefaul.typeMoney) {
-//                                val retrofit = Retrofit.Builder()
-//                                    .baseUrl("https://api.exchangerate-api.com/v4/")
-//                                    .addConverterFactory(GsonConverterFactory.create())
-//                                    .build()
-//
-//                                val exchangeRateApi = retrofit.create(ExchangeRateApi::class.java)
-//                                val exchangeRate = exchangeRateApi.getExchangeRate(typeDefaul.typeMoney!!)
-//                                val vndRate = exchangeRate.rates[account.typeMoney]
-//                                account.amountAccount!! * vndRate!!
-//                                Log.e("data", "tỉ giá tiền: ${ account.amountAccount}")
-//
-//                            } else {
-//                                account.amountAccount!!
-//                            }
-//                        }
-//                    }
-//
-//                    totalAmount = deferredList.awaitAll()
-//                        .filterIsInstance<Double>()
-//                        .sum()
-//                }
-//
-//                withContext(Dispatchers.Main) {
-////                    binding.textValueTotal.text = totalAmount.toString()
-//                }
-//            }
         }
 
 

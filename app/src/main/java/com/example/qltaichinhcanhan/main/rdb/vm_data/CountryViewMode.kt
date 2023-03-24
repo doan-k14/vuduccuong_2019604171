@@ -4,14 +4,9 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.qltaichinhcanhan.database.CategoryDatabase
-import com.example.qltaichinhcanhan.database.CategoryRepository
 import com.example.qltaichinhcanhan.main.m.*
 import com.example.qltaichinhcanhan.main.rdb.datab.AppDatabase
-import com.example.qltaichinhcanhan.main.rdb.reposi.AccountRepository
-import com.example.qltaichinhcanhan.main.rdb.reposi.Category1Repository
 import com.example.qltaichinhcanhan.main.rdb.reposi.CountryRepository
-import com.example.qltaichinhcanhan.mode.Category
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 

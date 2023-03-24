@@ -11,7 +11,7 @@
         android:id="@+id/img_select"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/click_color_5"
+        android:src="@drawable/custom_img_category"
         app:layout_constraintBottom_toBottomOf="@id/img_category"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -32,9 +32,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
+        android:ellipsize="end"
+        android:maxLength="15"
+        android:maxLines="1"
         android:text="Gia đình"
         android:textColor="@color/black"
-        android:textSize="24sp"
+        android:textSize="22sp"
         app:layout_constraintBottom_toBottomOf="@id/img_category"
         app:layout_constraintStart_toEndOf="@id/img_category"
         app:layout_constraintTop_toTopOf="@id/img_category" />
@@ -43,7 +46,7 @@
         android:id="@+id/text_value_category"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         android:text="đ360.000"
         app:layout_constraintStart_toStartOf="@id/text_name_category"
         app:layout_constraintTop_toBottomOf="@id/text_name_category" />

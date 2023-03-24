@@ -4,9 +4,8 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.example.qltaichinhcanhan.database.CategoryDatabase
 import com.example.qltaichinhcanhan.main.m.Account
-import com.example.qltaichinhcanhan.main.m.Category1
+import com.example.qltaichinhcanhan.main.m.Category
 import com.example.qltaichinhcanhan.main.m.Country
 import com.example.qltaichinhcanhan.main.m.Transaction
 import com.example.qltaichinhcanhan.main.rdb.inter.AccountDao
@@ -14,7 +13,7 @@ import com.example.qltaichinhcanhan.main.rdb.inter.Category1Dao
 import com.example.qltaichinhcanhan.main.rdb.inter.CountryDao
 import com.example.qltaichinhcanhan.main.rdb.inter.TransactionDao
 
-@Database(entities = [Account::class, Transaction::class, Category1::class, Country::class],
+@Database(entities = [Account::class, Transaction::class, Category::class, Country::class],
     version = 1)
 abstract class AppDatabase : RoomDatabase() {
     companion object {

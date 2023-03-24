@@ -81,23 +81,23 @@ object DataColor {
     }
 
     val listIcon = IconCategoryData.iconList
-    private var listCategory = arrayListOf<Category1>(
-        Category1(2, "category1", 1, 1F, listIcon[1].name, 1, false),
-        Category1(3, "category2", 1, 1F, listIcon[2].name, 1, false),
-        Category1(4, "category3", 1, 1F, listIcon[3].name, 1, false),
-        Category1(5, "category4", 1, 1F, listIcon[4].name, 1, false),
-        Category1(6, "category5", 1, 1F, listIcon[4].name, 1, false),
-        Category1(1, "Thêm", 1, 1F, listIcon[0].name, 2, false),
+    private var listCategory = arrayListOf<Category>(
+        Category(2, "category1", 1, 1F, listIcon[1].name, 1, false),
+        Category(3, "category2", 1, 1F, listIcon[2].name, 1, false),
+        Category(4, "category3", 1, 1F, listIcon[3].name, 1, false),
+        Category(5, "category4", 1, 1F, listIcon[4].name, 1, false),
+        Category(6, "category5", 1, 1F, listIcon[4].name, 1, false),
+        Category(1, "Thêm", 1, 1F, listIcon[0].name, 2, false),
     )
 
-    fun getListCategory(): ArrayList<Category1> {
+    fun getListCategory(): ArrayList<Category> {
         return arrayListOf(
-            Category1(2, "category1", 1, 1F, listIcon[1].name, 1, false),
-            Category1(3, "category2", 1, 1F, listIcon[2].name, 1, false),
-            Category1(4, "category3", 1, 1F, listIcon[3].name, 1, false),
-            Category1(5, "category4", 1, 1F, listIcon[4].name, 1, false),
-            Category1(6, "category5", 1, 1F, listIcon[4].name, 1, false),
-            Category1(1, "Thêm", 1, 1F, listIcon[0].name, 2, false),
+            Category(2, "category1", 1, 1F, listIcon[1].name, 1, false),
+            Category(3, "category2", 1, 1F, listIcon[2].name, 1, false),
+            Category(4, "category3", 1, 1F, listIcon[3].name, 1, false),
+            Category(5, "category4", 1, 1F, listIcon[4].name, 1, false),
+            Category(6, "category5", 1, 1F, listIcon[4].name, 1, false),
+            Category(1, "Thêm", 1, 1F, listIcon[0].name, 2, false),
         )
     }
 
