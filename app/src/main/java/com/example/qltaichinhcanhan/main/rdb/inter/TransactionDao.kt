@@ -3,8 +3,8 @@ package com.example.qltaichinhcanhan.main.rdb.inter
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import androidx.room.OnConflictStrategy
-import com.example.qltaichinhcanhan.main.m.Transaction
-import com.example.qltaichinhcanhan.main.m.TransactionWithAccountAndCategoryName
+import com.example.qltaichinhcanhan.main.model.Transaction
+import com.example.qltaichinhcanhan.main.model.TransactionWithAccountAndCategoryName
 
 
 @Dao

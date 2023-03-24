@@ -4,15 +4,14 @@ import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.qltaichinhcanhan.databinding.FragmentDialogAccountBinding
-import com.example.qltaichinhcanhan.main.adapter_main.AdapterAccount
-import com.example.qltaichinhcanhan.main.m.Account
+import com.example.qltaichinhcanhan.main.adapter.AdapterAccount
+import com.example.qltaichinhcanhan.main.model.Account
 import com.example.qltaichinhcanhan.main.rdb.vm_data.AccountViewMode
 
 

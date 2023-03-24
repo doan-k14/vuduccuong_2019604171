@@ -1,7 +1,7 @@
 package com.example.qltaichinhcanhan.main.rdb.reposi
 
 import androidx.lifecycle.LiveData
-import com.example.qltaichinhcanhan.main.m.Account
+import com.example.qltaichinhcanhan.main.model.Account
 import com.example.qltaichinhcanhan.main.rdb.inter.AccountDao
 
 class AccountRepository(private val accountDao: AccountDao) {

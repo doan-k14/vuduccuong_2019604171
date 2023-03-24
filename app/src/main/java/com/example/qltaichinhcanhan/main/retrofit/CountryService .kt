@@ -1,6 +1,6 @@
 package com.example.qltaichinhcanhan.main.retrofit
 
-import com.example.qltaichinhcanhan.main.m.CountryResponse
+import com.example.qltaichinhcanhan.main.model.CountryResponse
 import retrofit2.http.GET
 
 interface CountryService {

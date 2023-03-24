@@ -1,8 +1,7 @@
 package com.example.qltaichinhcanhan.main.rdb.reposi
 
 import androidx.lifecycle.LiveData
-import com.example.qltaichinhcanhan.main.m.Account
-import com.example.qltaichinhcanhan.main.m.Country
+import com.example.qltaichinhcanhan.main.model.Country
 import com.example.qltaichinhcanhan.main.rdb.inter.CountryDao
 
 class CountryRepository(private val countryDao: CountryDao) {

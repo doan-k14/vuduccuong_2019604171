@@ -2,7 +2,7 @@ package com.example.qltaichinhcanhan.main.rdb.inter
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.example.qltaichinhcanhan.main.m.Account
+import com.example.qltaichinhcanhan.main.model.Account
 
 @Dao
 interface AccountDao {

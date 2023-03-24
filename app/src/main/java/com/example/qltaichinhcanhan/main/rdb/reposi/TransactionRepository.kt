@@ -1,8 +1,8 @@
 package com.example.qltaichinhcanhan.main.rdb.reposi
 
 import androidx.lifecycle.LiveData
-import com.example.qltaichinhcanhan.main.m.Transaction
-import com.example.qltaichinhcanhan.main.m.TransactionWithAccountAndCategoryName
+import com.example.qltaichinhcanhan.main.model.Transaction
+import com.example.qltaichinhcanhan.main.model.TransactionWithAccountAndCategoryName
 import com.example.qltaichinhcanhan.main.rdb.inter.TransactionDao
 
 class TransactionRepository(private val transactionDao: TransactionDao) {

@@ -2,7 +2,7 @@ package com.example.qltaichinhcanhan.main.rdb.inter
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.example.qltaichinhcanhan.main.m.Category
+import com.example.qltaichinhcanhan.main.model.Category
 
 @Dao
 interface Category1Dao {

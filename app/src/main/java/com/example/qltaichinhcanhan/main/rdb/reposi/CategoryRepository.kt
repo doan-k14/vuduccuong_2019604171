@@ -1,7 +1,7 @@
 package com.example.qltaichinhcanhan.main.rdb.reposi
 
 import androidx.lifecycle.LiveData
-import com.example.qltaichinhcanhan.main.m.Category
+import com.example.qltaichinhcanhan.main.model.Category
 import com.example.qltaichinhcanhan.main.rdb.inter.Category1Dao
 
 class CategoryRepository(private val categoryDao: Category1Dao) {

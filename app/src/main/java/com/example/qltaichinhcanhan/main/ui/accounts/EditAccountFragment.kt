@@ -16,9 +16,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.qltaichinhcanhan.R
 import com.example.qltaichinhcanhan.splash.adapter.AdapterIConColor
 import com.example.qltaichinhcanhan.databinding.FragmentEditAccountBinding
-import com.example.qltaichinhcanhan.main.adapter_main.AdapterIconAccount
-import com.example.qltaichinhcanhan.main.m.Account
-import com.example.qltaichinhcanhan.main.m.DataColor
+import com.example.qltaichinhcanhan.main.adapter.AdapterIconAccount
+import com.example.qltaichinhcanhan.main.model.Account
+import com.example.qltaichinhcanhan.main.model.DataColor
 import com.example.qltaichinhcanhan.main.rdb.vm_data.AccountViewMode
 import com.example.qltaichinhcanhan.main.rdb.vm_data.CountryViewMode
 

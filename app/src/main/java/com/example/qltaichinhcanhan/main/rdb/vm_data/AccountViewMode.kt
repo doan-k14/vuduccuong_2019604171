@@ -4,8 +4,8 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.qltaichinhcanhan.main.m.Account
-import com.example.qltaichinhcanhan.main.m.IconAccount
+import com.example.qltaichinhcanhan.main.model.Account
+import com.example.qltaichinhcanhan.main.model.IconAccount
 import com.example.qltaichinhcanhan.main.rdb.datab.AppDatabase
 import com.example.qltaichinhcanhan.main.rdb.reposi.AccountRepository
 import kotlinx.coroutines.Dispatchers

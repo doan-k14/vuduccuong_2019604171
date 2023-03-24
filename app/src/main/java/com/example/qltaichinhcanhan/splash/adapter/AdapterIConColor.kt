@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.qltaichinhcanhan.databinding.ItemColorBinding
-import com.example.qltaichinhcanhan.main.m.ImageCheckCircle
+import com.example.qltaichinhcanhan.main.model.ImageCheckCircle
 
 class AdapterIConColor(
     var context: Context,

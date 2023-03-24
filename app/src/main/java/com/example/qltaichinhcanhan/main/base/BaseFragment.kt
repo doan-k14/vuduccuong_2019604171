@@ -1,13 +1,11 @@
 package com.example.qltaichinhcanhan.main.base
 
-import android.app.Activity
 import android.content.Context
-import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.fragment.app.Fragment
 import com.example.qltaichinhcanhan.main.inf.MyCallback
-import com.example.qltaichinhcanhan.main.m.Icon
+import com.example.qltaichinhcanhan.main.model.Icon
 
 
 abstract class BaseFragment : Fragment() {

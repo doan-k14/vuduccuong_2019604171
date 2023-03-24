@@ -8,12 +8,10 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
-import androidx.navigation.Navigation
-import androidx.navigation.fragment.findNavController
 import com.example.qltaichinhcanhan.R
 import com.example.qltaichinhcanhan.databinding.ActivityNdmainBinding
 import com.example.qltaichinhcanhan.main.inf.MyCallback
-import com.example.qltaichinhcanhan.main.m.Icon
+import com.example.qltaichinhcanhan.main.model.Icon
 
 class NDMainActivity : AppCompatActivity(), MyCallback {
 

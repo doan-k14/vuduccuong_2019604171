@@ -3,9 +3,9 @@ package com.example.qltaichinhcanhan.splash.adapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.example.qltaichinhcanhan.splash.boarding.OnBoarding1Fragment
-import com.example.qltaichinhcanhan.splash.boarding.OnBoarding2Fragment
-import com.example.qltaichinhcanhan.splash.boarding.OnBoarding3Fragment
+import com.example.qltaichinhcanhan.splash.fragment.boarding.OnBoarding1Fragment
+import com.example.qltaichinhcanhan.splash.fragment.boarding.OnBoarding2Fragment
+import com.example.qltaichinhcanhan.splash.fragment.boarding.OnBoarding3Fragment
 
 
 class OnBoardingPagerAdapter(

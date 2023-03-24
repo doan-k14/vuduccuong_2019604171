@@ -8,8 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import com.example.qltaichinhcanhan.R
 import com.example.qltaichinhcanhan.databinding.*
-import com.example.qltaichinhcanhan.main.m.Category
-import com.example.qltaichinhcanhan.main.m.DataColor
+import com.example.qltaichinhcanhan.main.model.Category
+import com.example.qltaichinhcanhan.main.model.DataColor
 import androidx.core.content.ContextCompat
 
 class AdapterIconCategory(

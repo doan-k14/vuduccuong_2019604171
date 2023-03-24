@@ -3,8 +3,8 @@ package com.example.qltaichinhcanhan.main.rdb.vm_data
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.qltaichinhcanhan.main.m.Category
-import com.example.qltaichinhcanhan.main.m.Icon
+import com.example.qltaichinhcanhan.main.model.Category
+import com.example.qltaichinhcanhan.main.model.Icon
 import com.example.qltaichinhcanhan.main.rdb.datab.AppDatabase
 import com.example.qltaichinhcanhan.main.rdb.reposi.CategoryRepository
 import kotlinx.coroutines.Dispatchers

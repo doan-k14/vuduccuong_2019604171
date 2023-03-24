@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:gravity="center|bottom"
     android:orientation="vertical"
-    tools:context=".splash.boarding.OnBoarding1Fragment">
+    tools:context=".splash.fragment.boarding.OnBoarding1Fragment">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:layout_width="375dp"

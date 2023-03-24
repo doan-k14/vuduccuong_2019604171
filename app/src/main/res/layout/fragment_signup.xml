@@ -7,7 +7,7 @@
     android:background="@color/white"
     android:orientation="vertical"
     android:padding="18dp"
-    tools:context=".splash.login.SignUpFragment">
+    tools:context=".splash.fragment.login.SignUpFragment">
 
 
     <ImageView

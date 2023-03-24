@@ -165,7 +165,7 @@
                 android:layout_height="wrap_content"
                 android:visibility="gone">
 
-                <com.example.qltaichinhcanhan.main.thu_vien.CustomHorizontalBar
+                <com.example.qltaichinhcanhan.main.library.CustomHorizontalBar
                     android:id="@+id/custom_horizontal_bar"
                     android:layout_width="match_parent"
                     android:layout_height="18dp"

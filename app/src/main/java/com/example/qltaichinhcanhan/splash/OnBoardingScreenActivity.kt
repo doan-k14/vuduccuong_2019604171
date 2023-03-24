@@ -9,8 +9,7 @@ import androidx.navigation.Navigation
 import com.example.qltaichinhcanhan.R
 import com.example.qltaichinhcanhan.databinding.ActivityOnBoardingScreenBinding
 import com.example.qltaichinhcanhan.main.inf.MyCallback
-import com.example.qltaichinhcanhan.main.m.Icon
-import kotlinx.coroutines.*
+import com.example.qltaichinhcanhan.main.model.Icon
 
 class OnBoardingScreenActivity : AppCompatActivity(), MyCallback {
     private lateinit var binding: ActivityOnBoardingScreenBinding
