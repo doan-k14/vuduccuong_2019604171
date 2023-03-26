@@ -18,9 +18,9 @@ import com.example.qltaichinhcanhan.R
 import com.example.qltaichinhcanhan.databinding.FragmentCurrencyBinding
 import com.example.qltaichinhcanhan.main.adapter.AdapterCountry
 import com.example.qltaichinhcanhan.main.base.BaseFragment
-import com.example.qltaichinhcanhan.main.model.Country
-import com.example.qltaichinhcanhan.main.model.CurrencyDataAPI
-import com.example.qltaichinhcanhan.main.rdb.vm_data.AccountViewMode
+import com.example.qltaichinhcanhan.main.model.m_r.Country
+import com.example.qltaichinhcanhan.main.model.m_api.CurrencyDataAPI
+import com.example.qltaichinhcanhan.main.rdb.vm_data.MoneyAccountViewMode
 import com.example.qltaichinhcanhan.main.rdb.vm_data.CountryViewMode
 import com.example.qltaichinhcanhan.main.retrofit.CountryService
 import com.google.gson.Gson
@@ -38,7 +38,7 @@ class CurrencyFragment : BaseFragment() {
     private lateinit var binding: FragmentCurrencyBinding
     lateinit var adapterCountry: AdapterCountry
     lateinit var countryViewMode: CountryViewMode
-    lateinit var accountViewMode: AccountViewMode
+    lateinit var moneyAccountViewMode: MoneyAccountViewMode
 
     var listCountry = listOf<Country>()
     var position = 0
@@ -53,7 +53,7 @@ class CurrencyFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         countryViewMode = ViewModelProvider(requireActivity())[CountryViewMode::class.java]
-        accountViewMode = ViewModelProvider(requireActivity())[AccountViewMode::class.java]
+        moneyAccountViewMode = ViewModelProvider(requireActivity())[MoneyAccountViewMode::class.java]
 
         initView()
         initEvent()
@@ -181,9 +181,9 @@ class CurrencyFragment : BaseFragment() {
     private fun filterList(query: String, listCountry: List<Country>): ArrayList<Country> {
         val filteredList = arrayListOf<Country>()
         for (i in listCountry) {
-            if (i.name!!.contains(query, ignoreCase = true)) {
-                filteredList.add(i)
-            }
+//            if (i.name!!.contains(query, ignoreCase = true)) {
+//                filteredList.add(i)
+//            }
         }
         if (filteredList.isEmpty()) {
             binding.textNotData.visibility = View.VISIBLE

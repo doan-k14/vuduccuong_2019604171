@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.qltaichinhcanhan.databinding.ItemTransactionBinding
 import com.example.qltaichinhcanhan.main.model.DataColor
-import com.example.qltaichinhcanhan.main.model.TransactionWithAccountAndCategoryName
+import com.example.qltaichinhcanhan.main.model.query_model.TransactionWithAccountAndCategoryName
 
 class AdapterTransaction(
     var context: Context,
@@ -31,25 +31,25 @@ class AdapterTransaction(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = listCategory[position]
         with(holder) {
-            binding.imgCategory.setImageResource(DataColor.showBackgroundColorCircle(context, item.category.icon!!))
-            val color = DataColor.getIdColorById(item.category.color!!)
-            binding.imgCategory.setBackgroundResource(DataColor.showBackgroundColorCircle(context,
-                color.toString()))
-            binding.textNameCategory.text = item.category.nameCategory
-            binding.textValueCategory.text = item.transaction.amountTransaction.toString()
-
-            binding.root.setOnClickListener {
-                clickItemSelect?.let {
-                    it(item)
-                }
-            }
-
-            binding.root.setOnLongClickListener {
-                clickLongItemSelect?.let {
-                    it(item)
-                }
-                true
-            }
+//            binding.imgCategory.setImageResource(DataColor.showBackgroundColorCircle(context, item.category.icon!!))
+//            val color = DataColor.getIdColorById(item.category.color!!)
+//            binding.imgCategory.setBackgroundResource(DataColor.showBackgroundColorCircle(context,
+//                color.toString()))
+//            binding.textNameCategory.text = item.category.nameCategory
+//            binding.textValueCategory.text = item.transaction.amountTransaction.toString()
+//
+//            binding.root.setOnClickListener {
+//                clickItemSelect?.let {
+//                    it(item)
+//                }
+//            }
+//
+//            binding.root.setOnLongClickListener {
+//                clickLongItemSelect?.let {
+//                    it(item)
+//                }
+//                true
+//            }
         }
     }
 

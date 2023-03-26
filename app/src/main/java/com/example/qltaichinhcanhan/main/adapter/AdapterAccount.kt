@@ -8,10 +8,11 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import com.example.qltaichinhcanhan.databinding.*
 import com.example.qltaichinhcanhan.main.model.*
+import com.example.qltaichinhcanhan.main.model.m_r.MoneyAccount
 
 class AdapterAccount(
     var context: Context,
-    var listCategory: ArrayList<Account>,
+    var listCategory: ArrayList<MoneyAccount>,
     var layoutType: LayoutType,
 ) : RecyclerView.Adapter<AdapterAccount.ViewHolder>() {
 
@@ -52,14 +53,14 @@ class AdapterAccount(
             when (layoutType) {
                 LayoutType.TYPE1 -> {
                     binding as ItemTransactionBinding
-                    binding.imgCategory.setImageResource(DataColor.showBackgroundColorCircle(context,
-                        item.icon!!))
-                    val color = DataColor.getIdColorById(item.color!!)
-                    binding.imgCategory.setBackgroundResource(DataColor.showBackgroundColorCircle(
-                        context,
-                        color.toString()))
-                    binding.textNameCategory.text = item.nameAccount
-                    binding.textValueCategory.text = item.amountAccount.toString() + item.typeMoney
+//                    binding.imgCategory.setImageResource(DataColor.showBackgroundColorCircle(context,
+//                        item.icon!!))
+//                    val color = DataColor.getIdColorById(item.color!!)
+//                    binding.imgCategory.setBackgroundResource(DataColor.showBackgroundColorCircle(
+//                        context,
+//                        color.toString()))
+//                    binding.textNameCategory.text = item.nameAccount
+//                    binding.textValueCategory.text = item.amountAccount.toString() + item.typeMoney
 
                     binding.root.setOnClickListener {
                         clickItemSelect?.let {
@@ -77,25 +78,25 @@ class AdapterAccount(
                 LayoutType.TYPE2 -> {
                     binding as ItemTransactionDialogBinding
 
-                    binding.imgSelect.isActivated = item.select == true
-                    binding.imgCategory.setImageResource(DataColor.showBackgroundColorCircle(context,
-                        item.icon!!))
-                    val color = DataColor.getIdColorById(item.color!!)
-                    binding.imgCategory.setBackgroundResource(DataColor.showBackgroundColorCircle(
-                        context,
-                        color.toString()))
-                    binding.textNameCategory.text = item.nameAccount
-                    binding.textValueCategory.text = item.amountAccount.toString() + item.typeMoney
-
-                    binding.root.setOnClickListener {
-                        for (i in listCategory.indices) {
-                            listCategory[i].select = (i == position)
-                        }
-                        clickItemSelect?.let {
-                            it(item)
-                        }
-                        notifyDataSetChanged()
-                    }
+//                    binding.imgSelect.isActivated = item.select == true
+//                    binding.imgCategory.setImageResource(DataColor.showBackgroundColorCircle(context,
+//                        item.icon!!))
+//                    val color = DataColor.getIdColorById(item.color!!)
+//                    binding.imgCategory.setBackgroundResource(DataColor.showBackgroundColorCircle(
+//                        context,
+//                        color.toString()))
+//                    binding.textNameCategory.text = item.nameAccount
+//                    binding.textValueCategory.text = item.amountAccount.toString() + item.typeMoney
+//
+//                    binding.root.setOnClickListener {
+//                        for (i in listCategory.indices) {
+//                            listCategory[i].select = (i == position)
+//                        }
+//                        clickItemSelect?.let {
+//                            it(item)
+//                        }
+//                        notifyDataSetChanged()
+//                    }
                 }
             }
         }
@@ -105,7 +106,7 @@ class AdapterAccount(
         return listCategory.size
     }
 
-    fun updateData(newList: ArrayList<Account>) {
+    fun updateData(newList: ArrayList<MoneyAccount>) {
         this.listCategory = newList
         reloadData()
     }
@@ -123,15 +124,15 @@ class AdapterAccount(
     }
 
 
-    private var clickItemSelect: ((Account) -> Unit)? = null
+    private var clickItemSelect: ((MoneyAccount) -> Unit)? = null
 
-    private var clickLongItemSelect: ((Account) -> Unit)? = null
+    private var clickLongItemSelect: ((MoneyAccount) -> Unit)? = null
 
-    fun setClickItemSelect(listener: (Account) -> Unit) {
+    fun setClickItemSelect(listener: (MoneyAccount) -> Unit) {
         clickItemSelect = listener
     }
 
-    fun setClickLongItemSelect(listener: (Account) -> Unit) {
+    fun setClickLongItemSelect(listener: (MoneyAccount) -> Unit) {
         clickLongItemSelect = listener
     }
 }

@@ -4,20 +4,16 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.example.qltaichinhcanhan.main.model.Account
-import com.example.qltaichinhcanhan.main.model.Category
-import com.example.qltaichinhcanhan.main.model.Country
-import com.example.qltaichinhcanhan.main.model.Transaction
-import com.example.qltaichinhcanhan.main.rdb.inter.AccountDao
-import com.example.qltaichinhcanhan.main.rdb.inter.Category1Dao
-import com.example.qltaichinhcanhan.main.rdb.inter.CountryDao
-import com.example.qltaichinhcanhan.main.rdb.inter.TransactionDao
+import com.example.qltaichinhcanhan.main.model.m.ColorR
+import com.example.qltaichinhcanhan.main.model.m.IconR
+import com.example.qltaichinhcanhan.main.model.m_r.*
+import com.example.qltaichinhcanhan.main.rdb.inter.*
 
-@Database(entities = [Account::class, Transaction::class, Category::class, Country::class],
+@Database(entities = [Country::class, Account::class, MoneyAccount::class, Category::class, Transaction::class],
     version = 1)
 abstract class AppDatabase : RoomDatabase() {
     companion object {
-        private const val DATABASE_NAME = "app_database41.db"
+        private const val DATABASE_NAME = "app_database24.db"
         private var instance: AppDatabase? = null
 
         @Synchronized
@@ -35,9 +31,11 @@ abstract class AppDatabase : RoomDatabase() {
         }
     }
 
-    abstract fun accountDao(): AccountDao
+    abstract fun moneyAccountDao(): MoneyAccountDao
     abstract fun transactionDao(): TransactionDao
-    abstract fun category1Dao(): Category1Dao
+    abstract fun categoryDao(): CategoryDao
     abstract fun countryDao(): CountryDao
+    abstract fun accountDao(): AccountDao
+
 
 }

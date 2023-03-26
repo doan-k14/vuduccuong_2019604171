@@ -13,7 +13,7 @@ import com.example.qltaichinhcanhan.R
 import com.example.qltaichinhcanhan.splash.adapter.AdapterIconCategory
 import com.example.qltaichinhcanhan.databinding.FragmentCategoryBinding
 import com.example.qltaichinhcanhan.main.base.BaseFragment
-import com.example.qltaichinhcanhan.main.model.Category
+import com.example.qltaichinhcanhan.main.model.m_r.Category
 import com.example.qltaichinhcanhan.main.rdb.vm_data.CategoryViewMode
 import com.google.android.material.tabs.TabLayout
 

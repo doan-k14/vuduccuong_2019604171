@@ -1,4 +1,4 @@
-package com.example.qltaichinhcanhan.main.model
+package com.example.qltaichinhcanhan.main.model.m_api
 
 class CurrencyDataAPI (
     val success: Boolean,

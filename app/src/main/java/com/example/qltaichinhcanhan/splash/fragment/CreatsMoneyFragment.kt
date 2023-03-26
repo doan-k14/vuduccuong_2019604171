@@ -21,15 +21,14 @@ import com.example.qltaichinhcanhan.main.library.MoneyTextWatcher
 import com.example.qltaichinhcanhan.R
 import com.example.qltaichinhcanhan.databinding.FragmentCreatsMoneyBinding
 import com.example.qltaichinhcanhan.main.NDMainActivity
-import com.example.qltaichinhcanhan.main.model.Account
-import com.example.qltaichinhcanhan.main.rdb.vm_data.AccountViewMode
+import com.example.qltaichinhcanhan.main.rdb.vm_data.MoneyAccountViewMode
 import com.example.qltaichinhcanhan.main.rdb.vm_data.CountryViewMode
 
 
 class CreatsMoneyFragment : Fragment() {
     lateinit var binding: FragmentCreatsMoneyBinding
     lateinit var countryViewMode: CountryViewMode
-    lateinit var accountViewMode: AccountViewMode
+    lateinit var moneyAccountViewMode: MoneyAccountViewMode
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -42,7 +41,7 @@ class CreatsMoneyFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         countryViewMode = ViewModelProvider(requireActivity())[CountryViewMode::class.java]
-        accountViewMode = ViewModelProvider(requireActivity())[AccountViewMode::class.java]
+        moneyAccountViewMode = ViewModelProvider(requireActivity())[MoneyAccountViewMode::class.java]
 
         val text =
             "Chào mừng bạn đến với Ứng dụng quản lý tài chính cá nhân. Hãy bắt đầu quản lý tiền của mình bằng cách nhập số tiền bạn có."
@@ -88,14 +87,14 @@ class CreatsMoneyFragment : Fragment() {
                 return@setOnClickListener
             }
             try {
-                val account = Account(0,
-                    "Tài khoản chính",
-                    country.currencyCode,
-                    temp.toFloat(),
-                    "ic_account1",
-                    1,
-                    false)
-                accountViewMode.addAccount(account)
+//                val moneyAccount = MoneyAccount(0,
+//                    "Tài khoản chính",
+//                    country.currencyCode,
+//                    temp.toFloat(),
+//                    "ic_account1",
+//                    1,
+//                    false)
+//                accountViewMode.addAccount(moneyAccount)
                 country.select = true
                 countryViewMode.updateAccount(country)
                 val sharedPreferences: SharedPreferences =

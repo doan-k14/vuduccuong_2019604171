@@ -3,7 +3,7 @@ package com.example.qltaichinhcanhan.main.rdb.vm_data
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.qltaichinhcanhan.main.model.Transaction
+import com.example.qltaichinhcanhan.main.model.m_r.Transaction
 import com.example.qltaichinhcanhan.main.rdb.datab.AppDatabase
 import com.example.qltaichinhcanhan.main.rdb.reposi.TransactionRepository
 import kotlinx.coroutines.Dispatchers

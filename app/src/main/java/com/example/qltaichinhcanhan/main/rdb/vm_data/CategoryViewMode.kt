@@ -3,7 +3,7 @@ package com.example.qltaichinhcanhan.main.rdb.vm_data
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.qltaichinhcanhan.main.model.Category
+import com.example.qltaichinhcanhan.main.model.m_r.Category
 import com.example.qltaichinhcanhan.main.model.Icon
 import com.example.qltaichinhcanhan.main.rdb.datab.AppDatabase
 import com.example.qltaichinhcanhan.main.rdb.reposi.CategoryRepository
@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 class CategoryViewMode(application: Application) : AndroidViewModel(application) {
 
     private var db = AppDatabase.getInstance(application)
-    private var categoryDao = db.category1Dao()
+    private var categoryDao = db.categoryDao()
 
     private val repository: CategoryRepository = CategoryRepository(categoryDao)
     val readAllDataLive = repository.allCategoriesLive

@@ -17,19 +17,19 @@ import com.example.qltaichinhcanhan.R
 import com.example.qltaichinhcanhan.splash.adapter.AdapterIConColor
 import com.example.qltaichinhcanhan.databinding.FragmentEditAccountBinding
 import com.example.qltaichinhcanhan.main.adapter.AdapterIconAccount
-import com.example.qltaichinhcanhan.main.model.Account
+import com.example.qltaichinhcanhan.main.model.m_r.MoneyAccount
 import com.example.qltaichinhcanhan.main.model.DataColor
-import com.example.qltaichinhcanhan.main.rdb.vm_data.AccountViewMode
+import com.example.qltaichinhcanhan.main.rdb.vm_data.MoneyAccountViewMode
 import com.example.qltaichinhcanhan.main.rdb.vm_data.CountryViewMode
 
 
 class EditAccountFragment : Fragment() {
     lateinit var binding: FragmentEditAccountBinding
-    lateinit var accountViewMode: AccountViewMode
+    lateinit var moneyAccountViewMode: MoneyAccountViewMode
     lateinit var countryViewMode: CountryViewMode
     private lateinit var adapterIConColor: AdapterIConColor
     private lateinit var adapterIconAccount: AdapterIconAccount
-    var account: Account = Account()
+    var moneyAccount: MoneyAccount = MoneyAccount()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,7 +41,7 @@ class EditAccountFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        accountViewMode = ViewModelProvider(requireActivity())[AccountViewMode::class.java]
+        moneyAccountViewMode = ViewModelProvider(requireActivity())[MoneyAccountViewMode::class.java]
         countryViewMode = ViewModelProvider(requireActivity())[CountryViewMode::class.java]
 
         initView()
@@ -69,9 +69,9 @@ class EditAccountFragment : Fragment() {
         binding.rcvColor.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
 
-        account = accountViewMode.account
+        moneyAccount = moneyAccountViewMode.moneyAccount
 
-        if (account.id == 0) {
+        if (moneyAccount.id == 0) {
             binding.textCreate.visibility = View.VISIBLE
             binding.llUpdate.visibility = View.GONE
             binding.edtTypeAccount.isEnabled = true
@@ -79,27 +79,27 @@ class EditAccountFragment : Fragment() {
             binding.edtTypeAccount.setCompoundDrawablesWithIntrinsicBounds(null, null, drawable, null)
         } else {
             binding.textCreate.visibility = View.GONE
-            if(account.id == 1){
+            if(moneyAccount.id == 1){
                 binding.llUpdate.visibility = View.GONE
                 binding.textSaveId1.visibility = View.VISIBLE
             }else{
                 binding.llUpdate.visibility = View.VISIBLE
                 binding.textSaveId1.visibility = View.GONE
             }
-            binding.edtNameAccount.setText(account.nameAccount)
-            binding.edtTypeAccount.text = account.typeMoney
-            binding.edtTotal.setText(account.amountAccount.toString())
-            adapterIconAccount.updateSelect(account.icon!!)
-            adapterIConColor.updateSelectColor(account.color!!)
-            adapterIconAccount.updateColor(account.color!!)
-            binding.edtTypeAccount.isEnabled = false
+//            binding.edtNameAccount.setText(moneyAccount.nameAccount)
+//            binding.edtTypeAccount.text = moneyAccount.typeMoney
+//            binding.edtTotal.setText(moneyAccount.amountAccount.toString())
+//            adapterIconAccount.updateSelect(moneyAccount.icon!!)
+//            adapterIConColor.updateSelectColor(moneyAccount.color!!)
+//            adapterIconAccount.updateColor(moneyAccount.color!!)
+//            binding.edtTypeAccount.isEnabled = false
         }
 
         val country = countryViewMode.country
         if (country.id != 0) {
             binding.edtTypeAccount.text = countryViewMode.country.currencyCode
         }else{
-            binding.edtTypeAccount.text = account.typeMoney
+//            binding.edtTypeAccount.text = moneyAccount.typeMoney
         }
     }
 
@@ -108,31 +108,31 @@ class EditAccountFragment : Fragment() {
             findNavController().popBackStack()
         }
         adapterIconAccount.setClickItemSelect {
-            accountViewMode.icon = it
+            moneyAccountViewMode.icon = it
         }
         adapterIConColor.setClickItemSelect {
             adapterIconAccount.updateColor(it.idColor)
-            accountViewMode.icon.color = it.idColor
+            moneyAccountViewMode.icon.color = it.idColor
         }
 
         binding.textSave.setOnClickListener {
             if (checkData()) {
-                accountViewMode.updateAccount(account)
+                moneyAccountViewMode.updateAccount(moneyAccount)
                 findNavController().popBackStack()
             }
         }
         binding.textSaveId1.setOnClickListener {
             if (checkData()) {
-                accountViewMode.updateAccount(account)
+                moneyAccountViewMode.updateAccount(moneyAccount)
                 findNavController().popBackStack()
             }
         }
         binding.textDelete.setOnClickListener {
-            createDialogDelete(Gravity.CENTER,account)
+            createDialogDelete(Gravity.CENTER,moneyAccount)
         }
         binding.textCreate.setOnClickListener {
             if (checkData()) {
-                accountViewMode.addAccount(account)
+                moneyAccountViewMode.addAccount(moneyAccount)
                 findNavController().popBackStack()
             }
         }
@@ -152,30 +152,30 @@ class EditAccountFragment : Fragment() {
                 Toast.LENGTH_SHORT).show()
             return false
         }
-        account.nameAccount = textName
-
-        val textTotal = binding.edtTotal.text.toString()
-
-        if (textTotal.isEmpty()) {
-            Toast.makeText(requireContext(), "Vui lòng nhập giá trị", Toast.LENGTH_SHORT).show()
-        } else {
-            try {
-                val number = textTotal.toFloat()
-                account.amountAccount = number
-            } catch (e: NumberFormatException) {
-                Toast.makeText(requireContext(), "Bạn nhập sai định dạng!", Toast.LENGTH_SHORT)
-                    .show()
-            }
-        }
-
-        account.icon = accountViewMode.icon.name
-        account.color = accountViewMode.icon.color
-        account.typeMoney = binding.edtTypeAccount.text.toString()
-        account.select = false
+//        moneyAccount.nameAccount = textName
+//
+//        val textTotal = binding.edtTotal.text.toString()
+//
+//        if (textTotal.isEmpty()) {
+//            Toast.makeText(requireContext(), "Vui lòng nhập giá trị", Toast.LENGTH_SHORT).show()
+//        } else {
+//            try {
+//                val number = textTotal.toFloat()
+//                moneyAccount.amountAccount = number
+//            } catch (e: NumberFormatException) {
+//                Toast.makeText(requireContext(), "Bạn nhập sai định dạng!", Toast.LENGTH_SHORT)
+//                    .show()
+//            }
+//        }
+//
+//        moneyAccount.icon = accountViewMode.icon.name
+//        moneyAccount.color = accountViewMode.icon.color
+//        moneyAccount.typeMoney = binding.edtTypeAccount.text.toString()
+//        moneyAccount.select = false
         return true
     }
 
-    private fun createDialogDelete(gravity: Int, account: Account) {
+    private fun createDialogDelete(gravity: Int, moneyAccount: MoneyAccount) {
         val dialog = Dialog(requireActivity())
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setContentView(R.layout.custom_dialog_layout)
@@ -201,7 +201,7 @@ class EditAccountFragment : Fragment() {
         val textKhong = dialog.findViewById<TextView>(R.id.text_khong)
 
         textCo.setOnClickListener {
-            accountViewMode.deleteAccount(account)
+            moneyAccountViewMode.deleteAccount(moneyAccount)
             dialog.dismiss()
             findNavController().popBackStack()
         }
@@ -211,7 +211,7 @@ class EditAccountFragment : Fragment() {
     }
 
     override fun onDestroy() {
-        accountViewMode.resetDataAccount()
+        moneyAccountViewMode.resetDataAccount()
         super.onDestroy()
     }
 }

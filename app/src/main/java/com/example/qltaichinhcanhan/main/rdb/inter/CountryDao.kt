@@ -2,7 +2,7 @@ package com.example.qltaichinhcanhan.main.rdb.inter
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.example.qltaichinhcanhan.main.model.Country
+import com.example.qltaichinhcanhan.main.model.m_r.Country
 
 @Dao
 interface CountryDao {

@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import com.example.qltaichinhcanhan.R
 import com.example.qltaichinhcanhan.databinding.*
-import com.example.qltaichinhcanhan.main.model.Category
+import com.example.qltaichinhcanhan.main.model.m_r.Category
 import com.example.qltaichinhcanhan.main.model.DataColor
 import androidx.core.content.ContextCompat
 
@@ -58,83 +58,83 @@ class AdapterIconCategory(
             when (layoutType) {
                 LayoutType.TYPE1 -> {
                     binding as ItemIconCategoryBinding
-                    val resources = context.resources
-                    val imageResourceId =
-                        resources.getIdentifier(item.icon, "drawable", context.packageName)
-                    binding.imgIcon.setImageResource(imageResourceId)
-
-                    binding.textNameCategory.text = item.nameCategory
-                    binding.imgIcon.setBackgroundResource(DataColor.setCustomBackgroundColorCircleById(
-                        context,
-                        item.color!!))
-                    binding.textNameCategory.setTextColor(ContextCompat.getColor(binding.textNameCategory.context,
-                        DataColor.setColorById(item.color!!)))
-
-                    binding.root.setOnClickListener {
-                        clickItemSelect?.let {
-                            it(item)
-                        }
-                    }
+//                    val resources = context.resources
+//                    val imageResourceId =
+//                        resources.getIdentifier(item.icon, "drawable", context.packageName)
+//                    binding.imgIcon.setImageResource(imageResourceId)
+//
+//                    binding.textNameCategory.text = item.nameCategory
+//                    binding.imgIcon.setBackgroundResource(DataColor.setCustomBackgroundColorCircleById(
+//                        context,
+//                        item.color!!))
+//                    binding.textNameCategory.setTextColor(ContextCompat.getColor(binding.textNameCategory.context,
+//                        DataColor.setColorById(item.color!!)))
+//
+//                    binding.root.setOnClickListener {
+//                        clickItemSelect?.let {
+//                            it(item)
+//                        }
+//                    }
 
                 }
                 LayoutType.TYPE2 -> {
                     binding as ItemIconAddCategoryBinding
-                    val resources = context.resources
-                    val imageResourceId =
-                        resources.getIdentifier(item.icon, "drawable", context.packageName)
-                    binding.imgIcon.setImageResource(imageResourceId)
-
-                    if (item.select == true) {
-                        binding.imgIcon.setBackgroundResource(DataColor.setCustomBackgroundColorCircleById(
-                            context,
-                            item.color!!))
-                        binding.root.setBackgroundResource(R.drawable.custom_icon_while)
-                    } else {
-                        binding.imgIcon.setBackgroundResource(R.drawable.color_icon_br)
-                        binding.root.background = null
-                    }
-                    if (item.id == 1) {
-                        binding.imgIcon.setBackgroundResource(R.drawable.color_icon_2)
-                    }
-
-                    binding.root.setOnClickListener {
-                        clickItemSelect?.let {
-                            for (i in 0 until listCategory.size - 1) {
-                                listCategory[i].select = (i == position)
-                            }
-                            notifyDataSetChanged()
-                            it(item)
-                        }
-                    }
+//                    val resources = context.resources
+//                    val imageResourceId =
+//                        resources.getIdentifier(item.icon, "drawable", context.packageName)
+//                    binding.imgIcon.setImageResource(imageResourceId)
+//
+//                    if (item.select == true) {
+//                        binding.imgIcon.setBackgroundResource(DataColor.setCustomBackgroundColorCircleById(
+//                            context,
+//                            item.color!!))
+//                        binding.root.setBackgroundResource(R.drawable.custom_icon_while)
+//                    } else {
+//                        binding.imgIcon.setBackgroundResource(R.drawable.color_icon_br)
+//                        binding.root.background = null
+//                    }
+//                    if (item.id == 1) {
+//                        binding.imgIcon.setBackgroundResource(R.drawable.color_icon_2)
+//                    }
+//
+//                    binding.root.setOnClickListener {
+//                        clickItemSelect?.let {
+//                            for (i in 0 until listCategory.size - 1) {
+//                                listCategory[i].select = (i == position)
+//                            }
+//                            notifyDataSetChanged()
+//                            it(item)
+//                        }
+//                    }
                 }
 
                 LayoutType.TYPE3 -> {
                     binding as ItemIconCategoryBinding
-                    val resources = context.resources
-                    val imageResourceId =
-                        resources.getIdentifier(item.icon, "drawable", context.packageName)
-                    binding.imgIcon.setImageResource(imageResourceId)
-
-                    binding.textNameCategory.text = item.nameCategory
-                    binding.imgIcon.setBackgroundResource(DataColor.setCustomBackgroundColorCircleById(context, item.color!!))
-                    binding.textNameCategory.setTextColor(ContextCompat.getColor(binding.textNameCategory.context,
-                        DataColor.setColorById(item.color!!)))
-
-                    if (item.select == true) {
-                        binding.root.setBackgroundResource(R.drawable.custom_icon_while)
-                    } else {
-                        binding.root.background = null
-                    }
-
-                    binding.root.setOnClickListener {
-                        for (i in 0 until listCategory.size - 1) {
-                            listCategory[i].select = (i == position)
-                        }
-                        notifyDataSetChanged()
-                        clickItemSelect?.let {
-                            it(item)
-                        }
-                    }
+//                    val resources = context.resources
+//                    val imageResourceId =
+//                        resources.getIdentifier(item.icon, "drawable", context.packageName)
+//                    binding.imgIcon.setImageResource(imageResourceId)
+//
+//                    binding.textNameCategory.text = item.nameCategory
+//                    binding.imgIcon.setBackgroundResource(DataColor.setCustomBackgroundColorCircleById(context, item.color!!))
+//                    binding.textNameCategory.setTextColor(ContextCompat.getColor(binding.textNameCategory.context,
+//                        DataColor.setColorById(item.color!!)))
+//
+//                    if (item.select == true) {
+//                        binding.root.setBackgroundResource(R.drawable.custom_icon_while)
+//                    } else {
+//                        binding.root.background = null
+//                    }
+//
+//                    binding.root.setOnClickListener {
+//                        for (i in 0 until listCategory.size - 1) {
+//                            listCategory[i].select = (i == position)
+//                        }
+//                        notifyDataSetChanged()
+//                        clickItemSelect?.let {
+//                            it(item)
+//                        }
+//                    }
 
                 }
             }
@@ -151,9 +151,9 @@ class AdapterIconCategory(
     }
 
     fun updateColor(idColor: Int) {
-        for (i in this.listCategory) {
-            i.color = idColor
-        }
+//        for (i in this.listCategory) {
+//            i.color = idColor
+//        }
         reloadData()
     }
 

@@ -3,8 +3,8 @@ package com.example.qltaichinhcanhan.main.rdb.inter
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import androidx.room.OnConflictStrategy
-import com.example.qltaichinhcanhan.main.model.Transaction
-import com.example.qltaichinhcanhan.main.model.TransactionWithAccountAndCategoryName
+import com.example.qltaichinhcanhan.main.model.m_r.Transaction
+import com.example.qltaichinhcanhan.main.model.query_model.TransactionWithAccountAndCategoryName
 
 
 @Dao
@@ -27,7 +27,7 @@ interface TransactionDao {
 
     @Query("SELECT * FROM `transaction` " +
             "LEFT JOIN account ON `transaction`.idAccount = account.id " +
-            "LEFT JOIN category1 ON `transaction`.idCategory1 = category1.id " +
+            "LEFT JOIN category ON `transaction`.idCategory = category.id " +
             "ORDER BY `transaction`.day DESC")
     fun getAllTransactionWithAccountAndCategoryName(): LiveData<List<TransactionWithAccountAndCategoryName>>
 
@@ -35,7 +35,7 @@ interface TransactionDao {
     @androidx.room.Transaction
     @Query("SELECT * FROM `transaction` " +
             "INNER JOIN account ON `transaction`.idAccount = account.id " +
-            "INNER JOIN category1 ON `transaction`.idCategory1 = category1.id")
+            "INNER JOIN category ON `transaction`.idCategory = category.id")
     fun getAllTransactionWithAccountAndCategoryName1(): List<TransactionWithAccountAndCategoryName>
 
 }

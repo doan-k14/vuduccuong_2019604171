@@ -10,6 +10,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.qltaichinhcanhan.R
 import com.example.qltaichinhcanhan.databinding.*
 import com.example.qltaichinhcanhan.main.model.*
+import com.example.qltaichinhcanhan.main.model.m_r.Country
 
 class AdapterCountry(
     var context: Context,
@@ -56,7 +57,7 @@ class AdapterCountry(
                 binding.root.setBackgroundResource(R.drawable.custom_button_white)
             }
 
-            binding.textNameCategory.text = item.name + " - " + item.exchangeRate.toString()
+//            binding.textNameCategory.text = item.name + " - " + item.exchangeRate.toString()
             binding.textValueCategory.text = item.currencyCode
 
 

@@ -15,8 +15,8 @@ import com.example.qltaichinhcanhan.R
 import com.example.qltaichinhcanhan.databinding.FragmentAccountsBinding
 import com.example.qltaichinhcanhan.main.adapter.AdapterAccount
 import com.example.qltaichinhcanhan.main.base.BaseFragment
-import com.example.qltaichinhcanhan.main.model.Account
-import com.example.qltaichinhcanhan.main.rdb.vm_data.AccountViewMode
+import com.example.qltaichinhcanhan.main.model.m_r.MoneyAccount
+import com.example.qltaichinhcanhan.main.rdb.vm_data.MoneyAccountViewMode
 import com.example.qltaichinhcanhan.main.retrofit.ExchangeRateApi
 import com.github.aachartmodel.aainfographics.aachartcreator.*
 import kotlinx.coroutines.*
@@ -28,7 +28,7 @@ class AccountsFragment : BaseFragment() {
     lateinit var binding: FragmentAccountsBinding
     lateinit var aaChartModel: AAChartModel
     lateinit var adapterAccount: AdapterAccount
-    lateinit var accountViewMode: AccountViewMode
+    lateinit var moneyAccountViewMode: MoneyAccountViewMode
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,7 +43,7 @@ class AccountsFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         Log.e("data", "AccountsFragment: onViewCreated")
         super.onViewCreated(view, savedInstanceState)
-        accountViewMode = ViewModelProvider(requireActivity())[AccountViewMode::class.java]
+        moneyAccountViewMode = ViewModelProvider(requireActivity())[MoneyAccountViewMode::class.java]
 
         binding.btnNavigation.setOnClickListener {
             myCallback?.onCallback()
@@ -55,34 +55,34 @@ class AccountsFragment : BaseFragment() {
 
     private fun initView() {
 
-        adapterAccount = AdapterAccount(requireContext(), arrayListOf<Account>(),AdapterAccount.LayoutType.TYPE1)
+        adapterAccount = AdapterAccount(requireContext(), arrayListOf<MoneyAccount>(),AdapterAccount.LayoutType.TYPE1)
         binding.rcvCategory.adapter = adapterAccount
         binding.rcvCategory.layoutManager =
             GridLayoutManager(requireContext(), 1, RecyclerView.VERTICAL, false)
 
-        accountViewMode.readAllDataLive.observe(requireActivity()) { accounts ->
-            adapterAccount.updateData(accounts as ArrayList<Account>)
+        moneyAccountViewMode.readAllDataLive.observe(requireActivity()) { accounts ->
+            adapterAccount.updateData(accounts as ArrayList<MoneyAccount>)
 
             var totalAmount = 0.0
             val typeDefaul = accounts[0]
 
-            for(i in accounts){
-                totalAmount += i.amountAccount!!.toFloat()
-            }
-            binding.textValueTotal.text = totalAmount.toString()+" - "+typeDefaul.typeMoney
+//            for(i in accounts){
+//                totalAmount += i.amountAccount!!.toFloat()
+//            }
+//            binding.textValueTotal.text = totalAmount.toString()+" - "+typeDefaul.typeMoney
 
         }
 
 
         adapterAccount.setClickItemSelect {
-            accountViewMode.account = it
+            moneyAccountViewMode.moneyAccount = it
             findNavController().navigate(R.id.action_nav_accounts_to_editAccountFragment)
         }
 
 
 
         binding.imgAddAccount.setOnClickListener {
-            accountViewMode.account = Account()
+            moneyAccountViewMode.moneyAccount = MoneyAccount()
             findNavController().navigate(R.id.action_nav_accounts_to_editAccountFragment)
         }
 

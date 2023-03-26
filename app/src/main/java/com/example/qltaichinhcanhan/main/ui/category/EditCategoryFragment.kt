@@ -18,7 +18,7 @@ import com.example.qltaichinhcanhan.splash.adapter.AdapterIConColor
 import com.example.qltaichinhcanhan.splash.adapter.AdapterIconCategory
 import com.example.qltaichinhcanhan.databinding.FragmentEditCategoryBinding
 import com.example.qltaichinhcanhan.main.base.BaseFragment
-import com.example.qltaichinhcanhan.main.model.Category
+import com.example.qltaichinhcanhan.main.model.m_r.Category
 import com.example.qltaichinhcanhan.main.model.DataColor
 import com.example.qltaichinhcanhan.main.model.Icon
 import com.example.qltaichinhcanhan.main.model.IconCategoryData
@@ -51,34 +51,34 @@ class EditCategoryFragment : BaseFragment() {
 
     private fun initView() {
         category = categoryViewModel.category
-        categoryViewModel.icon.name = category.icon!!
-        categoryViewModel.icon.color = category.color!!
-        if (categoryViewModel.nameIcon != null) {
-            categoryViewModel.icon.name = categoryViewModel.nameIcon
-            category.icon = categoryViewModel.nameIcon
-        }
+//        categoryViewModel.icon.name = category.icon!!
+//        categoryViewModel.icon.color = category.color!!
+//        if (categoryViewModel.nameIcon != null) {
+//            categoryViewModel.icon.name = categoryViewModel.nameIcon
+//            category.icon = categoryViewModel.nameIcon
+//        }
+//
+//        checkTypeCategory(category)
+//
+//        val list = DataColor.getListCategory()
+//        val listColor = DataColor.getListCheckCircle()
 
-        checkTypeCategory(category)
-
-        val list = DataColor.getListCategory()
-        val listColor = DataColor.getListCheckCircle()
-
-        adapterIconCategory =
-            AdapterIconCategory(requireContext(), list, AdapterIconCategory.LayoutType.TYPE2)
-        binding.rcvIconCategory.adapter = adapterIconCategory
-
-        val myLinearLayoutManager1 =
-            object : GridLayoutManager(requireContext(), 3, RecyclerView.VERTICAL, false) {
-                override fun canScrollVertically(): Boolean {
-                    return false
-                }
-            }
-        binding.rcvIconCategory.layoutManager = myLinearLayoutManager1
-
-        adapterIConColor = AdapterIConColor(requireContext(), listColor)
-        binding.rcvColor.adapter = adapterIConColor
-        binding.rcvColor.layoutManager =
-            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+//        adapterIconCategory =
+//            AdapterIconCategory(requireContext(), list, AdapterIconCategory.LayoutType.TYPE2)
+//        binding.rcvIconCategory.adapter = adapterIconCategory
+//
+//        val myLinearLayoutManager1 =
+//            object : GridLayoutManager(requireContext(), 3, RecyclerView.VERTICAL, false) {
+//                override fun canScrollVertically(): Boolean {
+//                    return false
+//                }
+//            }
+//        binding.rcvIconCategory.layoutManager = myLinearLayoutManager1
+//
+//        adapterIConColor = AdapterIConColor(requireContext(), listColor)
+//        binding.rcvColor.adapter = adapterIConColor
+//        binding.rcvColor.layoutManager =
+//            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
 
     }
 
@@ -87,16 +87,16 @@ class EditCategoryFragment : BaseFragment() {
             findNavController().popBackStack()
         }
 
-        adapterIconCategory.setClickItemSelect {
-            if (it.id == 1) {
-                findNavController().navigate(R.id.action_editCategoryFragment_to_iconCatalogFragment)
-            } else {
-                binding.imgIconCategory.setImageResource(DataColor.showBackgroundColorCircle(
-                    requireContext(),
-                    it.icon!!))
-                categoryViewModel.icon.name = it.icon!!
-            }
-        }
+//        adapterIconCategory.setClickItemSelect {
+//            if (it.id == 1) {
+//                findNavController().navigate(R.id.action_editCategoryFragment_to_iconCatalogFragment)
+//            } else {
+//                binding.imgIconCategory.setImageResource(DataColor.showBackgroundColorCircle(
+//                    requireContext(),
+//                    it.icon!!))
+//                categoryViewModel.icon.name = it.icon!!
+//            }
+//        }
 
 
         adapterIConColor.setClickItemSelect {
@@ -126,31 +126,31 @@ class EditCategoryFragment : BaseFragment() {
     }
 
     private fun checkTypeCategory(category: Category) {
-        binding.imgIconCategory.setImageResource(IconCategoryData.showICon(requireContext(),
-            category.icon!!))
-        if (category.id == 1 || category.id == 2) {
-            binding.textTitleTotal.setText(R.string.create_category)
-            binding.llUpdateCategory.visibility = View.GONE
-            binding.txtTypeCategory.visibility = View.GONE
-            binding.textCreateCategory.visibility = View.VISIBLE
-            binding.llTypeCategory.visibility = View.VISIBLE
-            if (category.type!! == 1) {
-                binding.imgExpense.isActivated = true
-                binding.imgInCome.isActivated = false
-            } else {
-                binding.imgExpense.isActivated = false
-                binding.imgInCome.isActivated = true
-            }
-        } else {
-            binding.edtNameCategory.setText(category.nameCategory)
-            binding.edtPlannedOutlay.setText(category.lave.toString())
-            categoryViewModel.icon.name = category.icon!!
-            binding.llUpdateCategory.visibility = View.VISIBLE
-            binding.txtTypeCategory.visibility = View.VISIBLE
-            binding.textCreateCategory.visibility = View.GONE
-            binding.llTypeCategory.visibility = View.GONE
-            binding.txtTypeCategory.text = getTypeCategory(category.type!!)
-        }
+//        binding.imgIconCategory.setImageResource(IconCategoryData.showICon(requireContext(),
+//            category.icon!!))
+//        if (category.id == 1 || category.id == 2) {
+//            binding.textTitleTotal.setText(R.string.create_category)
+//            binding.llUpdateCategory.visibility = View.GONE
+//            binding.txtTypeCategory.visibility = View.GONE
+//            binding.textCreateCategory.visibility = View.VISIBLE
+//            binding.llTypeCategory.visibility = View.VISIBLE
+//            if (category.type!! == 1) {
+//                binding.imgExpense.isActivated = true
+//                binding.imgInCome.isActivated = false
+//            } else {
+//                binding.imgExpense.isActivated = false
+//                binding.imgInCome.isActivated = true
+//            }
+//        } else {
+//            binding.edtNameCategory.setText(category.nameCategory)
+//            binding.edtPlannedOutlay.setText(category.lave.toString())
+//            categoryViewModel.icon.name = category.icon!!
+//            binding.llUpdateCategory.visibility = View.VISIBLE
+//            binding.txtTypeCategory.visibility = View.VISIBLE
+//            binding.textCreateCategory.visibility = View.GONE
+//            binding.llTypeCategory.visibility = View.GONE
+//            binding.txtTypeCategory.text = getTypeCategory(category.type!!)
+//        }
     }
 
     private fun clearData() {
@@ -167,21 +167,21 @@ class EditCategoryFragment : BaseFragment() {
                 Toast.LENGTH_SHORT).show()
             return false
         }
-        category.nameCategory = textName.toString()
-
-        var textPlannedOutlay = binding.edtPlannedOutlay.text
-        if (typeCick == 2) {
-            category.id = 0
-            if (categoryViewModel.icon.name == "ic_add") {
-                Toast.makeText(requireContext(),
-                    "Tên danh mục không được bỏ trống!",
-                    Toast.LENGTH_SHORT).show()
-                return false
-            }
-        }
-
-        category.icon = categoryViewModel.icon.name
-        category.color = categoryViewModel.icon.color
+//        category.nameCategory = textName.toString()
+//
+//        var textPlannedOutlay = binding.edtPlannedOutlay.text
+//        if (typeCick == 2) {
+//            category.id = 0
+//            if (categoryViewModel.icon.name == "ic_add") {
+//                Toast.makeText(requireContext(),
+//                    "Tên danh mục không được bỏ trống!",
+//                    Toast.LENGTH_SHORT).show()
+//                return false
+//            }
+//        }
+//
+//        category.icon = categoryViewModel.icon.name
+//        category.color = categoryViewModel.icon.color
         return true
     }
 

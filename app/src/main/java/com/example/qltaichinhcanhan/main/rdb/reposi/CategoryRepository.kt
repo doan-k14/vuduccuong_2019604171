@@ -1,10 +1,10 @@
 package com.example.qltaichinhcanhan.main.rdb.reposi
 
 import androidx.lifecycle.LiveData
-import com.example.qltaichinhcanhan.main.model.Category
-import com.example.qltaichinhcanhan.main.rdb.inter.Category1Dao
+import com.example.qltaichinhcanhan.main.model.m_r.Category
+import com.example.qltaichinhcanhan.main.rdb.inter.CategoryDao
 
-class CategoryRepository(private val categoryDao: Category1Dao) {
+class CategoryRepository(private val categoryDao: CategoryDao) {
     val allCategoriesLive: LiveData<List<Category>> = categoryDao.getAllCategoriesLive()
     val allCategories: List<Category> = categoryDao.getAllCategories()
 

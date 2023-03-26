@@ -2,6 +2,8 @@ package com.example.qltaichinhcanhan.main.model
 
 import android.content.Context
 import com.example.qltaichinhcanhan.R
+import com.example.qltaichinhcanhan.main.model.m_r.Category
+import com.example.qltaichinhcanhan.main.model.m_r.MoneyAccount
 
 data class ImageCheckCircle(
     var id: Int,
@@ -80,26 +82,26 @@ object DataColor {
         return color!!.color
     }
 
-    val listIcon = IconCategoryData.iconList
-    private var listCategory = arrayListOf<Category>(
-        Category(2, "category1", 1, 1F, listIcon[1].name, 1, false),
-        Category(3, "category2", 1, 1F, listIcon[2].name, 1, false),
-        Category(4, "category3", 1, 1F, listIcon[3].name, 1, false),
-        Category(5, "category4", 1, 1F, listIcon[4].name, 1, false),
-        Category(6, "category5", 1, 1F, listIcon[4].name, 1, false),
-        Category(1, "Thêm", 1, 1F, listIcon[0].name, 2, false),
-    )
-
-    fun getListCategory(): ArrayList<Category> {
-        return arrayListOf(
-            Category(2, "category1", 1, 1F, listIcon[1].name, 1, false),
-            Category(3, "category2", 1, 1F, listIcon[2].name, 1, false),
-            Category(4, "category3", 1, 1F, listIcon[3].name, 1, false),
-            Category(5, "category4", 1, 1F, listIcon[4].name, 1, false),
-            Category(6, "category5", 1, 1F, listIcon[4].name, 1, false),
-            Category(1, "Thêm", 1, 1F, listIcon[0].name, 2, false),
-        )
-    }
+//    val listIcon = IconCategoryData.iconList
+//    private var listCategory = arrayListOf<Category>(
+//        Category(2, "category1", 1, 1F, listIcon[1].name, 1, false),
+//        Category(3, "category2", 1, 1F, listIcon[2].name, 1, false),
+//        Category(4, "category3", 1, 1F, listIcon[3].name, 1, false),
+//        Category(5, "category4", 1, 1F, listIcon[4].name, 1, false),
+//        Category(6, "category5", 1, 1F, listIcon[4].name, 1, false),
+//        Category(1, "Thêm", 1, 1F, listIcon[0].name, 2, false),
+//    )
+//
+//    fun getListCategory(): ArrayList<Category> {
+//        return arrayListOf(
+//            Category(2, "category1", 1, 1F, listIcon[1].name, 1, false),
+//            Category(3, "category2", 1, 1F, listIcon[2].name, 1, false),
+//            Category(4, "category3", 1, 1F, listIcon[3].name, 1, false),
+//            Category(5, "category4", 1, 1F, listIcon[4].name, 1, false),
+//            Category(6, "category5", 1, 1F, listIcon[4].name, 1, false),
+//            Category(1, "Thêm", 1, 1F, listIcon[0].name, 2, false),
+//        )
+//    }
 
     fun getListCheckCircle(): ArrayList<ImageCheckCircle> {
         return arrayListOf(
@@ -113,30 +115,6 @@ object DataColor {
         )
     }
 
-
-    var listAccount = arrayListOf<Account>(
-        Account(0, "account1", "VND", 10000F, "ic_account1", 1, false),
-        Account(0, "account1", "VND", 10000F, "ic_account2", 1, false),
-        Account(0, "account1", "VND", 10000F, "ic_account3", 1, false),
-        Account(0, "account1", "VND", 10000F, "ic_account4", 1, false),
-        Account(0, "account1", "VND", 10000F, "ic_account5", 1, false),
-        Account(0, "account1", "VND", 10000F, "ic_account6", 1, false),
-        Account(0, "account1", "VND", 10000F, "ic_account7", 1, false),
-        Account(0, "account1", "VND", 10000F, "ic_account8", 1, false),
-        Account(0, "account1", "VND", 10000F, "ic_account9", 1, false),
-        Account(0, "account1", "VND", 10000F, "ic_account10", 1, false),
-        Account(0, "account1", "VND", 10000F, "ic_account11", 1, false),
-        Account(0, "account1", "VND", 10000F, "ic_account12", 1, false),
-        Account(0, "account1", "VND", 10000F, "ic_account13", 1, false),
-        Account(0, "account1", "VND", 10000F, "ic_account14", 1, false),
-        Account(0, "account1", "VND", 10000F, "ic_account15", 1, false),
-        Account(0, "account1", "VND", 10000F, "ic_account16", 1, false),
-        Account(0, "account1", "VND", 10000F, "ic_account17", 1, false),
-        Account(0, "account1", "VND", 10000F, "ic_account18", 1, false),
-        Account(0, "account1", "VND", 10000F, "ic_account19", 1, false),
-        Account(0, "account1", "VND", 10000F, "ic_account20", 1, false),
-        Account(0, "account1", "VND", 10000F, "ic_account21", 1, false),
-    )
 
     fun getListIconAccount(): ArrayList<IconAccount> {
         return arrayListOf(

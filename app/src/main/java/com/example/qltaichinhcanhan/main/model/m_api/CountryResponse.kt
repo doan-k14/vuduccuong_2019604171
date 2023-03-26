@@ -1,4 +1,4 @@
-package com.example.qltaichinhcanhan.main.model
+package com.example.qltaichinhcanhan.main.model.m_api
 
 data class CountryResponse(
     val name: String,

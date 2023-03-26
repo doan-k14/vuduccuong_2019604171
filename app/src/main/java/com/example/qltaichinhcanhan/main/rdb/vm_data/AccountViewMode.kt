@@ -4,10 +4,12 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.qltaichinhcanhan.main.model.Account
+import com.example.qltaichinhcanhan.main.model.m_r.MoneyAccount
 import com.example.qltaichinhcanhan.main.model.IconAccount
+import com.example.qltaichinhcanhan.main.model.m_r.Account
 import com.example.qltaichinhcanhan.main.rdb.datab.AppDatabase
 import com.example.qltaichinhcanhan.main.rdb.reposi.AccountRepository
+import com.example.qltaichinhcanhan.main.rdb.reposi.MoneyAccountRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -18,22 +20,13 @@ class AccountViewMode(application: Application) : AndroidViewModel(application) 
 
     private val repository: AccountRepository = AccountRepository(accountDao)
     val readAllDataLive = repository.allAccountsLive
-    val readAllData = repository.allAccounts
+    val readAllData = repository.allMoneyAccounts
 
     fun addAccount(account: Account) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.insert(account)
         }
     }
-
-    fun addListAccount(list:ArrayList<Account>){
-        viewModelScope.launch(Dispatchers.IO) {
-            for(i in list){
-                repository.insert(i)
-            }
-        }
-    }
-
 
     fun updateAccount(account: Account) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -54,19 +47,6 @@ class AccountViewMode(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    var account: Account = Account()
-    var icon: IconAccount = IconAccount()
-    var nameIcon: String?=null
-    var checkTypeCategory = true
-
-    var accountLiveAddTransaction = MutableLiveData<Account>()
-
-    fun resetDataAccount(){
-        account = Account()
-        checkTypeCategory = true
-        icon = IconAccount()
-        nameIcon = null
-    }
 }
 
 

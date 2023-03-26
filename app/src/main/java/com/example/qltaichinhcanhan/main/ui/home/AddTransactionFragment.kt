@@ -19,8 +19,11 @@ import com.bumptech.glide.RequestBuilder
 import com.example.qltaichinhcanhan.R
 import com.example.qltaichinhcanhan.splash.adapter.AdapterIconCategory
 import com.example.qltaichinhcanhan.databinding.FragmentAddTransactionBinding
-import com.example.qltaichinhcanhan.main.model.*
-import com.example.qltaichinhcanhan.main.rdb.vm_data.AccountViewMode
+import com.example.qltaichinhcanhan.main.model.m_api.CurrencyDataAPI
+import com.example.qltaichinhcanhan.main.model.m_r.Category
+import com.example.qltaichinhcanhan.main.model.m_r.Country
+import com.example.qltaichinhcanhan.main.model.m_r.MoneyAccount
+import com.example.qltaichinhcanhan.main.rdb.vm_data.MoneyAccountViewMode
 import com.example.qltaichinhcanhan.main.rdb.vm_data.CategoryViewMode
 import com.example.qltaichinhcanhan.main.rdb.vm_data.CountryViewMode
 import com.example.qltaichinhcanhan.main.rdb.vm_data.TransactionViewMode
@@ -40,7 +43,7 @@ class AddTransactionFragment : Fragment() {
     lateinit var countryViewMode: CountryViewMode
     private lateinit var adapterIconCategory: AdapterIconCategory
     private lateinit var categoryViewModel: CategoryViewMode
-    private lateinit var accountViewMode: AccountViewMode
+    private lateinit var moneyAccountViewMode: MoneyAccountViewMode
 
     var listCountryR = listOf<Country>()
     var timeTransaction = 0L
@@ -61,7 +64,7 @@ class AddTransactionFragment : Fragment() {
         transactionViewMode = ViewModelProvider(requireActivity())[TransactionViewMode::class.java]
         countryViewMode = ViewModelProvider(requireActivity())[CountryViewMode::class.java]
         categoryViewModel = ViewModelProvider(requireActivity())[CategoryViewMode::class.java]
-        accountViewMode = ViewModelProvider(requireActivity())[AccountViewMode::class.java]
+        moneyAccountViewMode = ViewModelProvider(requireActivity())[MoneyAccountViewMode::class.java]
 
         initView()
         initData()
@@ -86,9 +89,9 @@ class AddTransactionFragment : Fragment() {
             list = categoryViewModel.getCategory1ListByType(2)
         }
 
-        accountViewMode.accountLiveAddTransaction.observe(requireActivity()) {
+        moneyAccountViewMode.moneyAccountLiveAddTransaction.observe(requireActivity()) {
             if (it.id != 0) {
-                binding.textSelectAccount.text = it.nameAccount
+//                binding.textSelectAccount.text = it.nameAccount
             }
         }
 
@@ -349,7 +352,7 @@ class AddTransactionFragment : Fragment() {
         Log.e("data", "add transaction: onDestroy")
         countryViewMode.checkInputScreen = 0
         countryViewMode.country = Country(0)
-        accountViewMode.accountLiveAddTransaction.postValue(Account())
+        moneyAccountViewMode.moneyAccountLiveAddTransaction.postValue(MoneyAccount())
         categoryViewModel.resetDataCategory()
         super.onDestroy()
     }

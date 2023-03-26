@@ -11,15 +11,15 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.qltaichinhcanhan.databinding.FragmentDialogAccountBinding
 import com.example.qltaichinhcanhan.main.adapter.AdapterAccount
-import com.example.qltaichinhcanhan.main.model.Account
-import com.example.qltaichinhcanhan.main.rdb.vm_data.AccountViewMode
+import com.example.qltaichinhcanhan.main.model.m_r.MoneyAccount
+import com.example.qltaichinhcanhan.main.rdb.vm_data.MoneyAccountViewMode
 
 
 class DialogAccountFragment : DialogFragment() {
 
     lateinit var binding: FragmentDialogAccountBinding
     lateinit var adapterAccount: AdapterAccount
-    lateinit var accountViewMode: AccountViewMode
+    lateinit var moneyAccountViewMode: MoneyAccountViewMode
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)
@@ -45,7 +45,7 @@ class DialogAccountFragment : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        accountViewMode = ViewModelProvider(requireActivity())[AccountViewMode::class.java]
+        moneyAccountViewMode = ViewModelProvider(requireActivity())[MoneyAccountViewMode::class.java]
 
         initView()
         initEvent()
@@ -53,7 +53,7 @@ class DialogAccountFragment : DialogFragment() {
 
     private fun initView() {
         adapterAccount = AdapterAccount(requireContext(),
-            arrayListOf<Account>(),
+            arrayListOf<MoneyAccount>(),
             AdapterAccount.LayoutType.TYPE2)
         binding.rcvAccount.adapter = adapterAccount
 
@@ -66,10 +66,10 @@ class DialogAccountFragment : DialogFragment() {
 
         binding.rcvAccount.layoutManager = myLinearLayoutManager1
 
-        accountViewMode.readAllDataLive.observe(requireActivity()) { accounts ->
-            adapterAccount.updateData(accounts as ArrayList<Account>)
+        moneyAccountViewMode.readAllDataLive.observe(requireActivity()) { accounts ->
+            adapterAccount.updateData(accounts as ArrayList<MoneyAccount>)
         }
-        accountViewMode.accountLiveAddTransaction.observe(requireActivity()) {
+        moneyAccountViewMode.moneyAccountLiveAddTransaction.observe(requireActivity()) {
             adapterAccount.updateSelectTransaction(it.id)
         }
 
@@ -80,7 +80,7 @@ class DialogAccountFragment : DialogFragment() {
             dismiss()
         }
         adapterAccount.setClickItemSelect {
-            accountViewMode.accountLiveAddTransaction.postValue(it)
+            moneyAccountViewMode.moneyAccountLiveAddTransaction.postValue(it)
             dismiss()
         }
     }
