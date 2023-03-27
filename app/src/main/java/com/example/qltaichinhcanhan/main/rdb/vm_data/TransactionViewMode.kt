@@ -17,9 +17,9 @@ class TransactionViewMode(application: Application) : AndroidViewModel(applicati
     private val repository: TransactionRepository = TransactionRepository(transactionDao)
     val readAllData = repository.allTransactions
 
-    val readData = repository.allTransactionWithAccountAndCategoryName
+    val readData = repository.allTransactionWithDetails
 
-    val readData1 = repository.allTransactionWithAccountAndCategoryName1
+    val readData1 = repository.allTransactionWithDetails1
 
     fun addTransaction(transaction: Transaction) {
         viewModelScope.launch(Dispatchers.IO) {

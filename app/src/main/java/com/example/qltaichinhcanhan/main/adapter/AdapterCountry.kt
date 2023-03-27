@@ -15,7 +15,6 @@ import com.example.qltaichinhcanhan.main.model.m_r.Country
 class AdapterCountry(
     var context: Context,
     var listCategory: ArrayList<Country>,
-    var nameCountry: String? = null,
 ) : RecyclerView.Adapter<AdapterCountry.ViewHolder>() {
 
     inner class ViewHolder(binding: ItemCountryBinding) :
@@ -35,10 +34,9 @@ class AdapterCountry(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = listCategory[position]
 
-
         with(holder) {
             var pngUrl = ""
-            pngUrl = if (item.id == 1) {
+            pngUrl = if (item.idCountry == 1) {
                 "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Flag_of_the_Taliban.svg/320px-Flag_of_the_Taliban.svg.png"
             } else {
                 val svgUrl = item.flagUrl.toString()
@@ -57,9 +55,8 @@ class AdapterCountry(
                 binding.root.setBackgroundResource(R.drawable.custom_button_white)
             }
 
-//            binding.textNameCategory.text = item.name + " - " + item.exchangeRate.toString()
+            binding.textNameCategory.text = item.countryName + " - " + item.exchangeRate.toString()
             binding.textValueCategory.text = item.currencyCode
-
 
             binding.root.setOnClickListener {
                 clickItemSelect?.let {

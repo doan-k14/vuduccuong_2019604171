@@ -2,6 +2,7 @@ package com.example.qltaichinhcanhan.main.ui.home
 
 import android.graphics.Color
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -16,9 +17,10 @@ import com.example.qltaichinhcanhan.main.model.DataChart
 import com.example.qltaichinhcanhan.main.model.ItemColor
 import com.example.qltaichinhcanhan.main.adapter.AdapterTransaction
 import com.example.qltaichinhcanhan.main.base.BaseFragment
-import com.example.qltaichinhcanhan.main.model.*
+import com.example.qltaichinhcanhan.main.model.m.DefaultData
 import com.example.qltaichinhcanhan.main.rdb.vm_data.MoneyAccountViewMode
 import com.example.qltaichinhcanhan.main.rdb.vm_data.CategoryViewMode
+import com.example.qltaichinhcanhan.main.rdb.vm_data.DataViewMode
 import com.example.qltaichinhcanhan.main.rdb.vm_data.TransactionViewMode
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.PieChart
@@ -32,6 +34,7 @@ class HomeFragment : BaseFragment() {
     lateinit var moneyAccountViewMode: MoneyAccountViewMode
     lateinit var categoryViewMode: CategoryViewMode
     lateinit var transactionViewMode: TransactionViewMode
+    lateinit var dataViewMode: DataViewMode
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -169,7 +172,7 @@ class HomeFragment : BaseFragment() {
             }
         })
 
-        createData()
+        createDataCategory()
 
     }
 
@@ -185,32 +188,21 @@ class HomeFragment : BaseFragment() {
 
 
     private fun initView() {
-        moneyAccountViewMode = ViewModelProvider(requireActivity())[MoneyAccountViewMode::class.java]
+        moneyAccountViewMode =
+            ViewModelProvider(requireActivity())[MoneyAccountViewMode::class.java]
         categoryViewMode = ViewModelProvider(requireActivity())[CategoryViewMode::class.java]
         transactionViewMode = ViewModelProvider(requireActivity())[TransactionViewMode::class.java]
+        dataViewMode = ViewModelProvider(requireActivity())[DataViewMode::class.java]
 
     }
 
-    private fun createData() {
-
-        val listIcon = IconCategoryData.iconList
-
-//        var listCa = arrayListOf<Category>(
-//            Category(0, "Thêm", 1, 1F, listIcon[0].name, 1, false),
-//            Category(0, "Thêm", 2, 1F, listIcon[0].name, 1, false),
-//            Category(0, "category1", 1, 1F, listIcon[1].name, 1, false),
-//            Category(0, "category2", 1, 1F, listIcon[2].name, 2, false),
-//            Category(0, "category3", 2, 1F, listIcon[3].name, 3, false),
-//            Category(0, "category4", 2, 1F, listIcon[4].name, 4, false),
-//            Category(0, "category5", 2, 1F, listIcon[4].name, 5, false),
-//        )
-
-//        val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
-//        val isFirstTime = sharedPref.getBoolean("isFirstTime", true)
-//        if (isFirstTime) {
-//            categoryViewMode.addListCategory(listCa)
-//            sharedPref.edit().putBoolean("isFirstTime", false).apply()
-//        }
+    private fun createDataCategory() {
+        val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
+        val isFirstTime = sharedPref.getBoolean("isFirstTime", true)
+        if (isFirstTime) {
+            dataViewMode.addListCategory(DefaultData.getListCategoryCreateData())
+            sharedPref.edit().putBoolean("isFirstTime", false).apply()
+        }
     }
 
     fun pieChart(data: List<DataChart>, pieChart: PieChart, type: String) {

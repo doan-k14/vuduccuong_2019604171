@@ -24,7 +24,7 @@ class CategoryRepository(private val categoryDao: CategoryDao) {
         return categoryDao.getCategoryById(categoryId)
     }
 
-    fun getCategory1ListByType(type: Int): List<Category> {
+    fun getListCategoryByType(type: String): List<Category> {
         return categoryDao.getCategoryByType(type)
     }
 

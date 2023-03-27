@@ -10,10 +10,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.qltaichinhcanhan.R
 import com.example.qltaichinhcanhan.main.inf.IconClickListener
 import com.example.qltaichinhcanhan.main.model.IconCategory
+import com.example.qltaichinhcanhan.main.model.m.DefaultData
+import com.example.qltaichinhcanhan.main.model.m.IconR
 
 class IconCategoryAdapter(
     var context: Context,
-    private val categories: List<IconCategory>,private val iconClickListener: IconClickListener
+    private val categories: List<DefaultData.IconRCategory>,
+    private val iconClickListener: IconClickListener,
 ) : RecyclerView.Adapter<IconCategoryAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -38,7 +41,7 @@ class IconCategoryAdapter(
                 }
             }
         holder.iconList.layoutManager = layoutManager
-        holder.iconList.adapter = IconAdapter(category.icons,iconClickListener)
+        holder.iconList.adapter = IconAdapter(context, category.icons, iconClickListener)
     }
 
     override fun getItemCount() = categories.size

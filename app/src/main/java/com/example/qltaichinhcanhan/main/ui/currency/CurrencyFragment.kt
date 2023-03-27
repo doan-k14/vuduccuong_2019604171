@@ -1,16 +1,20 @@
 package com.example.qltaichinhcanhan.main.ui.currency
 
+import android.app.Dialog
 import android.content.Context
 import android.content.SharedPreferences
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import android.widget.TextView
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,10 +22,14 @@ import com.example.qltaichinhcanhan.R
 import com.example.qltaichinhcanhan.databinding.FragmentCurrencyBinding
 import com.example.qltaichinhcanhan.main.adapter.AdapterCountry
 import com.example.qltaichinhcanhan.main.base.BaseFragment
+import com.example.qltaichinhcanhan.main.model.m.DefaultData
 import com.example.qltaichinhcanhan.main.model.m_r.Country
 import com.example.qltaichinhcanhan.main.model.m_api.CurrencyDataAPI
+import com.example.qltaichinhcanhan.main.model.m_r.Account
+import com.example.qltaichinhcanhan.main.model.m_r.Category
 import com.example.qltaichinhcanhan.main.rdb.vm_data.MoneyAccountViewMode
 import com.example.qltaichinhcanhan.main.rdb.vm_data.CountryViewMode
+import com.example.qltaichinhcanhan.main.rdb.vm_data.DataViewMode
 import com.example.qltaichinhcanhan.main.retrofit.CountryService
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
@@ -37,8 +45,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 class CurrencyFragment : BaseFragment() {
     private lateinit var binding: FragmentCurrencyBinding
     lateinit var adapterCountry: AdapterCountry
-    lateinit var countryViewMode: CountryViewMode
-    lateinit var moneyAccountViewMode: MoneyAccountViewMode
+    lateinit var dataViewMode: DataViewMode
+
 
     var listCountry = listOf<Country>()
     var position = 0
@@ -52,8 +60,7 @@ class CurrencyFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        countryViewMode = ViewModelProvider(requireActivity())[CountryViewMode::class.java]
-        moneyAccountViewMode = ViewModelProvider(requireActivity())[MoneyAccountViewMode::class.java]
+        dataViewMode = ViewModelProvider(requireActivity())[DataViewMode::class.java]
 
         initView()
         initEvent()
@@ -61,10 +68,10 @@ class CurrencyFragment : BaseFragment() {
 
     private fun initView() {
 
-        if (countryViewMode.checkInputScreen == 0) {
+        if (dataViewMode.checkInputScreenCurrency == 0) {
             binding.btnNavigation.isActivated = false
             binding.textTitleAccount.setText(R.string.menu_currency)
-        } else if (countryViewMode.checkInputScreen == 1) {
+        } else if (dataViewMode.checkInputScreenCurrency == 1) {
             binding.btnNavigation.isActivated = true
             binding.textTitleAccount.setText(R.string.text_sreach)
         }
@@ -74,8 +81,8 @@ class CurrencyFragment : BaseFragment() {
         binding.rcvCategory.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
-        countryViewMode.readAllDataLive.observe(requireActivity()) {
-            Log.e("data", "test dau vao: ${it.size}")
+        dataViewMode.readAllDataLiveCountry.observe(requireActivity()) {
+            Log.e("data", "check size country: ${it.size}")
             listCountry = it
             position = listCountry.indexOfFirst { it.select == true }
             adapterCountry.updateData(it as ArrayList<Country>)
@@ -83,6 +90,8 @@ class CurrencyFragment : BaseFragment() {
                 binding.rcvCategory.layoutManager?.scrollToPosition(position)
             }
         }
+        createDefaultAccount()
+
         val sharedPreferences: SharedPreferences =
             requireActivity().getSharedPreferences("listCountry", Context.MODE_PRIVATE)
         val checkData = sharedPreferences.getBoolean("ck", false)
@@ -98,19 +107,18 @@ class CurrencyFragment : BaseFragment() {
             binding.rcvCategory.visibility = View.VISIBLE
         }
 
-//        binding.textTitleAccount.setOnClickListener {
-//            getExchangeRate(listCountry)
-//        }
+        binding.textTitleAccount.setOnClickListener {
+            getExchangeRate(listCountry)
+        }
 
     }
 
     private fun initEvent() {
 
-
         binding.btnNavigation.setOnClickListener {
-            if (countryViewMode.checkInputScreen == 0) {
+            if (dataViewMode.checkInputScreenCurrency == 0) {
                 myCallback?.onCallback()
-            } else if (countryViewMode.checkInputScreen == 1) {
+            } else if (dataViewMode.checkInputScreenCurrency == 1) {
                 findNavController().popBackStack()
             }
         }
@@ -132,12 +140,12 @@ class CurrencyFragment : BaseFragment() {
         }
 
         binding.imgArrowBack.setOnClickListener {
-            if (countryViewMode.checkInputScreen == 0) {
+            if (dataViewMode.checkInputScreenCurrency == 0) {
                 binding.clSearch.visibility = View.GONE
                 binding.clActionBarTop.visibility = View.VISIBLE
                 binding.edtSearch.setText("")
                 hideKeyboard(binding.edtSearch)
-            } else if (countryViewMode.checkInputScreen == 1) {
+            } else if (dataViewMode.checkInputScreenCurrency == 1) {
                 findNavController().popBackStack()
             }
 
@@ -169,10 +177,11 @@ class CurrencyFragment : BaseFragment() {
         })
 
         adapterCountry.setClickItemSelect {
-            if (countryViewMode.checkInputScreen == 0) {
+            if (dataViewMode.checkInputScreenCurrency == 0) {
+                createDialogCurrencyExchange(Gravity.CENTER, listCountry[position], it)
 
-            } else if (countryViewMode.checkInputScreen == 1) {
-                countryViewMode.country = it
+            } else if (dataViewMode.checkInputScreenCurrency == 1) {
+                dataViewMode.country = it
                 findNavController().popBackStack()
             }
         }
@@ -181,9 +190,9 @@ class CurrencyFragment : BaseFragment() {
     private fun filterList(query: String, listCountry: List<Country>): ArrayList<Country> {
         val filteredList = arrayListOf<Country>()
         for (i in listCountry) {
-//            if (i.name!!.contains(query, ignoreCase = true)) {
-//                filteredList.add(i)
-//            }
+            if (i.countryName!!.contains(query, ignoreCase = true)) {
+                filteredList.add(i)
+            }
         }
         if (filteredList.isEmpty()) {
             binding.textNotData.visibility = View.VISIBLE
@@ -219,10 +228,8 @@ class CurrencyFragment : BaseFragment() {
                             }
                         }
                         Log.e("data", "Số lượng quốc gia đã được conver: ${listCountryNew.size}")
-                        countryViewMode.listCountry = listCountryNew
-                        listCountry = listCountryNew
                         if (listCountryNew.size != 0) {
-                            countryViewMode.addListAccount(listCountryNew)
+                            dataViewMode.addListCountry(listCountryNew)
                         }
                     }
                 }
@@ -248,7 +255,7 @@ class CurrencyFragment : BaseFragment() {
         val currencyCodes = countryList.map { it.currencyCode }
         val position = countryList.indexOfFirst { it.select == true }
         if (countryList.isEmpty()) {
-            Log.e("data", "Chauw goi dc data")
+            Log.e("data", "Api exchange rate chưa đc gọi")
         } else {
             val client = OkHttpClient().newBuilder().build()
             CoroutineScope(Dispatchers.IO).launch {
@@ -266,14 +273,62 @@ class CurrencyFragment : BaseFragment() {
                         currencyData.quotes["${currencyData.source}${country.currencyCode}"]
                     if (exchangeRate != null) {
                         country.exchangeRate = exchangeRate.toFloat()
+                        dataViewMode.updateCountry(country)
                     }
                 }
-                listCountry = listOf()
-                listCountry = countryList
-                for (i in listCountry) {
-                    countryViewMode.updateAccount(i)
-                }
             }
+        }
+    }
+
+
+    private fun createDefaultAccount() {
+        val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
+        val isFirstTime = sharedPref.getBoolean("createDefaultAccount", true)
+        if (isFirstTime) {
+            dataViewMode.addAccount(Account(0, "Default account", "00000", "null", true))
+            sharedPref.edit().putBoolean("createDefaultAccount", false).apply()
+        }
+    }
+
+    private fun createDialogCurrencyExchange(gravity: Int, type1: Country, type2: Country) {
+        val dialog = Dialog(requireActivity())
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.custom_dialog_layout)
+
+        val window = dialog.window ?: return
+        window.setLayout(
+            WindowManager.LayoutParams.WRAP_CONTENT,
+            WindowManager.LayoutParams.WRAP_CONTENT
+        )
+        window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        val wLayoutParams = window.attributes
+        wLayoutParams.gravity = gravity
+        window.attributes = wLayoutParams
+
+        if (Gravity.BOTTOM == gravity) {
+            dialog.setCancelable(false)
+        } else {
+            dialog.setCancelable(false)
+        }
+        dialog.show()
+
+        val textMessage = dialog.findViewById<TextView>(R.id.dialog_message)
+        val textCo = dialog.findViewById<TextView>(R.id.text_co)
+        val textKhong = dialog.findViewById<TextView>(R.id.text_khong)
+
+        val t1 = resources.getText(R.string.currency_exchange).toString()
+        val t2 = resources.getText(R.string.currency_exchange1).toString()
+        textMessage.text =
+            "$t1 ${type1.currencyCode.toString()} (${type1.currencySymbol.toString()}) " +
+                    "thành ${type2.currencyCode.toString()} (${type2.currencySymbol.toString()}). $t2"
+
+        textCo.setOnClickListener {
+            // hàm đổi
+            dialog.dismiss()
+            findNavController().popBackStack()
+        }
+        textKhong.setOnClickListener {
+            dialog.dismiss()
         }
     }
 
@@ -281,7 +336,7 @@ class CurrencyFragment : BaseFragment() {
     // https://openexchangerates.org/api/currencies.json
     override fun onDestroy() {
         Log.e("data", "currency: onDestroy")
-        countryViewMode.checkInputScreen = 0
+        dataViewMode.checkInputScreenCurrency = 0
         super.onDestroy()
     }
 }

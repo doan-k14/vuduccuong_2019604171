@@ -25,7 +25,7 @@ class MoneyAccountRepository(private val moneyAccountDao: MoneyAccountDao) {
         return moneyAccountDao.getAccountById(accountId)
     }
 
-    fun getMoneyAccountWithDetails(accountId: Int): List<MoneyAccountWithDetails> {
+    fun getMoneyAccountWithDetails(accountId: Int): MoneyAccountWithDetails {
         return moneyAccountDao.getMoneyAccountWithDetails(accountId)
     }
 

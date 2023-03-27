@@ -18,7 +18,7 @@ enum class CategoryType {
     foreignKeys = [
         ForeignKey(
             entity = Account::class,
-            parentColumns = ["id"],
+            parentColumns = ["idAccount"],
             childColumns = ["idAccount"],
             onDelete = ForeignKey.CASCADE
         )
@@ -26,9 +26,8 @@ enum class CategoryType {
 )
 data class Category(
     @PrimaryKey(autoGenerate = true)
-    @SerializedName("id")
-    var id: Int = 0,
-    @ColumnInfo(name = "nameCategory")
+    @SerializedName("idCategory")
+    var idCategory: Int = 0,
     var categoryName: String? = null,
     var type: CategoryType? = null,
     var moneyLimit: Float? = null,

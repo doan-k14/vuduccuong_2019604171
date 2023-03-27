@@ -56,9 +56,9 @@ class CategoryViewMode(application: Application) : AndroidViewModel(application)
 //        return repository.getCategory1ListByType(type) as LiveData<List<Category1>>
 //    }
 
-    fun getCategory1ListByType(type: Int): List<Category> {
-        return repository.getCategory1ListByType(type)
-    }
+//    fun getCategory1ListByType(type: Int): List<Category> {
+//        return repository.getListCategoryByType(type)
+//    }
 
     var category: Category = Category()
     var icon: Icon = Icon()

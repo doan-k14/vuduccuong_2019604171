@@ -22,23 +22,24 @@ interface MoneyAccountDao {
     @Query("SELECT * FROM moneyAccount")
     fun getAllAccounts(): List<MoneyAccount>
 
-    @Query("SELECT * FROM moneyAccount WHERE id=:accountId")
+    @Query("SELECT * FROM moneyAccount WHERE idMoneyAccount=:accountId")
     fun getAccountById(accountId: Int): LiveData<MoneyAccount>
 
     @Query("SELECT * FROM moneyAccount " +
-            "LEFT JOIN country ON moneyAccount.idCountry = country.id " +
-            "LEFT JOIN account ON moneyAccount.idAccount = account.id " +
-            "WHERE moneyAccount.id = :id")
-    fun getMoneyAccountWithDetails(id: Int): List<MoneyAccountWithDetails>
+            "INNER JOIN country ON moneyAccount.idCountry = country.idCountry " +
+            "INNER JOIN account ON moneyAccount.idAccount = account.idAccount " +
+            "WHERE moneyAccount.idMoneyAccount = :id")
+    fun getMoneyAccountWithDetails(id: Int): MoneyAccountWithDetails
 
     @Transaction
-    @Query("SELECT * FROM moneyAccount WHERE id = :id")
+    @Query("SELECT * FROM moneyAccount WHERE idMoneyAccount = :id")
     fun getMoneyAccountWithDetails1(id: Int): LiveData<MoneyAccountWithDetails>
 
 
     @androidx.room.Transaction
     @Query("SELECT * FROM moneyAccount " +
-            "INNER JOIN country ON moneyAccount.idCountry = country.id " +
-            "INNER JOIN account ON moneyAccount.idAccount = account.id " )
+            "INNER JOIN country ON moneyAccount.idCountry = country.idCountry " +
+            "INNER JOIN account ON moneyAccount.idAccount = account.idAccount ")
     fun getAllMoneyAccounts(): List<MoneyAccountWithDetails>
+
 }

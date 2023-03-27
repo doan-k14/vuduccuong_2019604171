@@ -6,12 +6,11 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.qltaichinhcanhan.databinding.ItemTransactionBinding
-import com.example.qltaichinhcanhan.main.model.DataColor
-import com.example.qltaichinhcanhan.main.model.query_model.TransactionWithAccountAndCategoryName
+import com.example.qltaichinhcanhan.main.model.query_model.TransactionWithDetails
 
 class AdapterTransaction(
     var context: Context,
-    var listCategory: ArrayList<TransactionWithAccountAndCategoryName>,
+    var listCategory: ArrayList<TransactionWithDetails>,
 ) : RecyclerView.Adapter<AdapterTransaction.ViewHolder>() {
 
     inner class ViewHolder(binding: ItemTransactionBinding) :
@@ -57,7 +56,7 @@ class AdapterTransaction(
         return listCategory.size
     }
 
-    fun updateData(newList: ArrayList<TransactionWithAccountAndCategoryName>) {
+    fun updateData(newList: ArrayList<TransactionWithDetails>) {
         this.listCategory = newList
         reloadData()
     }
@@ -68,15 +67,15 @@ class AdapterTransaction(
     }
 
 
-    private var clickItemSelect: ((TransactionWithAccountAndCategoryName) -> Unit)? = null
+    private var clickItemSelect: ((TransactionWithDetails) -> Unit)? = null
 
-    private var clickLongItemSelect: ((TransactionWithAccountAndCategoryName) -> Unit)? = null
+    private var clickLongItemSelect: ((TransactionWithDetails) -> Unit)? = null
 
-    fun setClickItemSelect(listener: (TransactionWithAccountAndCategoryName) -> Unit) {
+    fun setClickItemSelect(listener: (TransactionWithDetails) -> Unit) {
         clickItemSelect = listener
     }
 
-    fun setClickLongItemSelect(listener: (TransactionWithAccountAndCategoryName) -> Unit) {
+    fun setClickLongItemSelect(listener: (TransactionWithDetails) -> Unit) {
         clickLongItemSelect = listener
     }
 }

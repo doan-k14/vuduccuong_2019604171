@@ -9,6 +9,8 @@ import com.example.qltaichinhcanhan.main.model.m_r.MoneyAccount
 import com.example.qltaichinhcanhan.main.model.IconAccount
 import com.example.qltaichinhcanhan.main.model.query_model.MoneyAccountWithDetails
 import com.example.qltaichinhcanhan.main.rdb.datab.AppDatabase
+import com.example.qltaichinhcanhan.main.rdb.reposi.AccountRepository
+import com.example.qltaichinhcanhan.main.rdb.reposi.CountryRepository
 import com.example.qltaichinhcanhan.main.rdb.reposi.MoneyAccountRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -17,7 +19,6 @@ class MoneyAccountViewMode(application: Application) : AndroidViewModel(applicat
 
     private var db = AppDatabase.getInstance(application)
     private var moneyAccountRepository = db.moneyAccountDao()
-
     private val repository: MoneyAccountRepository = MoneyAccountRepository(moneyAccountRepository)
     val readAllDataLive = repository.allAccountsLive
     val readAllData = repository.allMoneyAccounts
@@ -71,7 +72,7 @@ class MoneyAccountViewMode(application: Application) : AndroidViewModel(applicat
     }
 
 
-    val moneyAccountWithDetailsId = MutableLiveData<List<MoneyAccountWithDetails>>()
+    val moneyAccountWithDetailsId = MutableLiveData<MoneyAccountWithDetails>()
     fun getMoneyAccountWithDetails(it: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             val result = repository.getMoneyAccountWithDetails(it)
@@ -89,6 +90,35 @@ class MoneyAccountViewMode(application: Application) : AndroidViewModel(applicat
             _moneyAccountsWithDetails.postValue(result)
         }
     }
+
+
+    // update
+
+
+    private var accountDao = db.accountDao()
+    private val accountRepository: AccountRepository = AccountRepository(accountDao)
+    private var countryDao = db.countryDao()
+    private val countryRepository: CountryRepository = CountryRepository(countryDao)
+
+
+    fun updateMoneyAccountWithDetails(moneyAccountWithDetails: MoneyAccountWithDetails) {
+        // Lấy ra thông tin liên quan đến MoneyAccount, Country và Account
+        val moneyAccount = moneyAccountWithDetails.moneyAccount
+        val country = moneyAccountWithDetails.country
+        val account = moneyAccountWithDetails.account
+
+
+        viewModelScope.launch(Dispatchers.IO) {
+            countryRepository.update(country!!)
+            accountRepository.update(account!!)
+            moneyAccountRepository.update(moneyAccount!!)
+        }
+
+        // Thực hiện update thông tin cho các entity liên quan
+
+    }
+
+
 }
 
 

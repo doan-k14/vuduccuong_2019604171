@@ -1,8 +1,8 @@
 package com.example.qltaichinhcanhan.splash
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.WindowManager
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
@@ -20,7 +20,6 @@ class OnBoardingScreenActivity : AppCompatActivity(), MyCallback {
         binding = ActivityOnBoardingScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
         navController = Navigation.findNavController(this, R.id.nav_host_fragment)
-        setContentView(binding.root)
         setColorStatusbar()
     }
 

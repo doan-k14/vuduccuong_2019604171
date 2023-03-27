@@ -83,16 +83,16 @@ class AddTransactionFragment : Fragment() {
 
         if (categoryViewModel.checkTypeCategory) {
             binding.tabLayout.selectTab(binding.tabLayout.getTabAt(0))
-            list = categoryViewModel.getCategory1ListByType(1)
+//            list = categoryViewModel.getCategory1ListByType(1)
         } else {
             binding.tabLayout.selectTab(binding.tabLayout.getTabAt(1))
-            list = categoryViewModel.getCategory1ListByType(2)
+//            list = categoryViewModel.getCategory1ListByType(2)
         }
 
         moneyAccountViewMode.moneyAccountLiveAddTransaction.observe(requireActivity()) {
-            if (it.id != 0) {
-//                binding.textSelectAccount.text = it.nameAccount
-            }
+//            if (it.id != 0) {
+////                binding.textSelectAccount.text = it.nameAccount
+//            }
         }
 
         adapterIconCategory = AdapterIconCategory(requireContext(), list as ArrayList<Category>,
@@ -108,23 +108,23 @@ class AddTransactionFragment : Fragment() {
             }
         binding.rcvIconCategory.layoutManager = myLinearLayoutManager1
 
-        if (categoryViewModel.category.id != 0) {
-            adapterIconCategory.updateSelect(categoryViewModel.category.id)
-        }
-
-
-        var country = countryViewMode.country
-        if (country.id == 0) {
-            binding.layoutAmount1.visibility = View.GONE
-            binding.edtTypeAmountTransaction2.isEnabled = true
-            binding.edtAmount2.isEnabled = true
-
-        } else {
-            binding.layoutAmount1.visibility = View.VISIBLE
-            binding.edtTypeAmountTransaction1.text = country.currencyCode
-            binding.edtTypeAmountTransaction2.isEnabled = false
-            binding.edtAmount2.isEnabled = false
-        }
+//        if (categoryViewModel.category.id != 0) {
+//            adapterIconCategory.updateSelect(categoryViewModel.category.id)
+//        }
+//
+//
+//        var country = countryViewMode.country
+//        if (country.id == 0) {
+//            binding.layoutAmount1.visibility = View.GONE
+//            binding.edtTypeAmountTransaction2.isEnabled = true
+//            binding.edtAmount2.isEnabled = true
+//
+//        } else {
+//            binding.layoutAmount1.visibility = View.VISIBLE
+//            binding.edtTypeAmountTransaction1.text = country.currencyCode
+//            binding.edtTypeAmountTransaction2.isEnabled = false
+//            binding.edtAmount2.isEnabled = false
+//        }
 
         val dateFormat = SimpleDateFormat("dd/MM")
 
@@ -163,15 +163,15 @@ class AddTransactionFragment : Fragment() {
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 val position = tab?.position
-                if (position == 0) {
-                    val list = categoryViewModel.getCategory1ListByType(1)
-                    adapterIconCategory.updateData(list as ArrayList<Category> /* = java.util.ArrayList<com.example.qltaichinhcanhan.main.m.Category1> */)
-                    categoryViewModel.checkTypeCategory = true
-                } else if (position == 1) {
-                    val list = categoryViewModel.getCategory1ListByType(2)
-                    adapterIconCategory.updateData(list as ArrayList<Category> /* = java.util.ArrayList<com.example.qltaichinhcanhan.main.m.Category1> */)
-                    categoryViewModel.checkTypeCategory = false
-                }
+//                if (position == 0) {
+//                    val list = categoryViewModel.getCategory1ListByType(1)
+//                    adapterIconCategory.updateData(list as ArrayList<Category> /* = java.util.ArrayList<com.example.qltaichinhcanhan.main.m.Category1> */)
+//                    categoryViewModel.checkTypeCategory = true
+//                } else if (position == 1) {
+//                    val list = categoryViewModel.getCategory1ListByType(2)
+//                    adapterIconCategory.updateData(list as ArrayList<Category> /* = java.util.ArrayList<com.example.qltaichinhcanhan.main.m.Category1> */)
+//                    categoryViewModel.checkTypeCategory = false
+//                }
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {
@@ -221,13 +221,13 @@ class AddTransactionFragment : Fragment() {
             dialogFragmentB.show(parentFragmentManager, "DialogFragmentB")
         }
 
-        adapterIconCategory.setClickItemSelect {
-            if (it.id == 1) {
-                findNavController().navigate(R.id.action_addTransactionFragment_to_addCategoryFragment)
-            } else {
-                categoryViewModel.category = it
-            }
-        }
+//        adapterIconCategory.setClickItemSelect {
+//            if (it.id == 1) {
+//                findNavController().navigate(R.id.action_addTransactionFragment_to_addCategoryFragment)
+//            } else {
+//                categoryViewModel.category = it
+//            }
+//        }
 
         binding.textCreate.setOnClickListener {
 //            val dateFormat = SimpleDateFormat("dd/MM")

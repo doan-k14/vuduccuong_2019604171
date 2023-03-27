@@ -17,7 +17,7 @@
 
     <fragment
         android:id="@+id/nav_accounts"
-        android:name="com.example.qltaichinhcanhan.main.ui.accounts.AccountsFragment"
+        android:name="com.example.qltaichinhcanhan.main.ui.money_accounts.MoneyAccountsFragment"
         android:label="@string/menu_gallery"
         tools:layout="@layout/fragment_accounts">
         <action
@@ -57,7 +57,7 @@
         tools:layout="@layout/fragment_icon_catalog" />
     <fragment
         android:id="@+id/editAccountFragment"
-        android:name="com.example.qltaichinhcanhan.main.ui.accounts.EditAccountFragment"
+        android:name="com.example.qltaichinhcanhan.main.ui.money_accounts.EditMoneyAccountFragment"
         android:label="fragment_edit_account"
         tools:layout="@layout/fragment_edit_account" >
         <action

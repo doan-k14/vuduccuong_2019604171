@@ -2,7 +2,7 @@ package com.example.qltaichinhcanhan.main.rdb.reposi
 
 import androidx.lifecycle.LiveData
 import com.example.qltaichinhcanhan.main.model.m_r.Transaction
-import com.example.qltaichinhcanhan.main.model.query_model.TransactionWithAccountAndCategoryName
+import com.example.qltaichinhcanhan.main.model.query_model.TransactionWithDetails
 import com.example.qltaichinhcanhan.main.rdb.inter.TransactionDao
 
 class TransactionRepository(private val transactionDao: TransactionDao) {
@@ -24,13 +24,13 @@ class TransactionRepository(private val transactionDao: TransactionDao) {
         return transactionDao.getTransactionById(transactionId)
     }
 
-    val allTransactionWithAccountAndCategoryName:
-            LiveData<List<TransactionWithAccountAndCategoryName>> =
-        transactionDao.getAllTransactionWithAccountAndCategoryName()
+    val allTransactionWithDetails:
+            LiveData<List<TransactionWithDetails>> =
+        transactionDao.getAllLiveTransactionWithDetailsByDesc()
 
-    val allTransactionWithAccountAndCategoryName1:
-            List<TransactionWithAccountAndCategoryName> =
-        transactionDao.getAllTransactionWithAccountAndCategoryName1()
+    val allTransactionWithDetails1:
+            List<TransactionWithDetails> =
+        transactionDao.getAllTransactionWithDetailsByDesc()
 
 
 }

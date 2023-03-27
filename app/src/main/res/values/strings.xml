@@ -79,5 +79,7 @@
     <string name="text_select_account">Lựa chọn tài khoản</string>
     <string name="text_cancel">Kết thúc</string>
     <string name="add_category">Thêm danh mục</string>
+    <string name="currency_exchange">Ký hiệu tiền tệ cho tất cả các giao dịch sẽ được thay đổi từ</string>
+    <string name="currency_exchange1">Tuy nhiên , số tiền giao dịch sẽ không được quy đổi dựa trên tỷ giá hối đoái.</string>
 
 </resources>

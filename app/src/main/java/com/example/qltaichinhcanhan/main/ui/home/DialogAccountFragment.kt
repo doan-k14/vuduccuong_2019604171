@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.qltaichinhcanhan.databinding.FragmentDialogAccountBinding
-import com.example.qltaichinhcanhan.main.adapter.AdapterAccount
+import com.example.qltaichinhcanhan.main.adapter.AdapterMoneyAccount
 import com.example.qltaichinhcanhan.main.model.m_r.MoneyAccount
 import com.example.qltaichinhcanhan.main.rdb.vm_data.MoneyAccountViewMode
 
@@ -18,7 +18,7 @@ import com.example.qltaichinhcanhan.main.rdb.vm_data.MoneyAccountViewMode
 class DialogAccountFragment : DialogFragment() {
 
     lateinit var binding: FragmentDialogAccountBinding
-    lateinit var adapterAccount: AdapterAccount
+    lateinit var adapterMoneyAccount: AdapterMoneyAccount
     lateinit var moneyAccountViewMode: MoneyAccountViewMode
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -52,26 +52,26 @@ class DialogAccountFragment : DialogFragment() {
     }
 
     private fun initView() {
-        adapterAccount = AdapterAccount(requireContext(),
-            arrayListOf<MoneyAccount>(),
-            AdapterAccount.LayoutType.TYPE2)
-        binding.rcvAccount.adapter = adapterAccount
-
-        val myLinearLayoutManager1 =
-            object : GridLayoutManager(requireContext(), 1, RecyclerView.VERTICAL, false) {
-                override fun canScrollVertically(): Boolean {
-                    return false
-                }
-            }
-
-        binding.rcvAccount.layoutManager = myLinearLayoutManager1
-
-        moneyAccountViewMode.readAllDataLive.observe(requireActivity()) { accounts ->
-            adapterAccount.updateData(accounts as ArrayList<MoneyAccount>)
-        }
-        moneyAccountViewMode.moneyAccountLiveAddTransaction.observe(requireActivity()) {
-            adapterAccount.updateSelectTransaction(it.id)
-        }
+//        adapterMoneyAccount = AdapterMoneyAccount(requireContext(),
+//            arrayListOf<MoneyAccount>(),
+//            AdapterMoneyAccount.LayoutType.TYPE2)
+//        binding.rcvAccount.adapter = adapterMoneyAccount
+//
+//        val myLinearLayoutManager1 =
+//            object : GridLayoutManager(requireContext(), 1, RecyclerView.VERTICAL, false) {
+//                override fun canScrollVertically(): Boolean {
+//                    return false
+//                }
+//            }
+//
+//        binding.rcvAccount.layoutManager = myLinearLayoutManager1
+//
+//        moneyAccountViewMode.readAllDataLive.observe(requireActivity()) { accounts ->
+//            adapterMoneyAccount.updateData(accounts as ArrayList<MoneyAccount>)
+//        }
+////        moneyAccountViewMode.moneyAccountLiveAddTransaction.observe(requireActivity()) {
+////            adapterAccount.updateSelectTransaction(it.id)
+////        }
 
     }
 
@@ -79,9 +79,9 @@ class DialogAccountFragment : DialogFragment() {
         binding.textCancel.setOnClickListener {
             dismiss()
         }
-        adapterAccount.setClickItemSelect {
-            moneyAccountViewMode.moneyAccountLiveAddTransaction.postValue(it)
-            dismiss()
-        }
+//        adapterMoneyAccount.setClickItemSelect {
+//            moneyAccountViewMode.moneyAccountLiveAddTransaction.postValue(it)
+//            dismiss()
+//        }
     }
 }

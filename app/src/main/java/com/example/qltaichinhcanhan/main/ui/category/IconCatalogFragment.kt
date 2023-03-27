@@ -14,14 +14,17 @@ import com.example.qltaichinhcanhan.main.base.BaseFragment
 import com.example.qltaichinhcanhan.main.inf.IconClickListener
 import com.example.qltaichinhcanhan.main.model.Icon
 import com.example.qltaichinhcanhan.main.model.IconCategoryData
+import com.example.qltaichinhcanhan.main.model.m.DefaultData
+import com.example.qltaichinhcanhan.main.model.m.IconR
 import com.example.qltaichinhcanhan.main.rdb.vm_data.CategoryViewMode
+import com.example.qltaichinhcanhan.main.rdb.vm_data.DataViewMode
 
 
 class IconCatalogFragment : BaseFragment(), IconClickListener {
 
     lateinit var binding: FragmentIconCatalogBinding
     private lateinit var iconCategoryAdapter: IconCategoryAdapter
-    lateinit var categoryViewMode: CategoryViewMode
+    lateinit var dataViewMode: DataViewMode
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -32,12 +35,12 @@ class IconCatalogFragment : BaseFragment(), IconClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        categoryViewMode = ViewModelProvider(requireActivity())[CategoryViewMode::class.java]
+        dataViewMode = ViewModelProvider(requireActivity())[DataViewMode::class.java]
 
         val layoutManager = LinearLayoutManager(activity)
         binding.rcvIcon.layoutManager = layoutManager
         iconCategoryAdapter =
-            IconCategoryAdapter(requireContext(), IconCategoryData.getIconCategoryList1(), this)
+            IconCategoryAdapter(requireContext(), DefaultData.listIconRCategory, this)
         binding.rcvIcon.adapter = iconCategoryAdapter
 
         binding.btnNavigation.setOnClickListener {
@@ -46,9 +49,9 @@ class IconCatalogFragment : BaseFragment(), IconClickListener {
 
     }
 
-    override fun onIconClick(icon: Icon) {
-        Toast.makeText(context, "Selected icon: ${icon.name}", Toast.LENGTH_SHORT).show()
-        categoryViewMode.nameIcon = icon.name
+    override fun onIconClick(iconR: IconR) {
+        Toast.makeText(context, "Selected icon: ${iconR.iconName}", Toast.LENGTH_SHORT).show()
+        dataViewMode.selectIconR.id = iconR.id
         findNavController().popBackStack()
     }
 

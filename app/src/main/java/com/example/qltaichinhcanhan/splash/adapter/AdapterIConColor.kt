@@ -7,13 +7,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.qltaichinhcanhan.databinding.ItemColorBinding
 import com.example.qltaichinhcanhan.main.model.ImageCheckCircle
+import com.example.qltaichinhcanhan.main.model.m.IconR
 
 class AdapterIConColor(
     var context: Context,
-    var listIConColor: ArrayList<ImageCheckCircle>,
+    var listIConColor: List<IconR>,
 ) : RecyclerView.Adapter<AdapterIConColor.ViewHolder>() {
-    private var selectedItem: ImageCheckCircle? = null
-
     inner class ViewHolder(binding: ItemColorBinding) : RecyclerView.ViewHolder(binding.root) {
         internal val binding: ItemColorBinding
 
@@ -31,7 +30,9 @@ class AdapterIConColor(
         val item = listIConColor[position]
         with(holder) {
             binding.imgIconColor.isActivated = item.select == true
-            binding.imgIconColor.setImageResource(item.color)
+            binding.imgIconColor.setImageResource(IconR.getIconById(context,
+                item.id,
+                IconR.getListIconCheckCircle()))
 
             binding.root.setOnClickListener {
                 clickItemSelect?.let {
@@ -49,14 +50,14 @@ class AdapterIConColor(
         return listIConColor.size
     }
 
-    fun updateData(newList: ArrayList<ImageCheckCircle>) {
+    fun updateData(newList: List<IconR>) {
         this.listIConColor = newList
         reloadData()
     }
 
     fun updateSelectColor(idColor: Int) {
         for (i in listIConColor) {
-            i.select = (i.idColor == idColor)
+            i.select = (i.idColorR == idColor)
         }
         reloadData()
     }
@@ -66,9 +67,9 @@ class AdapterIConColor(
         notifyDataSetChanged()
     }
 
-    private var clickItemSelect: ((ImageCheckCircle) -> Unit)? = null
+    private var clickItemSelect: ((IconR) -> Unit)? = null
 
-    fun setClickItemSelect(listener: (ImageCheckCircle) -> Unit) {
+    fun setClickItemSelect(listener: (IconR) -> Unit) {
         clickItemSelect = listener
     }
 }

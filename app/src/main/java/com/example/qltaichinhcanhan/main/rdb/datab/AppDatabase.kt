@@ -13,7 +13,7 @@ import com.example.qltaichinhcanhan.main.rdb.inter.*
     version = 1)
 abstract class AppDatabase : RoomDatabase() {
     companion object {
-        private const val DATABASE_NAME = "app_database24.db"
+        private const val DATABASE_NAME = "app_database26.db"
         private var instance: AppDatabase? = null
 
         @Synchronized

@@ -1,4 +1,4 @@
-package com.example.qltaichinhcanhan.main.ui.accounts
+package com.example.qltaichinhcanhan.main.ui.money_accounts
 
 import android.os.Build
 import android.os.Bundle
@@ -13,22 +13,25 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.qltaichinhcanhan.R
 import com.example.qltaichinhcanhan.databinding.FragmentAccountsBinding
-import com.example.qltaichinhcanhan.main.adapter.AdapterAccount
+import com.example.qltaichinhcanhan.main.adapter.AdapterMoneyAccount
 import com.example.qltaichinhcanhan.main.base.BaseFragment
+import com.example.qltaichinhcanhan.main.model.m_r.Account
+import com.example.qltaichinhcanhan.main.model.m_r.Country
 import com.example.qltaichinhcanhan.main.model.m_r.MoneyAccount
-import com.example.qltaichinhcanhan.main.rdb.vm_data.MoneyAccountViewMode
+import com.example.qltaichinhcanhan.main.model.query_model.MoneyAccountWithDetails
+import com.example.qltaichinhcanhan.main.rdb.vm_data.DataViewMode
 import com.example.qltaichinhcanhan.main.retrofit.ExchangeRateApi
 import com.github.aachartmodel.aainfographics.aachartcreator.*
 import kotlinx.coroutines.*
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class AccountsFragment : BaseFragment() {
+class MoneyAccountsFragment : BaseFragment() {
 
     lateinit var binding: FragmentAccountsBinding
     lateinit var aaChartModel: AAChartModel
-    lateinit var adapterAccount: AdapterAccount
-    lateinit var moneyAccountViewMode: MoneyAccountViewMode
+    lateinit var adapterMoneyAccount: AdapterMoneyAccount
+    lateinit var dataViewMode: DataViewMode
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,50 +46,67 @@ class AccountsFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         Log.e("data", "AccountsFragment: onViewCreated")
         super.onViewCreated(view, savedInstanceState)
-        moneyAccountViewMode = ViewModelProvider(requireActivity())[MoneyAccountViewMode::class.java]
+        dataViewMode = ViewModelProvider(requireActivity())[DataViewMode::class.java]
 
         binding.btnNavigation.setOnClickListener {
             myCallback?.onCallback()
         }
 
         initView()
-
+        initEvent()
     }
+
 
     private fun initView() {
 
-        adapterAccount = AdapterAccount(requireContext(), arrayListOf<MoneyAccount>(),AdapterAccount.LayoutType.TYPE1)
-        binding.rcvCategory.adapter = adapterAccount
+        adapterMoneyAccount = AdapterMoneyAccount(requireContext(),
+            listOf<MoneyAccountWithDetails>(),
+            AdapterMoneyAccount.LayoutType.TYPE1)
+        binding.rcvCategory.adapter = adapterMoneyAccount
         binding.rcvCategory.layoutManager =
             GridLayoutManager(requireContext(), 1, RecyclerView.VERTICAL, false)
 
-        moneyAccountViewMode.readAllDataLive.observe(requireActivity()) { accounts ->
-            adapterAccount.updateData(accounts as ArrayList<MoneyAccount>)
+
+        dataViewMode.getAllMoneyAccountsWithDetails()
+
+        dataViewMode.moneyAccountsWithDetails.observe(requireActivity()) {
+            adapterMoneyAccount.updateData(it)
 
             var totalAmount = 0.0
-            val typeDefaul = accounts[0]
 
-//            for(i in accounts){
-//                totalAmount += i.amountAccount!!.toFloat()
-//            }
-//            binding.textValueTotal.text = totalAmount.toString()+" - "+typeDefaul.typeMoney
+            for (i in it) {
+                totalAmount += i.moneyAccount!!.amountMoneyAccount!!.toFloat() / i.country!!.exchangeRate!!.toFloat()
+            }
+            binding.textValueTotal.text = it[0].country!!.currencySymbol+" "+ converMoneyShow(totalAmount.toFloat())
 
         }
 
 
-        adapterAccount.setClickItemSelect {
-            moneyAccountViewMode.moneyAccount = it
+    }
+    private fun initEvent() {
+        adapterMoneyAccount.setClickItemSelect {
+            dataViewMode.editOrAddMoneyAccount = it
             findNavController().navigate(R.id.action_nav_accounts_to_editAccountFragment)
         }
-
-
 
         binding.imgAddAccount.setOnClickListener {
-            moneyAccountViewMode.moneyAccount = MoneyAccount()
+            dataViewMode.editOrAddMoneyAccount = MoneyAccountWithDetails(MoneyAccount(), Country(), Account())
             findNavController().navigate(R.id.action_nav_accounts_to_editAccountFragment)
+//            dataViewMode.addMoneyAccount(MoneyAccount(0, "usd", 100F, false, 3, 3, 239, 1))
+//            dataViewMode.addMoneyAccount(MoneyAccount(0, "euro", 1000F, false, 3, 3, 179, 1))
         }
+    }
 
-
+    private fun converMoneyShow(totalAmount: Float): String {
+        val displayAmount = if (totalAmount < 1000000) {
+            String.format("%,.0f",
+                totalAmount)
+        } else {
+            String.format("%.1fM",
+                totalAmount / 1000000).replace(",",
+                ".")
+        }
+        return displayAmount
     }
 
     fun convertMoney(type1: String, type2: String) {

@@ -10,24 +10,31 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 @Entity(tableName = "transaction",
     foreignKeys = [
-        ForeignKey(entity = MoneyAccount::class,
-            parentColumns = ["id"],
+        ForeignKey(
+            entity = MoneyAccount::class,
+            parentColumns = ["idMoneyAccount"],
             childColumns = ["idMoneyAccount"],
-            onDelete = ForeignKey.CASCADE),
-        ForeignKey(entity = Category::class,
-            parentColumns = ["id"],
+            onDelete = ForeignKey.CASCADE
+        ),
+        ForeignKey(
+            entity = Category::class,
+            parentColumns = ["idCategory"],
             childColumns = ["idCategory"],
-            onDelete = ForeignKey.CASCADE),
-        ForeignKey(entity = Account::class,
-            parentColumns = ["id"],
+            onDelete = ForeignKey.CASCADE
+        ),
+        ForeignKey(
+            entity = Account::class,
+            parentColumns = ["idAccount"],
             childColumns = ["idAccount"],
-            onDelete = ForeignKey.CASCADE)
-    ])
+            onDelete = ForeignKey.CASCADE
+        )
+    ]
+)
 
 data class Transaction(
     @PrimaryKey(autoGenerate = true)
-    @SerializedName("id")
-    val id: Int = 0,
+    @SerializedName("idTransaction")
+    val idTransaction: Int = 0,
     var transactionName: String? = null,
     var transactionAmount: Float? = null,
     var day: Long? = null,

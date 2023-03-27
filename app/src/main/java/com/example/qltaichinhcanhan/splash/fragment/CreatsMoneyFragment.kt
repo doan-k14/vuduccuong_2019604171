@@ -21,14 +21,16 @@ import com.example.qltaichinhcanhan.main.library.MoneyTextWatcher
 import com.example.qltaichinhcanhan.R
 import com.example.qltaichinhcanhan.databinding.FragmentCreatsMoneyBinding
 import com.example.qltaichinhcanhan.main.NDMainActivity
+import com.example.qltaichinhcanhan.main.model.m_r.Country
+import com.example.qltaichinhcanhan.main.model.m_r.MoneyAccount
 import com.example.qltaichinhcanhan.main.rdb.vm_data.MoneyAccountViewMode
 import com.example.qltaichinhcanhan.main.rdb.vm_data.CountryViewMode
+import com.example.qltaichinhcanhan.main.rdb.vm_data.DataViewMode
 
 
 class CreatsMoneyFragment : Fragment() {
     lateinit var binding: FragmentCreatsMoneyBinding
-    lateinit var countryViewMode: CountryViewMode
-    lateinit var moneyAccountViewMode: MoneyAccountViewMode
+    lateinit var dataViewMode: DataViewMode
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -40,8 +42,7 @@ class CreatsMoneyFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        countryViewMode = ViewModelProvider(requireActivity())[CountryViewMode::class.java]
-        moneyAccountViewMode = ViewModelProvider(requireActivity())[MoneyAccountViewMode::class.java]
+        dataViewMode = ViewModelProvider(requireActivity())[DataViewMode::class.java]
 
         val text =
             "Chào mừng bạn đến với Ứng dụng quản lý tài chính cá nhân. Hãy bắt đầu quản lý tiền của mình bằng cách nhập số tiền bạn có."
@@ -67,12 +68,14 @@ class CreatsMoneyFragment : Fragment() {
         }
 
         binding.edtTypeAccount.setOnClickListener {
-            countryViewMode.checkInputScreen = 1
+            dataViewMode.checkInputScreenCurrency = 1
+            dataViewMode.country = Country()
             findNavController().navigate(R.id.action_creatsMoneyFragment_to_currencyFragment)
         }
 
-        val country = countryViewMode.country
-        if (country.id != 0) {
+        val country = dataViewMode.country
+
+        if (country.idCountry != 0) {
             binding.edtTypeAccount.text = country.currencyCode
         }
 
@@ -87,16 +90,21 @@ class CreatsMoneyFragment : Fragment() {
                 return@setOnClickListener
             }
             try {
-//                val moneyAccount = MoneyAccount(0,
-//                    "Tài khoản chính",
-//                    country.currencyCode,
-//                    temp.toFloat(),
-//                    "ic_account1",
-//                    1,
-//                    false)
-//                accountViewMode.addAccount(moneyAccount)
+                val moneyAccount = MoneyAccount(
+                    0,
+                    "Tài khoản chính",
+                    temp.toFloat(),
+                    false,
+                    1,
+                    2,
+                    country.idCountry,
+                    1
+                )
+                dataViewMode.addMoneyAccount(moneyAccount)
+
                 country.select = true
-                countryViewMode.updateAccount(country)
+                dataViewMode.updateCountry(country)
+
                 val sharedPreferences: SharedPreferences =
                     requireActivity().getSharedPreferences("default_account_initialization_check",
                         Context.MODE_PRIVATE)

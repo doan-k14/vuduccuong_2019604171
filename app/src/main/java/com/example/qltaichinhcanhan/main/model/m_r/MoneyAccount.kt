@@ -1,7 +1,6 @@
 package com.example.qltaichinhcanhan.main.model.m_r
 
 import android.os.Parcelable
-import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
@@ -13,13 +12,13 @@ import kotlinx.parcelize.Parcelize
     foreignKeys = [
         ForeignKey(
             entity = Country::class,
-            parentColumns = ["id"],
+            parentColumns = ["idCountry"],
             childColumns = ["idCountry"],
             onDelete = ForeignKey.CASCADE
         ),
         ForeignKey(
             entity = Account::class,
-            parentColumns = ["id"],
+            parentColumns = ["idAccount"],
             childColumns = ["idAccount"],
             onDelete = ForeignKey.CASCADE
         )
@@ -27,8 +26,8 @@ import kotlinx.parcelize.Parcelize
 )
 data class MoneyAccount(
     @PrimaryKey(autoGenerate = true)
-    @SerializedName("id")
-    val id: Int = 0,
+    @SerializedName("idMoneyAccount")
+    val idMoneyAccount: Int = 0,
     var moneyAccountName: String? = null,
     var amountMoneyAccount: Float? = null,
     var select: Boolean? = null,

@@ -21,8 +21,11 @@ import com.example.qltaichinhcanhan.main.base.BaseFragment
 import com.example.qltaichinhcanhan.main.model.m_r.Category
 import com.example.qltaichinhcanhan.main.model.DataColor
 import com.example.qltaichinhcanhan.main.model.Icon
-import com.example.qltaichinhcanhan.main.model.IconCategoryData
-import com.example.qltaichinhcanhan.main.rdb.vm_data.CategoryViewMode
+import com.example.qltaichinhcanhan.main.model.ImageCheckCircle
+import com.example.qltaichinhcanhan.main.model.m.DefaultData
+import com.example.qltaichinhcanhan.main.model.m.IconR
+import com.example.qltaichinhcanhan.main.model.m_r.CategoryType
+import com.example.qltaichinhcanhan.main.rdb.vm_data.DataViewMode
 
 
 class EditCategoryFragment : BaseFragment() {
@@ -30,8 +33,8 @@ class EditCategoryFragment : BaseFragment() {
     private lateinit var adapterIconCategory: AdapterIconCategory
     private lateinit var adapterIConColor: AdapterIConColor
 
-    private lateinit var categoryViewModel: CategoryViewMode
-    var category = Category()
+    private lateinit var dataViewMode: DataViewMode
+    var editOrAddCategory = Category()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -43,43 +46,47 @@ class EditCategoryFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        categoryViewModel = ViewModelProvider(requireActivity())[CategoryViewMode::class.java]
+        dataViewMode = ViewModelProvider(requireActivity())[DataViewMode::class.java]
         initView()
         initEvent()
     }
 
     private fun initView() {
-        category = categoryViewModel.category
-//        categoryViewModel.icon.name = category.icon!!
-//        categoryViewModel.icon.color = category.color!!
-//        if (categoryViewModel.nameIcon != null) {
-//            categoryViewModel.icon.name = categoryViewModel.nameIcon
-//            category.icon = categoryViewModel.nameIcon
-//        }
-//
-//        checkTypeCategory(category)
-//
-//        val list = DataColor.getListCategory()
-//        val listColor = DataColor.getListCheckCircle()
+        // update lại list category ( lấy trong khoảng để trùng thì hiện thị)
 
-//        adapterIconCategory =
-//            AdapterIconCategory(requireContext(), list, AdapterIconCategory.LayoutType.TYPE2)
-//        binding.rcvIconCategory.adapter = adapterIconCategory
-//
-//        val myLinearLayoutManager1 =
-//            object : GridLayoutManager(requireContext(), 3, RecyclerView.VERTICAL, false) {
-//                override fun canScrollVertically(): Boolean {
-//                    return false
-//                }
-//            }
-//        binding.rcvIconCategory.layoutManager = myLinearLayoutManager1
-//
-//        adapterIConColor = AdapterIConColor(requireContext(), listColor)
-//        binding.rcvColor.adapter = adapterIConColor
-//        binding.rcvColor.layoutManager =
-//            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        adapterIconCategory =
+            AdapterIconCategory(requireContext(),
+                DefaultData.getListCategoryAdd(),
+                AdapterIconCategory.LayoutType.TYPE2)
+        binding.rcvIconCategory.adapter = adapterIconCategory
+        val myLinearLayoutManager =
+            object : GridLayoutManager(requireContext(), 3, RecyclerView.VERTICAL, false) {
+                override fun canScrollVertically(): Boolean {
+                    return false
+                }
+            }
+        binding.rcvIconCategory.layoutManager = myLinearLayoutManager
+        adapterIConColor = AdapterIConColor(requireContext(), IconR.getListIconCheckCircle())
+        binding.rcvColor.adapter = adapterIConColor
+        binding.rcvColor.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
 
+
+        editOrAddCategory = dataViewMode.editOrAddCategory
+
+        checkEditOrAddCategory(editOrAddCategory)
+        checkSelectIconCategory()
+
+    }
+
+    private fun checkSelectIconCategory() {
+        val ck = dataViewMode.selectIconR.id
+        if (ck > 2) {
+            binding.imgIconCategory.setImageResource(IconR.getIconById(requireContext(),
+                ck,
+                IconR.listIconRCategory))
+            dataViewMode.editOrAddCategory.icon = ck
+        }
     }
 
     private fun initEvent() {
@@ -87,76 +94,88 @@ class EditCategoryFragment : BaseFragment() {
             findNavController().popBackStack()
         }
 
-//        adapterIconCategory.setClickItemSelect {
-//            if (it.id == 1) {
-//                findNavController().navigate(R.id.action_editCategoryFragment_to_iconCatalogFragment)
-//            } else {
-//                binding.imgIconCategory.setImageResource(DataColor.showBackgroundColorCircle(
-//                    requireContext(),
-//                    it.icon!!))
-//                categoryViewModel.icon.name = it.icon!!
-//            }
-//        }
+        adapterIconCategory.setClickItemSelect {
+            if (it.idCategory == 1) {
+                findNavController().navigate(R.id.action_editCategoryFragment_to_iconCatalogFragment)
+            } else {
+                binding.imgIconCategory.setImageResource(IconR.getIconById(requireContext(),
+                    it.icon!!,
+                    IconR.listIconRCategory))
+                dataViewMode.editOrAddCategory.icon = it.icon
+            }
+        }
 
 
         adapterIConColor.setClickItemSelect {
-            val id = DataColor.getIdColorById(it.idColor)
-            binding.imgIconCategory.setBackgroundResource(DataColor.showBackgroundColorCircle(
-                requireContext(),
-                id!!))
-            adapterIconCategory.updateColor(it.idColor)
-            categoryViewModel.icon.color = it.idColor
+            binding.imgIconCategory.setBackgroundResource(IconR.getIconById(requireContext(),
+                it.idColorR!!,
+                IconR.getListIconCheckCircle()))
+            adapterIconCategory.updateColor(it.idColorR!!)
+            dataViewMode.editOrAddCategory.color = it.idColorR
+
         }
 
         binding.textSaveCategory.setOnClickListener {
-            checkData(1)
-            categoryViewModel.updateCategory(category)
-            findNavController().popBackStack()
+            if (checkData(1)) {
+                Log.e("data", "class category save: ${dataViewMode.editOrAddCategory.toString()}")
+                dataViewMode.updateCategory(category = editOrAddCategory)
+                findNavController().popBackStack()
+            }
         }
 
         binding.textCreateCategory.setOnClickListener {
-            checkData(2)
-            categoryViewModel.addCategory(category)
-            findNavController().popBackStack()
+            if (checkData(2)) {
+                Log.e("data", "class category save: ${dataViewMode.editOrAddCategory.toString()}")
+                dataViewMode.addCategory(category = editOrAddCategory)
+                findNavController().popBackStack()
+            }
         }
 
         binding.textDeleteCategory.setOnClickListener {
-            createDialogDelete(Gravity.CENTER, category)
+            createDialogDelete(Gravity.CENTER, category = editOrAddCategory)
         }
     }
 
-    private fun checkTypeCategory(category: Category) {
-//        binding.imgIconCategory.setImageResource(IconCategoryData.showICon(requireContext(),
-//            category.icon!!))
-//        if (category.id == 1 || category.id == 2) {
-//            binding.textTitleTotal.setText(R.string.create_category)
-//            binding.llUpdateCategory.visibility = View.GONE
-//            binding.txtTypeCategory.visibility = View.GONE
-//            binding.textCreateCategory.visibility = View.VISIBLE
-//            binding.llTypeCategory.visibility = View.VISIBLE
-//            if (category.type!! == 1) {
-//                binding.imgExpense.isActivated = true
-//                binding.imgInCome.isActivated = false
-//            } else {
-//                binding.imgExpense.isActivated = false
-//                binding.imgInCome.isActivated = true
-//            }
-//        } else {
-//            binding.edtNameCategory.setText(category.nameCategory)
-//            binding.edtPlannedOutlay.setText(category.lave.toString())
-//            categoryViewModel.icon.name = category.icon!!
-//            binding.llUpdateCategory.visibility = View.VISIBLE
-//            binding.txtTypeCategory.visibility = View.VISIBLE
-//            binding.textCreateCategory.visibility = View.GONE
-//            binding.llTypeCategory.visibility = View.GONE
-//            binding.txtTypeCategory.text = getTypeCategory(category.type!!)
-//        }
-    }
+    private fun checkEditOrAddCategory(category: Category) {
+        binding.imgIconCategory.setImageResource(IconR.getIconById(requireContext(),
+            category.icon!!,
+            IconR.listIconRCategory))
+        binding.imgIconCategory.setBackgroundResource(IconR.getIconById(requireContext(),
+            category.color!!,
+            IconR.getListIconCheckCircle()))
 
-    private fun clearData() {
-        categoryViewModel.category = Category()
-        categoryViewModel.icon = Icon()
-        categoryViewModel.nameIcon = null
+
+        if (category.idCategory == 1 || category.idCategory == 2) {
+            binding.textTitleTotal.setText(R.string.create_category)
+            binding.llUpdateCategory.visibility = View.GONE
+            binding.txtTypeCategory.visibility = View.GONE
+            binding.textCreateCategory.visibility = View.VISIBLE
+            binding.llTypeCategory.visibility = View.VISIBLE
+            if (category.type == CategoryType.EXPENSE) {
+                binding.imgExpense.isActivated = true
+                binding.imgInCome.isActivated = false
+            } else if (category.type == CategoryType.INCOME) {
+                binding.imgExpense.isActivated = false
+                binding.imgInCome.isActivated = true
+            }
+            binding.imgIconCategory.setBackgroundResource(IconR.getIconById(requireContext(),
+                1,
+                IconR.getListIconCheckCircle()))
+
+        } else {
+            binding.edtNameCategory.setText(category.categoryName)
+            binding.edtPlannedOutlay.setText(category.moneyLimit.toString())
+            binding.llUpdateCategory.visibility = View.VISIBLE
+            binding.txtTypeCategory.visibility = View.VISIBLE
+            binding.textCreateCategory.visibility = View.GONE
+            binding.llTypeCategory.visibility = View.GONE
+            binding.txtTypeCategory.text = getTypeCategory(category.type.toString())
+            adapterIConColor.updateSelectColor(category.color!!)
+            adapterIconCategory.updateColor(category.color!!)
+
+        }
+
+
     }
 
     private fun checkData(typeCick: Int): Boolean {
@@ -167,21 +186,18 @@ class EditCategoryFragment : BaseFragment() {
                 Toast.LENGTH_SHORT).show()
             return false
         }
-//        category.nameCategory = textName.toString()
-//
-//        var textPlannedOutlay = binding.edtPlannedOutlay.text
-//        if (typeCick == 2) {
-//            category.id = 0
-//            if (categoryViewModel.icon.name == "ic_add") {
-//                Toast.makeText(requireContext(),
-//                    "Tên danh mục không được bỏ trống!",
-//                    Toast.LENGTH_SHORT).show()
-//                return false
-//            }
-//        }
-//
-//        category.icon = categoryViewModel.icon.name
-//        category.color = categoryViewModel.icon.color
+        dataViewMode.editOrAddCategory.categoryName = textName.toString()
+
+        var textPlannedOutlay = binding.edtPlannedOutlay.text
+        if (typeCick == 2) {
+            dataViewMode.editOrAddCategory.idCategory = 0
+            if (dataViewMode.editOrAddCategory.icon!! <= 2) {
+                Toast.makeText(requireContext(),
+                    "Tên danh mục không được bỏ trống!",
+                    Toast.LENGTH_SHORT).show()
+                return false
+            }
+        }
         return true
     }
 
@@ -211,7 +227,7 @@ class EditCategoryFragment : BaseFragment() {
         val textKhong = dialog.findViewById<TextView>(R.id.text_khong)
 
         textCo.setOnClickListener {
-            categoryViewModel.deleteCategory(category)
+            dataViewMode.deleteCategory(category)
             dialog.dismiss()
             findNavController().popBackStack()
         }
@@ -220,29 +236,18 @@ class EditCategoryFragment : BaseFragment() {
         }
     }
 
-    private fun getTypeCategory(type: Int): String {
-        if (type == 1) {
+    private fun getTypeCategory(type: String): String {
+        if (type == CategoryType.EXPENSE.toString()) {
             return "Chi phí"
-        } else if (type == 2) {
+        } else if (type == CategoryType.INCOME.toString()) {
             return "Thu nhập"
         }
         return ""
     }
 
-    override fun onCallBackICon(icon: Icon) {
-        Log.e("test", "Edt: onCallBackICon ${icon.name}")
-        categoryViewModel.icon.name = icon.name
-        super.onCallBackICon(icon)
-    }
-
-    override fun onDestroyView() {
-        Log.e("test", "Edt: onDestroyView")
-        super.onDestroyView()
-    }
-
     override fun onDestroy() {
         Log.e("test", "Edt: onDestroy")
-        clearData()
+        dataViewMode.resetDataCategory()
         super.onDestroy()
     }
 

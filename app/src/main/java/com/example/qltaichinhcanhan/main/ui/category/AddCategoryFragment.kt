@@ -46,14 +46,14 @@ class AddCategoryFragment : Fragment() {
             GridLayoutManager(requireContext(), 3, RecyclerView.VERTICAL, false)
         binding.rcvIconCategory.layoutManager = myLinearLayoutManager1
 
-        if (categoryViewModel.checkTypeCategory) {
-            adapterIconCategory.updateData(categoryViewModel.getCategory1ListByType(1) as ArrayList<Category>)
-        } else {
-            adapterIconCategory.updateData(categoryViewModel.getCategory1ListByType(2) as ArrayList<Category>)
-        }
+//        if (categoryViewModel.checkTypeCategory) {
+//            adapterIconCategory.updateData(categoryViewModel.getCategory1ListByType(1) as ArrayList<Category>)
+//        } else {
+//            adapterIconCategory.updateData(categoryViewModel.getCategory1ListByType(2) as ArrayList<Category>)
+//        }
 
-        if (categoryViewModel.category.id != 0) {
-            adapterIconCategory.updateSelect(categoryViewModel.category.id)
+        if (categoryViewModel.category.idCategory != 0) {
+            adapterIconCategory.updateSelect(categoryViewModel.category.idCategory)
         }
 
     }
@@ -63,7 +63,7 @@ class AddCategoryFragment : Fragment() {
             findNavController().popBackStack()
         }
         adapterIconCategory.setClickItemSelect {
-            if (it.id == 1) {
+            if (it.idCategory == 1) {
                 findNavController().navigate(R.id.action_addCategoryFragment_to_editCategoryFragment)
             } else {
                 categoryViewModel.category = it

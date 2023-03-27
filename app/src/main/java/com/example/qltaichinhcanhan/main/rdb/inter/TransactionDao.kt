@@ -2,9 +2,8 @@ package com.example.qltaichinhcanhan.main.rdb.inter
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import androidx.room.OnConflictStrategy
 import com.example.qltaichinhcanhan.main.model.m_r.Transaction
-import com.example.qltaichinhcanhan.main.model.query_model.TransactionWithAccountAndCategoryName
+import com.example.qltaichinhcanhan.main.model.query_model.TransactionWithDetails
 
 
 @Dao
@@ -21,21 +20,23 @@ interface TransactionDao {
     @Query("SELECT * FROM `transaction`")
     fun getAllTransactions(): LiveData<List<Transaction>>
 
-    @Query("SELECT * FROM `transaction` WHERE id=:transactionId")
+    @Query("SELECT * FROM `transaction` WHERE idTransaction=:transactionId")
     fun getTransactionById(transactionId: Int): LiveData<Transaction>
 
 
     @Query("SELECT * FROM `transaction` " +
-            "LEFT JOIN account ON `transaction`.idAccount = account.id " +
-            "LEFT JOIN category ON `transaction`.idCategory = category.id " +
+            "LEFT JOIN account ON `transaction`.idAccount = account.idAccount " +
+            "LEFT JOIN category ON `transaction`.idCategory = category.idCategory " +
             "ORDER BY `transaction`.day DESC")
-    fun getAllTransactionWithAccountAndCategoryName(): LiveData<List<TransactionWithAccountAndCategoryName>>
+    fun getAllLiveTransactionWithDetailsByDesc(): LiveData<List<TransactionWithDetails>>
 
-
-    @androidx.room.Transaction
     @Query("SELECT * FROM `transaction` " +
-            "INNER JOIN account ON `transaction`.idAccount = account.id " +
-            "INNER JOIN category ON `transaction`.idCategory = category.id")
-    fun getAllTransactionWithAccountAndCategoryName1(): List<TransactionWithAccountAndCategoryName>
+            "INNER JOIN moneyAccount ON `transaction`.idAccount = moneyAccount.idMoneyAccount " +
+            "INNER JOIN account ON `transaction`.idAccount = account.idAccount " +
+            "INNER JOIN category ON `transaction`.idCategory = category.idCategory " +
+            "ORDER BY `transaction`.day DESC"
+    )
+    fun getAllTransactionWithDetailsByDesc(): List<TransactionWithDetails>
+
 
 }

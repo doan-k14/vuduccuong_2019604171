@@ -14,14 +14,17 @@ import com.example.qltaichinhcanhan.splash.adapter.AdapterIconCategory
 import com.example.qltaichinhcanhan.databinding.FragmentCategoryBinding
 import com.example.qltaichinhcanhan.main.base.BaseFragment
 import com.example.qltaichinhcanhan.main.model.m_r.Category
+import com.example.qltaichinhcanhan.main.model.m_r.CategoryType
 import com.example.qltaichinhcanhan.main.rdb.vm_data.CategoryViewMode
+import com.example.qltaichinhcanhan.main.rdb.vm_data.DataViewMode
 import com.google.android.material.tabs.TabLayout
 
 
 class CategoryFragment : BaseFragment() {
     lateinit var binding: FragmentCategoryBinding
     private lateinit var adapterIconCategory: AdapterIconCategory
-    private lateinit var categoryViewModel: CategoryViewMode
+    private lateinit var dataViewMode: DataViewMode
+    var list = listOf<Category>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,7 +37,7 @@ class CategoryFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        categoryViewModel = ViewModelProvider(requireActivity())[CategoryViewMode::class.java]
+        dataViewMode = ViewModelProvider(requireActivity())[DataViewMode::class.java]
 
         initView()
 
@@ -48,18 +51,18 @@ class CategoryFragment : BaseFragment() {
         binding.tabLayout.addTab(tabChiPhi)
         binding.tabLayout.addTab(tabThuNhap)
 
-        var list = listOf<Category>()
 
-        if (categoryViewModel.checkTypeCategory) {
+        if (!dataViewMode.checkTypeTabLayoutCategory) {
             binding.tabLayout.selectTab(binding.tabLayout.getTabAt(0))
-            list = categoryViewModel.getCategory1ListByType(1)
+            dataViewMode.getListCategoryByType(CategoryType.EXPENSE.toString())
+
         } else {
             binding.tabLayout.selectTab(binding.tabLayout.getTabAt(1))
-            list = categoryViewModel.getCategory1ListByType(2)
+            dataViewMode.getListCategoryByType(CategoryType.INCOME.toString())
         }
 
 
-        adapterIconCategory = AdapterIconCategory(requireContext(), list as ArrayList<Category>,
+        adapterIconCategory = AdapterIconCategory(requireContext(), arrayListOf(),
             AdapterIconCategory.LayoutType.TYPE1)
 
         binding.rcvIconCategory.adapter = adapterIconCategory
@@ -67,7 +70,9 @@ class CategoryFragment : BaseFragment() {
         binding.rcvIconCategory.layoutManager =
             GridLayoutManager(requireContext(), 3, RecyclerView.VERTICAL, false)
 
-
+        dataViewMode.listCategoryByTypeLiveData.observe(requireActivity()) {
+            adapterIconCategory.updateData(it as ArrayList<Category>)
+        }
     }
 
     private fun initEvent() {
@@ -77,20 +82,18 @@ class CategoryFragment : BaseFragment() {
 
         adapterIconCategory.setClickItemSelect {
             findNavController().navigate(R.id.actionExpenseToEditCategoryFragment)
-            categoryViewModel.category = it
+            dataViewMode.editOrAddCategory = it
         }
 
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 val position = tab?.position
                 if (position == 0) {
-                    val list = categoryViewModel.getCategory1ListByType(1)
-                    adapterIconCategory.updateData(list as ArrayList<Category> /* = java.util.ArrayList<com.example.qltaichinhcanhan.main.m.Category1> */)
-                    categoryViewModel.checkTypeCategory = true
+                    dataViewMode.getListCategoryByType(CategoryType.EXPENSE.toString())
+                    dataViewMode.checkTypeTabLayoutCategory = false
                 } else if (position == 1) {
-                    val list = categoryViewModel.getCategory1ListByType(2)
-                    adapterIconCategory.updateData(list as ArrayList<Category> /* = java.util.ArrayList<com.example.qltaichinhcanhan.main.m.Category1> */)
-                    categoryViewModel.checkTypeCategory = false
+                    dataViewMode.getListCategoryByType(CategoryType.INCOME.toString())
+                    dataViewMode.checkTypeTabLayoutCategory = true
                 }
             }
 
@@ -107,7 +110,7 @@ class CategoryFragment : BaseFragment() {
 
     override fun onDestroy() {
         Log.e("test", "Category: onDestroy")
-        categoryViewModel.resetDataCategory()
+        dataViewMode.resetDataCategory()
         super.onDestroy()
     }
 

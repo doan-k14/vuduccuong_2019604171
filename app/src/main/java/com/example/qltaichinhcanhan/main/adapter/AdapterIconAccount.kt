@@ -7,11 +7,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.qltaichinhcanhan.R
 import com.example.qltaichinhcanhan.databinding.*
-import com.example.qltaichinhcanhan.main.model.*
+import com.example.qltaichinhcanhan.main.model.m.IconR
 
 class AdapterIconAccount(
     var context: Context,
-    var listCategory: ArrayList<IconAccount>,
+    var listCategory: List<IconR>,
 ) : RecyclerView.Adapter<AdapterIconAccount.ViewHolder>() {
 
 
@@ -37,15 +37,9 @@ class AdapterIconAccount(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = listCategory[position]
         with(holder) {
-            val resources = context.resources
-            val imageResourceId =
-                resources.getIdentifier(item.name, "drawable", context.packageName)
-            binding.imgIcon.setImageResource(imageResourceId)
-
+            binding.imgIcon.setImageResource(IconR.getIconById(context,item.id,IconR.listIconRAccount))
             if (item.select == true) {
-                binding.imgIcon.setBackgroundResource(DataColor.setCustomBackgroundColorCircleById(
-                    context,
-                    item.color!!))
+                binding.imgIcon.setBackgroundResource(IconR.getColorById(context, item.idColorR!!, IconR.getListColor()))
                 binding.root.setBackgroundResource(R.drawable.custom_icon_while)
             } else {
                 binding.imgIcon.setBackgroundResource(R.drawable.color_icon_br)
@@ -68,31 +62,34 @@ class AdapterIconAccount(
         return listCategory.size
     }
 
-    fun updateData(newList: ArrayList<IconAccount>) {
+    fun updateData(newList: ArrayList<IconR>) {
         this.listCategory = newList
         reloadData()
     }
 
     fun updateColor(idColor: Int) {
         for (i in this.listCategory) {
-            i.color = idColor
+            i.idColorR = idColor
         }
         reloadData()
     }
-    fun updateSelect(name:String){
+
+    fun updateSelect(idIcon: Int) {
         for (i in listCategory) {
-            i.select = (i.name == name)
+            i.select = (i.id == idIcon)
         }
+        reloadData()
     }
+
     @SuppressLint("NotifyDataSetChanged")
     fun reloadData() {
         notifyDataSetChanged()
     }
 
 
-    private var clickItemSelect: ((IconAccount) -> Unit)? = null
+    private var clickItemSelect: ((IconR) -> Unit)? = null
 
-    fun setClickItemSelect(listener: (IconAccount) -> Unit) {
+    fun setClickItemSelect(listener: (IconR) -> Unit) {
         clickItemSelect = listener
     }
 }

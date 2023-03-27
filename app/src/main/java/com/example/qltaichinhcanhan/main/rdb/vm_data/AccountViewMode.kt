@@ -17,7 +17,6 @@ class AccountViewMode(application: Application) : AndroidViewModel(application) 
 
     private var db = AppDatabase.getInstance(application)
     private var accountDao = db.accountDao()
-
     private val repository: AccountRepository = AccountRepository(accountDao)
     val readAllDataLive = repository.allAccountsLive
     val readAllData = repository.allMoneyAccounts

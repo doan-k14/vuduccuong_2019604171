@@ -2,7 +2,9 @@ package com.example.qltaichinhcanhan.main.model
 
 import android.content.Context
 import com.example.qltaichinhcanhan.R
+import com.example.qltaichinhcanhan.main.model.m.IconR
 import com.example.qltaichinhcanhan.main.model.m_r.Category
+import com.example.qltaichinhcanhan.main.model.m_r.CategoryType
 import com.example.qltaichinhcanhan.main.model.m_r.MoneyAccount
 
 data class ImageCheckCircle(
@@ -92,16 +94,7 @@ object DataColor {
 //        Category(1, "Thêm", 1, 1F, listIcon[0].name, 2, false),
 //    )
 //
-//    fun getListCategory(): ArrayList<Category> {
-//        return arrayListOf(
-//            Category(2, "category1", 1, 1F, listIcon[1].name, 1, false),
-//            Category(3, "category2", 1, 1F, listIcon[2].name, 1, false),
-//            Category(4, "category3", 1, 1F, listIcon[3].name, 1, false),
-//            Category(5, "category4", 1, 1F, listIcon[4].name, 1, false),
-//            Category(6, "category5", 1, 1F, listIcon[4].name, 1, false),
-//            Category(1, "Thêm", 1, 1F, listIcon[0].name, 2, false),
-//        )
-//    }
+
 
     fun getListCheckCircle(): ArrayList<ImageCheckCircle> {
         return arrayListOf(
