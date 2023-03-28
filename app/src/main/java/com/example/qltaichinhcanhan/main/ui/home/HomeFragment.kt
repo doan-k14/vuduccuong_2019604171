@@ -193,7 +193,6 @@ class HomeFragment : BaseFragment() {
         categoryViewMode = ViewModelProvider(requireActivity())[CategoryViewMode::class.java]
         transactionViewMode = ViewModelProvider(requireActivity())[TransactionViewMode::class.java]
         dataViewMode = ViewModelProvider(requireActivity())[DataViewMode::class.java]
-
     }
 
     private fun createDataCategory() {
@@ -243,4 +242,8 @@ class HomeFragment : BaseFragment() {
         }
         pieChart.setCenterTextColor(Color.BLACK)
     }
+
+
+
+
 }

@@ -60,6 +60,10 @@ class CountryViewMode(application: Application) : AndroidViewModel(application) 
     }
 
 
+
+
+
+
     var listCountry = arrayListOf<Country>()
     var checkInputScreen = 0
     var country = Country(0)

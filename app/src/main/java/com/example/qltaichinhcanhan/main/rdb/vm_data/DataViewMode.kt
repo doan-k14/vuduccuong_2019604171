@@ -52,7 +52,7 @@ class DataViewMode(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    //    -----------------------------------------------------
+    //    --------------------------Country ---------------------------
     private var countryDao = db.countryDao()
     private val countryRepository: CountryRepository = CountryRepository(countryDao)
 
@@ -100,6 +100,14 @@ class DataViewMode(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    val countryDefault = MutableLiveData<Country>()
+    fun getCountryBySelect() {
+        viewModelScope.launch(Dispatchers.IO) {
+            countryDefault.postValue(countryRepository.getCountryBySelect().value)
+        }
+    }
+
+
     var checkInputScreenCurrency = 0
     var country = Country()
 
@@ -125,7 +133,6 @@ class DataViewMode(application: Application) : AndroidViewModel(application) {
         }
     }
 
-
     fun updateMoneyAccount(moneyAccount: MoneyAccount) {
         viewModelScope.launch(Dispatchers.IO) {
             moneyAccountRepository.update(moneyAccount)
@@ -144,15 +151,6 @@ class DataViewMode(application: Application) : AndroidViewModel(application) {
             moneyAccountLiveData.postValue(repository.getAccountById(it).value)
         }
     }
-
-
-    var editOrAddMoneyAccount = MoneyAccountWithDetails()
-
-    fun resetDataMoneyAccount() {
-        editOrAddMoneyAccount = MoneyAccountWithDetails()
-    }
-
-
 
     val moneyAccountWithDetailsId = MutableLiveData<MoneyAccountWithDetails>()
     fun getMoneyAccountWithDetails(it: Int) {
@@ -176,7 +174,6 @@ class DataViewMode(application: Application) : AndroidViewModel(application) {
 
     // update
 
-
     fun updateMoneyAccountWithDetails(moneyAccountWithDetails: MoneyAccountWithDetails) {
         // Lấy ra thông tin liên quan đến MoneyAccount, Country và Account
         val moneyAccount = moneyAccountWithDetails.moneyAccount
@@ -193,6 +190,16 @@ class DataViewMode(application: Application) : AndroidViewModel(application) {
         // Thực hiện update thông tin cho các entity liên quan
 
     }
+
+
+    var editOrAddMoneyAccount = MoneyAccountWithDetails()
+
+    fun resetDataMoneyAccount() {
+        editOrAddMoneyAccount = MoneyAccountWithDetails()
+    }
+
+
+
 
 
 //    ----------------------------------Category-------------

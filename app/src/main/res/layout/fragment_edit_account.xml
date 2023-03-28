@@ -30,7 +30,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:text="@string/edit_category"
+            android:text="@string/edit_money_account"
             android:textColor="@color/white"
             android:textSize="18sp"
             android:textStyle="bold"
@@ -98,7 +98,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="@string/acounts_name"
+                android:text="@string/total"
                 android:textSize="16sp" />
 
             <EditText

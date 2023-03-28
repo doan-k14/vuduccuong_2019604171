@@ -23,4 +23,8 @@ interface CountryDao {
 
     @Query("SELECT * FROM country WHERE idCountry=:countryId")
     fun getAccountById(countryId: Int): LiveData<Country>
+
+    @Query("SELECT * FROM country WHERE `select`= 1")
+    fun getCountryBySelect(): LiveData<Country>
+
 }

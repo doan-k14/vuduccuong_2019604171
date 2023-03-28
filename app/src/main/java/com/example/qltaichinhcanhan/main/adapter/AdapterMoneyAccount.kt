@@ -2,6 +2,7 @@ package com.example.qltaichinhcanhan.main.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -10,6 +11,7 @@ import com.example.qltaichinhcanhan.databinding.*
 import com.example.qltaichinhcanhan.main.model.m.IconR
 import com.example.qltaichinhcanhan.main.model.m_r.MoneyAccount
 import com.example.qltaichinhcanhan.main.model.query_model.MoneyAccountWithDetails
+import java.text.DecimalFormat
 
 class AdapterMoneyAccount(
     var context: Context,
@@ -50,21 +52,21 @@ class AdapterMoneyAccount(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = listCategory[position]
+        val formatter = DecimalFormat("#,###")
         with(holder) {
             when (layoutType) {
                 LayoutType.TYPE1 -> {
                     binding as ItemTransactionBinding
-
                     binding.imgCategory.setImageResource(IconR.getIconById(context,
                         item.moneyAccount!!.icon!!,
                         IconR.listIconRAccount))
 
                     binding.imgCategory.setBackgroundResource(IconR.getColorById(context,
                         item.moneyAccount.color!!,
-                        IconR.getListColor()))
+                        IconR.getListColorIconR()))
                     binding.textNameCategory.text = item.moneyAccount!!.moneyAccountName
-                    binding.textValueCategory.text =
-                        item.country!!.currencySymbol + item.moneyAccount!!.amountMoneyAccount.toString()
+                    val m = formatter.format(item.moneyAccount!!.amountMoneyAccount)
+                    binding.textValueCategory.text = item.country!!.currencySymbol + m
 
                     binding.root.setOnClickListener {
                         clickItemSelect?.let {

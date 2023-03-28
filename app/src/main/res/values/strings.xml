@@ -81,5 +81,6 @@
     <string name="add_category">Thêm danh mục</string>
     <string name="currency_exchange">Ký hiệu tiền tệ cho tất cả các giao dịch sẽ được thay đổi từ</string>
     <string name="currency_exchange1">Tuy nhiên , số tiền giao dịch sẽ không được quy đổi dựa trên tỷ giá hối đoái.</string>
+    <string name="edit_money_account">Chỉnh sửa tài khoản</string>
 
 </resources>

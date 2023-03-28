@@ -32,7 +32,7 @@ class MoneyAccountsFragment : BaseFragment() {
     lateinit var aaChartModel: AAChartModel
     lateinit var adapterMoneyAccount: AdapterMoneyAccount
     lateinit var dataViewMode: DataViewMode
-
+    var countryDefault = Country()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -71,18 +71,20 @@ class MoneyAccountsFragment : BaseFragment() {
 
         dataViewMode.moneyAccountsWithDetails.observe(requireActivity()) {
             adapterMoneyAccount.updateData(it)
-
+            countryDefault = it[0].country!!
+            
             var totalAmount = 0.0
-
             for (i in it) {
                 totalAmount += i.moneyAccount!!.amountMoneyAccount!!.toFloat() / i.country!!.exchangeRate!!.toFloat()
             }
-            binding.textValueTotal.text = it[0].country!!.currencySymbol+" "+ converMoneyShow(totalAmount.toFloat())
+            binding.textValueTotal.text =
+                it[0].country!!.currencySymbol + " " + converMoneyShow(totalAmount.toFloat())
 
         }
 
 
     }
+
     private fun initEvent() {
         adapterMoneyAccount.setClickItemSelect {
             dataViewMode.editOrAddMoneyAccount = it
@@ -90,7 +92,8 @@ class MoneyAccountsFragment : BaseFragment() {
         }
 
         binding.imgAddAccount.setOnClickListener {
-            dataViewMode.editOrAddMoneyAccount = MoneyAccountWithDetails(MoneyAccount(), Country(), Account())
+            dataViewMode.editOrAddMoneyAccount =
+                MoneyAccountWithDetails(MoneyAccount(), countryDefault, Account())
             findNavController().navigate(R.id.action_nav_accounts_to_editAccountFragment)
 //            dataViewMode.addMoneyAccount(MoneyAccount(0, "usd", 100F, false, 3, 3, 239, 1))
 //            dataViewMode.addMoneyAccount(MoneyAccount(0, "euro", 1000F, false, 3, 3, 179, 1))

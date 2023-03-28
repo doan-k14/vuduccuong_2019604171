@@ -39,7 +39,7 @@ class AdapterIconAccount(
         with(holder) {
             binding.imgIcon.setImageResource(IconR.getIconById(context,item.id,IconR.listIconRAccount))
             if (item.select == true) {
-                binding.imgIcon.setBackgroundResource(IconR.getColorById(context, item.idColorR!!, IconR.getListColor()))
+                binding.imgIcon.setBackgroundResource(IconR.getColorById(context, item.idColorR!!, IconR.getListColorIconR()))
                 binding.root.setBackgroundResource(R.drawable.custom_icon_while)
             } else {
                 binding.imgIcon.setBackgroundResource(R.drawable.color_icon_br)

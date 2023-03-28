@@ -6,6 +6,7 @@ import android.widget.EditText
 import androidx.fragment.app.Fragment
 import com.example.qltaichinhcanhan.main.inf.MyCallback
 import com.example.qltaichinhcanhan.main.model.Icon
+import java.text.DecimalFormat
 
 
 abstract class BaseFragment : Fragment() {
@@ -52,6 +53,11 @@ abstract class BaseFragment : Fragment() {
         val imm =
             requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(editText.windowToken, 0)
+    }
+
+    fun convertFloatToString(value: Float): String {
+        val formatter = DecimalFormat("#,###")
+        return formatter.format(value)
     }
 
 }

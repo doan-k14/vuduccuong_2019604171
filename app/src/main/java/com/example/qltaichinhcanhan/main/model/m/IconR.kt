@@ -48,7 +48,7 @@ data class IconR(
             IconR(10, "ic_ms5", 0, false, 3),
             IconR(11, "ic_sk", 0, false, 6)
         )
-
+        // ở list edt thì cắt trong khoảng [] để trùng id thì hiện thị ( gộp tất cả về 1 list
 
         fun getListIconCheckCircle(): List<IconR> {
             return listOf(
@@ -74,6 +74,21 @@ data class IconR(
                 ColorR(7, "color7"),
             )
         }
+
+        fun getListColorIconR() : List<ColorR>{
+            return listOf(
+                ColorR(0, "color_icon_br"),
+                ColorR(1, "color_icon_1"),
+                ColorR(2, "color_icon_2"),
+                ColorR(3, "color_icon_3"),
+                ColorR(4, "color_icon_4"),
+                ColorR(5, "color_icon_5"),
+                ColorR(6, "color_icon_6"),
+                ColorR(7, "color_icon_7"),
+            )
+        }
+
+
 
 
         fun showBackgroundColorCircle(context: Context, name: String): Int {

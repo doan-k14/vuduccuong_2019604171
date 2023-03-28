@@ -27,7 +27,7 @@ import kotlinx.parcelize.Parcelize
 data class MoneyAccount(
     @PrimaryKey(autoGenerate = true)
     @SerializedName("idMoneyAccount")
-    val idMoneyAccount: Int = 0,
+    var idMoneyAccount: Int = 0,
     var moneyAccountName: String? = null,
     var amountMoneyAccount: Float? = null,
     var select: Boolean? = null,
