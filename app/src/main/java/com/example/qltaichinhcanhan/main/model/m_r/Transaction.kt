@@ -34,12 +34,12 @@ import kotlinx.parcelize.Parcelize
 data class Transaction(
     @PrimaryKey(autoGenerate = true)
     @SerializedName("idTransaction")
-    val idTransaction: Int = 0,
+    var idTransaction: Int = 0,
     var transactionName: String? = null,
     var transactionAmount: Float? = null,
     var day: Long? = null,
     var comment: String? = null,
-    var select: Boolean? = null,
+    var selectTransaction: Boolean? = null,
     var idMoneyAccount: Int? = null,
     var idCategory: Int? = null,
     var idAccount: Int? = null,

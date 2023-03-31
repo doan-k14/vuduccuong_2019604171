@@ -3,6 +3,7 @@ package com.example.qltaichinhcanhan.main.rdb.inter
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.example.qltaichinhcanhan.main.model.m_r.Transaction
+import com.example.qltaichinhcanhan.main.model.query_model.MonthTransactions
 import com.example.qltaichinhcanhan.main.model.query_model.TransactionWithDetails
 
 
@@ -37,6 +38,28 @@ interface TransactionDao {
             "ORDER BY `transaction`.day DESC"
     )
     fun getAllTransactionWithDetailsByDesc(): List<TransactionWithDetails>
+
+    @Query("SELECT * FROM `transaction` " +
+            "INNER JOIN moneyAccount ON `transaction`.idAccount = moneyAccount.idMoneyAccount " +
+            "INNER JOIN account ON `transaction`.idAccount = account.idAccount " +
+            "INNER JOIN category ON `transaction`.idCategory = category.idCategory " +
+            "WHERE strftime('%Y', 'unixepoch', `transaction`.day / 1000, 'unixepoch') = :year " +
+            "GROUP BY strftime('%m', 'unixepoch', `transaction`.day / 1000, 'unixepoch') " +
+            "ORDER BY `transaction`.day DESC")
+    fun getTransactionsByMonthLiveData(year: String): LiveData<List<TransactionWithDetails>>
+
+    @Query("SELECT strftime('%m', `transaction`.day / 1000, 'unixepoch') AS month, * FROM `transaction` WHERE strftime('%Y', `transaction`.day / 1000, 'unixepoch') = :year ORDER BY day DESC")
+    fun getTransactionsByMonth(year: String): LiveData<List<Transaction>>
+
+
+    @Query("SELECT * FROM `transaction` " +
+            "INNER JOIN moneyAccount ON `transaction`.idAccount = moneyAccount.idMoneyAccount " +
+            "INNER JOIN account ON `transaction`.idAccount = account.idAccount " +
+            "INNER JOIN category ON `transaction`.idCategory = category.idCategory " +
+            "WHERE category.type = :type "+
+            "ORDER BY `transaction`.day DESC"
+    )
+    fun getAllTransactionWithDetailsByTypeCategory(type:String): List<TransactionWithDetails>
 
 
 }

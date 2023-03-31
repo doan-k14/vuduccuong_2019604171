@@ -1,6 +1,7 @@
 package com.example.qltaichinhcanhan.main.rdb.reposi
 
 import androidx.lifecycle.LiveData
+import com.example.qltaichinhcanhan.main.model.m_r.Category
 import com.example.qltaichinhcanhan.main.model.m_r.Transaction
 import com.example.qltaichinhcanhan.main.model.query_model.TransactionWithDetails
 import com.example.qltaichinhcanhan.main.rdb.inter.TransactionDao
@@ -24,13 +25,21 @@ class TransactionRepository(private val transactionDao: TransactionDao) {
         return transactionDao.getTransactionById(transactionId)
     }
 
-    val allTransactionWithDetails:
-            LiveData<List<TransactionWithDetails>> =
-        transactionDao.getAllLiveTransactionWithDetailsByDesc()
+    val allTransactionWithDetails: LiveData<List<TransactionWithDetails>> = transactionDao.getAllLiveTransactionWithDetailsByDesc()
 
-    val allTransactionWithDetails1:
-            List<TransactionWithDetails> =
-        transactionDao.getAllTransactionWithDetailsByDesc()
+    val allTransactionWithDetails1: List<TransactionWithDetails> = transactionDao.getAllTransactionWithDetailsByDesc()
+
+    fun getTransactionsByMonthLiveData(year: String): LiveData<List<TransactionWithDetails>> {
+        return transactionDao.getTransactionsByMonthLiveData(year)
+    }
+
+    fun getTransactionsByMonth(year: String): LiveData<List<Transaction>> {
+        return transactionDao.getTransactionsByMonth(year)
+    }
+
+    fun getAllTransactionWithDetailsByTypeCategory(type: String): List<TransactionWithDetails> {
+        return transactionDao.getAllTransactionWithDetailsByTypeCategory(type)
+    }
 
 
 }

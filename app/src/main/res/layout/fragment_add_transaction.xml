@@ -59,7 +59,8 @@
         app:tabPaddingStart="9dp"
         app:tabSelectedTextColor="@color/white"
         app:tabTextAppearance="@style/MyTabLayoutTextAppearance"
-        app:tabTextColor="@color/white_50" />
+        app:tabTextColor="@color/white_50"
+        tools:layout_editor_absoluteX="16dp" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -79,6 +80,43 @@
                 android:layout_height="wrap_content"
                 android:text="@string/txt_title_amount"
                 android:textSize="16sp" />
+
+            <LinearLayout
+                android:id="@+id/layout_amount0"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                android:weightSum="10">
+
+                <EditText
+                    android:id="@+id/edt_amount0"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="7"
+                    android:background="@drawable/rounded_edittext"
+                    android:inputType="number"
+                    android:maxLength="30"
+                    android:maxLines="1"
+                    android:paddingVertical="9dp"
+                    android:paddingLeft="10dp"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/edt_type_amount_transaction0"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="3"
+                    android:background="@drawable/rounded_edittext"
+                    android:gravity="center"
+                    android:padding="9dp"
+                    android:text="VND"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/layout_amount1"
@@ -129,44 +167,43 @@
                     android:layout_gravity="center"
                     android:layout_marginTop="10dp"
                     android:src="@drawable/ic_arrows_reload" />
-            </LinearLayout>
 
-
-            <LinearLayout
-                android:id="@+id/layout_amount2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal"
-                android:weightSum="10">
-
-                <EditText
-                    android:id="@+id/edt_amount2"
-                    android:layout_width="0dp"
+                <LinearLayout
+                    android:id="@+id/layout_amount2"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="5dp"
-                    android:layout_weight="7"
-                    android:background="@drawable/rounded_edittext"
-                    android:inputType="number"
-                    android:maxLength="30"
-                    android:maxLines="1"
-                    android:paddingVertical="9dp"
-                    android:paddingLeft="10dp"
-                    android:textColor="@color/black"
-                    android:textSize="16sp" />
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
+                    android:weightSum="10">
 
-                <TextView
-                    android:id="@+id/edt_type_amount_transaction2"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_weight="3"
-                    android:background="@drawable/rounded_edittext"
-                    android:gravity="center"
-                    android:padding="9dp"
-                    android:text="VND"
-                    android:textColor="@color/black"
-                    android:textSize="16sp" />
+                    <TextView
+                        android:id="@+id/edt_amount2"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5dp"
+                        android:layout_weight="7"
+                        android:background="@drawable/rounded_edittext"
+                        android:inputType="number"
+                        android:maxLength="30"
+                        android:maxLines="1"
+                        android:paddingVertical="9dp"
+                        android:paddingLeft="10dp"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/edt_type_amount_transaction2"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_weight="3"
+                        android:background="@drawable/rounded_edittext"
+                        android:gravity="center"
+                        android:padding="9dp"
+                        android:text="VND"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+                </LinearLayout>
             </LinearLayout>
 
             <TextView
@@ -295,7 +332,6 @@
                 android:layout_marginTop="10dp"
                 android:background="@drawable/rounded_edittext"
                 android:hint="@string/text_comment"
-                android:inputType="number"
                 android:paddingVertical="9dp"
                 android:paddingLeft="10dp"
                 android:textSize="16sp" />

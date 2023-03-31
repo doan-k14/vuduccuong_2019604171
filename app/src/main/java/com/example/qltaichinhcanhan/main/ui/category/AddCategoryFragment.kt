@@ -1,6 +1,7 @@
 package com.example.qltaichinhcanhan.main.ui.category
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,13 +14,14 @@ import com.example.qltaichinhcanhan.R
 import com.example.qltaichinhcanhan.databinding.FragmentAddCategoryBinding
 import com.example.qltaichinhcanhan.splash.adapter.AdapterIconCategory
 import com.example.qltaichinhcanhan.main.model.m_r.Category
-import com.example.qltaichinhcanhan.main.rdb.vm_data.CategoryViewMode
+import com.example.qltaichinhcanhan.main.model.m_r.CategoryType
+import com.example.qltaichinhcanhan.main.rdb.vm_data.DataViewMode
 
 
 class AddCategoryFragment : Fragment() {
     lateinit var binding: FragmentAddCategoryBinding
     private lateinit var adapterIconCategory: AdapterIconCategory
-    private lateinit var categoryViewModel: CategoryViewMode
+    private lateinit var dataViewMode: DataViewMode
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -30,7 +32,7 @@ class AddCategoryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        categoryViewModel = ViewModelProvider(requireActivity())[CategoryViewMode::class.java]
+        dataViewMode = ViewModelProvider(requireActivity())[DataViewMode::class.java]
         initView()
         initEvent()
     }
@@ -38,7 +40,7 @@ class AddCategoryFragment : Fragment() {
 
     private fun initView() {
         adapterIconCategory = AdapterIconCategory(requireContext(), arrayListOf(),
-            AdapterIconCategory.LayoutType.TYPE3)
+            AdapterIconCategory.LayoutType.TYPE4)
 
         binding.rcvIconCategory.adapter = adapterIconCategory
 
@@ -46,15 +48,22 @@ class AddCategoryFragment : Fragment() {
             GridLayoutManager(requireContext(), 3, RecyclerView.VERTICAL, false)
         binding.rcvIconCategory.layoutManager = myLinearLayoutManager1
 
-//        if (categoryViewModel.checkTypeCategory) {
-//            adapterIconCategory.updateData(categoryViewModel.getCategory1ListByType(1) as ArrayList<Category>)
-//        } else {
-//            adapterIconCategory.updateData(categoryViewModel.getCategory1ListByType(2) as ArrayList<Category>)
-//        }
 
-        if (categoryViewModel.category.idCategory != 0) {
-            adapterIconCategory.updateSelect(categoryViewModel.category.idCategory)
+        if (!dataViewMode.checkTypeTabLayoutAddTransaction) {
+            dataViewMode.getListCategoryByType(CategoryType.EXPENSE.toString())
+        } else {
+            dataViewMode.getListCategoryByType(CategoryType.INCOME.toString())
         }
+
+        dataViewMode.listCategoryByTypeLiveData.observe(requireActivity()) {
+            adapterIconCategory.updateData(it as ArrayList<Category>)
+            Log.e("data","update select: add category")
+
+        }
+
+//        if (categoryViewModel.category.idCategory != 0) {
+//            adapterIconCategory.updateSelect(categoryViewModel.category.idCategory)
+//        }
 
     }
 
@@ -63,10 +72,10 @@ class AddCategoryFragment : Fragment() {
             findNavController().popBackStack()
         }
         adapterIconCategory.setClickItemSelect {
-            if (it.idCategory == 1) {
+            if (it.idCategory <= 2) {
                 findNavController().navigate(R.id.action_addCategoryFragment_to_editCategoryFragment)
             } else {
-                categoryViewModel.category = it
+                dataViewMode.categorySelectAddCategoryByAddTransaction = it
                 findNavController().popBackStack()
             }
         }

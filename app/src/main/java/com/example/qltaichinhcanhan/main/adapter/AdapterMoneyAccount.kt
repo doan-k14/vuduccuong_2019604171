@@ -84,20 +84,24 @@ class AdapterMoneyAccount(
                 LayoutType.TYPE2 -> {
                     binding as ItemTransactionDialogBinding
 
-                    binding.imgSelect.isActivated = item.moneyAccount!!.select == true
+//                    Log.e("data","${item.moneyAccount!!.select}")
+                    binding.imgSelect.isActivated = item.moneyAccount!!.selectMoneyAccount == true
+
                     binding.imgCategory.setImageResource(IconR.getIconById(context,
                         item.moneyAccount.icon!!,
                         IconR.listIconRAccount))
+
                     binding.imgCategory.setBackgroundResource(IconR.getColorById(context,
                         item.moneyAccount.color!!,
-                        IconR.getListColor()))
-                    binding.textNameCategory.text = item.moneyAccount.moneyAccountName
-                    binding.textValueCategory.text =
-                        item.country!!.currencySymbol + item.moneyAccount!!.amountMoneyAccount.toString()
+                        IconR.getListColorIconR()))
+                    binding.textNameCategory.text = item.moneyAccount!!.moneyAccountName
+
+                    val m = formatter.format(item.moneyAccount!!.amountMoneyAccount)
+                    binding.textValueCategory.text = item.country!!.currencySymbol + m
 
                     binding.root.setOnClickListener {
                         for (i in listCategory.indices) {
-                            listCategory[i].moneyAccount!!.select = (i == position)
+                            listCategory[i].moneyAccount!!.selectMoneyAccount = (i == position)
                         }
                         clickItemSelect?.let {
                             it(item)
@@ -120,7 +124,7 @@ class AdapterMoneyAccount(
 
     fun updateSelectTransaction(idTransaction: Int) {
         for (i in listCategory) {
-            i.moneyAccount!!.select = (i.moneyAccount.idMoneyAccount == idTransaction)
+            i.moneyAccount!!.selectMoneyAccount = (i.moneyAccount.idMoneyAccount == idTransaction)
         }
         reloadData()
     }

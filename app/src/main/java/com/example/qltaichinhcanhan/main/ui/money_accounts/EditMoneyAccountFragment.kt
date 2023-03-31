@@ -90,7 +90,7 @@ class EditMoneyAccountFragment : BaseFragment() {
             dataViewMode.editOrAddMoneyAccount.moneyAccount!!.idAccount = 1
             dataViewMode.editOrAddMoneyAccount.moneyAccount!!.icon = 1
             dataViewMode.editOrAddMoneyAccount.moneyAccount!!.color = 1
-            dataViewMode.editOrAddMoneyAccount.moneyAccount!!.select = false
+            dataViewMode.editOrAddMoneyAccount.moneyAccount!!.selectMoneyAccount = false
 
         } else {
             val moneyAccount = dataViewMode.editOrAddMoneyAccount.moneyAccount!!

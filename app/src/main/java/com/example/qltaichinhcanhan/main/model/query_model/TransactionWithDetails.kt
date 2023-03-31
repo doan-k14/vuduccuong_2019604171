@@ -12,6 +12,5 @@ data class TransactionWithDetails(
     @Relation(parentColumn = "idAccount", entityColumn = "idAccount") val moneyAccount: MoneyAccount?=null,
     @Relation(parentColumn = "idCategory", entityColumn = "idCategory") val category: Category?=null,
     @Relation(parentColumn = "idAccount", entityColumn = "idAccount",entity = Account::class) val account: Account?=null
-
 )
 

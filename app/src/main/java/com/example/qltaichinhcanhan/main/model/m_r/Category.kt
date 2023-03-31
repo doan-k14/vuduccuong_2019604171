@@ -31,7 +31,7 @@ data class Category(
     var categoryName: String? = null,
     var type: CategoryType? = null,
     var moneyLimit: Float? = null,
-    var select: Boolean? = null,
+    var selectCategory: Boolean? = null,
     var icon: Int? = null,
     var color: Int? = null,
     var idAccount: Int? = null,

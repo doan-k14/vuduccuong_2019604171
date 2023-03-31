@@ -9,6 +9,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.*
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -19,36 +20,26 @@ import com.bumptech.glide.RequestBuilder
 import com.example.qltaichinhcanhan.R
 import com.example.qltaichinhcanhan.splash.adapter.AdapterIconCategory
 import com.example.qltaichinhcanhan.databinding.FragmentAddTransactionBinding
-import com.example.qltaichinhcanhan.main.model.m_api.CurrencyDataAPI
-import com.example.qltaichinhcanhan.main.model.m_r.Category
-import com.example.qltaichinhcanhan.main.model.m_r.Country
-import com.example.qltaichinhcanhan.main.model.m_r.MoneyAccount
-import com.example.qltaichinhcanhan.main.rdb.vm_data.MoneyAccountViewMode
-import com.example.qltaichinhcanhan.main.rdb.vm_data.CategoryViewMode
-import com.example.qltaichinhcanhan.main.rdb.vm_data.CountryViewMode
-import com.example.qltaichinhcanhan.main.rdb.vm_data.TransactionViewMode
+import com.example.qltaichinhcanhan.main.library.MoneyTextWatcher
+import com.example.qltaichinhcanhan.main.model.m_r.*
+import com.example.qltaichinhcanhan.main.model.query_model.MoneyAccountWithDetails
+import com.example.qltaichinhcanhan.main.rdb.vm_data.*
 import com.google.android.material.tabs.TabLayout
-import com.google.gson.Gson
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import okhttp3.OkHttpClient
-import okhttp3.Request
+import java.text.DecimalFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 class AddTransactionFragment : Fragment() {
     lateinit var binding: FragmentAddTransactionBinding
-    lateinit var transactionViewMode: TransactionViewMode
-    lateinit var countryViewMode: CountryViewMode
     private lateinit var adapterIconCategory: AdapterIconCategory
-    private lateinit var categoryViewModel: CategoryViewMode
-    private lateinit var moneyAccountViewMode: MoneyAccountViewMode
+    private lateinit var dataViewMode: DataViewMode
 
-    var listCountryR = listOf<Country>()
     var timeTransaction = 0L
     var listTimeInMillis = arrayListOf<Long>()
+
     private var requestBuilder: RequestBuilder<PictureDrawable>? = null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -61,10 +52,7 @@ class AddTransactionFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        transactionViewMode = ViewModelProvider(requireActivity())[TransactionViewMode::class.java]
-        countryViewMode = ViewModelProvider(requireActivity())[CountryViewMode::class.java]
-        categoryViewModel = ViewModelProvider(requireActivity())[CategoryViewMode::class.java]
-        moneyAccountViewMode = ViewModelProvider(requireActivity())[MoneyAccountViewMode::class.java]
+        dataViewMode = ViewModelProvider(requireActivity())[DataViewMode::class.java]
 
         initView()
         initData()
@@ -79,23 +67,22 @@ class AddTransactionFragment : Fragment() {
         binding.tabLayout.addTab(tabChiPhi)
         binding.tabLayout.addTab(tabThuNhap)
 
-        var list = listOf<Category>()
 
-        if (categoryViewModel.checkTypeCategory) {
-            binding.tabLayout.selectTab(binding.tabLayout.getTabAt(0))
-//            list = categoryViewModel.getCategory1ListByType(1)
+        if (!dataViewMode.checkTypeTabLayoutAddTransaction) {
+            if (!dataViewMode.checkTypeTabLayoutHomeTransaction) {
+                binding.tabLayout.selectTab(binding.tabLayout.getTabAt(0))
+                dataViewMode.getListCategoryByType(CategoryType.EXPENSE.toString())
+            } else {
+                binding.tabLayout.selectTab(binding.tabLayout.getTabAt(1))
+                dataViewMode.getListCategoryByType(CategoryType.INCOME.toString())
+            }
+
         } else {
             binding.tabLayout.selectTab(binding.tabLayout.getTabAt(1))
-//            list = categoryViewModel.getCategory1ListByType(2)
+            dataViewMode.getListCategoryByType(CategoryType.INCOME.toString())
         }
 
-        moneyAccountViewMode.moneyAccountLiveAddTransaction.observe(requireActivity()) {
-//            if (it.id != 0) {
-////                binding.textSelectAccount.text = it.nameAccount
-//            }
-        }
-
-        adapterIconCategory = AdapterIconCategory(requireContext(), list as ArrayList<Category>,
+        adapterIconCategory = AdapterIconCategory(requireContext(), arrayListOf(),
             AdapterIconCategory.LayoutType.TYPE3)
 
         binding.rcvIconCategory.adapter = adapterIconCategory
@@ -108,26 +95,7 @@ class AddTransactionFragment : Fragment() {
             }
         binding.rcvIconCategory.layoutManager = myLinearLayoutManager1
 
-//        if (categoryViewModel.category.id != 0) {
-//            adapterIconCategory.updateSelect(categoryViewModel.category.id)
-//        }
-//
-//
-//        var country = countryViewMode.country
-//        if (country.id == 0) {
-//            binding.layoutAmount1.visibility = View.GONE
-//            binding.edtTypeAmountTransaction2.isEnabled = true
-//            binding.edtAmount2.isEnabled = true
-//
-//        } else {
-//            binding.layoutAmount1.visibility = View.VISIBLE
-//            binding.edtTypeAmountTransaction1.text = country.currencyCode
-//            binding.edtTypeAmountTransaction2.isEnabled = false
-//            binding.edtAmount2.isEnabled = false
-//        }
-
         val dateFormat = SimpleDateFormat("dd/MM")
-
         val calendars =
             arrayOf(Calendar.getInstance(), Calendar.getInstance(), Calendar.getInstance())
         calendars[0].timeInMillis = System.currentTimeMillis()
@@ -142,15 +110,45 @@ class AddTransactionFragment : Fragment() {
             calendars[1].timeInMillis,
             calendars[2].timeInMillis)
         selectDate(listTimeInMillis)
-
         timeTransaction = listTimeInMillis[0]
+
 
     }
 
     private fun initData() {
-        countryViewMode.readAllDataLive.observe(requireActivity()) {
-            listCountryR = it
+        val idCategory = dataViewMode.categorySelectAddCategoryByAddTransaction.idCategory
+
+        dataViewMode.listCategoryByTypeLiveData.observe(requireActivity()) {
+            adapterIconCategory.updateData(it as ArrayList<Category>)
+            if(idCategory != 0){
+                adapterIconCategory.updateSelect(idCategory)
+                dataViewMode.transaction.idCategory = idCategory
+                dataViewMode.categorySelectAddCategoryByAddTransaction = Category(0)
+                Log.e("data","update select: add transaction")
+            }
+
         }
+
+        dataViewMode.moneyAccountWithDetailsSelect.observe(requireActivity()) {
+            if (it.moneyAccount!!.idMoneyAccount != 0) {
+                binding.textSelectAccount.text = it.moneyAccount!!.moneyAccountName
+                dataViewMode.transaction.idMoneyAccount = it.moneyAccount.idMoneyAccount
+            }
+        }
+
+        val country = dataViewMode.country
+        if (country.idCountry == 0) {
+            binding.layoutAmount0.visibility = View.VISIBLE
+            binding.layoutAmount1.visibility = View.GONE
+            binding.edtAmount0.addTextChangedListener(MoneyTextWatcher(binding.edtAmount0))
+
+        } else {
+            binding.layoutAmount1.visibility = View.VISIBLE
+            binding.layoutAmount0.visibility = View.GONE
+            binding.edtTypeAmountTransaction1.text = country.currencyCode
+            binding.edtTypeAmountTransaction2.isEnabled = false
+        }
+
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -163,15 +161,16 @@ class AddTransactionFragment : Fragment() {
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 val position = tab?.position
-//                if (position == 0) {
-//                    val list = categoryViewModel.getCategory1ListByType(1)
-//                    adapterIconCategory.updateData(list as ArrayList<Category> /* = java.util.ArrayList<com.example.qltaichinhcanhan.main.m.Category1> */)
-//                    categoryViewModel.checkTypeCategory = true
-//                } else if (position == 1) {
-//                    val list = categoryViewModel.getCategory1ListByType(2)
-//                    adapterIconCategory.updateData(list as ArrayList<Category> /* = java.util.ArrayList<com.example.qltaichinhcanhan.main.m.Category1> */)
-//                    categoryViewModel.checkTypeCategory = false
-//                }
+                // khẳng năng là phải tạo thành công thì mới đổi về cùng loại
+                if (position == 0) {
+                    dataViewMode.getListCategoryByType(CategoryType.EXPENSE.toString())
+                    dataViewMode.checkTypeTabLayoutAddTransaction = false
+                    dataViewMode.checkTypeTabLayoutHomeTransaction = false
+                } else if (position == 1) {
+                    dataViewMode.getListCategoryByType(CategoryType.INCOME.toString())
+                    dataViewMode.checkTypeTabLayoutAddTransaction = true
+                    dataViewMode.checkTypeTabLayoutHomeTransaction = true
+                }
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {
@@ -181,14 +180,13 @@ class AddTransactionFragment : Fragment() {
             }
         })
 
-
-        binding.edtTypeAmountTransaction1.setOnClickListener {
-            countryViewMode.checkInputScreen = 1
+        binding.edtTypeAmountTransaction0.setOnClickListener {
+            dataViewMode.checkInputScreenCurrency = 1
             findNavController().navigate(R.id.action_addTransactionFragment_to_nav_currency)
         }
 
-        binding.edtTypeAmountTransaction2.setOnClickListener {
-            countryViewMode.checkInputScreen = 1
+        binding.edtTypeAmountTransaction1.setOnClickListener {
+            dataViewMode.checkInputScreenCurrency = 1
             findNavController().navigate(R.id.action_addTransactionFragment_to_nav_currency)
         }
 
@@ -204,15 +202,16 @@ class AddTransactionFragment : Fragment() {
                     binding.edtAmount1.setSelection(formattedValue.length)
                     binding.edtAmount1.addTextChangedListener(this)
 
-                    val ex = countryViewMode.country.exchangeRate
-                    binding.edtAmount2.setText(calculateAndDisplayAmount(ex!!, s.toString()))
-
+                    val ex = dataViewMode.country.exchangeRate
+                    val amount = calculateAmount(ex!!, formattedValue)
+                    binding.edtAmount2.text = formatAmount(amount)
+                    if (amount != 0F) {
+                        dataViewMode.transaction.transactionAmount = amount
+                    }
                 }
             }
 
-
             override fun afterTextChanged(s: Editable?) {
-
             }
         })
 
@@ -221,25 +220,22 @@ class AddTransactionFragment : Fragment() {
             dialogFragmentB.show(parentFragmentManager, "DialogFragmentB")
         }
 
-//        adapterIconCategory.setClickItemSelect {
-//            if (it.id == 1) {
-//                findNavController().navigate(R.id.action_addTransactionFragment_to_addCategoryFragment)
-//            } else {
-//                categoryViewModel.category = it
-//            }
-//        }
-
-        binding.textCreate.setOnClickListener {
-//            val dateFormat = SimpleDateFormat("dd/MM")
-//            val date = Date(timeTransaction)
-//            Log.e("data", "time: ${dateFormat.format(date)}")
-
-            // usd -> jpy
-            currencyExchange(0.000043F, 0.0056F, 100F)
+        adapterIconCategory.setClickItemSelect {
+            if (it.idCategory <= 2) {
+                dataViewMode.transaction.idCategory = null
+                dataViewMode.categorySelectAddCategoryByAddTransaction = Category()
+                findNavController().navigate(R.id.action_addTransactionFragment_to_addCategoryFragment)
+            } else {
+                dataViewMode.transaction.idCategory = it.idCategory
+            }
         }
 
-//        check: 1 ngay goi 1 lan
-//        getExchangeRate(listCountryR)
+        binding.textCreate.setOnClickListener {
+            if(checkData(1)){
+                dataViewMode.addTransaction(dataViewMode.transaction)
+                findNavController().popBackStack()
+            }
+        }
 
     }
 
@@ -314,61 +310,6 @@ class AddTransactionFragment : Fragment() {
         datePickerDialog.show()
     }
 
-    private fun getExchangeRate(countryList: List<Country>) {
-        val currencyCodes = countryList.map { it.currencyCode }
-        val position = countryList.indexOfFirst { it.select == true }
-        if (countryList.isEmpty()) {
-            Log.e("data", "Chauw goi dc data")
-        } else {
-            val client = OkHttpClient().newBuilder().build()
-            CoroutineScope(Dispatchers.IO).launch {
-                val request = Request.Builder()
-                    .url("https://api.apilayer.com/currency_data/live?source=${currencyCodes[position]}&currencies=${currencyCodes}")
-                    .addHeader("apikey", "RBoOmM3hdqp3wjPJuhZxg6MSjcsEqg4D")
-                    .method("GET", null)
-                    .build()
-                val response = client.newCall(request).execute()
-                val json = response.body()?.string()
-                val currencyData = Gson().fromJson(json, CurrencyDataAPI::class.java)
-
-                countryList.forEach { country ->
-                    val exchangeRate =
-                        currencyData.quotes["${currencyData.source}${country.currencyCode}"]
-                    if (exchangeRate != null) {
-                        country.exchangeRate = exchangeRate.toFloat()
-                    }
-                }
-                listCountryR = listOf()
-                listCountryR = countryList
-                for (i in listCountryR) {
-                    countryViewMode.updateAccount(i)
-                }
-            }
-        }
-    }
-    // https://apilayer.com/marketplace/currency_data-api
-
-    override fun onDestroy() {
-        Log.e("data", "add transaction: onDestroy")
-        countryViewMode.checkInputScreen = 0
-        countryViewMode.country = Country(0)
-        moneyAccountViewMode.moneyAccountLiveAddTransaction.postValue(MoneyAccount())
-        categoryViewModel.resetDataCategory()
-        super.onDestroy()
-    }
-
-    fun currencyExchange(exchangeRate1: Float, exchangeRate2: Float, amount: Float) {
-        val result = (amount / exchangeRate1) * exchangeRate2
-        val displayAmount = if (result < 1000000) {
-            String.format("%,.0f",
-                result) // Nếu số tiền nhỏ hơn 1 triệu, hiển thị bình thường
-        } else {
-            String.format("%.1fM",
-                result / 1000000) // Nếu số tiền lớn hơn hoặc bằng 1 triệu, hiển thị dưới dạng "x.xM"
-        }
-        Log.e("data", "Kết quả quy đổi: $displayAmount")
-
-    }
 
     fun formatValue(value: String): String {
         val unformattedValue = value.replace(".", "").replace(",", "")
@@ -376,20 +317,103 @@ class AddTransactionFragment : Fragment() {
         return String.format("%,d", number)
     }
 
-    fun calculateAndDisplayAmount(ex: Float, formattedValue: String): String {
-        if (ex != 0F) {
-            val amount = formatValue(formattedValue).replace(".", "").toFloat() / ex!!
-            val displayAmount = if (amount < 1000000) {
-                String.format("%,.0f",
-                    amount)
-            } else {
-                String.format("%.1fM",
-                    amount / 1000000).replace(",",
-                    ".")
-            }
-            return displayAmount
-        }
-        return ""
+    fun calculateAmount(ex: Float, formattedValue: String): Float {
+        return formatValue(formattedValue).replace(".", "").toFloat() / ex
     }
+
+    fun formatAmount(amount: Float): String {
+        return if (amount < 1000000) {
+            DecimalFormat("#,###").format(amount)
+        } else {
+            String.format("%.1fM", amount / 1000000).replace(",", ".")
+        }
+    }
+
+    private fun checkData(typeClick: Int): Boolean {
+        if (dataViewMode.country.idCountry == 0) {
+            val value = MoneyTextWatcher.parseCurrencyValue(binding.edtAmount0.text.toString())
+            val temp = value.toString()
+            if (binding.edtAmount0.text.isEmpty()) {
+                Toast.makeText(requireContext(), "Vui lòng nhập giá trị tiền", Toast.LENGTH_SHORT)
+                    .show()
+                return false
+            }
+            try {
+                val number = temp.toFloat()
+                dataViewMode.transaction.transactionAmount = number
+            } catch (e: NumberFormatException) {
+                Toast.makeText(requireContext(), "Bạn nhập sai định dạng!", Toast.LENGTH_SHORT)
+                    .show()
+            }
+
+        } else {
+            val textAmount = binding.edtAmount2.text.toString()
+            if (textAmount.isEmpty()) {
+                Toast.makeText(requireContext(),
+                    "Vui lòng nhập giá trị tiền!",
+                    Toast.LENGTH_SHORT).show()
+                return false
+            }
+        }
+
+        if (dataViewMode.transaction.idMoneyAccount == null) {
+            Toast.makeText(requireContext(), "Bạn chưa lựa chọn Tài khoản", Toast.LENGTH_SHORT)
+                .show()
+            return false
+        }
+
+        if (dataViewMode.transaction.idCategory == null) {
+            Toast.makeText(requireContext(), "Bạn chưa lựa chọn Danh mục", Toast.LENGTH_SHORT)
+                .show()
+            return false
+        }
+
+        val textComment = binding.edtComment.text.toString()
+        dataViewMode.transaction.comment = textComment
+
+        dataViewMode.transaction.day = timeTransaction
+
+        dataViewMode.transaction.selectTransaction = false
+        dataViewMode.transaction.transactionName = "a"
+        dataViewMode.transaction.idAccount = 1
+
+        if (typeClick == 2) {
+            dataViewMode.transaction.idTransaction = 0
+        }
+
+        Log.e("data", "transaction: ${dataViewMode.transaction.toString()}")
+
+        return true
+    }
+
+    override fun onDestroy() {
+        dataViewMode.resetCheckTypeTabLayoutTransaction()
+        dataViewMode.checkInputScreenCurrency = 0
+        dataViewMode.country = Country()
+        dataViewMode.transaction = Transaction()
+        dataViewMode.moneyAccountWithDetailsSelect.postValue(MoneyAccountWithDetails(MoneyAccount()))
+        dataViewMode.categorySelectAddCategoryByAddTransaction = Category()
+        super.onDestroy()
+    }
+
+
+    // đổi tiền tệ
+    fun currencyExchange(exchangeRate1: Float, exchangeRate2: Float, amount: Float) {
+        val result = (amount / exchangeRate1) * exchangeRate2
+        val displayAmount = if (result < 1000000) {
+            String.format("%,.0f",
+                result)
+        } else {
+            String.format("%.1fM",
+                result / 1000000)
+        }
+        Log.e("data", "Kết quả quy đổi: $displayAmount")
+
+    }
+
+//    fun hienThiNgay(){
+//        val dateFormat = SimpleDateFormat("dd/MM")
+//        Log.e("data", "time: ${dateFormat.format(timeTransaction)}")
+//    }
 
 }

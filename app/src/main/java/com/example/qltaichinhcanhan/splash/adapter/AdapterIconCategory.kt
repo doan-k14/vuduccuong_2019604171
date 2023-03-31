@@ -12,6 +12,8 @@ import com.example.qltaichinhcanhan.main.model.m_r.Category
 import com.example.qltaichinhcanhan.main.model.DataColor
 import androidx.core.content.ContextCompat
 import com.example.qltaichinhcanhan.main.model.m.IconR
+import com.example.qltaichinhcanhan.main.model.m_r.CategoryType
+import kotlin.math.min
 
 class AdapterIconCategory(
     var context: Context,
@@ -22,7 +24,8 @@ class AdapterIconCategory(
     enum class LayoutType {
         TYPE1,
         TYPE2,
-        TYPE3
+        TYPE3,
+        TYPE4
     }
 
     inner class ViewHolder(binding: ViewBinding) :
@@ -46,6 +49,9 @@ class AdapterIconCategory(
                 binding = ItemIconAddCategoryBinding.inflate(inflater, parent, false)
             }
             LayoutType.TYPE3 -> {
+                binding = ItemIconCategoryBinding.inflate(inflater, parent, false)
+            }
+            LayoutType.TYPE4 -> {
                 binding = ItemIconCategoryBinding.inflate(inflater, parent, false)
             }
         }
@@ -78,7 +84,7 @@ class AdapterIconCategory(
                     binding as ItemIconAddCategoryBinding
                     binding.imgIcon.setImageResource(IconR.getIconById(context, item.icon!!,IconR.listIconRCategory))
 
-                    if (item.select == true) {
+                    if (item.selectCategory == true) {
                         binding.imgIcon.setBackgroundResource(DataColor.setCustomBackgroundColorCircleById(
                             context,
                             item.color!!))
@@ -94,7 +100,7 @@ class AdapterIconCategory(
                     binding.root.setOnClickListener {
                         clickItemSelect?.let {
                             for (i in 0 until listCategory.size - 1) {
-                                listCategory[i].select = (i == position)
+                                listCategory[i].selectCategory = (i == position)
                             }
                             notifyDataSetChanged()
                             it(item)
@@ -113,7 +119,7 @@ class AdapterIconCategory(
                     binding.textNameCategory.setTextColor(ContextCompat.getColor(binding.textNameCategory.context,
                         DataColor.setColorById(item.color!!)))
 
-                    if (item.select == true) {
+                    if (item.selectCategory == true) {
                         binding.root.setBackgroundResource(R.drawable.custom_icon_while)
                     } else {
                         binding.root.background = null
@@ -121,9 +127,28 @@ class AdapterIconCategory(
 
                     binding.root.setOnClickListener {
                         for (i in 0 until listCategory.size - 1) {
-                            listCategory[i].select = (i == position)
+                            listCategory[i].selectCategory = (i == position)
                         }
                         notifyDataSetChanged()
+                        clickItemSelect?.let {
+                            it(item)
+                        }
+                    }
+
+                }
+
+                LayoutType.TYPE4 -> {
+                    binding as ItemIconCategoryBinding
+                    binding.imgIcon.setImageResource(IconR.getIconById(context, item.icon!!,IconR.listIconRCategory))
+
+                    binding.textNameCategory.text = item.categoryName
+                    binding.imgIcon.setBackgroundResource(DataColor.setCustomBackgroundColorCircleById(
+                        context,
+                        item.color!!))
+                    binding.textNameCategory.setTextColor(ContextCompat.getColor(binding.textNameCategory.context,
+                        DataColor.setColorById(item.color!!)))
+
+                    binding.root.setOnClickListener {
                         clickItemSelect?.let {
                             it(item)
                         }
@@ -152,7 +177,7 @@ class AdapterIconCategory(
 
     fun updateSelect(idSelect: Int) {
         for (i in listCategory) {
-            i.select = (i.idCategory == idSelect)
+            i.selectCategory = (i.idCategory == idSelect)
         }
         reloadData()
     }

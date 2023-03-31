@@ -84,7 +84,7 @@ class CurrencyFragment : BaseFragment() {
         dataViewMode.readAllDataLiveCountry.observe(requireActivity()) {
             Log.e("data", "check size country: ${it.size}")
             listCountry = it
-            position = listCountry.indexOfFirst { it.select == true }
+            position = listCountry.indexOfFirst { it.selectCountry == true }
             adapterCountry.updateData(it as ArrayList<Country>)
             if (position != -1) {
                 binding.rcvCategory.layoutManager?.scrollToPosition(position)
@@ -253,7 +253,7 @@ class CurrencyFragment : BaseFragment() {
 
     private fun getExchangeRate(countryList: List<Country>) {
         val currencyCodes = countryList.map { it.currencyCode }
-        val position = countryList.indexOfFirst { it.select == true }
+        val position = countryList.indexOfFirst { it.selectCountry == true }
         if (countryList.isEmpty()) {
             Log.e("data", "Api exchange rate chưa đc gọi")
         } else {

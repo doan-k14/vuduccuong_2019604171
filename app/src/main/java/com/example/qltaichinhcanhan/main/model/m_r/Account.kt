@@ -12,5 +12,5 @@ data class Account(
     var accountName: String? = null,
     var password: String? = null,
     var urlImage: String? = null,
-    var select: Boolean? = null,
+    var selectAccount: Boolean? = null,
 )

@@ -94,7 +94,7 @@ class CreatsMoneyFragment : Fragment() {
                     0,
                     "Tài khoản chính",
                     temp.toFloat(),
-                    false,
+                    true,
                     1,
                     2,
                     country.idCountry,
@@ -102,7 +102,7 @@ class CreatsMoneyFragment : Fragment() {
                 )
                 dataViewMode.addMoneyAccount(moneyAccount)
 
-                country.select = true
+                country.selectCountry = true
                 dataViewMode.updateCountry(country)
 
                 val sharedPreferences: SharedPreferences =

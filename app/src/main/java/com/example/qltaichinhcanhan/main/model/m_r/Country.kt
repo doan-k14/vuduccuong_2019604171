@@ -15,6 +15,6 @@ data class Country(
     var currencySymbol: String? = null,
     var flagUrl: String? = null,
     var exchangeRate: Float? = null,
-    var select: Boolean? = null,
+    var selectCountry: Boolean? = null,
 )
 

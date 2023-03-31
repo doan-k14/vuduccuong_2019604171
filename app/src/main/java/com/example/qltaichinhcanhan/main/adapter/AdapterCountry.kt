@@ -49,7 +49,7 @@ class AdapterCountry(
                 .transform(RoundedCorners(16))
                 .into(binding.imgCategory)
 
-            if (item.select == true) {
+            if (item.selectCountry == true) {
                 binding.root.setBackgroundResource(R.drawable.button_delete_category)
             } else {
                 binding.root.setBackgroundResource(R.drawable.custom_button_white)

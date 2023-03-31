@@ -6,11 +6,14 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.qltaichinhcanhan.databinding.ItemTransactionBinding
+import com.example.qltaichinhcanhan.main.model.m.IconR
+import com.example.qltaichinhcanhan.main.model.query_model.FilterTransactions
 import com.example.qltaichinhcanhan.main.model.query_model.TransactionWithDetails
+import java.text.DecimalFormat
 
 class AdapterTransaction(
     var context: Context,
-    var listCategory: ArrayList<TransactionWithDetails>,
+    var listCategory: List<FilterTransactions>,
 ) : RecyclerView.Adapter<AdapterTransaction.ViewHolder>() {
 
     inner class ViewHolder(binding: ItemTransactionBinding) :
@@ -30,25 +33,28 @@ class AdapterTransaction(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = listCategory[position]
         with(holder) {
-//            binding.imgCategory.setImageResource(DataColor.showBackgroundColorCircle(context, item.category.icon!!))
-//            val color = DataColor.getIdColorById(item.category.color!!)
-//            binding.imgCategory.setBackgroundResource(DataColor.showBackgroundColorCircle(context,
-//                color.toString()))
-//            binding.textNameCategory.text = item.category.nameCategory
-//            binding.textValueCategory.text = item.transaction.amountTransaction.toString()
-//
-//            binding.root.setOnClickListener {
-//                clickItemSelect?.let {
-//                    it(item)
-//                }
-//            }
-//
-//            binding.root.setOnLongClickListener {
-//                clickLongItemSelect?.let {
-//                    it(item)
-//                }
-//                true
-//            }
+            binding.imgCategory.setImageResource(IconR.getIconById(context,
+                item.transactionWithDetails.category!!.icon!!,IconR.listIconRCategory))
+            binding.imgCategory.setBackgroundResource(IconR.getColorById(context,
+                item.transactionWithDetails.category!!.color!!,IconR.getListColorIconR()))
+            binding.textNameCategory.text = item.transactionWithDetails.category.categoryName
+
+            val formatter = DecimalFormat("#,###")
+            val m = formatter.format(item.transactionWithDetails.transaction!!.transactionAmount)
+            binding.textValueCategory.text = m
+
+            binding.root.setOnClickListener {
+                clickItemSelect?.let {
+                    it(item)
+                }
+            }
+
+            binding.root.setOnLongClickListener {
+                clickLongItemSelect?.let {
+                    it(item)
+                }
+                true
+            }
         }
     }
 
@@ -56,7 +62,7 @@ class AdapterTransaction(
         return listCategory.size
     }
 
-    fun updateData(newList: ArrayList<TransactionWithDetails>) {
+    fun updateData(newList: List<FilterTransactions>) {
         this.listCategory = newList
         reloadData()
     }
@@ -67,15 +73,15 @@ class AdapterTransaction(
     }
 
 
-    private var clickItemSelect: ((TransactionWithDetails) -> Unit)? = null
+    private var clickItemSelect: ((FilterTransactions) -> Unit)? = null
 
-    private var clickLongItemSelect: ((TransactionWithDetails) -> Unit)? = null
+    private var clickLongItemSelect: ((FilterTransactions) -> Unit)? = null
 
-    fun setClickItemSelect(listener: (TransactionWithDetails) -> Unit) {
+    fun setClickItemSelect(listener: (FilterTransactions) -> Unit) {
         clickItemSelect = listener
     }
 
-    fun setClickLongItemSelect(listener: (TransactionWithDetails) -> Unit) {
+    fun setClickLongItemSelect(listener: (FilterTransactions) -> Unit) {
         clickLongItemSelect = listener
     }
 }

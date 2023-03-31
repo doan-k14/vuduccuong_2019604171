@@ -30,7 +30,7 @@ data class MoneyAccount(
     var idMoneyAccount: Int = 0,
     var moneyAccountName: String? = null,
     var amountMoneyAccount: Float? = null,
-    var select: Boolean? = null,
+    var selectMoneyAccount: Boolean? = null,
     var icon: Int? = null,
     var color: Int? = null,
     var idCountry: Int? = null,
