@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="30dp"
+    android:background="@drawable/custom_button_white"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <TextView
+        android:id="@+id/text_select_account"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/export_data_as"
+        android:textColor="@color/black"
+        android:textSize="18sp" />
+
+    <RadioGroup
+        android:id="@+id/radio_type_file"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp">
+
+        <RadioButton
+            android:paddingStart="8dp"
+            android:id="@+id/rd_bt_excel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/blu_mani"
+            android:checked="true"
+            android:text="@string/excel" />
+
+        <RadioButton
+            android:paddingStart="8dp"
+            android:id="@+id/rd_bt_csv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/blu_mani"
+            android:text="@string/csv" />
+    </RadioGroup>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="right"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/text_cancel"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="40dp"
+            android:gravity="center"
+            android:text="@string/text_cancel1"
+            android:textAllCaps="true"
+            android:textColor="@color/blu_mani" />
+
+        <TextView
+            android:id="@+id/text_export"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/text_export"
+            android:textAllCaps="true"
+            android:textColor="@color/blu_mani" />
+    </LinearLayout>
+
+</LinearLayout>

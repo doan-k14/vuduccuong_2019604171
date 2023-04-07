@@ -15,7 +15,6 @@ import com.example.qltaichinhcanhan.databinding.FragmentCategoryBinding
 import com.example.qltaichinhcanhan.main.base.BaseFragment
 import com.example.qltaichinhcanhan.main.model.m_r.Category
 import com.example.qltaichinhcanhan.main.model.m_r.CategoryType
-import com.example.qltaichinhcanhan.main.rdb.vm_data.CategoryViewMode
 import com.example.qltaichinhcanhan.main.rdb.vm_data.DataViewMode
 import com.google.android.material.tabs.TabLayout
 

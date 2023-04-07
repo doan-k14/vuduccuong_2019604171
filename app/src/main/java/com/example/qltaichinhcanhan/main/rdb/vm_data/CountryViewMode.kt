@@ -16,42 +16,6 @@ class CountryViewMode(application: Application) : AndroidViewModel(application) 
     private var countryDao = db.countryDao()
 
     private val repository: CountryRepository = CountryRepository(countryDao)
-    val readAllDataLive = repository.allAccountsLive
-    val readAllData = repository.allAccounts
-
-    fun addAccount(country: Country) {
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.insert(country)
-        }
-    }
-
-    fun addListAccount(list: ArrayList<Country>) {
-        viewModelScope.launch(Dispatchers.IO) {
-            for (i in list) {
-                repository.insert(i)
-            }
-        }
-    }
-    fun updateListAccount(list: List<Country>) {
-        Log.e("data","update")
-        viewModelScope.launch(Dispatchers.IO) {
-            for (i in list) {
-                repository.update(country)
-            }
-        }
-    }
-
-    fun updateAccount(country: Country) {
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.update(country)
-        }
-    }
-
-    fun deleteAccount(country: Country) {
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.delete(country)
-        }
-    }
 
     fun getAccountById(it: Int) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -59,13 +23,6 @@ class CountryViewMode(application: Application) : AndroidViewModel(application) 
         }
     }
 
-
-
-
-
-
-    var listCountry = arrayListOf<Country>()
-    var checkInputScreen = 0
     var country = Country(0)
 }
 

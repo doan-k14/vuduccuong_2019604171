@@ -82,5 +82,33 @@
     <string name="currency_exchange">Ký hiệu tiền tệ cho tất cả các giao dịch sẽ được thay đổi từ</string>
     <string name="currency_exchange1">Tuy nhiên , số tiền giao dịch sẽ không được quy đổi dựa trên tỷ giá hối đoái.</string>
     <string name="edit_money_account">Chỉnh sửa tài khoản</string>
+    <string name="select_moth">Chọn tháng</string>
+    <string name="text_ok">OK</string>
+    <string name="amount_of_money">Số tiền</string>
+    <string name="money_account">Tài khoản</string>
+    <string name="day">Ngày</string>
+    <string name="transaction_delete_confirmation">Bạn có chắc chắn muốn xóa giao dịch không</string>
+    <string name="announcement_title">Thống kê các khoản chi tiêu và thu nhập</string>
+    <string name="request_permission">Bạn hãy cấp quyền truy cập bộ nhớ</string>
+    <string name="export_data_as">Xuất dữ liệu thống kê dưới dạng":" </string>
+    <string name="excel">Excel</string>
+    <string name="csv">CSV</string>
+    <string name="text_export">Xuất</string>
+    <string name="text_cancel1">Hủy</string>
+    <string name="reminder">Thông báo</string>
+    <string name="text_remind">Nhắc nhở</string>
+    <string name="text_create">Tạo</string>
+    <string name="edt_notification">Chỉnh sửa nhắc nhở</string>
+    <string name="text_name_notification">Tên lời nhắc</string>
+    <string name="text_frequency_of_reminders">Tần suất nhắc nhở</string>
+    <string name="text_reminder_start_date">Ngày bắt đầu nhắc nhở</string>
+    <string name="title_hour">Giờ</string>
+    <string name="menu_once">Một lần</string>
+    <string name="menu_daily">Hằng ngày</string>
+    <string name="menu_weekly">Một tuần một lần</string>
+    <string name="menu_monthly">Một tháng một lần</string>
+    <string name="menu_quarterly">Một quý một lần</string>
+    <string name="menu_yearly">Một năm một lần</string>
+    <string name="text_save">Lưu</string>
 
 </resources>

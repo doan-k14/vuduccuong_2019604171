@@ -10,7 +10,7 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.example.qltaichinhcanhan.databinding.FragmentSlideshowBinding
 import com.example.qltaichinhcanhan.main.base.BaseFragment
-import com.github.aachartmodel.aainfographics.aachartcreator.*
+//import com.github.aachartmodel.aainfographics.aachartcreator.*
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.LegendEntry
 import com.github.mikephil.charting.components.XAxis
@@ -27,7 +27,7 @@ import java.util.*
 class SlideshowFragment : BaseFragment() {
 
     lateinit var binding: FragmentSlideshowBinding
-    lateinit var aaChartModel: AAChartModel
+//    lateinit var aaChartModel: AAChartModel
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -267,25 +267,25 @@ class SlideshowFragment : BaseFragment() {
         })
     }
 
-    fun setDataChart(monthTitles: Array<String>, data1: Array<Any>, data2: Array<Any>) {
-        aaChartModel = AAChartModel()
-            .chartType(AAChartType.Column)
-            .backgroundColor("#FFFFFF")
-            .tooltipEnabled(false)  // hiện thị thống kê
-            .categories(monthTitles) // hiện thị tháng
-            .yAxisLabelsEnabled(false) // giá trị của trục oy
-            .yAxisGridLineWidth(0f)
-            .yAxisTitle("")
-
-            .series(arrayOf(
-                AASeriesElement()
-                    .name("Tokyo")
-                    .data(data1),
-                AASeriesElement()
-                    .name("NewYork")
-                    .data(data2),
-            ))
-    }
+//    fun setDataChart(monthTitles: Array<String>, data1: Array<Any>, data2: Array<Any>) {
+//        aaChartModel = AAChartModel()
+//            .chartType(AAChartType.Column)
+//            .backgroundColor("#FFFFFF")
+//            .tooltipEnabled(false)  // hiện thị thống kê
+//            .categories(monthTitles) // hiện thị tháng
+//            .yAxisLabelsEnabled(false) // giá trị của trục oy
+//            .yAxisGridLineWidth(0f)
+//            .yAxisTitle("")
+//
+//            .series(arrayOf(
+//                AASeriesElement()
+//                    .name("Tokyo")
+//                    .data(data1),
+//                AASeriesElement()
+//                    .name("NewYork")
+//                    .data(data2),
+//            ))
+//    }
 
 }
 

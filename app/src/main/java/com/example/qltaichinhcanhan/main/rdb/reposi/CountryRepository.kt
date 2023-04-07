@@ -24,7 +24,7 @@ class CountryRepository(private val countryDao: CountryDao) {
         return countryDao.getAccountById(accountId)
     }
 
-    fun getCountryBySelect(): LiveData<Country> {
+    fun getCountryBySelect(): Country {
         return countryDao.getCountryBySelect()
     }
 }

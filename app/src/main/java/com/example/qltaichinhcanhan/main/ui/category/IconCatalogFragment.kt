@@ -12,11 +12,8 @@ import com.example.qltaichinhcanhan.databinding.FragmentIconCatalogBinding
 import com.example.qltaichinhcanhan.main.adapter.IconCategoryAdapter
 import com.example.qltaichinhcanhan.main.base.BaseFragment
 import com.example.qltaichinhcanhan.main.inf.IconClickListener
-import com.example.qltaichinhcanhan.main.model.Icon
-import com.example.qltaichinhcanhan.main.model.IconCategoryData
 import com.example.qltaichinhcanhan.main.model.m.DefaultData
 import com.example.qltaichinhcanhan.main.model.m.IconR
-import com.example.qltaichinhcanhan.main.rdb.vm_data.CategoryViewMode
 import com.example.qltaichinhcanhan.main.rdb.vm_data.DataViewMode
 
 

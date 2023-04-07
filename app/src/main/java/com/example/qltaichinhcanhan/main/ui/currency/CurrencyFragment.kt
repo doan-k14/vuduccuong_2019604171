@@ -14,7 +14,6 @@ import android.view.*
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
-import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,13 +21,9 @@ import com.example.qltaichinhcanhan.R
 import com.example.qltaichinhcanhan.databinding.FragmentCurrencyBinding
 import com.example.qltaichinhcanhan.main.adapter.AdapterCountry
 import com.example.qltaichinhcanhan.main.base.BaseFragment
-import com.example.qltaichinhcanhan.main.model.m.DefaultData
 import com.example.qltaichinhcanhan.main.model.m_r.Country
 import com.example.qltaichinhcanhan.main.model.m_api.CurrencyDataAPI
 import com.example.qltaichinhcanhan.main.model.m_r.Account
-import com.example.qltaichinhcanhan.main.model.m_r.Category
-import com.example.qltaichinhcanhan.main.rdb.vm_data.MoneyAccountViewMode
-import com.example.qltaichinhcanhan.main.rdb.vm_data.CountryViewMode
 import com.example.qltaichinhcanhan.main.rdb.vm_data.DataViewMode
 import com.example.qltaichinhcanhan.main.retrofit.CountryService
 import com.google.gson.Gson

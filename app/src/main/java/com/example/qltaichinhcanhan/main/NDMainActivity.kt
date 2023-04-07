@@ -30,9 +30,7 @@ class NDMainActivity : AppCompatActivity(), MyCallback {
         binding.navView.setupWithNavController(navController)
 
 
-        binding.appBarNdmain.btnDialog.setOnClickListener {
-            Toast.makeText(this, "dialog", Toast.LENGTH_SHORT).show()
-        }
+
     }
 
 

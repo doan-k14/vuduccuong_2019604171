@@ -4,7 +4,6 @@ import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
@@ -12,10 +11,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.qltaichinhcanhan.databinding.FragmentDialogAccountBinding
 import com.example.qltaichinhcanhan.main.adapter.AdapterMoneyAccount
-import com.example.qltaichinhcanhan.main.model.m_r.MoneyAccount
 import com.example.qltaichinhcanhan.main.model.query_model.MoneyAccountWithDetails
 import com.example.qltaichinhcanhan.main.rdb.vm_data.DataViewMode
-import com.example.qltaichinhcanhan.main.rdb.vm_data.MoneyAccountViewMode
 
 
 class DialogAccountFragment : DialogFragment() {

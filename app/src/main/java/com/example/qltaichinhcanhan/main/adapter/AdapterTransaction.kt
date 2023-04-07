@@ -7,13 +7,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.qltaichinhcanhan.databinding.ItemTransactionBinding
 import com.example.qltaichinhcanhan.main.model.m.IconR
-import com.example.qltaichinhcanhan.main.model.query_model.FilterTransactions
-import com.example.qltaichinhcanhan.main.model.query_model.TransactionWithDetails
+import com.example.qltaichinhcanhan.main.model.m_convert.FilterTransactions
 import java.text.DecimalFormat
 
 class AdapterTransaction(
     var context: Context,
     var listCategory: List<FilterTransactions>,
+    var currencyCode :String
 ) : RecyclerView.Adapter<AdapterTransaction.ViewHolder>() {
 
     inner class ViewHolder(binding: ItemTransactionBinding) :
@@ -34,14 +34,16 @@ class AdapterTransaction(
         val item = listCategory[position]
         with(holder) {
             binding.imgCategory.setImageResource(IconR.getIconById(context,
-                item.transactionWithDetails.category!!.icon!!,IconR.listIconRCategory))
+                item.transaction.transactionWithDetails?.category!!.icon!!,
+                IconR.listIconRCategory))
             binding.imgCategory.setBackgroundResource(IconR.getColorById(context,
-                item.transactionWithDetails.category!!.color!!,IconR.getListColorIconR()))
-            binding.textNameCategory.text = item.transactionWithDetails.category.categoryName
+                item.transaction.transactionWithDetails?.category!!.color!!,
+                IconR.getListColorIconR()))
+            binding.textNameCategory.text =
+                item.transaction.transactionWithDetails?.category!!.categoryName
 
             val formatter = DecimalFormat("#,###")
-            val m = formatter.format(item.transactionWithDetails.transaction!!.transactionAmount)
-            binding.textValueCategory.text = m
+            binding.textValueCategory.text = currencyCode + formatter.format(item.transaction.transactionWithDetails!!.transaction!!.transactionAmount)
 
             binding.root.setOnClickListener {
                 clickItemSelect?.let {
@@ -66,6 +68,12 @@ class AdapterTransaction(
         this.listCategory = newList
         reloadData()
     }
+
+    fun updateCurrencyCode(currencyCodeNew:String){
+        this.currencyCode = currencyCodeNew
+        reloadData()
+    }
+
 
     @SuppressLint("NotifyDataSetChanged")
     fun reloadData() {

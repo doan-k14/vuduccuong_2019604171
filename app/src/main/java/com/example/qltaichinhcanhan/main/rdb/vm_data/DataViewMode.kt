@@ -5,6 +5,8 @@ import android.util.Log
 import androidx.lifecycle.*
 import com.example.qltaichinhcanhan.main.model.m.IconR
 import com.example.qltaichinhcanhan.main.model.m_r.*
+import com.example.qltaichinhcanhan.main.model.m_convert.FilterTransactions
+import com.example.qltaichinhcanhan.main.model.m_convert.TransactionWithFullDetails
 import com.example.qltaichinhcanhan.main.model.query_model.MoneyAccountWithDetails
 import com.example.qltaichinhcanhan.main.model.query_model.TransactionWithDetails
 import com.example.qltaichinhcanhan.main.rdb.datab.AppDatabase
@@ -97,13 +99,16 @@ class DataViewMode(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    val countryDefault = MutableLiveData<Country>()
+    private val _countryDefault = MutableLiveData<Country>()
+    val countryDefault: LiveData<Country>
+        get() = _countryDefault
+
     fun getCountryBySelect() {
-        viewModelScope.launch(Dispatchers.IO) {
-            countryDefault.postValue(countryRepository.getCountryBySelect().value)
+        viewModelScope.launch {
+            val result = countryRepository.getCountryBySelect()
+            _countryDefault.postValue(result)
         }
     }
-
 
     var checkInputScreenCurrency = 0
 
@@ -354,8 +359,61 @@ class DataViewMode(application: Application) : AndroidViewModel(application) {
         checkTypeTabLayoutHomeTransaction = false
     }
 
-    var checkTypeTabLayoutFilterDay = 0
+    var checkTypeTabLayoutFilterDay = 1
 
+
+    // time month
+    private val _isChecked = MutableLiveData<Boolean>()
+
+    init {
+        _isChecked.value = false // Giá trị mặc định là false
+    }
+
+    val isChecked: LiveData<Boolean>
+        get() = _isChecked
+
+    fun setIsChecked(newValue: Boolean) {
+        _isChecked.value = newValue
+    }
+
+    var timeSelectMoth = ""
+    var timeSelectYear = 0
+
+    // transactions ( từ home -> list transaction)
+    var filterTransactions = FilterTransactions(TransactionWithFullDetails(), listOf())
+
+    // transaction ( từ transactionByTime -> DefaultTransaction
+    var selectTransactionByTimeToDefault = TransactionWithFullDetails()
+
+    // ---------------------------------- NotificationInfo----------------------
+
+    private var notificationInfoDao = db.notificationInfoDao()
+    private val notificationInfoRepository: NotificationInfoRepository =
+        NotificationInfoRepository(notificationInfoDao)
+
+    val readAllNotificationInfoLive = notificationInfoRepository.allNotificationInfoLive
+    val readAllNotificationInfo = notificationInfoRepository.allNotificationInfo
+
+    fun addNotificationInfo(notificationInfo: NotificationInfo) {
+        viewModelScope.launch(Dispatchers.IO) {
+            notificationInfoRepository.insert(notificationInfo)
+        }
+    }
+
+    fun updateNotificationInfo(notificationInfo: NotificationInfo) {
+        viewModelScope.launch(Dispatchers.IO) {
+            notificationInfoRepository.update(notificationInfo)
+        }
+    }
+
+    fun deleteNotificationInfo(notificationInfo: NotificationInfo) {
+        viewModelScope.launch(Dispatchers.IO) {
+            notificationInfoRepository.delete(notificationInfo)
+        }
+    }
+
+
+    var selectNotificationInfoReminderToEdit = NotificationInfo()
 }
 
 

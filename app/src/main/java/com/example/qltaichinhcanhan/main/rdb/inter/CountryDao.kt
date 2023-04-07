@@ -25,6 +25,6 @@ interface CountryDao {
     fun getAccountById(countryId: Int): LiveData<Country>
 
     @Query("SELECT * FROM country WHERE `selectCountry`= 1")
-    fun getCountryBySelect(): LiveData<Country>
+    fun getCountryBySelect(): Country
 
 }

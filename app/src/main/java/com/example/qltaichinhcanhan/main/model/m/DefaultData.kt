@@ -1,10 +1,12 @@
 package com.example.qltaichinhcanhan.main.model.m
 
+import com.example.qltaichinhcanhan.R
 import com.example.qltaichinhcanhan.main.model.Icon
 import com.example.qltaichinhcanhan.main.model.IconCategory
 import com.example.qltaichinhcanhan.main.model.IconCategoryData
 import com.example.qltaichinhcanhan.main.model.m_r.Category
 import com.example.qltaichinhcanhan.main.model.m_r.CategoryType
+import com.example.qltaichinhcanhan.main.model.m_r.NotificationInfo
 
 object DefaultData {
 
@@ -19,7 +21,7 @@ object DefaultData {
         )
     }
 
-    fun getListCategoryCreateData():ArrayList<Category>{
+    fun getListCategoryCreateData(): ArrayList<Category> {
         val listIcon = IconR.listIconRCategory
         return arrayListOf(
             Category(1, "Thêm", CategoryType.INCOME, 1F, false,listIcon[0].id,listIcon[0].idColorR,1),
@@ -41,7 +43,7 @@ object DefaultData {
     val listIconRCategory = listOf(
         IconRCategory(1, "Thể thao", IconR.listIconRCategory),
         IconRCategory(2, "Sức khỏe", IconR.listIconRCategory),
-        IconRCategory(3, "Mua sắm",IconR.listIconRCategory),
+        IconRCategory(3, "Mua sắm", IconR.listIconRCategory),
         IconRCategory(4, "Thể thao", IconR.listIconRCategory),
         IconRCategory(5, "Thể thao", IconR.listIconRCategory),
         IconRCategory(6, "Thể thao", IconR.listIconRCategory),
@@ -51,5 +53,37 @@ object DefaultData {
         IconRCategory(10, "Giải trí", IconR.listIconRCategory),
     )
 
+
+    data class MothR(
+        var idMothR:Int?=null,
+        var mothName: String? = null,
+        var selectMoth: Boolean? = null,
+    )
+
+    val listMothR = listOf(
+        MothR(1,"Tháng 1", false),
+        MothR(2,"Tháng 2", false),
+        MothR(3,"Tháng 3", false),
+        MothR(4,"Tháng 4", false),
+        MothR(5,"Tháng 5", false),
+        MothR(6,"Tháng 6", false),
+        MothR(7,"Tháng 7", false),
+        MothR(8,"Tháng 8", false),
+        MothR(9,"Tháng 9", false),
+        MothR(10,"Tháng 10", false),
+        MothR(11,"Tháng 11", false),
+        MothR(12,"Tháng 12", false)
+        )
+
+    val headerFileXlsAndCSV = arrayOf(
+        "Ngày tháng",
+        "Danh mục",
+        "Tài khoản",
+        "Số tiền mặc định",
+        "Loại tiền mặc định",
+        "Số tiền theo tài khoản",
+        "Loại tiền theo tài khoản",
+        "Ghi chú"
+    )
 
 }

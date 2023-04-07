@@ -23,8 +23,6 @@ import com.example.qltaichinhcanhan.databinding.FragmentCreatsMoneyBinding
 import com.example.qltaichinhcanhan.main.NDMainActivity
 import com.example.qltaichinhcanhan.main.model.m_r.Country
 import com.example.qltaichinhcanhan.main.model.m_r.MoneyAccount
-import com.example.qltaichinhcanhan.main.rdb.vm_data.MoneyAccountViewMode
-import com.example.qltaichinhcanhan.main.rdb.vm_data.CountryViewMode
 import com.example.qltaichinhcanhan.main.rdb.vm_data.DataViewMode
 
 

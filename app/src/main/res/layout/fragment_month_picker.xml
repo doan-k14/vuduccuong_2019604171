@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/previousYearButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_arrow_back"
+            />
+
+        <TextView
+            android:id="@+id/currentYearTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+
+        <ImageButton
+            android:id="@+id/nextYearButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_arrow_back"
+            />
+    </LinearLayout>
+
+    <GridLayout
+        android:id="@+id/monthGridLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:alignmentMode="alignMargins"
+        android:columnCount="4"
+        android:columnOrderPreserved="false"
+        android:rowCount="3">
+
+        <TextView
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:layout_margin="2dp"
+            android:background="@color/bg_color"
+            android:gravity="center"
+            android:textSize="18sp" />
+
+        <TextView
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:layout_margin="2dp"
+            android:background="@color/bg_color"
+            android:gravity="center"
+            android:textSize="18sp" />
+        <TextView
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:layout_margin="2dp"
+            android:background="@color/bg_color"
+            android:gravity="center"
+            android:textSize="18sp" />
+        <TextView
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:layout_margin="2dp"
+            android:background="@color/bg_color"
+            android:gravity="center"
+            android:textSize="18sp" />
+        <TextView
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:layout_margin="2dp"
+            android:background="@color/bg_color"
+            android:gravity="center"
+            android:textSize="18sp" />
+        <TextView
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:layout_margin="2dp"
+            android:background="@color/bg_color"
+            android:gravity="center"
+            android:textSize="18sp" />
+        <TextView
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:layout_margin="2dp"
+            android:background="@color/bg_color"
+            android:gravity="center"
+            android:textSize="18sp" />
+        <TextView
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:layout_margin="2dp"
+            android:background="@color/bg_color"
+            android:gravity="center"
+            android:textSize="18sp" />
+        <TextView
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:layout_margin="2dp"
+            android:background="@color/bg_color"
+            android:gravity="center"
+            android:textSize="18sp" />
+        <TextView
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:layout_margin="2dp"
+            android:background="@color/bg_color"
+            android:gravity="center"
+            android:textSize="18sp" />
+        <TextView
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:layout_margin="2dp"
+            android:background="@color/bg_color"
+            android:gravity="center"
+            android:textSize="18sp" />
+        <TextView
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:layout_margin="2dp"
+            android:background="@color/bg_color"
+            android:gravity="center"
+            android:textSize="18sp" />
+
+
+        <!-- Add 10 more TextViews for the remaining months -->
+
+    </GridLayout>
+
+</LinearLayout>

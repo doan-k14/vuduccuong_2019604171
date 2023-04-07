@@ -9,10 +9,13 @@
         android:id="@+id/nav_home"
         android:name="com.example.qltaichinhcanhan.main.ui.home.HomeFragment"
         android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home" >
+        tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_nav_home_to_addTransactionFragment"
             app:destination="@id/addTransactionFragment" />
+        <action
+            android:id="@+id/action_nav_home_to_transactionByCategoryFragment"
+            app:destination="@id/transactionByCategoryFragment" />
     </fragment>
 
     <fragment
@@ -59,7 +62,7 @@
         android:id="@+id/editAccountFragment"
         android:name="com.example.qltaichinhcanhan.main.ui.money_accounts.EditMoneyAccountFragment"
         android:label="fragment_edit_account"
-        tools:layout="@layout/fragment_edit_account" >
+        tools:layout="@layout/fragment_edit_account">
         <action
             android:id="@+id/action_editAccountFragment_to_nav_currency"
             app:destination="@id/nav_currency" />
@@ -73,7 +76,7 @@
         android:id="@+id/addTransactionFragment"
         android:name="com.example.qltaichinhcanhan.main.ui.home.AddTransactionFragment"
         android:label="fragment_add_transaction"
-        tools:layout="@layout/fragment_add_transaction" >
+        tools:layout="@layout/fragment_add_transaction">
         <action
             android:id="@+id/action_addTransactionFragment_to_nav_currency"
             app:destination="@id/nav_currency" />
@@ -85,9 +88,41 @@
         android:id="@+id/addCategoryFragment"
         android:name="com.example.qltaichinhcanhan.main.ui.category.AddCategoryFragment"
         android:label="fragment_add_category2"
-        tools:layout="@layout/fragment_add_category" >
+        tools:layout="@layout/fragment_add_category">
         <action
             android:id="@+id/action_addCategoryFragment_to_editCategoryFragment"
             app:destination="@id/editCategoryFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/transactionByCategoryFragment"
+        android:name="com.example.qltaichinhcanhan.main.ui.home.TransactionByCategoryFragment"
+        android:label="fragment_default_transaction"
+        tools:layout="@layout/fragment_transaction_by_category">
+        <action
+            android:id="@+id/action_transactionByCategoryFragment_to_defaultTransactionFragment"
+            app:destination="@id/defaultTransactionFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/defaultTransactionFragment"
+        android:name="com.example.qltaichinhcanhan.main.ui.home.DefaultTransactionFragment"
+        android:label="fragment_default_transaction"
+        tools:layout="@layout/fragment_default_transaction">
+        <action
+            android:id="@+id/action_defaultTransactionFragment_to_addTransactionFragment"
+            app:destination="@id/addTransactionFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/nav_reminders"
+        android:name="com.example.qltaichinhcanhan.main.ui.reminder.RemindersFragment"
+        android:label="fragment_reminders"
+        tools:layout="@layout/fragment_reminders" >
+        <action
+            android:id="@+id/action_nav_reminders_to_editNotificationFragment"
+            app:destination="@id/editNotificationFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editNotificationFragment"
+        android:name="com.example.qltaichinhcanhan.main.ui.reminder.EditNotificationFragment"
+        android:label="fragment_edit_notification"
+        tools:layout="@layout/fragment_edit_notification" />
 </navigation>

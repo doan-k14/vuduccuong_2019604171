@@ -4,9 +4,7 @@ import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.*
-import androidx.fragment.app.Fragment
 import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
@@ -21,13 +19,10 @@ import com.example.qltaichinhcanhan.main.adapter.AdapterIconAccount
 import com.example.qltaichinhcanhan.main.base.BaseFragment
 import com.example.qltaichinhcanhan.main.library.MoneyTextWatcher
 import com.example.qltaichinhcanhan.main.model.m_r.MoneyAccount
-import com.example.qltaichinhcanhan.main.model.DataColor
 import com.example.qltaichinhcanhan.main.model.m.IconR
 import com.example.qltaichinhcanhan.main.model.m_r.Account
 import com.example.qltaichinhcanhan.main.model.m_r.Country
 import com.example.qltaichinhcanhan.main.model.query_model.MoneyAccountWithDetails
-import com.example.qltaichinhcanhan.main.rdb.vm_data.MoneyAccountViewMode
-import com.example.qltaichinhcanhan.main.rdb.vm_data.CountryViewMode
 import com.example.qltaichinhcanhan.main.rdb.vm_data.DataViewMode
 
 

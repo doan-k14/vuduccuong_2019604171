@@ -21,7 +21,6 @@ import com.example.qltaichinhcanhan.main.model.m_r.MoneyAccount
 import com.example.qltaichinhcanhan.main.model.query_model.MoneyAccountWithDetails
 import com.example.qltaichinhcanhan.main.rdb.vm_data.DataViewMode
 import com.example.qltaichinhcanhan.main.retrofit.ExchangeRateApi
-import com.github.aachartmodel.aainfographics.aachartcreator.*
 import kotlinx.coroutines.*
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -29,7 +28,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class MoneyAccountsFragment : BaseFragment() {
 
     lateinit var binding: FragmentAccountsBinding
-    lateinit var aaChartModel: AAChartModel
+//    lateinit var aaChartModel: AAChartModel
     lateinit var adapterMoneyAccount: AdapterMoneyAccount
     lateinit var dataViewMode: DataViewMode
     var countryDefault = Country()
@@ -138,25 +137,25 @@ class MoneyAccountsFragment : BaseFragment() {
 //        binding.aaChartView.aa_drawChartWithChartModel(aaChartModel)
     }
 
-    fun setDataChart(monthTitles: Array<String>, data1: Array<Any>, data2: Array<Any>) {
-        aaChartModel = AAChartModel()
-            .chartType(AAChartType.Column)
-            .backgroundColor("#FFFFFF")
-            .tooltipEnabled(false)  // hiện thị thống kê
-            .categories(monthTitles) // hiện thị tháng
-            .yAxisLabelsEnabled(false) // giá trị của trục oy
-            .yAxisGridLineWidth(0f)
-            .yAxisTitle("")
-
-            .series(arrayOf(
-                AASeriesElement()
-                    .name("Tokyo")
-                    .data(data1),
-                AASeriesElement()
-                    .name("NewYork")
-                    .data(data2),
-            ))
-    }
+//    fun setDataChart(monthTitles: Array<String>, data1: Array<Any>, data2: Array<Any>) {
+//        aaChartModel = AAChartModel()
+//            .chartType(AAChartType.Column)
+//            .backgroundColor("#FFFFFF")
+//            .tooltipEnabled(false)  // hiện thị thống kê
+//            .categories(monthTitles) // hiện thị tháng
+//            .yAxisLabelsEnabled(false) // giá trị của trục oy
+//            .yAxisGridLineWidth(0f)
+//            .yAxisTitle("")
+//
+//            .series(arrayOf(
+//                AASeriesElement()
+//                    .name("Tokyo")
+//                    .data(data1),
+//                AASeriesElement()
+//                    .name("NewYork")
+//                    .data(data2),
+//            ))
+//    }
 
     override fun onDestroy() {
         super.onDestroy()

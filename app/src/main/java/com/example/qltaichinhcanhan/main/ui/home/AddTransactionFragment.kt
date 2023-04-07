@@ -37,8 +37,10 @@ class AddTransactionFragment : Fragment() {
 
     var timeTransaction = 0L
     var listTimeInMillis = arrayListOf<Long>()
+    var moneyAccountWithDetails = MoneyAccountWithDetails()
 
-    private var requestBuilder: RequestBuilder<PictureDrawable>? = null
+    var countryDefault = Country()
+    var countrySelect = Country()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -120,19 +122,32 @@ class AddTransactionFragment : Fragment() {
 
         dataViewMode.listCategoryByTypeLiveData.observe(requireActivity()) {
             adapterIconCategory.updateData(it as ArrayList<Category>)
-            if(idCategory != 0){
+            if (idCategory != 0) {
                 adapterIconCategory.updateSelect(idCategory)
                 dataViewMode.transaction.idCategory = idCategory
                 dataViewMode.categorySelectAddCategoryByAddTransaction = Category(0)
-                Log.e("data","update select: add transaction")
             }
+        }
+
+        // country mặc định
+        dataViewMode.countryDefault.observe(requireActivity()) {
+            binding.edtTypeAmountTransaction0.text = it.currencyCode
+            countryDefault = it
+            countrySelect = it
+            Log.e("data","id country default: ${it.idCountry}")
 
         }
 
+        // country được lấy ra từ dialog moneyAccount được chọn
         dataViewMode.moneyAccountWithDetailsSelect.observe(requireActivity()) {
             if (it.moneyAccount!!.idMoneyAccount != 0) {
                 binding.textSelectAccount.text = it.moneyAccount!!.moneyAccountName
                 dataViewMode.transaction.idMoneyAccount = it.moneyAccount.idMoneyAccount
+                moneyAccountWithDetails = it
+
+                countryDefault = it.country!!
+                binding.edtTypeAmountTransaction0.text = countryDefault.currencyCode
+                binding.edtTypeAmountTransaction2.text = countryDefault.currencyCode
             }
         }
 
@@ -141,13 +156,15 @@ class AddTransactionFragment : Fragment() {
             binding.layoutAmount0.visibility = View.VISIBLE
             binding.layoutAmount1.visibility = View.GONE
             binding.edtAmount0.addTextChangedListener(MoneyTextWatcher(binding.edtAmount0))
+            countrySelect = countryDefault
 
         } else {
             binding.layoutAmount1.visibility = View.VISIBLE
             binding.layoutAmount0.visibility = View.GONE
             binding.edtTypeAmountTransaction1.text = country.currencyCode
             binding.edtTypeAmountTransaction2.isEnabled = false
-        }
+            countrySelect = country
+           }
 
     }
 
@@ -202,8 +219,14 @@ class AddTransactionFragment : Fragment() {
                     binding.edtAmount1.setSelection(formattedValue.length)
                     binding.edtAmount1.addTextChangedListener(this)
 
-                    val ex = dataViewMode.country.exchangeRate
-                    val amount = calculateAmount(ex!!, formattedValue)
+                    var amount = 0F
+                    if (countryDefault.idCountry == countrySelect.idCountry) {
+                        amount = calculateAmount(formattedValue)
+                    } else {
+                        amount = calculateAmount2(countrySelect.exchangeRate!!,countryDefault.exchangeRate!!,
+                            formattedValue)
+                    }
+
                     binding.edtAmount2.text = formatAmount(amount)
                     if (amount != 0F) {
                         dataViewMode.transaction.transactionAmount = amount
@@ -231,7 +254,7 @@ class AddTransactionFragment : Fragment() {
         }
 
         binding.textCreate.setOnClickListener {
-            if(checkData(1)){
+            if (checkData(1)) {
                 dataViewMode.addTransaction(dataViewMode.transaction)
                 findNavController().popBackStack()
             }
@@ -317,8 +340,12 @@ class AddTransactionFragment : Fragment() {
         return String.format("%,d", number)
     }
 
-    fun calculateAmount(ex: Float, formattedValue: String): Float {
-        return formatValue(formattedValue).replace(".", "").toFloat() / ex
+    fun calculateAmount(formattedValue: String): Float {
+        return formatValue(formattedValue).replace(".", "").toFloat()
+    }
+
+    fun calculateAmount2(ex1: Float, ex2: Float, formattedValue: String): Float {
+        return (formatValue(formattedValue).replace(".", "").toFloat()/ex1 ) * ex2
     }
 
     fun formatAmount(amount: Float): String {
@@ -381,7 +408,14 @@ class AddTransactionFragment : Fragment() {
             dataViewMode.transaction.idTransaction = 0
         }
 
-        Log.e("data", "transaction: ${dataViewMode.transaction.toString()}")
+        var moneyAccount = MoneyAccount()
+        val money = moneyAccountWithDetails.moneyAccount?.amountMoneyAccount
+        val moneyNew = money!! - dataViewMode.transaction.transactionAmount!!
+
+        moneyAccount = moneyAccountWithDetails.moneyAccount!!
+        moneyAccount.amountMoneyAccount = moneyNew
+
+        dataViewMode.updateMoneyAccount(moneyAccount)
 
         return true
     }
@@ -395,25 +429,4 @@ class AddTransactionFragment : Fragment() {
         dataViewMode.categorySelectAddCategoryByAddTransaction = Category()
         super.onDestroy()
     }
-
-
-    // đổi tiền tệ
-    fun currencyExchange(exchangeRate1: Float, exchangeRate2: Float, amount: Float) {
-        val result = (amount / exchangeRate1) * exchangeRate2
-        val displayAmount = if (result < 1000000) {
-            String.format("%,.0f",
-                result)
-        } else {
-            String.format("%.1fM",
-                result / 1000000)
-        }
-        Log.e("data", "Kết quả quy đổi: $displayAmount")
-
-    }
-
-//    fun hienThiNgay(){
-//        val dateFormat = SimpleDateFormat("dd/MM")
-//        Log.e("data", "time: ${dateFormat.format(timeTransaction)}")
-//    }
-
 }
