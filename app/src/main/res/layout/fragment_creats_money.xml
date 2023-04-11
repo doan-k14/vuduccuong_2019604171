@@ -38,7 +38,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginRight="5dp"
-            android:layout_weight="7"
+            android:layout_weight="6"
             android:background="@drawable/rounded_edittext"
             android:gravity="center"
             android:hint="@string/vaule_total"
@@ -55,12 +55,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
-            android:layout_weight="3"
+            android:layout_weight="4"
             android:background="@drawable/rounded_edittext"
             android:drawableRight="@drawable/ic_arrow_drop_down"
             android:gravity="center"
             android:padding="9dp"
-            android:text="VND"
+            android:text="Loại tiền"
             android:textColor="@color/black"
             android:textSize="16sp" />
     </LinearLayout>

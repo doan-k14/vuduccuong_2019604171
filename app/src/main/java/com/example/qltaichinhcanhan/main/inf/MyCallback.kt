@@ -4,6 +4,6 @@ import com.example.qltaichinhcanhan.main.model.Icon
 
 interface MyCallback {
     fun onCallback()
-    fun onCallbackCategoryToEditC()
-    fun onIconClick(icon: Icon)
+    fun onCallbackLockedDrawers()
+    fun onCallbackUnLockedDrawers()
 }

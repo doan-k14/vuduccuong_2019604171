@@ -14,6 +14,7 @@ import android.view.*
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -35,6 +36,9 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.*
+import java.util.concurrent.TimeUnit
+import kotlin.collections.ArrayList
 
 
 class CurrencyFragment : BaseFragment() {
@@ -101,18 +105,16 @@ class CurrencyFragment : BaseFragment() {
             binding.pressedLoading.visibility = View.GONE
             binding.rcvCategory.visibility = View.VISIBLE
         }
-
-        binding.textTitleAccount.setOnClickListener {
-            getExchangeRate(listCountry)
+        if(position !=-1){
+            updateExchangeRateByDay()
         }
-
     }
 
     private fun initEvent() {
 
         binding.btnNavigation.setOnClickListener {
             if (dataViewMode.checkInputScreenCurrency == 0) {
-                myCallback?.onCallback()
+                onCallback()
             } else if (dataViewMode.checkInputScreenCurrency == 1) {
                 findNavController().popBackStack()
             }
@@ -179,6 +181,21 @@ class CurrencyFragment : BaseFragment() {
                 dataViewMode.country = it
                 findNavController().popBackStack()
             }
+        }
+    }
+
+    private fun updateExchangeRateByDay(){
+        val sharedPreferences = requireActivity().getSharedPreferences("MyPreferences", Context.MODE_PRIVATE)
+        val currentDate = Calendar.getInstance().time
+        val lastUpdateDate = Date(sharedPreferences.getLong("LastUpdateDate", 0))
+        val daysDifference = TimeUnit.MILLISECONDS.toDays(currentDate.time - lastUpdateDate.time)
+        if (daysDifference >= 1 || lastUpdateDate == Date(0)) {
+//            getExchangeRate(listCountry)
+            // 12h
+            Toast.makeText(requireActivity(),"Cập nhập tỉ giá",Toast.LENGTH_LONG).show()
+            val editor = sharedPreferences.edit()
+            editor.putLong("LastUpdateDate", currentDate.time)
+            editor.apply()
         }
     }
 
@@ -292,7 +309,7 @@ class CurrencyFragment : BaseFragment() {
 
         val window = dialog.window ?: return
         window.setLayout(
-            WindowManager.LayoutParams.WRAP_CONTENT,
+            WindowManager.LayoutParams.MATCH_PARENT,
             WindowManager.LayoutParams.WRAP_CONTENT
         )
         window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))

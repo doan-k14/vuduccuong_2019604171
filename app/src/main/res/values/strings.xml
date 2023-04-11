@@ -53,7 +53,7 @@
     <string name="action_settings">Settings</string>
 
     <string name="menu_home">Home</string>
-    <string name="menu_gallery">Gallery</string>
+    <string name="menu_gallery">Cài đặt</string>
     <string name="menu_slideshow">Biểu đồ</string>
     <string name="total">Tổng cộng</string>
     <string name="acounts">Tài khoản</string>
@@ -110,5 +110,9 @@
     <string name="menu_quarterly">Một quý một lần</string>
     <string name="menu_yearly">Một năm một lần</string>
     <string name="text_save">Lưu</string>
+    <string name="transaction_delete_notification">Bạn có chắn chắn muốn xóa lời nhắc không?</string>
+    <string name="menu_account">Tài khoản</string>
+    <string name="not_data_transaction">Không tồn tại dữ liệu</string>
+    <string name="text_edti_transaction">Chỉnh sửa giao dịch</string>
 
 </resources>

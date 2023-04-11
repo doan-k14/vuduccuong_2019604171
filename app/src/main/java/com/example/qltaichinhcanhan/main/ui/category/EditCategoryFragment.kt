@@ -208,7 +208,7 @@ class EditCategoryFragment : BaseFragment() {
 
         val window = dialog.window ?: return
         window.setLayout(
-            WindowManager.LayoutParams.WRAP_CONTENT,
+            WindowManager.LayoutParams.MATCH_PARENT,
             WindowManager.LayoutParams.WRAP_CONTENT
         )
         window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))

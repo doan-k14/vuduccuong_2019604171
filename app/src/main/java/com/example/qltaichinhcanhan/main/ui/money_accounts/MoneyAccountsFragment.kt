@@ -48,13 +48,16 @@ class MoneyAccountsFragment : BaseFragment() {
         dataViewMode = ViewModelProvider(requireActivity())[DataViewMode::class.java]
 
         binding.btnNavigation.setOnClickListener {
-            myCallback?.onCallback()
+            onCallback()
         }
 
         initView()
         initEvent()
     }
-
+    override fun onStart() {
+        super.onStart()
+        onCallbackUnLockedDrawers()
+    }
 
     private fun initView() {
 
@@ -157,8 +160,9 @@ class MoneyAccountsFragment : BaseFragment() {
 //            ))
 //    }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onStop() {
+        super.onStop()
+        onCallbackLockedDrawers()
     }
 }
 

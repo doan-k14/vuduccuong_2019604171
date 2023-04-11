@@ -4,23 +4,18 @@ package com.example.qltaichinhcanhan.main.ui.home
 import android.Manifest
 import android.app.DatePickerDialog
 import android.app.Dialog
-import android.content.Context
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.icu.text.SimpleDateFormat
-import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
 import android.preference.PreferenceManager
+import android.util.Log
 import android.view.*
 import android.widget.RadioGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.content.FileProvider
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -29,7 +24,6 @@ import com.example.qltaichinhcanhan.databinding.FragmentHomeBinding
 import com.example.qltaichinhcanhan.main.adapter.AdapterTransaction
 import com.example.qltaichinhcanhan.main.base.BaseFragment
 import com.example.qltaichinhcanhan.main.library.ChartUtils
-import com.example.qltaichinhcanhan.main.model.m.ConvertXML
 import com.example.qltaichinhcanhan.main.model.m.DefaultData
 import com.example.qltaichinhcanhan.main.model.m_convert.TransactionWithFullDetails
 import com.example.qltaichinhcanhan.main.model.m_r.CategoryType
@@ -40,12 +34,6 @@ import com.example.qltaichinhcanhan.main.model.query_model.TransactionWithDetail
 import com.example.qltaichinhcanhan.main.rdb.vm_data.DataViewMode
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.tabs.TabLayout
-import com.opencsv.CSVWriter
-import jxl.Workbook
-import jxl.write.Label
-import org.apache.commons.lang3.StringUtils
-import java.io.File
-import java.io.FileWriter
 import java.util.*
 
 
@@ -58,6 +46,7 @@ class HomeFragment : BaseFragment() {
     var listTransactionWithFullDetails = listOf<TransactionWithFullDetails>()
     var currencySymbol = ""
     var countryDefault = Country()
+    var checkScreenHome = false
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -71,9 +60,15 @@ class HomeFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         dataViewMode = ViewModelProvider(requireActivity())[DataViewMode::class.java]
+        checkScreenHome = true
         initView()
         initData()
         initEvent()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        onCallbackUnLockedDrawers()
     }
 
     private fun initView() {
@@ -91,35 +86,45 @@ class HomeFragment : BaseFragment() {
 
         var listTransactionWithDetails = listOf<TransactionWithDetails>()
         // lắng nghe list transaction lấy từ csdl
-        dataViewMode.listTransactionWithDetailsLiveData.observe(requireActivity()) {
-            listTransactionWithDetails = listOf()
-            listTransactionWithDetails = it
-            if (it.isNotEmpty()) {
-                dataViewMode.getAllMoneyAccountsWithDetails()
+        dataViewMode.listTransactionWithDetailsByTypeLiveData.observe(requireActivity()) {
+            if(checkScreenHome){
+//                Log.e("view"," initData home: ${it.size}")
+                listTransactionWithDetails = listOf()
+                listTransactionWithDetails = it
+                if (it.isNotEmpty()) {
+                    dataViewMode.getAllMoneyAccountsWithDetails()
+                }else{
+                    listTransactionWithFullDetails = listOf()
+                    ChartUtils.pieChart(requireActivity(),listOf(),binding.barChart,currencySymbol)
+                    adapterTransaction.updateData(listOf())
+                }
             }
         }
 
         var listMoneyAccountWithDetails = listOf<MoneyAccountWithDetails>()
         // lắng nghe list moneyAccount lấy từ csdl
         dataViewMode.moneyAccountsWithDetails.observe(requireActivity()) {
-            listMoneyAccountWithDetails = listOf()
-            listMoneyAccountWithDetails = it
-            setTextTotalMoney(listMoneyAccountWithDetails)
+            if(checkScreenHome){
+                listMoneyAccountWithDetails = listOf()
+                listMoneyAccountWithDetails = it
+                setTextTotalMoney(listMoneyAccountWithDetails)
 
-            if (listTransactionWithDetails.isNotEmpty() && listMoneyAccountWithDetails.isNotEmpty()) {
-                // hợp nhất để tạo ra class transaction với đầy đủ các thông tin liên quan qua khóa ngoài
-                mergeTransactionWithMoneyAccount(listTransactionWithDetails,
-                    listMoneyAccountWithDetails)
+                if (listTransactionWithDetails.isNotEmpty() && listMoneyAccountWithDetails.isNotEmpty()) {
+                    // hợp nhất để tạo ra class transaction với đầy đủ các thông tin liên quan qua khóa ngoài
+                    mergeTransactionWithMoneyAccount(listTransactionWithDetails,
+                        listMoneyAccountWithDetails)
+                }
             }
         }
     }
 
     private fun initEvent() {
         binding.imgMenu.setOnClickListener {
-            myCallback?.onCallback()
+            onCallback()
         }
 
         binding.imgAdd1.setOnClickListener {
+            dataViewMode.checkInputScreenAddTransaction = 0
             findNavController().navigate(R.id.action_nav_home_to_addTransactionFragment)
         }
 
@@ -146,13 +151,18 @@ class HomeFragment : BaseFragment() {
         }
 
         binding.btnExportFile.setOnClickListener {
-            if (ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(requireActivity(),
-                    arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
-            } else {
-                createDialogExportFile(Gravity.CENTER)
 
+            if(listTransactionWithFullDetails.isNotEmpty()){
+                if (ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(requireActivity(),
+                        arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
+                } else {
+                    createDialogExportFile(Gravity.CENTER)
+
+                }
+            }else{
+                Toast.makeText(requireActivity(),"Danh sách chưa có dữ liệu. Không thể xuất file null!",Toast.LENGTH_LONG).show()
             }
         }
 
@@ -270,6 +280,7 @@ class HomeFragment : BaseFragment() {
 
                 when (position) {
                     0 -> {
+                        Log.e("data","timeDay: ${timeDay}")
                         binding.textTimePieChart.text = timeDay
                         checkShowOrHideTextTime(false)
                         val l =
@@ -499,6 +510,15 @@ class HomeFragment : BaseFragment() {
         listTransactionWithFullDetails = listOf()
         listTransactionWithFullDetails = transactionWithFullDetailsList
         filterTransactionByTime(listTransactionWithFullDetails)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        onCallbackLockedDrawers()
+    }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        checkScreenHome = false
     }
 
     override fun onDestroy() {

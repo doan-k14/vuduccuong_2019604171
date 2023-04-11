@@ -4,7 +4,7 @@ import com.example.qltaichinhcanhan.main.model.query_model.MoneyAccountWithDetai
 import com.example.qltaichinhcanhan.main.model.query_model.TransactionWithDetails
 
 data class TransactionWithFullDetails(
-    val transactionWithDetails: TransactionWithDetails? = null,
-    val moneyAccountWithDetails: MoneyAccountWithDetails? = null,
+    var transactionWithDetails: TransactionWithDetails? = null,
+    var moneyAccountWithDetails: MoneyAccountWithDetails? = null,
 )
 

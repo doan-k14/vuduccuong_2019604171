@@ -110,11 +110,44 @@
                 app:tabTextAppearance="@style/MyTabLayoutChart"
                 app:tabTextColor="@color/text_hide" />
 
-            <com.github.mikephil.charting.charts.BarChart
-                android:id="@+id/bar_chart"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="220dp" />
+                android:layout_height="220dp">
+
+                <com.github.mikephil.charting.charts.BarChart
+                    android:id="@+id/bar_chart0"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <com.github.mikephil.charting.charts.BarChart
+                    android:id="@+id/bar_chart1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <com.github.mikephil.charting.charts.BarChart
+                    android:id="@+id/bar_chart2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <TextView
+                    android:visibility="gone"
+                    android:id="@+id/text_not_data"
+                    android:textColor="@color/red"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/white"
+                    android:gravity="center"
+                    android:text="@string/not_data_transaction" />
+            </RelativeLayout>
+
+
         </LinearLayout>
+
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/chart"
+            android:layout_width="match_parent"
+            android:layout_height="220dp"
+            android:visibility="gone" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rcv_m"

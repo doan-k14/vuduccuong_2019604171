@@ -53,7 +53,7 @@ class DefaultTransactionFragment : BaseFragment() {
         binding.imgMoneyAccount.setBackgroundResource(IconR.getColorById(requireActivity(),
             moneyAccount.color!!, IconR.getListColorIconR()))
 
-        val category = transaction.transactionWithDetails.category
+        val category = transaction.transactionWithDetails!!.category
         binding.imgCategory.setImageResource(IconR.getIconById(requireActivity(),
             category?.icon!!, IconR.listIconRCategory))
         binding.textNameCategory.text = category.categoryName
@@ -61,7 +61,7 @@ class DefaultTransactionFragment : BaseFragment() {
             category.color!!, IconR.getListColorIconR()))
 
         binding.textDay.text =
-            convertTimeToDate(transaction.transactionWithDetails.transaction.day!!)
+            convertTimeToDate(transaction.transactionWithDetails!!.transaction!!.day!!)
 
     }
 
@@ -71,6 +71,7 @@ class DefaultTransactionFragment : BaseFragment() {
         }
 
         binding.btnEdit.setOnClickListener {
+            dataViewMode.checkInputScreenAddTransaction = 1
             findNavController().navigate(R.id.action_defaultTransactionFragment_to_addTransactionFragment)
         }
 
@@ -89,7 +90,7 @@ class DefaultTransactionFragment : BaseFragment() {
 
         val window = dialog.window ?: return
         window.setLayout(
-            WindowManager.LayoutParams.WRAP_CONTENT,
+            WindowManager.LayoutParams.MATCH_PARENT,
             WindowManager.LayoutParams.WRAP_CONTENT
         )
         window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))

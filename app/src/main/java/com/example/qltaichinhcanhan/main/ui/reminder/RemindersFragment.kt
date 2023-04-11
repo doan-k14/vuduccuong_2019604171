@@ -35,12 +35,7 @@ class RemindersFragment : BaseFragment() {
         dataViewMode = ViewModelProvider(requireActivity())[DataViewMode::class.java]
 
         binding.btnNavigation.setOnClickListener {
-            myCallback?.onCallback()
-        }
-
-        binding.textTitleAccount.setOnClickListener {
-
-
+            onCallback()
         }
 
         binding.llCreateNotification.setOnClickListener {
@@ -49,7 +44,10 @@ class RemindersFragment : BaseFragment() {
         }
         initView()
     }
-
+    override fun onStart() {
+        super.onStart()
+        onCallbackUnLockedDrawers()
+    }
     private fun initView() {
 
         adapterNotification = AdapterNotification(requireActivity(), listOf())
@@ -66,6 +64,13 @@ class RemindersFragment : BaseFragment() {
             dataViewMode.selectNotificationInfoReminderToEdit = it
             findNavController().navigate(R.id.action_nav_reminders_to_editNotificationFragment)
         }
+        adapterNotification.setClickItemSelectSw {
+            dataViewMode.updateNotificationInfo(it)
+        }
 
+    }
+    override fun onStop() {
+        super.onStop()
+        onCallbackLockedDrawers()
     }
 }

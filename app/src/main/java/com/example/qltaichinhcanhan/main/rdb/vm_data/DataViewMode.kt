@@ -332,7 +332,7 @@ class DataViewMode(application: Application) : AndroidViewModel(application) {
 
     // get transaction by type category
     private val _listTransactionLiveData = MutableLiveData<List<TransactionWithDetails>>()
-    val listTransactionWithDetailsLiveData: LiveData<List<TransactionWithDetails>>
+    val listTransactionWithDetailsByTypeLiveData: LiveData<List<TransactionWithDetails>>
         get() = _listTransactionLiveData
 
     fun getAllTransactionWithDetailsByTypeCategory(type: String) {
@@ -342,6 +342,8 @@ class DataViewMode(application: Application) : AndroidViewModel(application) {
         }
     }
 
+
+    var checkInputScreenAddTransaction = 0
 
     var transaction = Transaction()
     var exchangeRate = 0F
@@ -384,6 +386,19 @@ class DataViewMode(application: Application) : AndroidViewModel(application) {
 
     // transaction ( từ transactionByTime -> DefaultTransaction
     var selectTransactionByTimeToDefault = TransactionWithFullDetails()
+    var editTransaction = TransactionWithFullDetails()
+
+
+
+
+    // check sliderSow
+
+    var selectTabLayoutSlidesShow = 0
+    var selectTabLayoutStyleSlidesShow = 1
+
+
+
+
 
     // ---------------------------------- NotificationInfo----------------------
 

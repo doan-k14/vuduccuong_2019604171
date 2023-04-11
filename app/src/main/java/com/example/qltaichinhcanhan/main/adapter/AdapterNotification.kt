@@ -39,13 +39,15 @@ class AdapterNotification(
         with(holder) {
 
             binding.swNotification.isChecked = item.isNotificationSelected!!
-
             binding.textNameNotification.text = item.nameNotification
 
             binding.swNotification.setOnClickListener {
                 listNotification[position].isNotificationSelected =
                     !listNotification[position].isNotificationSelected!!
                 reloadData()
+                clickItemSelectSw?.let {
+                    it(item)
+                }
             }
 
             binding.root.setOnClickListener {
@@ -74,9 +76,14 @@ class AdapterNotification(
 
     private var clickItemSelect: ((NotificationInfo) -> Unit)? = null
 
-
     fun setClickItemSelect(listener: (NotificationInfo) -> Unit) {
         clickItemSelect = listener
+    }
+
+    private var clickItemSelectSw: ((NotificationInfo) -> Unit)? = null
+
+    fun setClickItemSelectSw(listener: (NotificationInfo) -> Unit) {
+        clickItemSelectSw = listener
     }
 
 }

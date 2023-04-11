@@ -30,7 +30,7 @@ class CategoryFragment : BaseFragment() {
         savedInstanceState: Bundle?,
     ): View {
         binding = FragmentCategoryBinding.inflate(inflater, container, false)
-        Log.e("test", "Category: onCreateView")
+        myCallback?.onCallbackUnLockedDrawers()
         return binding.root
     }
 
@@ -42,6 +42,11 @@ class CategoryFragment : BaseFragment() {
 
         initEvent()
 
+    }
+
+    override fun onStart() {
+        super.onStart()
+        onCallbackUnLockedDrawers()
     }
 
     private fun initView() {
@@ -76,7 +81,7 @@ class CategoryFragment : BaseFragment() {
 
     private fun initEvent() {
         binding.btnNavigation.setOnClickListener {
-            myCallback?.onCallback()
+            onCallback()
         }
 
         adapterIconCategory.setClickItemSelect {
@@ -107,8 +112,11 @@ class CategoryFragment : BaseFragment() {
 //https://viblo.asia/p/navigation-architecture-component-phan-i-gAm5yX9Vldb
     }
 
+    override fun onStop() {
+        super.onStop()
+        onCallbackLockedDrawers()
+    }
     override fun onDestroy() {
-        Log.e("test", "Category: onDestroy")
         dataViewMode.resetDataCategory()
         super.onDestroy()
     }

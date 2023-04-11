@@ -8,6 +8,7 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import com.example.qltaichinhcanhan.R
 import com.example.qltaichinhcanhan.databinding.ActivityNdmainBinding
 import com.example.qltaichinhcanhan.main.inf.MyCallback
@@ -46,9 +47,11 @@ class NDMainActivity : AppCompatActivity(), MyCallback {
         binding.drawerLayout.openDrawer(GravityCompat.START)
     }
 
-    override fun onCallbackCategoryToEditC() {
+    override fun onCallbackLockedDrawers() {
+        binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
     }
 
-    override fun onIconClick(icon: Icon) {
+    override fun onCallbackUnLockedDrawers() {
+        binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
     }
 }

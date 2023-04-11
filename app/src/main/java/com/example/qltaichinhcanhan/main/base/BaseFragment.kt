@@ -5,6 +5,7 @@ import android.content.Intent
 import android.icu.text.SimpleDateFormat
 import android.os.Build
 import android.os.Environment
+import android.util.Log
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.core.content.FileProvider
@@ -32,31 +33,27 @@ abstract class BaseFragment : Fragment() {
 
     var myCallback: MyCallback? = null
 
-    // Phương thức onCallback dùng để xử lý callback, có thể override lại trong các Fragment
-    open fun onCallback() {}
-    open fun onCallbackCategoryToEditC() {}
-
-//    interface CallFragment {
-//        open fun onCallBackICon(icon: Icon) {}
-//    }
-
-    open fun onCallBackICon(icon: Icon) {}
+    open fun onCallback() {
+        myCallback?.onCallback()
+    }
+    open fun onCallbackLockedDrawers() {
+        myCallback?.onCallbackLockedDrawers()
+    }
+    open fun onCallbackUnLockedDrawers() {
+        myCallback?.onCallbackUnLockedDrawers()
+    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-
-        // Kiểm tra xem Activity chứa Fragment đã implement interface MyCallback hay chưa
         try {
             myCallback = context as MyCallback
         } catch (e: ClassCastException) {
-            // Nếu không, đưa ra thông báo lỗi
             throw ClassCastException("$context must implement MyCallback")
         }
     }
 
     override fun onDetach() {
         super.onDetach()
-        // Giải phóng bộ nhớ bằng cách xoá reference tới callback interface
         myCallback = null
     }
 
@@ -113,6 +110,14 @@ abstract class BaseFragment : Fragment() {
     fun convertTimeToYear(time: Long): String {
         val dateFormat = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             SimpleDateFormat("YYYY", Locale.getDefault())
+        } else {
+            TODO("VERSION.SDK_INT < N")
+        }
+        return dateFormat.format(time)
+    }
+    fun convertTimeToMountYear(time: Long): String {
+        val dateFormat = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            SimpleDateFormat("dd/MM", Locale.getDefault())
         } else {
             TODO("VERSION.SDK_INT < N")
         }
@@ -192,14 +197,14 @@ abstract class BaseFragment : Fragment() {
         val listConvertXML = arrayListOf<ConvertXML>()
         for (i in listTransactionWithFullDetails) {
             val time = convertTimeToDate(i.transactionWithDetails!!.transaction!!.day!!)
-            val categoryName = i.transactionWithDetails.category!!.categoryName
-            val moneyAccountName = i.transactionWithDetails.moneyAccount!!.moneyAccountName
-            val transactionAmountDefault = i.transactionWithDetails.transaction!!.transactionAmount!!
+            val categoryName = i.transactionWithDetails!!.category!!.categoryName
+            val moneyAccountName = i.transactionWithDetails!!.moneyAccount!!.moneyAccountName
+            val transactionAmountDefault = i.transactionWithDetails!!.transaction!!.transactionAmount!!
             val currencyCodeDefault = i.moneyAccountWithDetails!!.country!!.currencyCode
 
-            val transactionAmount = i.transactionWithDetails.transaction!!.transactionAmount!! / i.moneyAccountWithDetails!!.country!!.exchangeRate!!
+            val transactionAmount = i.transactionWithDetails!!.transaction!!.transactionAmount!! / i.moneyAccountWithDetails!!.country!!.exchangeRate!!
             val currencyCode = countryDefault.currencyCode
-            val transactionComment = i.transactionWithDetails.transaction.comment
+            val transactionComment = i.transactionWithDetails!!.transaction!!.comment
 
             val convertXML = ConvertXML(
                 date = time,

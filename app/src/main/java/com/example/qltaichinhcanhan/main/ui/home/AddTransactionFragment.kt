@@ -1,26 +1,23 @@
 package com.example.qltaichinhcanhan.main.ui.home
 
 import android.app.DatePickerDialog
-import android.graphics.drawable.PictureDrawable
-import android.icu.text.SimpleDateFormat
-import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.*
 import android.widget.Toast
-import androidx.annotation.RequiresApi
-import androidx.fragment.app.Fragment
+import androidx.activity.addCallback
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.RequestBuilder
 import com.example.qltaichinhcanhan.R
 import com.example.qltaichinhcanhan.splash.adapter.AdapterIconCategory
 import com.example.qltaichinhcanhan.databinding.FragmentAddTransactionBinding
+import com.example.qltaichinhcanhan.main.base.BaseFragment
 import com.example.qltaichinhcanhan.main.library.MoneyTextWatcher
+import com.example.qltaichinhcanhan.main.model.m_convert.TransactionWithFullDetails
 import com.example.qltaichinhcanhan.main.model.m_r.*
 import com.example.qltaichinhcanhan.main.model.query_model.MoneyAccountWithDetails
 import com.example.qltaichinhcanhan.main.rdb.vm_data.*
@@ -30,18 +27,20 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-class AddTransactionFragment : Fragment() {
+class AddTransactionFragment : BaseFragment() {
     lateinit var binding: FragmentAddTransactionBinding
     private lateinit var adapterIconCategory: AdapterIconCategory
     private lateinit var dataViewMode: DataViewMode
 
     var timeTransaction = 0L
     var listTimeInMillis = arrayListOf<Long>()
+
     var moneyAccountWithDetails = MoneyAccountWithDetails()
 
     var countryDefault = Country()
     var countrySelect = Country()
 
+    var checkEdtTransaction = false
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -51,18 +50,23 @@ class AddTransactionFragment : Fragment() {
         return binding.root
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         dataViewMode = ViewModelProvider(requireActivity())[DataViewMode::class.java]
-
         initView()
         initData()
         initEvent()
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner){
+            if(!checkEdtTransaction){
+                findNavController().popBackStack()
+            }else{
+                Toast.makeText(requireContext(), "Condition is false", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
 
-    @RequiresApi(Build.VERSION_CODES.N)
     private fun initView() {
         val tabChiPhi = binding.tabLayout.newTab().setText("Chi Phí")
         val tabThuNhap = binding.tabLayout.newTab().setText("Thu Nhập")
@@ -70,72 +74,45 @@ class AddTransactionFragment : Fragment() {
         binding.tabLayout.addTab(tabThuNhap)
 
 
-        if (!dataViewMode.checkTypeTabLayoutAddTransaction) {
-            if (!dataViewMode.checkTypeTabLayoutHomeTransaction) {
-                binding.tabLayout.selectTab(binding.tabLayout.getTabAt(0))
-                dataViewMode.getListCategoryByType(CategoryType.EXPENSE.toString())
-            } else {
-                binding.tabLayout.selectTab(binding.tabLayout.getTabAt(1))
-                dataViewMode.getListCategoryByType(CategoryType.INCOME.toString())
-            }
-
-        } else {
-            binding.tabLayout.selectTab(binding.tabLayout.getTabAt(1))
-            dataViewMode.getListCategoryByType(CategoryType.INCOME.toString())
+        val typeInputScreen = dataViewMode.checkInputScreenAddTransaction
+        if(typeInputScreen == 1){
+            dataViewMode.editTransaction = dataViewMode.selectTransactionByTimeToDefault?.let { transaction ->
+                TransactionWithFullDetails(
+                    transactionWithDetails = transaction.transactionWithDetails?.copy(),
+                    moneyAccountWithDetails = transaction.moneyAccountWithDetails?.copy()
+                )
+            } ?: TransactionWithFullDetails()
         }
+        createViewTabLayOutTypeTransaction(typeInputScreen)
 
-        adapterIconCategory = AdapterIconCategory(requireContext(), arrayListOf(),
-            AdapterIconCategory.LayoutType.TYPE3)
+        createViewEdtMoney(typeInputScreen)
 
-        binding.rcvIconCategory.adapter = adapterIconCategory
+        createRcv()
 
-        val myLinearLayoutManager1 =
-            object : GridLayoutManager(requireContext(), 3, RecyclerView.VERTICAL, false) {
-                override fun canScrollVertically(): Boolean {
-                    return false
-                }
-            }
-        binding.rcvIconCategory.layoutManager = myLinearLayoutManager1
-
-        val dateFormat = SimpleDateFormat("dd/MM")
-        val calendars =
-            arrayOf(Calendar.getInstance(), Calendar.getInstance(), Calendar.getInstance())
-        calendars[0].timeInMillis = System.currentTimeMillis()
-        calendars[1].timeInMillis = System.currentTimeMillis() - 24 * 60 * 60 * 1000 // Hôm qua
-        calendars[2].timeInMillis = System.currentTimeMillis() - 2 * 24 * 60 * 60 * 1000 // Hôm kia
-
-        binding.textCurrentDate.text = dateFormat.format(calendars[0].time)
-        binding.textYesterdayDate.text = dateFormat.format(calendars[1].time)
-        binding.textSelectDate.text = dateFormat.format(calendars[2].time)
-
-        listTimeInMillis = arrayListOf(calendars[0].timeInMillis,
-            calendars[1].timeInMillis,
-            calendars[2].timeInMillis)
-        selectDate(listTimeInMillis)
-        timeTransaction = listTimeInMillis[0]
-
+        createSelectTime(typeInputScreen)
 
     }
 
-    private fun initData() {
-        val idCategory = dataViewMode.categorySelectAddCategoryByAddTransaction.idCategory
-
-        dataViewMode.listCategoryByTypeLiveData.observe(requireActivity()) {
-            adapterIconCategory.updateData(it as ArrayList<Category>)
-            if (idCategory != 0) {
-                adapterIconCategory.updateSelect(idCategory)
-                dataViewMode.transaction.idCategory = idCategory
-                dataViewMode.categorySelectAddCategoryByAddTransaction = Category(0)
-            }
+    private fun createViewEdtMoney(typeInputScreen: Int) {
+        if(typeInputScreen == 1){
+            binding.layoutAmount0.visibility = View.VISIBLE
+            val transaction = dataViewMode.editTransaction
+            binding.edtTypeAmountTransaction0.text = transaction.moneyAccountWithDetails?.country?.currencyCode
+            val transactionAmount = transaction.transactionWithDetails?.transaction?.transactionAmount!!
+            binding.edtAmount0.setText(formatAmount(transactionAmount))
         }
+    }
+
+    private fun initData() {
+
 
         // country mặc định
         dataViewMode.countryDefault.observe(requireActivity()) {
-            binding.edtTypeAmountTransaction0.text = it.currencyCode
+            if(dataViewMode.checkInputScreenAddTransaction == 0){
+                binding.edtTypeAmountTransaction0.text = it.currencyCode
+            }
             countryDefault = it
             countrySelect = it
-            Log.e("data","id country default: ${it.idCountry}")
-
         }
 
         // country được lấy ra từ dialog moneyAccount được chọn
@@ -164,42 +141,24 @@ class AddTransactionFragment : Fragment() {
             binding.edtTypeAmountTransaction1.text = country.currencyCode
             binding.edtTypeAmountTransaction2.isEnabled = false
             countrySelect = country
-           }
+        }
 
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
     private fun initEvent() {
 
         binding.btnNavigation.setOnClickListener {
             findNavController().popBackStack()
         }
 
-        binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab?) {
-                val position = tab?.position
-                // khẳng năng là phải tạo thành công thì mới đổi về cùng loại
-                if (position == 0) {
-                    dataViewMode.getListCategoryByType(CategoryType.EXPENSE.toString())
-                    dataViewMode.checkTypeTabLayoutAddTransaction = false
-                    dataViewMode.checkTypeTabLayoutHomeTransaction = false
-                } else if (position == 1) {
-                    dataViewMode.getListCategoryByType(CategoryType.INCOME.toString())
-                    dataViewMode.checkTypeTabLayoutAddTransaction = true
-                    dataViewMode.checkTypeTabLayoutHomeTransaction = true
-                }
-            }
+        eventTabLayoutTypeTransaction()
 
-            override fun onTabUnselected(tab: TabLayout.Tab?) {
-            }
-
-            override fun onTabReselected(tab: TabLayout.Tab?) {
-            }
-        })
 
         binding.edtTypeAmountTransaction0.setOnClickListener {
-            dataViewMode.checkInputScreenCurrency = 1
-            findNavController().navigate(R.id.action_addTransactionFragment_to_nav_currency)
+            if(dataViewMode.checkInputScreenAddTransaction == 0){
+                dataViewMode.checkInputScreenCurrency = 1
+                findNavController().navigate(R.id.action_addTransactionFragment_to_nav_currency)
+            }
         }
 
         binding.edtTypeAmountTransaction1.setOnClickListener {
@@ -223,7 +182,8 @@ class AddTransactionFragment : Fragment() {
                     if (countryDefault.idCountry == countrySelect.idCountry) {
                         amount = calculateAmount(formattedValue)
                     } else {
-                        amount = calculateAmount2(countrySelect.exchangeRate!!,countryDefault.exchangeRate!!,
+                        amount = calculateAmount2(countrySelect.exchangeRate!!,
+                            countryDefault.exchangeRate!!,
                             formattedValue)
                     }
 
@@ -243,52 +203,236 @@ class AddTransactionFragment : Fragment() {
             dialogFragmentB.show(parentFragmentManager, "DialogFragmentB")
         }
 
+
+        binding.textCreate.setOnClickListener {
+            if (checkDataAddOrEditTransaction(1)) {
+                dataViewMode.addTransaction(dataViewMode.transaction)
+                findNavController().popBackStack()
+            }
+        }
+
+        eventRcvCategory()
+
+        // sự kiện chọn thời gian
+        eventSelectTime()
+    }
+
+    // khởi tạo view và sự kiện của rcv category
+
+    private fun createRcv() {
+        adapterIconCategory = AdapterIconCategory(requireContext(), arrayListOf(), AdapterIconCategory.LayoutType.TYPE3)
+        binding.rcvIconCategory.adapter = adapterIconCategory
+        val myLinearLayoutManager1 =
+            object : GridLayoutManager(requireContext(), 3, RecyclerView.VERTICAL, false) {
+                override fun canScrollVertically(): Boolean {
+                    return false
+                }
+            }
+        binding.rcvIconCategory.layoutManager = myLinearLayoutManager1
+
+        // sự kiện mở rộng lựa chọn của rcv category
+        val idCategory = dataViewMode.categorySelectAddCategoryByAddTransaction.idCategory
+
+        dataViewMode.listCategoryByTypeLiveData.observe(requireActivity()) {
+            adapterIconCategory.updateData(it as ArrayList<Category>)
+
+            if(dataViewMode.checkInputScreenAddTransaction == 0){
+                if(idCategory != 0){
+                    adapterIconCategory.updateSelect(idCategory)
+                    dataViewMode.transaction.idCategory = idCategory
+                    dataViewMode.categorySelectAddCategoryByAddTransaction = Category(0)
+                }
+            }else{
+                if(idCategory !=0){
+                    dataViewMode.editTransaction.transactionWithDetails?.category?.idCategory = idCategory
+                    adapterIconCategory.updateSelect(idCategory!!)
+                }else{
+                    adapterIconCategory.updateSelect(dataViewMode.editTransaction.transactionWithDetails?.category?.idCategory!!)
+                }
+            }
+        }
+
+    }
+
+    private fun eventRcvCategory() {
         adapterIconCategory.setClickItemSelect {
             if (it.idCategory <= 2) {
                 dataViewMode.transaction.idCategory = null
                 dataViewMode.categorySelectAddCategoryByAddTransaction = Category()
                 findNavController().navigate(R.id.action_addTransactionFragment_to_addCategoryFragment)
             } else {
-                dataViewMode.transaction.idCategory = it.idCategory
+                if(dataViewMode.checkInputScreenAddTransaction == 0){
+                    dataViewMode.transaction.idCategory = it.idCategory
+                }else{
+                    dataViewMode.editTransaction.transactionWithDetails?.category = it
+                }
             }
         }
+    }
 
-        binding.textCreate.setOnClickListener {
-            if (checkData(1)) {
-                dataViewMode.addTransaction(dataViewMode.transaction)
-                findNavController().popBackStack()
+    // Khởi tạo view và sự kiện của tablayout type transaction
+    private fun createViewTabLayOutTypeTransaction(type:Int) {
+        if (type == 0) {
+            // add new transaction
+            binding.textCreate.text = resources.getText(R.string.text_create)
+            binding.textTitleTotal.text = resources.getText(R.string.add_transaction)
+
+            if (!dataViewMode.checkTypeTabLayoutAddTransaction) {
+                if (!dataViewMode.checkTypeTabLayoutHomeTransaction) {
+                    binding.tabLayout.selectTab(binding.tabLayout.getTabAt(0))
+                    dataViewMode.getListCategoryByType(CategoryType.EXPENSE.toString())
+                } else {
+                    binding.tabLayout.selectTab(binding.tabLayout.getTabAt(1))
+                    dataViewMode.getListCategoryByType(CategoryType.INCOME.toString())
+                }
+
+            } else {
+                binding.tabLayout.selectTab(binding.tabLayout.getTabAt(1))
+                dataViewMode.getListCategoryByType(CategoryType.INCOME.toString())
             }
+
+        } else if (dataViewMode.checkInputScreenAddTransaction == 1) {
+            // edt transaction
+            val transactionEdit = dataViewMode.editTransaction
+            val typeTransaction = transactionEdit.transactionWithDetails?.category?.type.toString()
+            if (typeTransaction == CategoryType.EXPENSE.toString()) {
+                binding.tabLayout.selectTab(binding.tabLayout.getTabAt(0))
+                dataViewMode.getListCategoryByType(CategoryType.EXPENSE.toString())
+            } else {
+                binding.tabLayout.selectTab(binding.tabLayout.getTabAt(1))
+                dataViewMode.getListCategoryByType(CategoryType.INCOME.toString())
+            }
+
+            binding.textCreate.text = resources.getText(R.string.text_save)
+            binding.textTitleTotal.text = resources.getText(R.string.text_edti_transaction)
         }
+    }
+
+    private fun eventTabLayoutTypeTransaction() {
+        binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                val position = tab?.position
+                // khẳng năng là phải tạo thành công thì mới đổi về cùng loại
+                if (position == 0) {
+                    dataViewMode.getListCategoryByType(CategoryType.EXPENSE.toString())
+                    dataViewMode.checkTypeTabLayoutAddTransaction = false
+                    dataViewMode.checkTypeTabLayoutHomeTransaction = false
+                } else if (position == 1) {
+                    dataViewMode.getListCategoryByType(CategoryType.INCOME.toString())
+                    dataViewMode.checkTypeTabLayoutAddTransaction = true
+                    dataViewMode.checkTypeTabLayoutHomeTransaction = true
+                }
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+            }
+        })
 
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
-    private fun selectDate(listTimeInMillis: List<Long>) {
-        binding.llDate1.setOnClickListener {
-            binding.llDate1.setBackgroundResource(R.drawable.button_save_category)
-            binding.llDate2.background = null
-            binding.llDate3.background = null
+
+    // Khởi tạo view và sự kiện của lựa chọn thời gian
+
+    private fun createSelectTime(typeInputScreen:Int) {
+        val calendars = arrayOf(Calendar.getInstance(), Calendar.getInstance(), Calendar.getInstance())
+        calendars[0].timeInMillis = System.currentTimeMillis()
+        calendars[1].timeInMillis = System.currentTimeMillis() - 24 * 60 * 60 * 1000 // Hôm qua
+        calendars[2].timeInMillis = System.currentTimeMillis() - 2 * 24 * 60 * 60 * 1000 // Hôm kia
+        listTimeInMillis = arrayListOf(calendars[0].timeInMillis, calendars[1].timeInMillis, calendars[2].timeInMillis)
+
+        if(typeInputScreen == 0){
+            // giá trị thời gian được chọn
             timeTransaction = listTimeInMillis[0]
+
+            binding.textCurrentDate.text = convertTimeToMountYear(calendars[0].time.time)
+            binding.textYesterdayDate.text = convertTimeToMountYear(calendars[1].time.time)
+            binding.textSelectDate.text = convertTimeToMountYear(calendars[2].time.time)
+
+        }else{
+            val time = dataViewMode.editTransaction.transactionWithDetails?.transaction?.day
+            setTimeByEditTransaction(time!!)
+        }
+    }
+
+    private fun setTimeByEditTransaction(inputTimeInMillis:Long){
+        val calendarToday = Calendar.getInstance() // Lấy đối tượng Calendar hiện tại
+        val todayStart = calendarToday.clone() as Calendar // Tạo một bản sao của đối tượng Calendar hiện tại
+        todayStart.set(Calendar.HOUR_OF_DAY, 0)
+        todayStart.set(Calendar.MINUTE, 0)
+        todayStart.set(Calendar.SECOND, 0)
+        todayStart.set(Calendar.MILLISECOND, 0)
+
+        val calendarYesterday = Calendar.getInstance() // Lấy đối tượng Calendar của ngày hôm qua
+        calendarYesterday.add(Calendar.DAY_OF_MONTH, -1)
+        val yesterdayStart = calendarYesterday.clone() as Calendar // Tạo một bản sao của đối tượng Calendar của ngày hôm qua
+        yesterdayStart.set(Calendar.HOUR_OF_DAY, 0)
+        yesterdayStart.set(Calendar.MINUTE, 0)
+        yesterdayStart.set(Calendar.SECOND, 0)
+        yesterdayStart.set(Calendar.MILLISECOND, 0)
+
+        val inputTime = Calendar.getInstance()
+        inputTime.timeInMillis = inputTimeInMillis
+
+        if (inputTime >= todayStart) {
+            setSelectAndTime(0)
+        } else if (inputTime >= yesterdayStart) {
+            setSelectAndTime(1)
+        } else {
+            listTimeInMillis[2] = inputTimeInMillis
+            setSelectAndTime(2)
+        }
+    }
+
+    private fun setSelectAndTime(selectIndex:Int){
+        when(selectIndex) {
+            0 -> {
+                binding.llDate1.setBackgroundResource(R.drawable.button_save_category)
+                binding.llDate2.background = null
+                binding.llDate3.background = null
+                timeTransaction = listTimeInMillis[0]
+                binding.textCurrentDate.text = convertTimeToMountYear(listTimeInMillis[0])
+                binding.textYesterdayDate.text = convertTimeToMountYear(listTimeInMillis[1])
+                binding.textSelectDate.text = convertTimeToMountYear(listTimeInMillis[2])
+            }
+            1 -> {
+                binding.llDate2.setBackgroundResource(R.drawable.button_save_category)
+                binding.llDate1.background = null
+                binding.llDate3.background = null
+                timeTransaction = listTimeInMillis[1]
+                binding.textCurrentDate.text = convertTimeToMountYear(listTimeInMillis[0])
+                binding.textYesterdayDate.text = convertTimeToMountYear(listTimeInMillis[1])
+                binding.textSelectDate.text = convertTimeToMountYear(listTimeInMillis[2])
+            }
+            2 -> {
+                binding.llDate3.setBackgroundResource(R.drawable.button_save_category)
+                binding.llDate1.background = null
+                binding.llDate2.background = null
+                timeTransaction =  listTimeInMillis[2]
+                binding.textCurrentDate.text = convertTimeToMountYear(listTimeInMillis[0])
+                binding.textYesterdayDate.text = convertTimeToMountYear(listTimeInMillis[1])
+                binding.textSelectDate.text = convertTimeToMountYear(listTimeInMillis[2])
+            }
+        }
+    }
+
+    private fun eventSelectTime() {
+        binding.llDate1.setOnClickListener {
+            setSelectAndTime(0)
         }
         binding.llDate2.setOnClickListener {
-            binding.llDate2.setBackgroundResource(R.drawable.button_save_category)
-            binding.llDate1.background = null
-            binding.llDate3.background = null
-            timeTransaction = listTimeInMillis[1]
+            setSelectAndTime(1)
         }
         binding.llDate3.setOnClickListener {
-            binding.llDate3.setBackgroundResource(R.drawable.button_save_category)
-            binding.llDate1.background = null
-            binding.llDate2.background = null
-            timeTransaction = listTimeInMillis[2]
+            setSelectAndTime(2)
         }
-
         binding.imgCategoryAdd.setOnClickListener {
             createDialogCalender()
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
     private fun createDialogCalender() {
         val today = Calendar.getInstance()
         val yesterday = Calendar.getInstance()
@@ -301,30 +445,15 @@ class AddTransactionFragment : Fragment() {
             when {
                 selectedDate.get(Calendar.YEAR) == today.get(Calendar.YEAR) &&
                         selectedDate.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR) -> {
-                    binding.llDate1.setBackgroundResource(R.drawable.button_save_category)
-                    binding.llDate2.background = null
-                    binding.llDate3.background = null
-                    timeTransaction = selectedDate.timeInMillis
+                    setSelectAndTime(0)
                 }
                 selectedDate.get(Calendar.YEAR) == yesterday.get(Calendar.YEAR) &&
                         selectedDate.get(Calendar.DAY_OF_YEAR) == yesterday.get(Calendar.DAY_OF_YEAR) -> {
-                    binding.llDate2.setBackgroundResource(R.drawable.button_save_category)
-                    binding.llDate1.background = null
-                    binding.llDate3.background = null
-                    timeTransaction = selectedDate.timeInMillis
-
+                    setSelectAndTime(1)
                 }
                 else -> {
-                    binding.llDate3.setBackgroundResource(R.drawable.button_save_category)
-                    binding.llDate1.background = null
-                    binding.llDate2.background = null
-
                     listTimeInMillis[2] = selectedDate.timeInMillis
-                    timeTransaction = selectedDate.timeInMillis
-                    val dateFormat = SimpleDateFormat("dd/MM", Locale.getDefault())
-                    val selectedDate = dateFormat.format(selectedDate.time)
-                    binding.textSelectDate.text = selectedDate
-
+                    setSelectAndTime(2)
                 }
             }
         }, today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH))
@@ -332,6 +461,8 @@ class AddTransactionFragment : Fragment() {
         datePickerDialog.datePicker.maxDate = System.currentTimeMillis()
         datePickerDialog.show()
     }
+
+
 
 
     fun formatValue(value: String): String {
@@ -345,7 +476,7 @@ class AddTransactionFragment : Fragment() {
     }
 
     fun calculateAmount2(ex1: Float, ex2: Float, formattedValue: String): Float {
-        return (formatValue(formattedValue).replace(".", "").toFloat()/ex1 ) * ex2
+        return (formatValue(formattedValue).replace(".", "").toFloat() / ex1) * ex2
     }
 
     fun formatAmount(amount: Float): String {
@@ -356,7 +487,7 @@ class AddTransactionFragment : Fragment() {
         }
     }
 
-    private fun checkData(typeClick: Int): Boolean {
+    private fun checkDataAddOrEditTransaction(typeClick: Int): Boolean {
         if (dataViewMode.country.idCountry == 0) {
             val value = MoneyTextWatcher.parseCurrencyValue(binding.edtAmount0.text.toString())
             val temp = value.toString()

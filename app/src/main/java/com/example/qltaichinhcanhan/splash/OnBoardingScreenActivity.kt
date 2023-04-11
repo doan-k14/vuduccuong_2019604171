@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.example.qltaichinhcanhan.R
@@ -34,9 +35,9 @@ class OnBoardingScreenActivity : AppCompatActivity(), MyCallback {
     override fun onCallback() {
     }
 
-    override fun onCallbackCategoryToEditC() {
+    override fun onCallbackLockedDrawers() {
     }
 
-    override fun onIconClick(icon: Icon) {
+    override fun onCallbackUnLockedDrawers() {
     }
 }
