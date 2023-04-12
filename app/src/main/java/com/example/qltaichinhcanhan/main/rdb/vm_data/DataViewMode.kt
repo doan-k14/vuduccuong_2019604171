@@ -386,7 +386,8 @@ class DataViewMode(application: Application) : AndroidViewModel(application) {
 
     // transaction ( từ transactionByTime -> DefaultTransaction
     var selectTransactionByTimeToDefault = TransactionWithFullDetails()
-    var editTransaction = TransactionWithFullDetails()
+    var transactionAddOrEdt = TransactionWithFullDetails()
+    var checkEdtTransaction = false
 
 
 

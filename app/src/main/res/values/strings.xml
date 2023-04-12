@@ -114,5 +114,9 @@
     <string name="menu_account">Tài khoản</string>
     <string name="not_data_transaction">Không tồn tại dữ liệu</string>
     <string name="text_edti_transaction">Chỉnh sửa giao dịch</string>
+    <string name="the_transaction_has_been_changed">Giao dịch đã được thay đổi</string>
+    <string name="exit_without_saving">Thoát mà không lưu?</string>
+    <string name="dialog_message">Thông báo</string>
+    <string name="text_no">Không</string>
 
 </resources>

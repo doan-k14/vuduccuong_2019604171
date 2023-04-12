@@ -7,12 +7,14 @@ import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.qltaichinhcanhan.R
 import com.example.qltaichinhcanhan.databinding.FragmentDefaultTransactionBinding
 import com.example.qltaichinhcanhan.main.base.BaseFragment
+import com.example.qltaichinhcanhan.main.library.CustomDialog
 import com.example.qltaichinhcanhan.main.model.m.DefaultData
 import com.example.qltaichinhcanhan.main.model.m.IconR
 import com.example.qltaichinhcanhan.main.model.m_convert.TransactionWithFullDetails
@@ -76,55 +78,29 @@ class DefaultTransactionFragment : BaseFragment() {
         }
 
         binding.textDelete.setOnClickListener {
-            createDialogDelete(Gravity.CENTER, dataViewMode.selectTransactionByTimeToDefault)
-        }
-    }
+            val customDialog = CustomDialog(requireActivity())
+            customDialog.showDialog(
+                Gravity.CENTER,
+                resources.getString(R.string.dialog_message),
+                resources.getString(R.string.transaction_delete_confirmation),
+                resources.getString(R.string.text_ok),
+                {
+                    val transaction = dataViewMode.selectTransactionByTimeToDefault.transactionWithDetails?.transaction!!
+                    dataViewMode.deleteTransaction(transaction)
 
-    private fun createDialogDelete(
-        gravity: Int,
-        transactionWithFullDetails: TransactionWithFullDetails,
-    ) {
-        val dialog = Dialog(requireActivity())
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setContentView(R.layout.custom_dialog_layout)
+                    val moneyAccount = dataViewMode.selectTransactionByTimeToDefault.moneyAccountWithDetails?.moneyAccount
+                    val amountMoneyA = moneyAccount!!.amountMoneyAccount!! + transaction.transactionAmount!!
+                    moneyAccount.amountMoneyAccount = amountMoneyA
+                    dataViewMode.updateMoneyAccount(moneyAccount)
 
-        val window = dialog.window ?: return
-        window.setLayout(
-            WindowManager.LayoutParams.MATCH_PARENT,
-            WindowManager.LayoutParams.WRAP_CONTENT
-        )
-        window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        val wLayoutParams = window.attributes
-        wLayoutParams.gravity = gravity
-        window.attributes = wLayoutParams
-
-        if (Gravity.BOTTOM == gravity) {
-            dialog.setCancelable(false)
-        } else {
-            dialog.setCancelable(false)
-        }
-        dialog.show()
-
-        val textCo = dialog.findViewById<TextView>(R.id.text_co)
-        val textKhong = dialog.findViewById<TextView>(R.id.text_khong)
-        val textMessage = dialog.findViewById<TextView>(R.id.dialog_message)
-        textMessage.text = resources.getString(R.string.transaction_delete_confirmation)
-
-        textCo.setOnClickListener {
-
-            val transaction = transactionWithFullDetails.transactionWithDetails?.transaction!!
-            dataViewMode.deleteTransaction(transaction)
-
-            val moneyAccount = transactionWithFullDetails.moneyAccountWithDetails?.moneyAccount
-            val amountMoneyA = moneyAccount!!.amountMoneyAccount!! + transaction.transactionAmount!!
-            moneyAccount.amountMoneyAccount = amountMoneyA
-            dataViewMode.updateMoneyAccount(moneyAccount)
-
-            dialog.dismiss()
-            findNavController().popBackStack(R.id.nav_home, false)
-        }
-        textKhong.setOnClickListener {
-            dialog.dismiss()
+                    customDialog.dismiss()
+                    findNavController().popBackStack(R.id.nav_home, false)
+                },
+                resources.getString(R.string.text_no),
+                {
+                    customDialog.dismiss()
+                }
+            )
         }
     }
 

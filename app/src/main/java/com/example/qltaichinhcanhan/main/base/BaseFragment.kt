@@ -1,13 +1,20 @@
 package com.example.qltaichinhcanhan.main.base
 
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.icu.text.SimpleDateFormat
 import android.os.Build
 import android.os.Environment
 import android.util.Log
+import android.view.Gravity
+import android.view.Window
+import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.TextView
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import com.example.qltaichinhcanhan.R
@@ -289,6 +296,5 @@ abstract class BaseFragment : Fragment() {
         writer.close()
         return file
     }
-
 
 }

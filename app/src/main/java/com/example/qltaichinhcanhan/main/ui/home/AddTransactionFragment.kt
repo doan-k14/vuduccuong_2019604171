@@ -16,6 +16,7 @@ import com.example.qltaichinhcanhan.R
 import com.example.qltaichinhcanhan.splash.adapter.AdapterIconCategory
 import com.example.qltaichinhcanhan.databinding.FragmentAddTransactionBinding
 import com.example.qltaichinhcanhan.main.base.BaseFragment
+import com.example.qltaichinhcanhan.main.library.CustomDialog
 import com.example.qltaichinhcanhan.main.library.MoneyTextWatcher
 import com.example.qltaichinhcanhan.main.model.m_convert.TransactionWithFullDetails
 import com.example.qltaichinhcanhan.main.model.m_r.*
@@ -35,12 +36,11 @@ class AddTransactionFragment : BaseFragment() {
     var timeTransaction = 0L
     var listTimeInMillis = arrayListOf<Long>()
 
-    var moneyAccountWithDetails = MoneyAccountWithDetails()
+    var moneyAccountSelect = MoneyAccountWithDetails()
 
     var countryDefault = Country()
     var countrySelect = Country()
 
-    var checkEdtTransaction = false
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -57,32 +57,60 @@ class AddTransactionFragment : BaseFragment() {
         initData()
         initEvent()
 
+        // tạo hàm vì ở 2 chỗ gọi
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner){
-            if(!checkEdtTransaction){
+            if(dataViewMode.checkInputScreenAddTransaction == 0){
                 findNavController().popBackStack()
             }else{
-                Toast.makeText(requireContext(), "Condition is false", Toast.LENGTH_SHORT).show()
+                if(dataViewMode.transactionAddOrEdt == dataViewMode.selectTransactionByTimeToDefault){
+                    findNavController().popBackStack()
+                }else{
+                    val customDialog = CustomDialog(requireActivity())
+                    customDialog.showDialog(
+                        Gravity.CENTER,
+                        resources.getString(R.string.the_transaction_has_been_changed),
+                        resources.getString(R.string.exit_without_saving),
+                        resources.getString(R.string.text_ok),
+                        {
+                            customDialog.dismiss()
+                            findNavController().popBackStack()
+                        },
+                        resources.getString(R.string.text_no),
+                        {
+                            customDialog.dismiss()
+                        }
+                    )
+                }
             }
         }
     }
 
 
     private fun initView() {
+
+        val typeInputScreen = dataViewMode.checkInputScreenAddTransaction
+        if(typeInputScreen == 0){
+            dataViewMode.transactionAddOrEdt = TransactionWithFullDetails()
+        } else if(typeInputScreen == 1){
+            if(!dataViewMode.checkEdtTransaction){
+                dataViewMode.transactionAddOrEdt = dataViewMode.selectTransactionByTimeToDefault.let { transaction ->
+                    TransactionWithFullDetails(
+                        transactionWithDetails = transaction.transactionWithDetails?.copy(),
+                        moneyAccountWithDetails = transaction.moneyAccountWithDetails?.copy()
+                    )
+                } ?: TransactionWithFullDetails()
+                dataViewMode.moneyAccountWithDetailsSelect.postValue(dataViewMode.transactionAddOrEdt.moneyAccountWithDetails)
+                dataViewMode.checkEdtTransaction = true
+            }
+
+        }
+
+
         val tabChiPhi = binding.tabLayout.newTab().setText("Chi Phí")
         val tabThuNhap = binding.tabLayout.newTab().setText("Thu Nhập")
         binding.tabLayout.addTab(tabChiPhi)
         binding.tabLayout.addTab(tabThuNhap)
 
-
-        val typeInputScreen = dataViewMode.checkInputScreenAddTransaction
-        if(typeInputScreen == 1){
-            dataViewMode.editTransaction = dataViewMode.selectTransactionByTimeToDefault?.let { transaction ->
-                TransactionWithFullDetails(
-                    transactionWithDetails = transaction.transactionWithDetails?.copy(),
-                    moneyAccountWithDetails = transaction.moneyAccountWithDetails?.copy()
-                )
-            } ?: TransactionWithFullDetails()
-        }
         createViewTabLayOutTypeTransaction(typeInputScreen)
 
         createViewEdtMoney(typeInputScreen)
@@ -96,7 +124,7 @@ class AddTransactionFragment : BaseFragment() {
     private fun createViewEdtMoney(typeInputScreen: Int) {
         if(typeInputScreen == 1){
             binding.layoutAmount0.visibility = View.VISIBLE
-            val transaction = dataViewMode.editTransaction
+            val transaction = dataViewMode.transactionAddOrEdt
             binding.edtTypeAmountTransaction0.text = transaction.moneyAccountWithDetails?.country?.currencyCode
             val transactionAmount = transaction.transactionWithDetails?.transaction?.transactionAmount!!
             binding.edtAmount0.setText(formatAmount(transactionAmount))
@@ -110,6 +138,7 @@ class AddTransactionFragment : BaseFragment() {
         dataViewMode.countryDefault.observe(requireActivity()) {
             if(dataViewMode.checkInputScreenAddTransaction == 0){
                 binding.edtTypeAmountTransaction0.text = it.currencyCode
+                binding.edtTypeAmountTransaction2.text = it.currencyCode
             }
             countryDefault = it
             countrySelect = it
@@ -120,11 +149,16 @@ class AddTransactionFragment : BaseFragment() {
             if (it.moneyAccount!!.idMoneyAccount != 0) {
                 binding.textSelectAccount.text = it.moneyAccount!!.moneyAccountName
                 dataViewMode.transaction.idMoneyAccount = it.moneyAccount.idMoneyAccount
-                moneyAccountWithDetails = it
+                moneyAccountSelect = it
 
                 countryDefault = it.country!!
                 binding.edtTypeAmountTransaction0.text = countryDefault.currencyCode
                 binding.edtTypeAmountTransaction2.text = countryDefault.currencyCode
+
+                if(dataViewMode.checkInputScreenAddTransaction == 1){
+                    dataViewMode.transactionAddOrEdt.moneyAccountWithDetails = it
+                    dataViewMode.transactionAddOrEdt.transactionWithDetails!!.transaction!!.idMoneyAccount = it.moneyAccount.idMoneyAccount
+                }
             }
         }
 
@@ -205,8 +239,16 @@ class AddTransactionFragment : BaseFragment() {
 
 
         binding.textCreate.setOnClickListener {
-            if (checkDataAddOrEditTransaction(1)) {
-                dataViewMode.addTransaction(dataViewMode.transaction)
+            if(dataViewMode.checkInputScreenAddTransaction == 0){
+                if (checkDataAddOrEditTransaction(1)) {
+                    dataViewMode.addTransaction(dataViewMode.transaction)
+                    findNavController().popBackStack()
+                }
+            }
+           else{
+               // update
+                checkDataEditTransaction()
+                dataViewMode.selectTransactionByTimeToDefault = dataViewMode.transactionAddOrEdt
                 findNavController().popBackStack()
             }
         }
@@ -244,10 +286,10 @@ class AddTransactionFragment : BaseFragment() {
                 }
             }else{
                 if(idCategory !=0){
-                    dataViewMode.editTransaction.transactionWithDetails?.category?.idCategory = idCategory
+                    dataViewMode.transactionAddOrEdt.transactionWithDetails?.category?.idCategory = idCategory
                     adapterIconCategory.updateSelect(idCategory!!)
                 }else{
-                    adapterIconCategory.updateSelect(dataViewMode.editTransaction.transactionWithDetails?.category?.idCategory!!)
+                    adapterIconCategory.updateSelect(dataViewMode.transactionAddOrEdt.transactionWithDetails?.category?.idCategory!!)
                 }
             }
         }
@@ -264,7 +306,8 @@ class AddTransactionFragment : BaseFragment() {
                 if(dataViewMode.checkInputScreenAddTransaction == 0){
                     dataViewMode.transaction.idCategory = it.idCategory
                 }else{
-                    dataViewMode.editTransaction.transactionWithDetails?.category = it
+                    dataViewMode.transactionAddOrEdt.transactionWithDetails?.transaction?.idCategory = it.idCategory
+                    dataViewMode.transactionAddOrEdt.transactionWithDetails?.category = it
                 }
             }
         }
@@ -293,7 +336,7 @@ class AddTransactionFragment : BaseFragment() {
 
         } else if (dataViewMode.checkInputScreenAddTransaction == 1) {
             // edt transaction
-            val transactionEdit = dataViewMode.editTransaction
+            val transactionEdit = dataViewMode.transactionAddOrEdt
             val typeTransaction = transactionEdit.transactionWithDetails?.category?.type.toString()
             if (typeTransaction == CategoryType.EXPENSE.toString()) {
                 binding.tabLayout.selectTab(binding.tabLayout.getTabAt(0))
@@ -352,7 +395,7 @@ class AddTransactionFragment : BaseFragment() {
             binding.textSelectDate.text = convertTimeToMountYear(calendars[2].time.time)
 
         }else{
-            val time = dataViewMode.editTransaction.transactionWithDetails?.transaction?.day
+            val time = dataViewMode.transactionAddOrEdt.transactionWithDetails?.transaction?.day
             setTimeByEditTransaction(time!!)
         }
     }
@@ -540,13 +583,110 @@ class AddTransactionFragment : BaseFragment() {
         }
 
         var moneyAccount = MoneyAccount()
-        val money = moneyAccountWithDetails.moneyAccount?.amountMoneyAccount
+        val money = moneyAccountSelect.moneyAccount?.amountMoneyAccount
         val moneyNew = money!! - dataViewMode.transaction.transactionAmount!!
 
-        moneyAccount = moneyAccountWithDetails.moneyAccount!!
+        moneyAccount = moneyAccountSelect.moneyAccount!!
         moneyAccount.amountMoneyAccount = moneyNew
 
         dataViewMode.updateMoneyAccount(moneyAccount)
+
+        return true
+    }
+    private fun checkDataEditTransaction(): Boolean {
+        val value = MoneyTextWatcher.parseCurrencyValue(binding.edtAmount0.text.toString())
+        val temp = value.toString()
+        var amountNew = 0F
+        if (binding.edtAmount0.text.isEmpty()) {
+            Toast.makeText(requireContext(), "Vui lòng nhập giá trị tiền", Toast.LENGTH_SHORT)
+                .show()
+            return false
+        }
+        try {
+            amountNew = temp.toFloat()
+        } catch (e: NumberFormatException) {
+            Toast.makeText(requireContext(), "Bạn nhập sai định dạng!", Toast.LENGTH_SHORT)
+                .show()
+        }
+
+        val textComment = binding.edtComment.text.toString()
+        dataViewMode.transactionAddOrEdt.transactionWithDetails?.transaction?.comment = textComment
+        dataViewMode.transactionAddOrEdt.transactionWithDetails?.transaction?.day = timeTransaction
+
+        val typeCategoryDefault = dataViewMode.selectTransactionByTimeToDefault.transactionWithDetails?.category?.type
+        val typeCategoryNew = dataViewMode.transactionAddOrEdt.transactionWithDetails?.category?.type
+
+
+        // số tiền mặc định
+        val amountDefault = dataViewMode.selectTransactionByTimeToDefault.transactionWithDetails?.transaction?.transactionAmount
+
+        // tài khoản money mặc định
+        val moneyAccountDefault = dataViewMode.selectTransactionByTimeToDefault.moneyAccountWithDetails?.moneyAccount
+        val moneyAccountNew = dataViewMode.transactionAddOrEdt.moneyAccountWithDetails?.moneyAccount
+
+        var checkDefaultType = 1
+        checkDefaultType = if(typeCategoryDefault == CategoryType.EXPENSE){
+            -1
+        }else{
+            1
+        }
+        var checkNewType = 1
+        checkNewType = if(typeCategoryDefault == CategoryType.EXPENSE && typeCategoryNew == CategoryType.INCOME){
+            1
+        }else{
+            -1
+        }
+        Log.e("ttt","d: ${typeCategoryDefault} n : ${typeCategoryNew}")
+
+        if (typeCategoryDefault == typeCategoryNew) {
+            if (moneyAccountDefault!!.idMoneyAccount == moneyAccountNew!!.idMoneyAccount) {
+                if (amountDefault!! != amountNew) {
+                    val moneyNew =
+                        moneyAccountDefault.amountMoneyAccount!! + checkDefaultType * (amountNew - amountDefault)
+                    moneyAccountDefault.amountMoneyAccount = moneyNew
+                    dataViewMode.updateMoneyAccount(moneyAccountDefault)
+                    dataViewMode.transactionAddOrEdt.transactionWithDetails!!.transaction!!.transactionAmount =
+                        amountNew
+                }
+            } else {
+                val moneyDefault =
+                    moneyAccountDefault.amountMoneyAccount!! - (checkDefaultType * amountDefault!!)
+                moneyAccountDefault.amountMoneyAccount = moneyDefault
+                dataViewMode.updateMoneyAccount(moneyAccountDefault)
+
+                val moneyNew = moneyAccountNew.amountMoneyAccount!! + (amountNew * checkDefaultType)
+                moneyAccountNew.amountMoneyAccount = moneyNew
+                dataViewMode.updateMoneyAccount(moneyAccountNew)
+
+                dataViewMode.transactionAddOrEdt.transactionWithDetails!!.transaction!!.transactionAmount =
+                    amountNew
+            }
+        } else {
+            if (moneyAccountDefault!!.idMoneyAccount == moneyAccountNew!!.idMoneyAccount) {
+                val moneyNew =
+                    moneyAccountDefault.amountMoneyAccount!! + checkNewType * (amountDefault!! + amountNew)
+                moneyAccountDefault.amountMoneyAccount = moneyNew
+                dataViewMode.updateMoneyAccount(moneyAccountDefault)
+                dataViewMode.transactionAddOrEdt.transactionWithDetails!!.transaction!!.transactionAmount =
+                    amountNew
+            } else {
+                val moneyDefault =
+                    moneyAccountDefault.amountMoneyAccount!! + checkNewType * amountDefault!!
+                moneyAccountDefault.amountMoneyAccount = moneyDefault
+                dataViewMode.updateMoneyAccount(moneyAccountDefault)
+
+                val moneyNew =
+                    moneyAccountNew.amountMoneyAccount!! + checkNewType * ( amountNew)
+                moneyAccountNew.amountMoneyAccount = moneyNew
+                dataViewMode.updateMoneyAccount(moneyAccountNew)
+
+                dataViewMode.transactionAddOrEdt.transactionWithDetails!!.transaction!!.transactionAmount =
+                    amountNew
+            }
+
+        }
+
+        dataViewMode.updateTransaction(dataViewMode.transactionAddOrEdt.transactionWithDetails?.transaction!!)
 
         return true
     }
@@ -558,6 +698,7 @@ class AddTransactionFragment : BaseFragment() {
         dataViewMode.transaction = Transaction()
         dataViewMode.moneyAccountWithDetailsSelect.postValue(MoneyAccountWithDetails(MoneyAccount()))
         dataViewMode.categorySelectAddCategoryByAddTransaction = Category()
+        dataViewMode.checkEdtTransaction = false
         super.onDestroy()
     }
 }
