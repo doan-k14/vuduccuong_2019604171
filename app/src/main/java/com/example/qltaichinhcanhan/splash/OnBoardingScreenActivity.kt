@@ -1,6 +1,8 @@
 package com.example.qltaichinhcanhan.splash
 
 import android.os.Bundle
+import android.preference.PreferenceManager
+import android.text.TextUtils
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -11,6 +13,7 @@ import com.example.qltaichinhcanhan.R
 import com.example.qltaichinhcanhan.databinding.ActivityOnBoardingScreenBinding
 import com.example.qltaichinhcanhan.main.inf.MyCallback
 import com.example.qltaichinhcanhan.main.model.Icon
+import java.util.*
 
 class OnBoardingScreenActivity : AppCompatActivity(), MyCallback {
     private lateinit var binding: ActivityOnBoardingScreenBinding
@@ -20,6 +23,7 @@ class OnBoardingScreenActivity : AppCompatActivity(), MyCallback {
         super.onCreate(savedInstanceState)
         binding = ActivityOnBoardingScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        getCodeLanguage()
         navController = Navigation.findNavController(this, R.id.nav_host_fragment)
         setColorStatusbar()
     }
@@ -39,5 +43,24 @@ class OnBoardingScreenActivity : AppCompatActivity(), MyCallback {
     }
 
     override fun onCallbackUnLockedDrawers() {
+    }
+    fun getCodeLanguage() {
+        val preferencesL = PreferenceManager.getDefaultSharedPreferences(this)
+        var localeStringL = preferencesL.getBoolean("updated_language", false)
+        if(!localeStringL){
+            val editor = PreferenceManager.getDefaultSharedPreferences(this).edit()
+            editor.putBoolean("updated_language", true)
+            editor.apply()
+
+            val preferences = PreferenceManager.getDefaultSharedPreferences(this)
+            var localeString = preferences.getString("locale", "")
+            if (TextUtils.isEmpty(localeString)) {
+                localeString = Locale.getDefault().language
+            }
+            val configuration = resources.configuration
+            configuration.setLocale(Locale(localeString))
+            resources.updateConfiguration(configuration, resources.displayMetrics)
+            recreate()
+        }
     }
 }

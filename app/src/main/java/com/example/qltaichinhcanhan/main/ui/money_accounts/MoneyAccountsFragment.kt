@@ -43,7 +43,6 @@ class MoneyAccountsFragment : BaseFragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        Log.e("data", "AccountsFragment: onViewCreated")
         super.onViewCreated(view, savedInstanceState)
         dataViewMode = ViewModelProvider(requireActivity())[DataViewMode::class.java]
 
@@ -79,9 +78,7 @@ class MoneyAccountsFragment : BaseFragment() {
             for (i in it) {
                 totalAmount += i.moneyAccount!!.amountMoneyAccount!!.toFloat() / i.country!!.exchangeRate!!.toFloat()
             }
-            binding.textValueTotal.text =
-                it[0].country!!.currencySymbol + " " + converMoneyShow(totalAmount.toFloat())
-
+            binding.textValueTotal.text = "${converMoneyShow(totalAmount.toFloat())} ${it[0].country!!.currencySymbol}"
         }
 
 
@@ -97,8 +94,6 @@ class MoneyAccountsFragment : BaseFragment() {
             dataViewMode.editOrAddMoneyAccount =
                 MoneyAccountWithDetails(MoneyAccount(), countryDefault, Account())
             findNavController().navigate(R.id.action_nav_accounts_to_editAccountFragment)
-//            dataViewMode.addMoneyAccount(MoneyAccount(0, "usd", 100F, false, 3, 3, 239, 1))
-//            dataViewMode.addMoneyAccount(MoneyAccount(0, "euro", 1000F, false, 3, 3, 179, 1))
         }
     }
 
@@ -128,37 +123,6 @@ class MoneyAccountsFragment : BaseFragment() {
             Log.e("data", "tỉ giá ${vndRate}")
         }
     }
-
-    fun viewChart() {
-//        //        // data theo 12 tháng
-//        val monthTitles1 = arrayOf("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12")
-//        val data12: Array<Any> =
-//            arrayOf(7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6)
-//        val data22: Array<Any> =
-//            arrayOf(0.2, 0.8, 5.7, 11.3, 17.0, 22.0, 24.8, 24.1, 20.1, 14.1, 8.6, 2.5)
-//        setDataChart(monthTitles1, data12, data22)
-//        binding.aaChartView.aa_drawChartWithChartModel(aaChartModel)
-    }
-
-//    fun setDataChart(monthTitles: Array<String>, data1: Array<Any>, data2: Array<Any>) {
-//        aaChartModel = AAChartModel()
-//            .chartType(AAChartType.Column)
-//            .backgroundColor("#FFFFFF")
-//            .tooltipEnabled(false)  // hiện thị thống kê
-//            .categories(monthTitles) // hiện thị tháng
-//            .yAxisLabelsEnabled(false) // giá trị của trục oy
-//            .yAxisGridLineWidth(0f)
-//            .yAxisTitle("")
-//
-//            .series(arrayOf(
-//                AASeriesElement()
-//                    .name("Tokyo")
-//                    .data(data1),
-//                AASeriesElement()
-//                    .name("NewYork")
-//                    .data(data2),
-//            ))
-//    }
 
     override fun onStop() {
         super.onStop()

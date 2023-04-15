@@ -160,8 +160,7 @@ class EditMoneyAccountFragment : BaseFragment() {
     private fun checkData(typeClick: Int): Boolean {
         val textName = binding.edtNameAccount.text.toString()
         if (textName.isEmpty()) {
-            Toast.makeText(requireContext(),
-                "Tên danh mục không được bỏ trống!",
+            Toast.makeText(requireContext(),resources.getString(R.string.category_names_cannot_be_left_blank),
                 Toast.LENGTH_SHORT).show()
             return false
         }
@@ -170,14 +169,14 @@ class EditMoneyAccountFragment : BaseFragment() {
         val value = MoneyTextWatcher.parseCurrencyValue(binding.edtTotal.text.toString())
         val temp = value.toString()
         if (binding.edtTotal.text.isEmpty()) {
-            Toast.makeText(requireContext(), "Vui lòng nhập giá trị", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), resources.getString(R.string.please_enter_the_value), Toast.LENGTH_SHORT).show()
             return false
         }
         try {
             val number = temp.toFloat()
             dataViewMode.editOrAddMoneyAccount.moneyAccount!!.amountMoneyAccount = number
         } catch (e: NumberFormatException) {
-            Toast.makeText(requireContext(), "Bạn nhập sai định dạng!", Toast.LENGTH_SHORT)
+            Toast.makeText(requireContext(), resources.getString(R.string.you_entered_the_wrong_format), Toast.LENGTH_SHORT)
                 .show()
         }
 

@@ -10,6 +10,7 @@ import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.qltaichinhcanhan.R
 import com.example.qltaichinhcanhan.databinding.FragmentOnBoarding1Binding
@@ -29,13 +30,23 @@ class OnBoarding1Fragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val text = getString(R.string.welcome)
-        val textWithLineBreaks = text.replace("\\n", "\n")
-        val spannableString = SpannableString(textWithLineBreaks)
-        val boldSpan = StyleSpan(Typeface.BOLD)
-        val colorSpan = ForegroundColorSpan(Color.RED)
-        spannableString.setSpan(boldSpan, 23, 49, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        spannableString.setSpan(colorSpan, 23, 49, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        val t = requireContext().resources.getString(R.string.personal_financial_management_application)
+        val welcomeTo = requireContext().resources.getString(R.string.welcome_to)
+        val startManaging = requireContext().resources.getString(R.string.register_now)
+        val textMessage = "$welcomeTo $t $startManaging"
+
+        val spannableString = SpannableString(textMessage)
+        spannableString.setSpan(
+            ForegroundColorSpan(ContextCompat.getColor(requireContext(), R.color.red)),
+            welcomeTo.length,
+            welcomeTo.length + t.length,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+        spannableString.setSpan(StyleSpan(Typeface.BOLD),
+            welcomeTo.length,
+            welcomeTo.length + t.length,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+
         binding.txtTitleMoney.text = spannableString
     }
 

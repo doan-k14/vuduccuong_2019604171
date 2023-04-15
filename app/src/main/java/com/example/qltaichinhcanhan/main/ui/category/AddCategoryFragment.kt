@@ -58,7 +58,6 @@ class AddCategoryFragment : Fragment() {
         dataViewMode.listCategoryByTypeLiveData.observe(requireActivity()) {
             adapterIconCategory.updateData(it as ArrayList<Category>)
             Log.e("data","update select: add category")
-
         }
 
 //        if (categoryViewModel.category.idCategory != 0) {
@@ -73,6 +72,7 @@ class AddCategoryFragment : Fragment() {
         }
         adapterIconCategory.setClickItemSelect {
             if (it.idCategory <= 2) {
+                dataViewMode.editOrAddCategory = it
                 findNavController().navigate(R.id.action_addCategoryFragment_to_editCategoryFragment)
             } else {
                 dataViewMode.categorySelectAddCategoryByAddTransaction = it

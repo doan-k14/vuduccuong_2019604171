@@ -18,6 +18,7 @@ import com.example.qltaichinhcanhan.splash.adapter.AdapterIConColor
 import com.example.qltaichinhcanhan.splash.adapter.AdapterIconCategory
 import com.example.qltaichinhcanhan.databinding.FragmentEditCategoryBinding
 import com.example.qltaichinhcanhan.main.base.BaseFragment
+import com.example.qltaichinhcanhan.main.library.MoneyTextWatcher
 import com.example.qltaichinhcanhan.main.model.m_r.Category
 import com.example.qltaichinhcanhan.main.model.DataColor
 import com.example.qltaichinhcanhan.main.model.Icon
@@ -73,6 +74,7 @@ class EditCategoryFragment : BaseFragment() {
 
 
         editOrAddCategory = dataViewMode.editOrAddCategory
+        binding.edtPlannedOutlay.addTextChangedListener(MoneyTextWatcher(binding.edtPlannedOutlay))
 
         checkEditOrAddCategory(editOrAddCategory)
         checkSelectIconCategory()
@@ -164,7 +166,7 @@ class EditCategoryFragment : BaseFragment() {
 
         } else {
             binding.edtNameCategory.setText(category.categoryName)
-            binding.edtPlannedOutlay.setText(category.moneyLimit.toString())
+            binding.edtPlannedOutlay.setText(convertFloatToString(category.moneyLimit!!))
             binding.llUpdateCategory.visibility = View.VISIBLE
             binding.txtTypeCategory.visibility = View.VISIBLE
             binding.textCreateCategory.visibility = View.GONE
@@ -182,18 +184,33 @@ class EditCategoryFragment : BaseFragment() {
         val textName = binding.edtNameCategory.text
         if (textName.isEmpty()) {
             Toast.makeText(requireContext(),
-                "Tên danh mục không được bỏ trống!",
+                requireContext().resources.getString(R.string.category_names_cannot_be_left_blank),
                 Toast.LENGTH_SHORT).show()
             return false
         }
         dataViewMode.editOrAddCategory.categoryName = textName.toString()
 
-        var textPlannedOutlay = binding.edtPlannedOutlay.text
+        val value = MoneyTextWatcher.parseCurrencyValue(binding.edtPlannedOutlay.text.toString())
+        val temp = value.toString()
+        if (binding.edtPlannedOutlay.text.isNotEmpty()) {
+            try {
+                val number = temp.toFloat()
+                dataViewMode.editOrAddCategory.moneyLimit = number
+            } catch (e: NumberFormatException) {
+                Toast.makeText(requireContext(),
+                    requireContext().resources.getString(R.string.you_entered_the_wrong_format),
+                    Toast.LENGTH_SHORT)
+                    .show()
+            }
+        } else {
+            dataViewMode.editOrAddCategory.moneyLimit = 0F
+        }
+
         if (typeCick == 2) {
             dataViewMode.editOrAddCategory.idCategory = 0
             if (dataViewMode.editOrAddCategory.icon!! <= 2) {
                 Toast.makeText(requireContext(),
-                    "Tên danh mục không được bỏ trống!",
+                    requireContext().resources.getString(R.string.category_names_cannot_be_left_blank),
                     Toast.LENGTH_SHORT).show()
                 return false
             }
@@ -238,9 +255,9 @@ class EditCategoryFragment : BaseFragment() {
 
     private fun getTypeCategory(type: String): String {
         if (type == CategoryType.EXPENSE.toString()) {
-            return "Chi phí"
+            return requireContext().resources.getString(R.string.expense)
         } else if (type == CategoryType.INCOME.toString()) {
-            return "Thu nhập"
+            return requireContext().resources.getString(R.string.in_come)
         }
         return ""
     }

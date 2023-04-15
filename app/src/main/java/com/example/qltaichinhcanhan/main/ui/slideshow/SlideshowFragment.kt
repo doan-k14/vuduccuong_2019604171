@@ -71,22 +71,6 @@ class SlideshowFragment : BaseFragment() {
     }
 
     private fun initView() {
-        val tabLayout = binding.tabLayout
-        val tabChung = tabLayout.newTab().setText("Chung")
-        val tabChiPhi = tabLayout.newTab().setText("Chi Phí")
-        val tabThuNhap = tabLayout.newTab().setText("Thu Nhập")
-        tabLayout.addTab(tabChung)
-        tabLayout.addTab(tabChiPhi)
-        tabLayout.addTab(tabThuNhap)
-
-        val tabLayoutChart = binding.tabLayoutChart
-        val tabNgay = tabLayoutChart.newTab().setText("Ngày")
-        val tabThang = tabLayoutChart.newTab().setText("Tháng")
-        val tabNam = tabLayoutChart.newTab().setText("Năm")
-        tabLayoutChart.addTab(tabNgay)
-        tabLayoutChart.addTab(tabThang)
-        tabLayoutChart.addTab(tabNam)
-
 
         when (dataViewMode.selectTabLayoutSlidesShow) {
             0 -> {

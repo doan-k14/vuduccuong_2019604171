@@ -15,6 +15,7 @@
     <color name="main_color1">#2196F3</color>
 
     <color name="bg_color">#E8E9EC</color>
+    <color name="bg_color1">#F0F2FA</color>
 
     <color name="progress_gradient_start">#4da5ff</color>
     <color name="progress_gradient_end">#a9d3ff</color>

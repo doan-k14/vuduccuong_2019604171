@@ -19,7 +19,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Loading"
+            android:text="@string/loading"
             android:textColor="@color/orange_spl"
             android:textSize="20sp"
             android:textStyle="bold" />

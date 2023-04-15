@@ -181,7 +181,7 @@ class EditNotificationFragment : BaseFragment() {
     private fun checkDataNotification() {
         val notificationName = binding.edtNameNotification.text.toString()
         if (notificationName.isEmpty()) {
-            Toast.makeText(requireActivity(), "Bạn chưa nhập tên lời nhắc!", Toast.LENGTH_LONG)
+            Toast.makeText(requireActivity(), requireContext().resources.getString(R.string.you_have_not_entered_a_reminder_name), Toast.LENGTH_LONG)
                 .show()
             return
         }
@@ -190,7 +190,7 @@ class EditNotificationFragment : BaseFragment() {
 
         val notificationNote = binding.edtNote.text.toString()
         if (notificationNote.isEmpty()) {
-            Toast.makeText(requireActivity(), "Bạn chưa nhập ghi chú!", Toast.LENGTH_LONG).show()
+            Toast.makeText(requireActivity(), requireContext().resources.getString(R.string.you_have_not_entered_a_note), Toast.LENGTH_LONG).show()
             return
         }
         notificationInfo.notificationNote = notificationNote

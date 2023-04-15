@@ -71,10 +71,10 @@ object ChartUtils {
         pieChart.holeRadius = 70f
         if (sumAmount != 0F) {
             val formatter = DecimalFormat("#,###")
-            pieChart.centerText = formatter.format(sumAmount) + type
+            pieChart.centerText = "${formatter.format(sumAmount)} ${type}"
             pieChart.animateY(1500, Easing.EaseInOutQuad)
         } else {
-            pieChart.centerText = "Bạn chưa có dữ liệu"
+            pieChart.centerText = context.resources.getString(R.string.you_don_t_have_data_yet)
             pieChart.animateY(1500, Easing.EaseInOutQuad)
         }
         pieChart.setCenterTextSize(14f)

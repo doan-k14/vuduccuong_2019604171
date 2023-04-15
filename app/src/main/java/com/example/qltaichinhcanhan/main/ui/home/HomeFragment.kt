@@ -162,7 +162,7 @@ class HomeFragment : BaseFragment() {
 
                 }
             }else{
-                Toast.makeText(requireActivity(),"Danh sách chưa có dữ liệu. Không thể xuất file null!",Toast.LENGTH_LONG).show()
+                Toast.makeText(requireActivity(), resources.getString(R.string.list_category_null),Toast.LENGTH_LONG).show()
             }
         }
 
@@ -175,14 +175,13 @@ class HomeFragment : BaseFragment() {
         val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
         val isFirstTime = sharedPref.getBoolean("createDataCategory", true)
         if (isFirstTime) {
-            dataViewMode.addListCategory(DefaultData.getListCategoryCreateData())
+            dataViewMode.addListCategory(DefaultData.getListCategoryCreateData(requireContext()))
 
             val today = Calendar.getInstance()
             today.timeInMillis = System.currentTimeMillis()
             val currentTime = Calendar.getInstance().time.time
-
-            dataViewMode.addNotificationInfo(NotificationInfo(0,"Nhắc nhở","Hằng ngày",today.timeInMillis
-                ,currentTime,"Đừng quên bổ sung chi tiêu của bạn cho ngày hôm nay",false,1))
+            dataViewMode.addNotificationInfo(NotificationInfo(0,resources.getString(R.string.remind),resources.getString(R.string.menu_daily),today.timeInMillis
+                ,currentTime,resources.getString(R.string.reminde_notes),false,1))
             sharedPref.edit().putBoolean("createDataCategory", false).apply()
         }
     }
@@ -196,11 +195,6 @@ class HomeFragment : BaseFragment() {
     }
 
     private fun createTabLayoutIOrE() {
-        val tabChiPhi = binding.tabLayout.newTab().setText("Chi Phí")
-        val tabThuNhap = binding.tabLayout.newTab().setText("Thu Nhập")
-        binding.tabLayout.addTab(tabChiPhi)
-        binding.tabLayout.addTab(tabThuNhap)
-
         if (!dataViewMode.checkTypeTabLayoutHomeTransaction) {
             binding.tabLayout.selectTab(binding.tabLayout.getTabAt(0))
             dataViewMode.getAllTransactionWithDetailsByTypeCategory(CategoryType.EXPENSE.toString())
@@ -231,18 +225,11 @@ class HomeFragment : BaseFragment() {
     }
 
     private fun createTabLayoutFilterDay() {
-        val tabLayoutChart = binding.tabLayoutChart
-        val tabNgay = tabLayoutChart.newTab().setText("Ngày")
-        val tabThang = tabLayoutChart.newTab().setText("Tháng")
-        val tabNam = tabLayoutChart.newTab().setText("Năm")
-        val tabTuan = tabLayoutChart.newTab().setText("Tuần")
-        tabLayoutChart.addTab(tabNgay)
-        tabLayoutChart.addTab(tabThang)
-        tabLayoutChart.addTab(tabNam)
-        tabLayoutChart.addTab(tabTuan)
-
         val today = Calendar.getInstance()
         today.timeInMillis = System.currentTimeMillis()
+        val startDate = Calendar.getInstance()
+        startDate.timeInMillis = today.timeInMillis - 7 * 24 * 60 * 60 * 1000
+
         val timeDay = convertTimeToDate(today.timeInMillis)
         val timeMonth = convertTimeToMoth(today.timeInMillis)
         val timeYear = convertTimeToYear(today.timeInMillis)
@@ -268,19 +255,19 @@ class HomeFragment : BaseFragment() {
                 checkShowOrHideTextTime(true)
             }
             3 -> {
+                binding.textTimePieChart.text = "${convertTimeToDateMonth(startDate.timeInMillis)} - ${convertTimeToDate(today.timeInMillis)}"
                 binding.tabLayoutChart.selectTab(binding.tabLayoutChart.getTabAt(3))
                 checkShowOrHideTextTime(false)
             }
         }
 
-        tabLayoutChart.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+        binding.tabLayoutChart.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 val position = tab?.position
                 dataViewMode.checkTypeTabLayoutFilterDay = position!!.toInt()
 
                 when (position) {
                     0 -> {
-                        Log.e("data","timeDay: ${timeDay}")
                         binding.textTimePieChart.text = timeDay
                         checkShowOrHideTextTime(false)
                         val l =
@@ -305,11 +292,13 @@ class HomeFragment : BaseFragment() {
                             listTransactionWithFullDetails)
                         adapterTransaction.updateData(l)
                         ChartUtils.pieChart(requireActivity(),l,binding.barChart,currencySymbol)
-
                     }
                     3 -> {
                         checkShowOrHideTextTime(false)
-                        createDialogCalenderTimeInterval()
+                        binding.textTimePieChart.text = "${convertTimeToDateMonth(startDate.timeInMillis)} - ${convertTimeToDate(today.timeInMillis)}"
+                        val l =  filterTransactionsByPeriod(startDate.timeInMillis,today.timeInMillis,listTransactionWithFullDetails)
+                        adapterTransaction.updateData(l)
+                        ChartUtils.pieChart(requireActivity(),l,binding.barChart,currencySymbol)
                     }
                 }
             }
@@ -373,6 +362,9 @@ class HomeFragment : BaseFragment() {
     private fun filterTransactionByTime(listTransactionWithDetails: List<TransactionWithFullDetails>) {
         val today = Calendar.getInstance()
         today.timeInMillis = System.currentTimeMillis()
+        val startDate = Calendar.getInstance()
+        startDate.timeInMillis = today.timeInMillis - 7 * 24 * 60 * 60 * 1000
+
         val timeDay = convertTimeToDate(today.timeInMillis)
         val timeMonth = convertTimeToMoth(today.timeInMillis)
         val timeYear = convertTimeToYear(today.timeInMillis)
@@ -397,7 +389,9 @@ class HomeFragment : BaseFragment() {
                 ChartUtils.pieChart(requireActivity(),l,binding.barChart,currencySymbol)
             }
             3 -> {
-
+                val l =  filterTransactionsByPeriod(startDate.timeInMillis,today.timeInMillis,listTransactionWithFullDetails)
+                adapterTransaction.updateData(l)
+                ChartUtils.pieChart(requireActivity(),l,binding.barChart,currencySymbol)
             }
         }
     }
@@ -475,16 +469,19 @@ class HomeFragment : BaseFragment() {
     // dialog khoảng thời gian
     private fun createDialogCalenderTimeInterval() {
         val builder = MaterialDatePicker.Builder.dateRangePicker()
-            .setTitleText("Chọn khoảng thời gian")
+            .setTitleText(resources.getString(R.string.choose_a_time_period))
         val picker = builder.build()
 
         picker.addOnPositiveButtonClickListener { selection ->
             val startDate = selection.first
             val endDate = selection.second
 
-            val d1 = convertTimeToDate(startDate)
+            val d1 = convertTimeToDateMonth(startDate)
             val d2 = convertTimeToDate(endDate)
             binding.textTimePieChart.text = "$d1 - $d2"
+            val l =  filterTransactionsByPeriod(startDate,endDate,listTransactionWithFullDetails)
+            adapterTransaction.updateData(l)
+            ChartUtils.pieChart(requireActivity(),l,binding.barChart,currencySymbol)
         }
         picker.show(requireActivity().supportFragmentManager, picker.toString())
     }

@@ -60,7 +60,7 @@
             android:drawableRight="@drawable/ic_arrow_drop_down"
             android:gravity="center"
             android:padding="9dp"
-            android:text="Loại tiền"
+            android:text="@string/type_money"
             android:textColor="@color/black"
             android:textSize="16sp" />
     </LinearLayout>

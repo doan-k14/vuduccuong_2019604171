@@ -18,7 +18,7 @@ import com.example.qltaichinhcanhan.main.model.m_convert.TransactionsShowDetails
 import com.example.qltaichinhcanhan.main.rdb.vm_data.DataViewMode
 
 
-class TransactionByCategoryFragment : BaseFragment(),TransactionClickListener {
+class TransactionByCategoryFragment : BaseFragment(), TransactionClickListener {
 
     lateinit var binding: FragmentTransactionByCategoryBinding
     lateinit var dataViewMode: DataViewMode
@@ -40,6 +40,7 @@ class TransactionByCategoryFragment : BaseFragment(),TransactionClickListener {
 
         val fileTransactionDefault = dataViewMode.filterTransactions
 
+
         val l = groupTransactionsByDay(fileTransactionDefault.listTransaction)
 
 
@@ -47,15 +48,37 @@ class TransactionByCategoryFragment : BaseFragment(),TransactionClickListener {
         initEvent()
         val layoutManager = LinearLayoutManager(activity)
         binding.rcvTransactionDefault.layoutManager = layoutManager
-        adapterTransactionByTime = AdapterTransactionByTime(requireContext(), l!!,this)
+        val type = dataViewMode.checkTypeTabLayoutFilterDay
+        adapterTransactionByTime = AdapterTransactionByTime(requireContext(), l!!, this, type)
         binding.rcvTransactionDefault.adapter = adapterTransactionByTime
     }
 
     private fun initView(filterTransactions: FilterTransactions) {
         binding.textTitleTransaction.text =
-            filterTransactions.transaction.transactionWithDetails?.transaction!!.transactionName
-        binding.textValueTransaction.text =
-            convertFloatToString(filterTransactions.transaction.transactionWithDetails?.transaction!!.transactionAmount!!)
+            filterTransactions.transaction.transactionWithDetails?.category?.categoryName
+
+        val currencySymbol =
+            filterTransactions.transaction.moneyAccountWithDetails?.country?.currencySymbol!!
+        val transactionAmount =
+            filterTransactions.transaction.transactionWithDetails?.transaction!!.transactionAmount!!
+        binding.textValueTransaction.text = convertFloatToString(transactionAmount) + currencySymbol
+
+        val moneyLimit =
+            filterTransactions.transaction.transactionWithDetails?.category?.moneyLimit!!
+        if (dataViewMode.checkTypeTabLayoutFilterDay == 1) {
+            if(moneyLimit !=0F){
+                if (moneyLimit < transactionAmount) {
+                    val limit = (transactionAmount - moneyLimit) / moneyLimit * 100
+                    binding.llLimit.visibility = View.VISIBLE
+                    binding.textMoneyLimit.text = convertFloatToString(moneyLimit) + currencySymbol +" (${limit.toInt()}%)"
+                    binding.textAmount.text = convertFloatToString(transactionAmount) + " / "
+                }else{
+                    binding.llLimit.visibility = View.GONE
+                }
+            }
+        } else {
+            binding.llLimit.visibility = View.GONE
+        }
     }
 
     private fun initEvent() {
@@ -71,7 +94,7 @@ class TransactionByCategoryFragment : BaseFragment(),TransactionClickListener {
 
     private fun groupTransactionsByDay(transactionList: List<TransactionWithFullDetails>): List<TransactionsShowDetails> {
         val groupedByDay =
-            transactionList.groupBy { convertTimeToDate(it.transactionWithDetails?.transaction?.day!!) }
+            transactionList.groupBy { formatTimeInMillis(it.transactionWithDetails?.transaction?.day!!) }
 
         val groupedByDayAndTime = groupedByDay.map { entry ->
             val day = entry.key ?: ""

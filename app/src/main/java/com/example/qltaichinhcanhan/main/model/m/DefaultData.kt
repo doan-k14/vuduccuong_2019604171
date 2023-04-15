@@ -1,5 +1,6 @@
 package com.example.qltaichinhcanhan.main.model.m
 
+import android.content.Context
 import com.example.qltaichinhcanhan.R
 import com.example.qltaichinhcanhan.main.model.Icon
 import com.example.qltaichinhcanhan.main.model.IconCategory
@@ -12,28 +13,28 @@ object DefaultData {
 
     fun getListCategoryAdd(): ArrayList<Category> {
         return arrayListOf(
-            Category(2, "category2", CategoryType.EXPENSE, 1F, false, IconR.listIconRCategory[2].id,1,1),
-            Category(3, "category3", CategoryType.EXPENSE, 1F, false, IconR.listIconRCategory[3].id,1,1),
-            Category(4, "category4", CategoryType.EXPENSE, 1F, false, IconR.listIconRCategory[4].id,1,1),
-            Category(5, "category5", CategoryType.EXPENSE, 1F, false, IconR.listIconRCategory[5].id,1,1),
-            Category(6, "category6", CategoryType.EXPENSE, 1F, false, IconR.listIconRCategory[6].id,1,1),
-            Category(1, "Thêm", CategoryType.EXPENSE, 1F, false, IconR.listIconRCategory[1].id,1,1),
+            Category(2, "category2", CategoryType.EXPENSE, 0F, false, IconR.listIconRCategory[2].id,1,1),
+            Category(3, "category3", CategoryType.EXPENSE, 0F, false, IconR.listIconRCategory[3].id,1,1),
+            Category(4, "category4", CategoryType.EXPENSE, 0F, false, IconR.listIconRCategory[4].id,1,1),
+            Category(5, "category5", CategoryType.EXPENSE, 0F, false, IconR.listIconRCategory[5].id,1,1),
+            Category(6, "category6", CategoryType.EXPENSE, 0F, false, IconR.listIconRCategory[6].id,1,1),
+            Category(1, "Thêm", CategoryType.EXPENSE, 0F, false, IconR.listIconRCategory[1].id,1,1),
         )
     }
 
-    fun getListCategoryCreateData(): ArrayList<Category> {
+    fun getListCategoryCreateData(context: Context): ArrayList<Category> {
         val listIcon = IconR.listIconRCategory
         return arrayListOf(
-            Category(1, "Thêm", CategoryType.INCOME, 1F, false,listIcon[0].id,listIcon[0].idColorR,1),
-            Category(2, "Thêm", CategoryType.EXPENSE, 1F, false,listIcon[0].id,listIcon[0].idColorR,1),
-            Category(3, "Gia đình", CategoryType.EXPENSE, 1F, false,listIcon[2].id,listIcon[2].idColorR,1),
-            Category(4, "Di chuyển", CategoryType.EXPENSE, 1F, false,listIcon[3].id,listIcon[3].idColorR,1),
-            Category(5, "Sức khỏe", CategoryType.EXPENSE, 1F, false,listIcon[4].id,listIcon[4].idColorR,1),
-            Category(6, "Khác", CategoryType.EXPENSE, 1F, false,listIcon[5].id,listIcon[5].idColorR,1),
-            Category(7, "Lương", CategoryType.INCOME, 1F, false,listIcon[6].id,listIcon[6].idColorR,1),
-            Category(8, "Thưởng", CategoryType.INCOME, 1F, false,listIcon[1].id,listIcon[1].idColorR,1),
-            Category(9, "Đầu tư", CategoryType.INCOME, 1F, false,listIcon[7].id,listIcon[7].idColorR,1),
-            Category(10, "Khác", CategoryType.INCOME, 1F, false,listIcon[8].id,listIcon[8].idColorR,1),
+            Category(1, context.resources.getString(R.string.add), CategoryType.INCOME, 0F, false,listIcon[0].id,listIcon[0].idColorR,1),
+            Category(2, context.resources.getString(R.string.add), CategoryType.EXPENSE, 0F, false,listIcon[0].id,listIcon[0].idColorR,1),
+            Category(3, context.resources.getString(R.string.family), CategoryType.EXPENSE, 0F, false,listIcon[2].id,listIcon[2].idColorR,1),
+            Category(4, context.resources.getString(R.string.move), CategoryType.EXPENSE, 0F, false,listIcon[3].id,listIcon[3].idColorR,1),
+            Category(5, context.resources.getString(R.string.health), CategoryType.EXPENSE, 0F, false,listIcon[4].id,listIcon[4].idColorR,1),
+            Category(6, context.resources.getString(R.string.other), CategoryType.EXPENSE, 0F, false,listIcon[5].id,listIcon[5].idColorR,1),
+            Category(7, context.resources.getString(R.string.wage), CategoryType.INCOME, 0F, false,listIcon[6].id,listIcon[6].idColorR,1),
+            Category(8, context.resources.getString(R.string.bonus), CategoryType.INCOME, 0F, false,listIcon[3].id,listIcon[1].idColorR,1),
+            Category(9, context.resources.getString(R.string.invest), CategoryType.INCOME, 0F, false,listIcon[7].id,listIcon[7].idColorR,1),
+            Category(10, context.resources.getString(R.string.other), CategoryType.INCOME, 0F, false,listIcon[8].id,listIcon[8].idColorR,1),
         )
     }
 

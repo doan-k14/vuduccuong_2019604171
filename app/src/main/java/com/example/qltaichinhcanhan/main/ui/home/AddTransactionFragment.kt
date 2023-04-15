@@ -277,7 +277,7 @@ class AddTransactionFragment : BaseFragment() {
 
         dataViewMode.listCategoryByTypeLiveData.observe(requireActivity()) {
             adapterIconCategory.updateData(it as ArrayList<Category>)
-
+            dataViewMode.transaction.idCategory = 0
             if(dataViewMode.checkInputScreenAddTransaction == 0){
                 if(idCategory != 0){
                     adapterIconCategory.updateSelect(idCategory)
@@ -299,7 +299,7 @@ class AddTransactionFragment : BaseFragment() {
     private fun eventRcvCategory() {
         adapterIconCategory.setClickItemSelect {
             if (it.idCategory <= 2) {
-                dataViewMode.transaction.idCategory = null
+                dataViewMode.transaction.idCategory = 0
                 dataViewMode.categorySelectAddCategoryByAddTransaction = Category()
                 findNavController().navigate(R.id.action_addTransactionFragment_to_addCategoryFragment)
             } else {
@@ -334,7 +334,7 @@ class AddTransactionFragment : BaseFragment() {
                 dataViewMode.getListCategoryByType(CategoryType.INCOME.toString())
             }
 
-        } else if (dataViewMode.checkInputScreenAddTransaction == 1) {
+        } else if (type == 1) {
             // edt transaction
             val transactionEdit = dataViewMode.transactionAddOrEdt
             val typeTransaction = transactionEdit.transactionWithDetails?.category?.type.toString()
@@ -535,7 +535,7 @@ class AddTransactionFragment : BaseFragment() {
             val value = MoneyTextWatcher.parseCurrencyValue(binding.edtAmount0.text.toString())
             val temp = value.toString()
             if (binding.edtAmount0.text.isEmpty()) {
-                Toast.makeText(requireContext(), "Vui lòng nhập giá trị tiền", Toast.LENGTH_SHORT)
+                Toast.makeText(requireContext(),  requireContext().getString(R.string.please_enter_the_value), Toast.LENGTH_SHORT)
                     .show()
                 return false
             }
@@ -543,7 +543,7 @@ class AddTransactionFragment : BaseFragment() {
                 val number = temp.toFloat()
                 dataViewMode.transaction.transactionAmount = number
             } catch (e: NumberFormatException) {
-                Toast.makeText(requireContext(), "Bạn nhập sai định dạng!", Toast.LENGTH_SHORT)
+                Toast.makeText(requireContext(),  requireContext().getString(R.string.you_entered_the_wrong_format), Toast.LENGTH_SHORT)
                     .show()
             }
 
@@ -551,20 +551,20 @@ class AddTransactionFragment : BaseFragment() {
             val textAmount = binding.edtAmount2.text.toString()
             if (textAmount.isEmpty()) {
                 Toast.makeText(requireContext(),
-                    "Vui lòng nhập giá trị tiền!",
+                    requireContext().getString(R.string.please_enter_the_value),
                     Toast.LENGTH_SHORT).show()
                 return false
             }
         }
 
         if (dataViewMode.transaction.idMoneyAccount == null) {
-            Toast.makeText(requireContext(), "Bạn chưa lựa chọn Tài khoản", Toast.LENGTH_SHORT)
+            Toast.makeText(requireContext(),  requireContext().getString(R.string.text_select_account), Toast.LENGTH_SHORT)
                 .show()
             return false
         }
 
-        if (dataViewMode.transaction.idCategory == null) {
-            Toast.makeText(requireContext(), "Bạn chưa lựa chọn Danh mục", Toast.LENGTH_SHORT)
+        if (dataViewMode.transaction.idCategory == 0) {
+            Toast.makeText(requireContext(),  requireContext().getString(R.string.you_have_not_selected_a_category), Toast.LENGTH_SHORT)
                 .show()
             return false
         }
@@ -598,14 +598,14 @@ class AddTransactionFragment : BaseFragment() {
         val temp = value.toString()
         var amountNew = 0F
         if (binding.edtAmount0.text.isEmpty()) {
-            Toast.makeText(requireContext(), "Vui lòng nhập giá trị tiền", Toast.LENGTH_SHORT)
+            Toast.makeText(requireContext(), requireContext().getString(R.string.please_enter_the_value), Toast.LENGTH_SHORT)
                 .show()
             return false
         }
         try {
             amountNew = temp.toFloat()
         } catch (e: NumberFormatException) {
-            Toast.makeText(requireContext(), "Bạn nhập sai định dạng!", Toast.LENGTH_SHORT)
+            Toast.makeText(requireContext(),  requireContext().getString(R.string.you_entered_the_wrong_format), Toast.LENGTH_SHORT)
                 .show()
         }
 
@@ -636,7 +636,6 @@ class AddTransactionFragment : BaseFragment() {
         }else{
             -1
         }
-        Log.e("ttt","d: ${typeCategoryDefault} n : ${typeCategoryNew}")
 
         if (typeCategoryDefault == typeCategoryNew) {
             if (moneyAccountDefault!!.idMoneyAccount == moneyAccountNew!!.idMoneyAccount) {
@@ -699,6 +698,8 @@ class AddTransactionFragment : BaseFragment() {
         dataViewMode.moneyAccountWithDetailsSelect.postValue(MoneyAccountWithDetails(MoneyAccount()))
         dataViewMode.categorySelectAddCategoryByAddTransaction = Category()
         dataViewMode.checkEdtTransaction = false
+        dataViewMode.transactionAddOrEdt = TransactionWithFullDetails()
+        dataViewMode.checkInitializeViewAddOrEditTransaction = false
         super.onDestroy()
     }
 }

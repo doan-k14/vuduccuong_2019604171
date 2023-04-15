@@ -45,6 +45,12 @@
             android:id="@+id/onBoarding3Fragment"
             android:name="com.example.qltaichinhcanhan.splash.fragment.boarding.OnBoarding3Fragment"
             android:label="OnBoarding3Fragment" />
+        <action
+            android:id="@+id/action_onBoardingFragment_to_creatsMoneyFragment"
+            app:destination="@id/creatsMoneyFragment" />
+        <action
+            android:id="@+id/action_onBoardingFragment_to_languageFragment2"
+            app:destination="@id/languageFragment2" />
 
     </fragment>
 
@@ -89,4 +95,9 @@
         android:name="com.example.qltaichinhcanhan.main.ui.currency.CurrencyFragment"
         android:label="fragment_currency"
         tools:layout="@layout/fragment_currency" />
+    <fragment
+        android:id="@+id/languageFragment2"
+        android:name="com.example.qltaichinhcanhan.main.ui.setting.LanguageFragment"
+        android:label="fragment_language"
+        tools:layout="@layout/fragment_language" />
 </navigation>

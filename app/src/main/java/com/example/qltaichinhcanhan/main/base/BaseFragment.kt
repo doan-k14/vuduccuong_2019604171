@@ -83,6 +83,16 @@ abstract class BaseFragment : Fragment() {
         return formatter.format(value)
     }
 
+    fun formatTimeInMillis(timeInMillis1: Long): String {
+        val calendar = Calendar.getInstance().apply {
+            timeInMillis = timeInMillis1
+        }
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
+        val month = calendar.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault())
+        val year = calendar.get(Calendar.YEAR)
+        return "$day $month, $year"
+    }
+
     fun convertTimeToHour(time:Long):String{
         val hourFormat = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             SimpleDateFormat("HH:mm", Locale.getDefault())
@@ -91,7 +101,14 @@ abstract class BaseFragment : Fragment() {
         }
         return hourFormat.format(time)
     }
-
+    fun convertTimeToDateMonth(time: Long): String {
+        val dateFormat = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            SimpleDateFormat("dd/MM", Locale.getDefault())
+        } else {
+            TODO("VERSION.SDK_INT < N")
+        }
+        return dateFormat.format(time)
+    }
     // chuyển đổi time: timeInMillis -> string
     fun convertTimeToDate(time: Long): String {
         val dateFormat = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -159,6 +176,20 @@ abstract class BaseFragment : Fragment() {
     }
 
     // lọc transactions theo ngày, tháng, năm
+    fun filterTransactionsByPeriod(
+        dateStart: Long,
+        dateEnd: Long,
+        transactionList: List<TransactionWithFullDetails>,
+    ): List<FilterTransactions> {
+        val filteredList = transactionList.filter { it ->
+            (it.transactionWithDetails?.transaction?.day!! in dateStart..dateEnd)
+        }
+        Log.e("ttt","filterTransactionsByPeriod: ${filteredList.size} year: ${convertTimeToYear(dateStart)}")
+        if(filteredList.isNotEmpty()){
+            return filterTransactionsByYear(convertTimeToYear(dateStart),filteredList)
+        }
+        return listOf()
+    }
     fun filterTransactionsByDay(
         date: String,
         transactionList: List<TransactionWithFullDetails>,

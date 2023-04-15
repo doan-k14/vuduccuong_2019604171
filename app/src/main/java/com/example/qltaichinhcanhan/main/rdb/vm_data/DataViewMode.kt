@@ -4,6 +4,7 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.*
 import com.example.qltaichinhcanhan.main.model.m.IconR
+import com.example.qltaichinhcanhan.main.model.m.LanguageR
 import com.example.qltaichinhcanhan.main.model.m_r.*
 import com.example.qltaichinhcanhan.main.model.m_convert.FilterTransactions
 import com.example.qltaichinhcanhan.main.model.m_convert.TransactionWithFullDetails
@@ -398,8 +399,10 @@ class DataViewMode(application: Application) : AndroidViewModel(application) {
     var selectTabLayoutStyleSlidesShow = 1
 
 
+    var checkInitializeViewAddOrEditTransaction = false
 
 
+    var languageR = LanguageR()
 
     // ---------------------------------- NotificationInfo----------------------
 

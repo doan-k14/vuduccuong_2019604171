@@ -98,13 +98,13 @@
                 android:textSize="16sp" />
 
             <LinearLayout
-                android:visibility="gone"
-                android:layout_marginHorizontal="10dp"
                 android:id="@+id/ll_type_category"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
                 android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <ImageView
                     android:id="@+id/img_expense"
@@ -157,6 +157,7 @@
                 android:layout_marginLeft="10dp"
                 android:background="@drawable/rounded_edittext"
                 android:hint="@string/text_planned"
+                android:inputType="number"
                 android:padding="9dp"
                 android:textSize="16sp" />
         </LinearLayout>
@@ -222,7 +223,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/button_delete_category"
                 android:gravity="center"
-                android:text="Xóa"
+                android:text="@string/delete"
                 android:textColor="#FF0000" />
 
             <TextView
@@ -233,7 +234,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/button_save_category"
                 android:gravity="center"
-                android:text="Lưu"
+                android:text="@string/text_save"
                 android:textColor="#FFFFFF" />
         </LinearLayout>
 

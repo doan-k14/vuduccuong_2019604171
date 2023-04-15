@@ -3,6 +3,7 @@ package com.example.qltaichinhcanhan.main.adapter
 import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.qltaichinhcanhan.databinding.ItemTransactionBinding
@@ -42,7 +43,7 @@ class AdapterTransactionDefault(
 
             val formatter = DecimalFormat("#,###")
             val m = formatter.format( item.transactionWithDetails?.transaction!!.transactionAmount!!)
-            binding.textValueCategory.text = item.moneyAccountWithDetails?.country?.currencySymbol +  m
+            binding.textValueCategory.text =  "${m} ${item.moneyAccountWithDetails?.country?.currencySymbol}"
 
             holder.itemView.setOnClickListener {
                 transactionClickListener.onTransactionClick(item)

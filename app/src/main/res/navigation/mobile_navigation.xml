@@ -71,7 +71,11 @@
         android:id="@+id/nav_currency"
         android:name="com.example.qltaichinhcanhan.main.ui.currency.CurrencyFragment"
         android:label="fragment_currency"
-        tools:layout="@layout/fragment_currency" />
+        tools:layout="@layout/fragment_currency" >
+        <action
+            android:id="@+id/action_nav_currency_to_currencyConversionFragment"
+            app:destination="@id/currencyConversionFragment" />
+    </fragment>
     <fragment
         android:id="@+id/addTransactionFragment"
         android:name="com.example.qltaichinhcanhan.main.ui.home.AddTransactionFragment"
@@ -125,4 +129,34 @@
         android:name="com.example.qltaichinhcanhan.main.ui.reminder.EditNotificationFragment"
         android:label="fragment_edit_notification"
         tools:layout="@layout/fragment_edit_notification" />
+    <fragment
+        android:id="@+id/currencyConversionFragment"
+        android:name="com.example.qltaichinhcanhan.main.ui.currency.CurrencyConversionFragment"
+        android:label="fragment_currency_conversion"
+        tools:layout="@layout/fragment_currency_conversion" >
+        <action
+            android:id="@+id/action_currencyConversionFragment_to_nav_currency"
+            app:destination="@id/nav_currency" />
+    </fragment>
+    <fragment
+        android:id="@+id/nav_utilities"
+        android:name="com.example.qltaichinhcanhan.main.ui.utilities.UtilitiesFragment"
+        android:label="fragment_utilities"
+        tools:layout="@layout/fragment_utilities" />
+    <fragment
+        android:id="@+id/nav_setting"
+        android:name="com.example.qltaichinhcanhan.main.ui.setting.SettingFragment"
+        android:label="fragment_setting"
+        tools:layout="@layout/fragment_setting" >
+
+        <action
+            android:id="@+id/action_nav_setting_to_languageFragment"
+            app:destination="@id/languageFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/languageFragment"
+        android:name="com.example.qltaichinhcanhan.main.ui.setting.LanguageFragment"
+        android:label="fragment_language"
+        tools:layout="@layout/fragment_language" />
+
 </navigation>

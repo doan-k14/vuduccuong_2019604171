@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
+import android.text.Html
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
@@ -15,6 +16,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.qltaichinhcanhan.main.library.MoneyTextWatcher
@@ -42,17 +44,20 @@ class CreatsMoneyFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         dataViewMode = ViewModelProvider(requireActivity())[DataViewMode::class.java]
 
-        val text =
-            "Chào mừng bạn đến với Ứng dụng quản lý tài chính cá nhân. Hãy bắt đầu quản lý tiền của mình bằng cách nhập số tiền bạn có."
-
-        val spannableString = SpannableString(text)
-        spannableString.setSpan(ForegroundColorSpan(Color.BLUE),
-            22,
-            56,
-            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        val t = requireContext().resources.getString(R.string.personal_financial_management_application)
+        val welcomeTo = requireContext().resources.getString(R.string.welcome_to)
+        val startManaging = requireContext().resources.getString(R.string.start_managing_your_money_by_entering_the_amount_you_have)
+        val textMessage = "$welcomeTo $t $startManaging"
+        val spannableString = SpannableString(textMessage)
+        spannableString.setSpan(
+            ForegroundColorSpan(ContextCompat.getColor(requireContext(), R.color.red)),
+            welcomeTo.length,
+            welcomeTo.length + t.length,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
         spannableString.setSpan(StyleSpan(Typeface.BOLD),
-            22,
-            56,
+            welcomeTo.length,
+            welcomeTo.length + t.length,
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
 
         binding.txtTitleMoney.text = spannableString
@@ -83,14 +88,14 @@ class CreatsMoneyFragment : Fragment() {
             val temp = value.toString()
             if (binding.edtInitialBalance.text.isEmpty()) {
                 Toast.makeText(requireContext(),
-                    "Số tiền hiện tại của bạn là bao nhiêu. Vui lòng nhập dữ liệu!",
+                    requireContext().getString(R.string.please_enter_data),
                     Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
             try {
                 val moneyAccount = MoneyAccount(
                     0,
-                    "Tài khoản chính",
+                    requireContext().getString(R.string.main_account),
                     temp.toFloat(),
                     true,
                     1,
@@ -115,7 +120,7 @@ class CreatsMoneyFragment : Fragment() {
                 requireActivity().finish()
             } catch (e: NumberFormatException) {
                 Toast.makeText(context,
-                    "Hãy nhập lại số tiền",
+                    requireContext().getString(R.string.please_enter_data),
                     Toast.LENGTH_SHORT).show()
             }
         }

@@ -66,7 +66,7 @@ class AdapterMoneyAccount(
                         IconR.getListColorIconR()))
                     binding.textNameCategory.text = item.moneyAccount!!.moneyAccountName
                     val m = formatter.format(item.moneyAccount!!.amountMoneyAccount)
-                    binding.textValueCategory.text = item.country!!.currencySymbol + m
+                    binding.textValueCategory.text = "${m} ${item.country!!.currencySymbol}"
 
                     binding.root.setOnClickListener {
                         clickItemSelect?.let {
@@ -97,7 +97,7 @@ class AdapterMoneyAccount(
                     binding.textNameCategory.text = item.moneyAccount!!.moneyAccountName
 
                     val m = formatter.format(item.moneyAccount!!.amountMoneyAccount)
-                    binding.textValueCategory.text = item.country!!.currencySymbol + m
+                    binding.textValueCategory.text = "${m} ${item.country!!.currencySymbol}"
 
                     binding.root.setOnClickListener {
                         for (i in listCategory.indices) {

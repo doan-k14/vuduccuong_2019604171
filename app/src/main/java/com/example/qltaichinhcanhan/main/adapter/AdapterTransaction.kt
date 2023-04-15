@@ -3,6 +3,7 @@ package com.example.qltaichinhcanhan.main.adapter
 import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.qltaichinhcanhan.databinding.ItemTransactionBinding
@@ -13,7 +14,7 @@ import java.text.DecimalFormat
 class AdapterTransaction(
     var context: Context,
     var listCategory: List<FilterTransactions>,
-    var currencyCode :String
+    var currencyCode: String,
 ) : RecyclerView.Adapter<AdapterTransaction.ViewHolder>() {
 
     inner class ViewHolder(binding: ItemTransactionBinding) :
@@ -31,6 +32,10 @@ class AdapterTransaction(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        var totalAmount = 0F
+        for (i in listCategory) {
+            totalAmount += i.transaction.transactionWithDetails?.transaction?.transactionAmount!!
+        }
         val item = listCategory[position]
         with(holder) {
             binding.imgCategory.setImageResource(IconR.getIconById(context,
@@ -42,8 +47,12 @@ class AdapterTransaction(
             binding.textNameCategory.text =
                 item.transaction.transactionWithDetails?.category!!.categoryName
 
+            val transactionAmount =
+                item.transaction.transactionWithDetails!!.transaction!!.transactionAmount!!
+            val percentage = (transactionAmount / totalAmount) * 100
             val formatter = DecimalFormat("#,###")
-            binding.textValueCategory.text = currencyCode + formatter.format(item.transaction.transactionWithDetails!!.transaction!!.transactionAmount)
+            binding.textValueCategory.text =
+                "(${percentage.toInt()}%)   ${formatter.format(transactionAmount)} ${currencyCode}"
 
             binding.root.setOnClickListener {
                 clickItemSelect?.let {
@@ -69,7 +78,7 @@ class AdapterTransaction(
         reloadData()
     }
 
-    fun updateCurrencyCode(currencyCodeNew:String){
+    fun updateCurrencyCode(currencyCodeNew: String) {
         this.currencyCode = currencyCodeNew
         reloadData()
     }

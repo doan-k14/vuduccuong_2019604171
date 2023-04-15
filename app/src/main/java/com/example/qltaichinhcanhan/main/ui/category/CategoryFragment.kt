@@ -50,11 +50,6 @@ class CategoryFragment : BaseFragment() {
     }
 
     private fun initView() {
-        val tabChiPhi = binding.tabLayout.newTab().setText("Chi Phí")
-        val tabThuNhap = binding.tabLayout.newTab().setText("Thu Nhập")
-        binding.tabLayout.addTab(tabChiPhi)
-        binding.tabLayout.addTab(tabThuNhap)
-
 
         if (!dataViewMode.checkTypeTabLayoutCategory) {
             binding.tabLayout.selectTab(binding.tabLayout.getTabAt(0))
@@ -116,6 +111,7 @@ class CategoryFragment : BaseFragment() {
         super.onStop()
         onCallbackLockedDrawers()
     }
+
     override fun onDestroy() {
         dataViewMode.resetDataCategory()
         super.onDestroy()

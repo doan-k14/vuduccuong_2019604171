@@ -66,6 +66,7 @@
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/drawable/color_icon_yellow.xml" value="0.122" />
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/drawable/custom_button_login.xml" value="0.239" />
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/drawable/custom_button_main.xml" value="0.239" />
+        <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/drawable/custom_button_white_50.xml" value="0.2035" />
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/drawable/custom_button_white_login.xml" value="0.239" />
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/drawable/custom_circle_indicator3.xml" value="0.1965" />
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/drawable/custom_icon_ci.xml" value="0.1965" />
@@ -75,8 +76,10 @@
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/drawable/custom_img_eye.xml" value="0.239" />
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/drawable/custom_layout_top.xml" value="0.2945" />
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/drawable/custom_progress_bar_horizontal.xml" value="0.1" />
+        <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/drawable/custom_text_exchange.xml" value="0.165" />
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/drawable/dashed_circle.xml" value="0.1" />
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/drawable/dialog_acount.xml" value="0.214" />
+        <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/drawable/ic_account13.xml" value="0.2175" />
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/drawable/ic_account21.xml" value="0.227" />
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/drawable/ic_account3.xml" value="0.1695" />
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/drawable/ic_account7.xml" value="0.227" />
@@ -88,8 +91,10 @@
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/drawable/ic_baseline_add_circle.xml" value="0.239" />
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/drawable/ic_calendar_add.xml" value="0.351" />
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/drawable/ic_calendar_mark.xml" value="0.2115" />
+        <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/drawable/ic_check_circle.xml" value="0.2935" />
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/drawable/ic_check_circle_0.xml" value="0.169" />
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/drawable/ic_check_circle_1.xml" value="0.282" />
+        <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/drawable/ic_check_circle_1111.xml" value="0.2935" />
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/drawable/ic_check_circle_2.xml" value="0.282" />
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/drawable/ic_check_circle_3.xml" value="0.282" />
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/drawable/ic_check_circle_4.xml" value="0.282" />
@@ -105,22 +110,34 @@
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/drawable/ic_circle_6.xml" value="0.282" />
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/drawable/ic_circle_7.xml" value="0.282" />
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/drawable/ic_circle_b.xml" value="0.282" />
+        <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/drawable/ic_cn.xml" value="0.2725" />
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/drawable/ic_download.xml" value="0.239" />
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/drawable/ic_error_b.xml" value="0.17" />
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/drawable/ic_eye.xml" value="0.239" />
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/drawable/ic_eye_hide.xml" value="0.282" />
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/drawable/ic_eye_hidel.xml" value="0.239" />
+        <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/drawable/ic_in.xml" value="0.1225" />
+        <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/drawable/ic_jp.xml" value="0.2315" />
+        <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/drawable/ic_kh.xml" value="0.2315" />
+        <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/drawable/ic_kr.xml" value="0.1225" />
+        <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/drawable/ic_la.xml" value="0.1225" />
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/drawable/ic_layout.xml" value="0.268" />
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/drawable/ic_list.xml" value="0.18" />
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/drawable/ic_logo.xml" value="0.268" />
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/drawable/ic_menu.xml" value="0.298" />
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/drawable/ic_menu_gallery.xml" value="0.1965" />
+        <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/drawable/ic_money_cash_dollar_coin.xml" value="0.2175" />
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/drawable/ic_ms2.xml" value="0.227" />
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/drawable/ic_picturel_andscape.xml" value="0.17" />
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/drawable/ic_programming_web.xml" value="0.104" />
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/drawable/ic_radio_button_checked.xml" value="0.282" />
+        <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/drawable/ic_radio_button_unchecked.xml" value="0.2175" />
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/drawable/ic_reminders.xml" value="0.2335" />
+        <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/drawable/ic_search_circle.xml" value="0.2175" />
+        <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/drawable/ic_search_circle_w.xml" value="0.2175" />
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/drawable/ic_settings.xml" value="0.2335" />
+        <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/drawable/ic_update_d.xml" value="0.2175" />
+        <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/drawable/ic_vn.xml" value="0.304" />
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/drawable/rounded_edittext.xml" value="0.1955" />
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/drawable/side_nav_bar.xml" value="0.1965" />
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/drawable/tab_indicator.xml" value="0.239" />
@@ -151,9 +168,11 @@
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/layout/fragment_category_in_come.xml" value="0.36666666666666664" />
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/layout/fragment_creats_money.xml" value="0.18" />
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/layout/fragment_currency.xml" value="0.25" />
+        <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/layout/fragment_currency_conversion.xml" value="0.25" />
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/layout/fragment_default_transaction.xml" value="0.20416666666666666" />
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/layout/fragment_detail_money.xml" value="0.36666666666666664" />
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/layout/fragment_dialog_account.xml" value="0.2078125" />
+        <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/layout/fragment_dialog_language.xml" value="0.225" />
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/layout/fragment_dialog_select_moth.xml" value="0.20416666666666666" />
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/layout/fragment_edit_account.xml" value="0.36666666666666664" />
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/layout/fragment_edit_category.xml" value="0.33" />
@@ -174,20 +193,24 @@
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/layout/fragment_on_boarding3.xml" value="0.18854166666666666" />
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/layout/fragment_reminders.xml" value="0.36666666666666664" />
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/layout/fragment_report.xml" value="0.36666666666666664" />
+        <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/layout/fragment_setting.xml" value="0.33" />
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/layout/fragment_signup.xml" value="0.2328125" />
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/layout/fragment_slideshow.xml" value="0.36666666666666664" />
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/layout/fragment_splash.xml" value="0.22192028985507245" />
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/layout/fragment_summary.xml" value="0.2346014492753623" />
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/layout/fragment_transaction_by_category.xml" value="0.2234375" />
+        <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/layout/fragment_utilities.xml" value="0.15677083333333333" />
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/layout/item_adapter_notification.xml" value="0.36666666666666664" />
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/layout/item_category.xml" value="0.36666666666666664" />
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/layout/item_category1.xml" value="0.36666666666666664" />
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/layout/item_category_icon.xml" value="0.20416666666666666" />
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/layout/item_color.xml" value="0.36666666666666664" />
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/layout/item_country.xml" value="0.5" />
+        <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/layout/item_country_conversion.xml" value="0.5" />
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/layout/item_icon.xml" value="0.20416666666666666" />
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/layout/item_icon_add_category.xml" value="0.1" />
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/layout/item_icon_category.xml" value="0.2" />
+        <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/layout/item_language.xml" value="0.33" />
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/layout/item_layout.xml" value="0.2838541666666667" />
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/layout/item_money_e_s.xml" value="0.36666666666666664" />
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/layout/item_money_expense.xml" value="0.36666666666666664" />
@@ -195,6 +218,7 @@
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/layout/item_month.xml" value="0.20416666666666666" />
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/layout/item_notification.xml" value="0.365625" />
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/layout/item_transaction.xml" value="0.36666666666666664" />
+        <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/layout/item_transaction_by_time.xml" value="0.36666666666666664" />
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/layout/item_transaction_dialog.xml" value="0.2078125" />
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/layout/item_week.xml" value="0.1" />
         <entry key="..\:/Ki_7/TTTN/QLTaiChinhCaNhan/app/src/main/res/layout/item_year.xml" value="0.20416666666666666" />

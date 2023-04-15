@@ -69,13 +69,15 @@ class CurrencyFragment : BaseFragment() {
 
         if (dataViewMode.checkInputScreenCurrency == 0) {
             binding.btnNavigation.isActivated = false
+            binding.textCurrencyConversion.visibility = View.VISIBLE
             binding.textTitleAccount.setText(R.string.menu_currency)
         } else if (dataViewMode.checkInputScreenCurrency == 1) {
             binding.btnNavigation.isActivated = true
+            binding.textCurrencyConversion.visibility = View.GONE
             binding.textTitleAccount.setText(R.string.text_sreach)
         }
-
-        adapterCountry = AdapterCountry(requireActivity(), arrayListOf())
+        val country = Country()
+        adapterCountry = AdapterCountry(requireActivity(), arrayListOf(),AdapterCountry.LayoutType.TYPE1,country,country,0F)
         binding.rcvCategory.adapter = adapterCountry
         binding.rcvCategory.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
@@ -182,6 +184,14 @@ class CurrencyFragment : BaseFragment() {
                 findNavController().popBackStack()
             }
         }
+
+        binding.textCurrencyConversion.setOnClickListener {
+            findNavController().navigate(R.id.action_nav_currency_to_currencyConversionFragment)
+        }
+
+        binding.textTitleAccount.setOnClickListener {
+            getExchangeRate(listCountry)
+        }
     }
 
     private fun updateExchangeRateByDay(){
@@ -201,8 +211,13 @@ class CurrencyFragment : BaseFragment() {
 
     private fun filterList(query: String, listCountry: List<Country>): ArrayList<Country> {
         val filteredList = arrayListOf<Country>()
+        val searchText = query.toLowerCase()
         for (i in listCountry) {
-            if (i.countryName!!.contains(query, ignoreCase = true)) {
+            if (i.countryName?.toLowerCase()?.contains(searchText) == true ||
+                i.currencyCode?.toLowerCase()?.contains(searchText) == true ||
+                i.currencyName?.toLowerCase()?.contains(searchText) == true ||
+                i.currencySymbol?.toLowerCase()?.contains(searchText) == true
+            ){
                 filteredList.add(i)
             }
         }
@@ -241,6 +256,9 @@ class CurrencyFragment : BaseFragment() {
                         }
                         Log.e("data", "Số lượng quốc gia đã được conver: ${listCountryNew.size}")
                         if (listCountryNew.size != 0) {
+                            if(listCountryNew[0].currencyCode == "AFN"){
+                                listCountryNew.removeAt(0)
+                            }
                             dataViewMode.addListCountry(listCountryNew)
                         }
                     }
@@ -330,9 +348,10 @@ class CurrencyFragment : BaseFragment() {
 
         val t1 = resources.getText(R.string.currency_exchange).toString()
         val t2 = resources.getText(R.string.currency_exchange1).toString()
+        val thanh = requireContext().resources.getString(R.string.wall)
         textMessage.text =
             "$t1 ${type1.currencyCode.toString()} (${type1.currencySymbol.toString()}) " +
-                    "thành ${type2.currencyCode.toString()} (${type2.currencySymbol.toString()}). $t2"
+                    "${thanh} ${type2.currencyCode.toString()} (${type2.currencySymbol.toString()}). $t2"
 
         textCo.setOnClickListener {
             // hàm đổi

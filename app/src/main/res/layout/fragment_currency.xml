@@ -101,13 +101,28 @@
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/text_currency_conversion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/button_delete_category"
+        android:gravity="center"
+        android:paddingVertical="12dp"
+        android:text="@string/currency_conversion"
+        android:textColor="@color/blu_mani"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/cl_action_bar_top" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:paddingHorizontal="20dp"
         android:paddingVertical="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cl_action_bar_top">
+        app:layout_constraintTop_toBottomOf="@id/text_currency_conversion">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rcv_category"
@@ -122,13 +137,14 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
         <TextView
-            android:visibility="gone"
-            android:text="@string/not_data"
-            android:textColor="@color/red"
             android:id="@+id/text_not_data"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@string/not_data"
+            android:textColor="@color/red"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
