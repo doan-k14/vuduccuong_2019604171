@@ -26,6 +26,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
+            android:drawableRight="@drawable/ic_arrow_drop_down_w"
             android:id="@+id/text_title_total"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

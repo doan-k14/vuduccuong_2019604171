@@ -30,7 +30,7 @@
             android:title="@string/menu_currency" />
         <item
             android:id="@+id/nav_utilities"
-            android:icon="@drawable/ic_account14"
+            android:icon="@drawable/ic_utilities"
             android:title="@string/utilities" />
         <item
             android:id="@+id/nav_setting"

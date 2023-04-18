@@ -87,33 +87,51 @@ class HomeFragment : BaseFragment() {
         var listTransactionWithDetails = listOf<TransactionWithDetails>()
         // lắng nghe list transaction lấy từ csdl
         dataViewMode.listTransactionWithDetailsByTypeLiveData.observe(requireActivity()) {
-            if(checkScreenHome){
+            if (checkScreenHome) {
 //                Log.e("view"," initData home: ${it.size}")
                 listTransactionWithDetails = listOf()
                 listTransactionWithDetails = it
                 if (it.isNotEmpty()) {
                     dataViewMode.getAllMoneyAccountsWithDetails()
-                }else{
+                } else {
                     listTransactionWithFullDetails = listOf()
-                    ChartUtils.pieChart(requireActivity(),listOf(),binding.barChart,currencySymbol)
+                    ChartUtils.pieChart(requireActivity(),
+                        listOf(),
+                        binding.barChart,
+                        currencySymbol)
                     adapterTransaction.updateData(listOf())
                 }
             }
         }
 
+        var country = Country()
+        dataViewMode.countryDefault.observe(requireActivity()) {
+            country = it
+        }
         var listMoneyAccountWithDetails = listOf<MoneyAccountWithDetails>()
         // lắng nghe list moneyAccount lấy từ csdl
+
         dataViewMode.moneyAccountsWithDetails.observe(requireActivity()) {
-            if(checkScreenHome){
+            if (checkScreenHome) {
                 listMoneyAccountWithDetails = listOf()
                 listMoneyAccountWithDetails = it
-                setTextTotalMoney(listMoneyAccountWithDetails)
+                val moneyAccount = dataViewMode.selectMoneyAccountFilterHome
 
-                if (listTransactionWithDetails.isNotEmpty() && listMoneyAccountWithDetails.isNotEmpty()) {
-                    // hợp nhất để tạo ra class transaction với đầy đủ các thông tin liên quan qua khóa ngoài
-                    mergeTransactionWithMoneyAccount(listTransactionWithDetails,
-                        listMoneyAccountWithDetails)
+                if (moneyAccount.moneyAccount != null) {
+                    mergeTransactionWithSelectMoneyAccount(listTransactionWithDetails,
+                        moneyAccount)
+                    binding.textTitleTotal.text = moneyAccount.moneyAccount.moneyAccountName
+                    binding.textTotalMoney.text =
+                        "${convertFloatToString((moneyAccount.moneyAccount.amountMoneyAccount!!) / (moneyAccount.country?.exchangeRate!!))} ${country.currencySymbol}"
+                } else {
+                    setTextTotalMoney(listMoneyAccountWithDetails, country)
+                    if (listTransactionWithDetails.isNotEmpty() && listMoneyAccountWithDetails.isNotEmpty()) {
+                        // hợp nhất để tạo ra class transaction với đầy đủ các thông tin liên quan qua khóa ngoài
+                        mergeTransactionWithMoneyAccount(listTransactionWithDetails,
+                            listMoneyAccountWithDetails)
+                    }
                 }
+
             }
         }
     }
@@ -152,23 +170,30 @@ class HomeFragment : BaseFragment() {
 
         binding.btnExportFile.setOnClickListener {
 
-            if(listTransactionWithFullDetails.isNotEmpty()){
-                if (ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    != PackageManager.PERMISSION_GRANTED) {
+            if (listTransactionWithFullDetails.isNotEmpty()) {
+                if (ContextCompat.checkSelfPermission(requireActivity(),
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED
+                ) {
                     ActivityCompat.requestPermissions(requireActivity(),
                         arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
                 } else {
                     createDialogExportFile(Gravity.CENTER)
 
                 }
-            }else{
-                Toast.makeText(requireActivity(), resources.getString(R.string.list_category_null),Toast.LENGTH_LONG).show()
+            } else {
+                Toast.makeText(requireActivity(),
+                    resources.getString(R.string.list_category_null),
+                    Toast.LENGTH_LONG).show()
             }
         }
 
+        binding.textTitleTotal.setOnClickListener {
+            dataViewMode.checkInputScreenMoneyAccount = 2
+            findNavController().navigate(R.id.action_nav_home_to_nav_accounts)
+        }
+
     }
-
-
 
 
     private fun createDataCategory() {
@@ -180,18 +205,25 @@ class HomeFragment : BaseFragment() {
             val today = Calendar.getInstance()
             today.timeInMillis = System.currentTimeMillis()
             val currentTime = Calendar.getInstance().time.time
-            dataViewMode.addNotificationInfo(NotificationInfo(0,resources.getString(R.string.remind),resources.getString(R.string.menu_daily),today.timeInMillis
-                ,currentTime,resources.getString(R.string.reminde_notes),false,1))
+            dataViewMode.addNotificationInfo(NotificationInfo(0,
+                resources.getString(R.string.remind),
+                resources.getString(R.string.menu_daily),
+                today.timeInMillis,
+                currentTime,
+                resources.getString(R.string.reminde_notes),
+                false,
+                1))
             sharedPref.edit().putBoolean("createDataCategory", false).apply()
         }
     }
 
-    private fun setTextTotalMoney(l:List<MoneyAccountWithDetails>) {
+    private fun setTextTotalMoney(l: List<MoneyAccountWithDetails>, country: Country) {
         var totalMoney = 0F
-        for(i in l){
+        for (i in l) {
             totalMoney += i.moneyAccount?.amountMoneyAccount!! / i.country?.exchangeRate!!
         }
-        binding.textTotalMoney.text = convertFloatToString(totalMoney) + currencySymbol
+        binding.textTotalMoney.text =
+            "${convertFloatToString(totalMoney)} ${country.currencySymbol}"
     }
 
     private fun createTabLayoutIOrE() {
@@ -255,7 +287,8 @@ class HomeFragment : BaseFragment() {
                 checkShowOrHideTextTime(true)
             }
             3 -> {
-                binding.textTimePieChart.text = "${convertTimeToDateMonth(startDate.timeInMillis)} - ${convertTimeToDate(today.timeInMillis)}"
+                binding.textTimePieChart.text =
+                    "${convertTimeToDateMonth(startDate.timeInMillis)} - ${convertTimeToDate(today.timeInMillis)}"
                 binding.tabLayoutChart.selectTab(binding.tabLayoutChart.getTabAt(3))
                 checkShowOrHideTextTime(false)
             }
@@ -274,7 +307,7 @@ class HomeFragment : BaseFragment() {
                             filterTransactionsByDay(timeDay,
                                 listTransactionWithFullDetails)
                         adapterTransaction.updateData(l)
-                        ChartUtils.pieChart(requireActivity(),l,binding.barChart,currencySymbol)
+                        ChartUtils.pieChart(requireActivity(), l, binding.barChart, currencySymbol)
 
                     }
                     1 -> {
@@ -282,7 +315,7 @@ class HomeFragment : BaseFragment() {
                         checkShowOrHideTextTime(false)
                         val l = filterTransactionsByMoth(timeMonth, listTransactionWithFullDetails)
                         adapterTransaction.updateData(l)
-                        ChartUtils.pieChart(requireActivity(),l,binding.barChart,currencySymbol)
+                        ChartUtils.pieChart(requireActivity(), l, binding.barChart, currencySymbol)
 
                     }
                     2 -> {
@@ -291,14 +324,19 @@ class HomeFragment : BaseFragment() {
                         val l = filterTransactionsByYear(dataViewMode.timeSelectYear.toString(),
                             listTransactionWithFullDetails)
                         adapterTransaction.updateData(l)
-                        ChartUtils.pieChart(requireActivity(),l,binding.barChart,currencySymbol)
+                        ChartUtils.pieChart(requireActivity(), l, binding.barChart, currencySymbol)
                     }
                     3 -> {
                         checkShowOrHideTextTime(false)
-                        binding.textTimePieChart.text = "${convertTimeToDateMonth(startDate.timeInMillis)} - ${convertTimeToDate(today.timeInMillis)}"
-                        val l =  filterTransactionsByPeriod(startDate.timeInMillis,today.timeInMillis,listTransactionWithFullDetails)
+                        binding.textTimePieChart.text =
+                            "${convertTimeToDateMonth(startDate.timeInMillis)} - ${
+                                convertTimeToDate(today.timeInMillis)
+                            }"
+                        val l = filterTransactionsByPeriod(startDate.timeInMillis,
+                            today.timeInMillis,
+                            listTransactionWithFullDetails)
                         adapterTransaction.updateData(l)
-                        ChartUtils.pieChart(requireActivity(),l,binding.barChart,currencySymbol)
+                        ChartUtils.pieChart(requireActivity(), l, binding.barChart, currencySymbol)
                     }
                 }
             }
@@ -376,22 +414,24 @@ class HomeFragment : BaseFragment() {
             0 -> {
                 val l = filterTransactionsByDay(timeDay, listTransactionWithDetails)
                 adapterTransaction.updateData(l)
-                ChartUtils.pieChart(requireActivity(),l,binding.barChart,currencySymbol)
+                ChartUtils.pieChart(requireActivity(), l, binding.barChart, currencySymbol)
             }
             1 -> {
                 val l = filterTransactionsByMoth(timeMonth, listTransactionWithFullDetails)
                 adapterTransaction.updateData(l)
-                ChartUtils.pieChart(requireActivity(),l,binding.barChart,currencySymbol)
+                ChartUtils.pieChart(requireActivity(), l, binding.barChart, currencySymbol)
             }
             2 -> {
                 val l = filterTransactionsByYear(timeYear, listTransactionWithFullDetails)
                 adapterTransaction.updateData(l)
-                ChartUtils.pieChart(requireActivity(),l,binding.barChart,currencySymbol)
+                ChartUtils.pieChart(requireActivity(), l, binding.barChart, currencySymbol)
             }
             3 -> {
-                val l =  filterTransactionsByPeriod(startDate.timeInMillis,today.timeInMillis,listTransactionWithFullDetails)
+                val l = filterTransactionsByPeriod(startDate.timeInMillis,
+                    today.timeInMillis,
+                    listTransactionWithFullDetails)
                 adapterTransaction.updateData(l)
-                ChartUtils.pieChart(requireActivity(),l,binding.barChart,currencySymbol)
+                ChartUtils.pieChart(requireActivity(), l, binding.barChart, currencySymbol)
             }
         }
     }
@@ -409,7 +449,7 @@ class HomeFragment : BaseFragment() {
             binding.textTimePieChart.text = timeDay
             val l = filterTransactionsByDay(timeDay, listTransactionWithFullDetails)
             adapterTransaction.updateData(l)
-            ChartUtils.pieChart(requireActivity(),l,binding.barChart,currencySymbol)
+            ChartUtils.pieChart(requireActivity(), l, binding.barChart, currencySymbol)
 
 
         }, today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH))
@@ -431,11 +471,10 @@ class HomeFragment : BaseFragment() {
                 val l = (filterTransactionsByMoth(dataViewMode.timeSelectMoth,
                     listTransactionWithFullDetails))
                 adapterTransaction.updateData(l)
-                ChartUtils.pieChart(requireActivity(),l,binding.barChart,currencySymbol)
+                ChartUtils.pieChart(requireActivity(), l, binding.barChart, currencySymbol)
             }
         }
     }
-
 
     // sự kiện tăng giảm năm
     private fun yearUpOrDownEvent() {
@@ -443,16 +482,18 @@ class HomeFragment : BaseFragment() {
             --dataViewMode.timeSelectYear
             binding.textYear.text = dataViewMode.timeSelectYear.toString()
 
-            val l = (filterTransactionsByYear(dataViewMode.timeSelectYear.toString(), listTransactionWithFullDetails))
+            val l = (filterTransactionsByYear(dataViewMode.timeSelectYear.toString(),
+                listTransactionWithFullDetails))
             adapterTransaction.updateData(l)
-            ChartUtils.pieChart(requireActivity(),l,binding.barChart,currencySymbol)
+            ChartUtils.pieChart(requireActivity(), l, binding.barChart, currencySymbol)
         }
         binding.imgRight.setOnClickListener {
             ++dataViewMode.timeSelectYear
             binding.textYear.text = dataViewMode.timeSelectYear.toString()
-            val l = (filterTransactionsByYear(dataViewMode.timeSelectYear.toString(), listTransactionWithFullDetails))
+            val l = (filterTransactionsByYear(dataViewMode.timeSelectYear.toString(),
+                listTransactionWithFullDetails))
             adapterTransaction.updateData(l)
-            ChartUtils.pieChart(requireActivity(),l,binding.barChart,currencySymbol)
+            ChartUtils.pieChart(requireActivity(), l, binding.barChart, currencySymbol)
         }
     }
 
@@ -479,9 +520,9 @@ class HomeFragment : BaseFragment() {
             val d1 = convertTimeToDateMonth(startDate)
             val d2 = convertTimeToDate(endDate)
             binding.textTimePieChart.text = "$d1 - $d2"
-            val l =  filterTransactionsByPeriod(startDate,endDate,listTransactionWithFullDetails)
+            val l = filterTransactionsByPeriod(startDate, endDate, listTransactionWithFullDetails)
             adapterTransaction.updateData(l)
-            ChartUtils.pieChart(requireActivity(),l,binding.barChart,currencySymbol)
+            ChartUtils.pieChart(requireActivity(), l, binding.barChart, currencySymbol)
         }
         picker.show(requireActivity().supportFragmentManager, picker.toString())
     }
@@ -507,12 +548,35 @@ class HomeFragment : BaseFragment() {
         listTransactionWithFullDetails = listOf()
         listTransactionWithFullDetails = transactionWithFullDetailsList
         filterTransactionByTime(listTransactionWithFullDetails)
+        Log.e("ttt", "mergeTransactionWithMoneyAccount")
+    }
+
+    private fun mergeTransactionWithSelectMoneyAccount(
+        listTransactionWithDetails: List<TransactionWithDetails>,
+        moneyAccountWithDetails: MoneyAccountWithDetails,
+    ) {
+
+        val transactionWithFullDetailsList = mutableListOf<TransactionWithFullDetails>()
+
+        for (transactionWithDetails in listTransactionWithDetails) {
+            if (transactionWithDetails.moneyAccount?.idMoneyAccount == moneyAccountWithDetails.moneyAccount!!.idMoneyAccount) {
+                val transactionWithFullDetails = TransactionWithFullDetails(
+                    transactionWithDetails = transactionWithDetails,
+                    moneyAccountWithDetails = moneyAccountWithDetails
+                )
+                transactionWithFullDetailsList.add(transactionWithFullDetails)
+            }
+        }
+        listTransactionWithFullDetails = listOf()
+        listTransactionWithFullDetails = transactionWithFullDetailsList
+        filterTransactionByTime(listTransactionWithFullDetails)
     }
 
     override fun onStop() {
         super.onStop()
         onCallbackLockedDrawers()
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         checkScreenHome = false
@@ -524,14 +588,20 @@ class HomeFragment : BaseFragment() {
     }
 
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray,
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == 1) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // Quyền được cấp, tiếp tục thực hiện các thao tác lưu file
 
             } else {
-                Toast.makeText(requireActivity(), getText(R.string.request_permission), Toast.LENGTH_LONG).show()
+                Toast.makeText(requireActivity(),
+                    getText(R.string.request_permission),
+                    Toast.LENGTH_LONG).show()
             }
         }
     }
@@ -567,21 +637,23 @@ class HomeFragment : BaseFragment() {
         radioGroup.setOnCheckedChangeListener { group, checkedId ->
             when (checkedId) {
                 R.id.rd_bt_excel -> {
-                    checkSelectRadioTypeFile =false
+                    checkSelectRadioTypeFile = false
                 }
                 R.id.rd_bt_csv -> {
-                    checkSelectRadioTypeFile =true
+                    checkSelectRadioTypeFile = true
                 }
             }
         }
 
         textExport.setOnClickListener {
             dialog.dismiss()
-            val listConvertXML = convertTransactionWithFullDetailsToConvertXML(listTransactionWithFullDetails,countryDefault)
-            if(!checkSelectRadioTypeFile){
+            val listConvertXML = convertTransactionWithFullDetailsToConvertXML(
+                listTransactionWithFullDetails,
+                countryDefault)
+            if (!checkSelectRadioTypeFile) {
                 val excelFilePath = exportToXlsx(listConvertXML)
                 shareFile(excelFilePath)
-            }else{
+            } else {
                 val excelFilePath = exportToCsv(listConvertXML)
                 shareFile(excelFilePath)
             }

@@ -28,7 +28,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 class MoneyAccountsFragment : BaseFragment() {
 
     lateinit var binding: FragmentAccountsBinding
-//    lateinit var aaChartModel: AAChartModel
+
+    //    lateinit var aaChartModel: AAChartModel
     lateinit var adapterMoneyAccount: AdapterMoneyAccount
     lateinit var dataViewMode: DataViewMode
     var countryDefault = Country()
@@ -46,13 +47,10 @@ class MoneyAccountsFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         dataViewMode = ViewModelProvider(requireActivity())[DataViewMode::class.java]
 
-        binding.btnNavigation.setOnClickListener {
-            onCallback()
-        }
-
         initView()
         initEvent()
     }
+
     override fun onStart() {
         super.onStart()
         onCallbackUnLockedDrawers()
@@ -67,6 +65,22 @@ class MoneyAccountsFragment : BaseFragment() {
         binding.rcvCategory.layoutManager =
             GridLayoutManager(requireContext(), 1, RecyclerView.VERTICAL, false)
 
+        if (dataViewMode.checkInputScreenMoneyAccount == 0) {
+            binding.llTotal.visibility = View.VISIBLE
+            binding.imgAddAccount.visibility = View.VISIBLE
+            binding.btnNavigation.setImageResource(R.drawable.ic_menu)
+            binding.textTitleAccount.text = resources.getString(R.string.acounts)
+        } else if(dataViewMode.checkInputScreenMoneyAccount == 1){
+            binding.llTotal.visibility = View.GONE
+            binding.imgAddAccount.visibility = View.GONE
+            binding.btnNavigation.setImageResource(R.drawable.ic_arrow_back)
+            binding.textTitleAccount.text = resources.getString(R.string.select_money_account)
+        }else{
+            binding.llTotal.visibility = View.VISIBLE
+            binding.imgAddAccount.visibility = View.GONE
+            binding.btnNavigation.setImageResource(R.drawable.ic_arrow_back)
+            binding.textTitleAccount.text = resources.getString(R.string.select_money_account)
+        }
 
         dataViewMode.getAllMoneyAccountsWithDetails()
 
@@ -85,15 +99,42 @@ class MoneyAccountsFragment : BaseFragment() {
     }
 
     private fun initEvent() {
+        binding.btnNavigation.setOnClickListener {
+            if (dataViewMode.checkInputScreenMoneyAccount == 0) {
+                onCallback()
+            } else {
+                findNavController().popBackStack()
+            }
+        }
+
         adapterMoneyAccount.setClickItemSelect {
-            dataViewMode.editOrAddMoneyAccount = it
-            findNavController().navigate(R.id.action_nav_accounts_to_editAccountFragment)
+            when (dataViewMode.checkInputScreenMoneyAccount) {
+                0 -> {
+                    dataViewMode.editOrAddMoneyAccount = it
+                    findNavController().navigate(R.id.action_nav_accounts_to_editAccountFragment)
+                }
+                1 -> {
+                    dataViewMode.selectMoneyAccountFilterExportFile = it
+                    findNavController().popBackStack()
+                }
+                else -> {
+                    dataViewMode.selectMoneyAccountFilterHome = it
+                    findNavController().popBackStack()
+                }
+            }
         }
 
         binding.imgAddAccount.setOnClickListener {
             dataViewMode.editOrAddMoneyAccount =
                 MoneyAccountWithDetails(MoneyAccount(), countryDefault, Account())
             findNavController().navigate(R.id.action_nav_accounts_to_editAccountFragment)
+        }
+
+        binding.llTotal.setOnClickListener {
+            if(dataViewMode.checkInputScreenMoneyAccount == 2){
+                dataViewMode.selectMoneyAccountFilterHome = MoneyAccountWithDetails()
+                findNavController().popBackStack()
+            }
         }
     }
 
@@ -127,6 +168,11 @@ class MoneyAccountsFragment : BaseFragment() {
     override fun onStop() {
         super.onStop()
         onCallbackLockedDrawers()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        dataViewMode.checkInputScreenMoneyAccount = 0
     }
 }
 

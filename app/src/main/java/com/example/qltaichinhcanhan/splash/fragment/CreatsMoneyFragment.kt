@@ -92,6 +92,12 @@ class CreatsMoneyFragment : Fragment() {
                     Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
+            if(country.idCountry == 0){
+                Toast.makeText(requireContext(),
+                    requireContext().getString(R.string.please_select_currency),
+                    Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
             try {
                 val moneyAccount = MoneyAccount(
                     0,

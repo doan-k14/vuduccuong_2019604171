@@ -42,7 +42,11 @@ class CurrencyConversionFragment : BaseFragment() {
         dataViewMode = ViewModelProvider(requireActivity())[DataViewMode::class.java]
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
-            findNavController().popBackStack(R.id.nav_home, false)
+            if(dataViewMode.checkInputScreenCurrencyConversion == 0){
+                findNavController().popBackStack(R.id.nav_home, false)
+            }else{
+                findNavController().popBackStack()
+            }
         }
         initView()
         initEvent()
@@ -122,7 +126,11 @@ class CurrencyConversionFragment : BaseFragment() {
 
     private fun initEvent() {
         binding.btnBack.setOnClickListener {
-            findNavController().popBackStack(R.id.nav_home, false)
+            if(dataViewMode.checkInputScreenCurrencyConversion == 0){
+                findNavController().popBackStack(R.id.nav_home, false)
+            }else{
+                findNavController().popBackStack()
+            }
         }
         binding.textTypeMoney.setOnClickListener {
             dataViewMode.checkInputScreenCurrency = 1
@@ -169,6 +177,7 @@ class CurrencyConversionFragment : BaseFragment() {
         super.onDestroy()
         dataViewMode.checkInputScreenCurrency = 0
         dataViewMode.country = Country()
+        dataViewMode.checkInputScreenCurrencyConversion = 0
     }
 
 }

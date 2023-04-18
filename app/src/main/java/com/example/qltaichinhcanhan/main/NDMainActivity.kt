@@ -40,6 +40,10 @@ class NDMainActivity : AppCompatActivity(), MyCallback {
         textNameAccount.text = resources.getText(R.string.login)
         imageAccount.setImageResource(R.drawable.ic_user_circle)
 
+        textNameAccount.setOnClickListener {
+            findNavController(R.id.nav_host_fragment_content_ndmain).navigate(R.id.profileFragment)
+            binding.drawerLayout.closeDrawer(GravityCompat.START)
+        }
 
     }
 
@@ -63,6 +67,7 @@ class NDMainActivity : AppCompatActivity(), MyCallback {
     override fun onCallbackUnLockedDrawers() {
         binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
     }
+
     override fun onDestroy() {
         super.onDestroy()
         val editor = PreferenceManager.getDefaultSharedPreferences(this).edit()

@@ -39,18 +39,6 @@ interface TransactionDao {
     fun getAllTransactionWithDetailsByDesc(): List<TransactionWithDetails>
 
     @Query("SELECT * FROM `transaction` " +
-            "INNER JOIN moneyAccount ON `transaction`.idAccount = moneyAccount.idMoneyAccount " +
-            "INNER JOIN account ON `transaction`.idAccount = account.idAccount " +
-            "INNER JOIN category ON `transaction`.idCategory = category.idCategory " +
-            "WHERE strftime('%Y', 'unixepoch', `transaction`.day / 1000, 'unixepoch') = :year " +
-            "GROUP BY strftime('%m', 'unixepoch', `transaction`.day / 1000, 'unixepoch') " +
-            "ORDER BY `transaction`.day DESC")
-    fun getTransactionsByMonthLiveData(year: String): LiveData<List<TransactionWithDetails>>
-
-    @Query("SELECT strftime('%m', `transaction`.day / 1000, 'unixepoch') AS month, * FROM `transaction` WHERE strftime('%Y', `transaction`.day / 1000, 'unixepoch') = :year ORDER BY day DESC")
-    fun getTransactionsByMonth(year: String): LiveData<List<Transaction>>
-
-    @Query("SELECT * FROM `transaction` " +
             "INNER JOIN moneyAccount ON `transaction`.idMoneyAccount = moneyAccount.idMoneyAccount " +
             "INNER JOIN account ON `transaction`.idAccount = account.idAccount " +
             "INNER JOIN category ON `transaction`.idCategory = category.idCategory " +
@@ -58,6 +46,13 @@ interface TransactionDao {
             "ORDER BY `transaction`.day DESC"
     )
     fun getAllTransactionWithDetailsByTypeCategory(type: String): List<TransactionWithDetails>
+    @Query("SELECT * FROM `transaction` " +
+            "INNER JOIN moneyAccount ON `transaction`.idMoneyAccount = moneyAccount.idMoneyAccount " +
+            "INNER JOIN account ON `transaction`.idAccount = account.idAccount " +
+            "INNER JOIN category ON `transaction`.idCategory = category.idCategory " +
+            "ORDER BY `transaction`.day DESC"
+    )
+    fun getAllTransactionWithDetails(): List<TransactionWithDetails>
 
 
 }

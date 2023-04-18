@@ -15,6 +15,7 @@ import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import com.example.qltaichinhcanhan.R
@@ -328,4 +329,9 @@ abstract class BaseFragment : Fragment() {
         return file
     }
 
+    fun showMessFutureUpdate(){
+        Toast.makeText(requireActivity(),
+            requireContext().resources.getString(R.string.future_update),
+            Toast.LENGTH_LONG).show()
+    }
 }

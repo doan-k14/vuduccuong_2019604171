@@ -14,6 +14,8 @@ import com.example.qltaichinhcanhan.main.rdb.datab.AppDatabase
 import com.example.qltaichinhcanhan.main.rdb.reposi.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.*
+import kotlin.collections.ArrayList
 
 class DataViewMode(application: Application) : AndroidViewModel(application) {
 
@@ -115,6 +117,7 @@ class DataViewMode(application: Application) : AndroidViewModel(application) {
 
     // country lấy cờ
     var country = Country()
+    var checkInputScreenCurrencyConversion = 0
 
 
 //    -------------------------------Money Account------------------------------
@@ -198,6 +201,8 @@ class DataViewMode(application: Application) : AndroidViewModel(application) {
 
 
     var editOrAddMoneyAccount = MoneyAccountWithDetails()
+    var selectMoneyAccountFilterHome = MoneyAccountWithDetails()
+    var selectMoneyAccountFilterExportFile = MoneyAccountWithDetails()
 
     fun resetDataMoneyAccount() {
         editOrAddMoneyAccount = MoneyAccountWithDetails()
@@ -205,6 +210,7 @@ class DataViewMode(application: Application) : AndroidViewModel(application) {
 
     val moneyAccountWithDetailsSelect = MutableLiveData<MoneyAccountWithDetails>()
 
+    var checkInputScreenMoneyAccount = 0
 
 //    ----------------------------------Category-------------
 
@@ -257,26 +263,6 @@ class DataViewMode(application: Application) : AndroidViewModel(application) {
             _listCategoryByTypeLiveData.postValue(result)
         }
     }
-
-
-    val transactionsByMonthLiveData = MutableLiveData<List<TransactionWithDetails>>()
-
-    fun getTransactionsByMonthLiveData(year: String) {
-        viewModelScope.launch {
-            val result = transactionRepository.getTransactionsByMonthLiveData(year)
-            transactionsByMonthLiveData.postValue(result.value)
-        }
-    }
-
-    val transactionsByMonthLiveData1 = MutableLiveData<List<Transaction>>()
-
-    fun getTransactionsByMonthLiveData1(year: String) {
-        viewModelScope.launch {
-            val result = transactionRepository.getTransactionsByMonth(year)
-            transactionsByMonthLiveData1.postValue(result.value)
-        }
-    }
-
 
     var checkTypeTabLayoutCategory = false
     var editOrAddCategory = Category()
@@ -342,7 +328,16 @@ class DataViewMode(application: Application) : AndroidViewModel(application) {
             _listTransactionLiveData.postValue(result)
         }
     }
+    private val _listTransactionLiveAllData = MutableLiveData<List<TransactionWithDetails>>()
+    val listTransactionWithDetailsLiveAllData: LiveData<List<TransactionWithDetails>>
+        get() = _listTransactionLiveAllData
 
+    fun getAllTransactionWithDetails() {
+        viewModelScope.launch {
+            val result = transactionRepository.getAllTransactionWithDetails()
+            _listTransactionLiveAllData.postValue(result)
+        }
+    }
 
     var checkInputScreenAddTransaction = 0
 
@@ -403,6 +398,23 @@ class DataViewMode(application: Application) : AndroidViewModel(application) {
 
 
     var languageR = LanguageR()
+
+
+    // -------------------- export file
+    var selectTimeExportFileFragment = 1
+
+    val today = Calendar.getInstance()
+    val year = today.get(Calendar.YEAR)
+    val month = today.get(Calendar.MONTH) + 1
+
+    var dataSelectTimeExportFileFragment = "$month/$year"
+    fun setDateMontDefault(){
+        dataSelectTimeExportFileFragment = "$month/$year"
+    }
+
+
+    var checkInputScreenInstallmentDepositFragment = 0
+
 
     // ---------------------------------- NotificationInfo----------------------
 

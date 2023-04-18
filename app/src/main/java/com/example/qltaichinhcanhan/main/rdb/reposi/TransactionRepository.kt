@@ -29,17 +29,12 @@ class TransactionRepository(private val transactionDao: TransactionDao) {
 
     val allTransactionWithDetails1: List<TransactionWithDetails> = transactionDao.getAllTransactionWithDetailsByDesc()
 
-    fun getTransactionsByMonthLiveData(year: String): LiveData<List<TransactionWithDetails>> {
-        return transactionDao.getTransactionsByMonthLiveData(year)
-    }
-
-    fun getTransactionsByMonth(year: String): LiveData<List<Transaction>> {
-        return transactionDao.getTransactionsByMonth(year)
-    }
-
     fun getAllTransactionWithDetailsByTypeCategory(type: String): List<TransactionWithDetails> {
         return transactionDao.getAllTransactionWithDetailsByTypeCategory(type)
     }
 
+    fun getAllTransactionWithDetails(): List<TransactionWithDetails> {
+        return transactionDao.getAllTransactionWithDetails()
+    }
 
 }

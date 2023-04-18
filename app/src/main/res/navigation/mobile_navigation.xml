@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_nav_home_to_transactionByCategoryFragment"
             app:destination="@id/transactionByCategoryFragment" />
+        <action
+            android:id="@+id/action_nav_home_to_nav_accounts"
+            app:destination="@id/nav_accounts" />
     </fragment>
 
     <fragment
@@ -142,7 +145,17 @@
         android:id="@+id/nav_utilities"
         android:name="com.example.qltaichinhcanhan.main.ui.utilities.UtilitiesFragment"
         android:label="fragment_utilities"
-        tools:layout="@layout/fragment_utilities" />
+        tools:layout="@layout/fragment_utilities" >
+        <action
+            android:id="@+id/action_nav_utilities_to_currencyConversionFragment"
+            app:destination="@id/currencyConversionFragment" />
+        <action
+            android:id="@+id/action_nav_utilities_to_exportFileFragment"
+            app:destination="@id/exportFileFragment" />
+        <action
+            android:id="@+id/action_nav_utilities_to_installmentDepositFragment"
+            app:destination="@id/installmentDepositFragment" />
+    </fragment>
     <fragment
         android:id="@+id/nav_setting"
         android:name="com.example.qltaichinhcanhan.main.ui.setting.SettingFragment"
@@ -158,5 +171,31 @@
         android:name="com.example.qltaichinhcanhan.main.ui.setting.LanguageFragment"
         android:label="fragment_language"
         tools:layout="@layout/fragment_language" />
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.qltaichinhcanhan.main.ui.profile.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/exportFileFragment"
+        android:name="com.example.qltaichinhcanhan.main.ui.utilities.ExportFileFragment"
+        android:label="fragment_export_file"
+        tools:layout="@layout/fragment_export_file" >
+        <action
+            android:id="@+id/action_exportFileFragment_to_nav_accounts"
+            app:destination="@id/nav_accounts" />
+        <action
+            android:id="@+id/action_exportFileFragment_to_timeExportFileFragment"
+            app:destination="@id/timeExportFileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/timeExportFileFragment"
+        android:name="com.example.qltaichinhcanhan.main.ui.utilities.TimeExportFileFragment"
+        android:label="fragment_time_export_file"
+        tools:layout="@layout/fragment_time_export_file" />
+    <fragment
+        android:id="@+id/installmentDepositFragment"
+        android:name="com.example.qltaichinhcanhan.main.ui.utilities.InstallmentDepositFragment"
+        android:label="InstallmentDepositFragment" />
 
 </navigation>
