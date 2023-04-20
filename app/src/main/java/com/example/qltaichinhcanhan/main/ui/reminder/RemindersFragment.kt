@@ -1,11 +1,19 @@
 package com.example.qltaichinhcanhan.main.ui.reminder
 
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavDeepLinkBuilder
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.qltaichinhcanhan.R
@@ -44,10 +52,12 @@ class RemindersFragment : BaseFragment() {
         }
         initView()
     }
+
     override fun onStart() {
         super.onStart()
         onCallbackUnLockedDrawers()
     }
+
     private fun initView() {
 
         adapterNotification = AdapterNotification(requireActivity(), listOf())
@@ -66,9 +76,16 @@ class RemindersFragment : BaseFragment() {
         }
         adapterNotification.setClickItemSelectSw {
             dataViewMode.updateNotificationInfo(it)
+            val notificationHandler = NotificationHandler(requireActivity())
+            if (it.isNotificationSelected!!) {
+                notificationHandler.scheduleNotification(it)
+            } else {
+                notificationHandler.cancelScheduledNotification(it.idNotification)
+            }
         }
 
     }
+
     override fun onStop() {
         super.onStop()
         onCallbackLockedDrawers()

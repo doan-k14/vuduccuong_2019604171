@@ -40,6 +40,13 @@ class DataViewMode(application: Application) : AndroidViewModel(application) {
             accountRepository.update(account)
         }
     }
+    fun updateListAccount(list: List<Account>) {
+        viewModelScope.launch(Dispatchers.IO) {
+            for (i in list) {
+                accountRepository.update(i)
+            }
+        }
+    }
 
     fun deleteAccount(account: Account) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -47,12 +54,36 @@ class DataViewMode(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    val accountLiveData = MutableLiveData<Account>()
-    fun getAccountById(it: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
-            accountLiveData.postValue(accountRepository.getAccountById(it).value)
+    private val _accountDefault = MutableLiveData<Account>()
+    val accountDefault: LiveData<Account>
+        get() = _accountDefault
+
+    fun getAccountByDefault() {
+        viewModelScope.launch {
+            val result = accountRepository.getAccountBySelect()
+            _accountDefault.postValue(result)
         }
     }
+
+
+    val accountByEmailLiveData = MutableLiveData<Account>()
+    fun getAccountByEMail(email: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            accountByEmailLiveData.postValue(accountRepository.getAccountByEmail(email).value)
+        }
+    }
+    var checkGetAccountDefault = 0
+    var createAccountDefault = Account()
+
+
+    var createAccount = Account()
+    var checkInputScreenCreateMoney = 0
+
+    var listAccount = listOf<Account>()
+
+
+    var checkInputScreenLogin = 0
+    var checkInputScreenSigup = 0
 
     //    --------------------------Country ---------------------------
     private var countryDao = db.countryDao()
@@ -328,6 +359,7 @@ class DataViewMode(application: Application) : AndroidViewModel(application) {
             _listTransactionLiveData.postValue(result)
         }
     }
+
     private val _listTransactionLiveAllData = MutableLiveData<List<TransactionWithDetails>>()
     val listTransactionWithDetailsLiveAllData: LiveData<List<TransactionWithDetails>>
         get() = _listTransactionLiveAllData
@@ -386,8 +418,6 @@ class DataViewMode(application: Application) : AndroidViewModel(application) {
     var checkEdtTransaction = false
 
 
-
-
     // check sliderSow
 
     var selectTabLayoutSlidesShow = 0
@@ -408,7 +438,7 @@ class DataViewMode(application: Application) : AndroidViewModel(application) {
     val month = today.get(Calendar.MONTH) + 1
 
     var dataSelectTimeExportFileFragment = "$month/$year"
-    fun setDateMontDefault(){
+    fun setDateMontDefault() {
         dataSelectTimeExportFileFragment = "$month/$year"
     }
 

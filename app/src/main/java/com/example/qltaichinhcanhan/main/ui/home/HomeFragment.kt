@@ -26,6 +26,7 @@ import com.example.qltaichinhcanhan.main.base.BaseFragment
 import com.example.qltaichinhcanhan.main.library.ChartUtils
 import com.example.qltaichinhcanhan.main.model.m.DefaultData
 import com.example.qltaichinhcanhan.main.model.m_convert.TransactionWithFullDetails
+import com.example.qltaichinhcanhan.main.model.m_r.Account
 import com.example.qltaichinhcanhan.main.model.m_r.CategoryType
 import com.example.qltaichinhcanhan.main.model.m_r.Country
 import com.example.qltaichinhcanhan.main.model.m_r.NotificationInfo
@@ -78,6 +79,7 @@ class HomeFragment : BaseFragment() {
     }
 
     private fun initData() {
+        getAccountLogin()
         // khởi tạo các category mặc định ban đầu
         createDataCategory()
 
@@ -584,6 +586,7 @@ class HomeFragment : BaseFragment() {
 
     override fun onDestroy() {
         dataViewMode.resetCheckTypeTabLayoutHomeToAddTransaction()
+        dataViewMode.checkGetAccountDefault = 0
         super.onDestroy()
     }
 
@@ -660,6 +663,26 @@ class HomeFragment : BaseFragment() {
         }
         textCancel.setOnClickListener {
             dialog.dismiss()
+        }
+    }
+
+    private fun getAccountLogin(){
+        if(dataViewMode.checkGetAccountDefault == 0){
+            dataViewMode.getAccountByDefault()
+            dataViewMode.accountDefault.observe(requireActivity()){
+                dataViewMode.createAccountDefault = Account()
+                if(it != null){
+                    dataViewMode.createAccountDefault = it
+                }else{
+                    dataViewMode.createAccountDefault = Account()
+                }
+                onCallbackAccount(dataViewMode.createAccountDefault)
+                dataViewMode.readAllDataLiveAccount.observe(requireActivity()) {
+                    dataViewMode.listAccount = it
+                }
+                Log.e("ttt","${it.toString()}")
+                dataViewMode.checkGetAccountDefault = 1
+            }
         }
     }
 }

@@ -10,6 +10,7 @@ data class Account(
     @SerializedName("idAccount")
     val idAccount: Int = 0,
     var accountName: String? = null,
+    var emailName: String? = null,
     var password: String? = null,
     var urlImage: String? = null,
     var selectAccount: Boolean? = null,

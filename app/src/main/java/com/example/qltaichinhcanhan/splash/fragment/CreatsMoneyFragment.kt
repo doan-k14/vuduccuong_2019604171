@@ -6,11 +6,13 @@ import android.content.SharedPreferences
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
+import android.os.Handler
 import android.text.Html
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -23,6 +25,7 @@ import com.example.qltaichinhcanhan.main.library.MoneyTextWatcher
 import com.example.qltaichinhcanhan.R
 import com.example.qltaichinhcanhan.databinding.FragmentCreatsMoneyBinding
 import com.example.qltaichinhcanhan.main.NDMainActivity
+import com.example.qltaichinhcanhan.main.model.m_r.Account
 import com.example.qltaichinhcanhan.main.model.m_r.Country
 import com.example.qltaichinhcanhan.main.model.m_r.MoneyAccount
 import com.example.qltaichinhcanhan.main.rdb.vm_data.DataViewMode
@@ -43,10 +46,11 @@ class CreatsMoneyFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         dataViewMode = ViewModelProvider(requireActivity())[DataViewMode::class.java]
-
-        val t = requireContext().resources.getString(R.string.personal_financial_management_application)
+        val t =
+            requireContext().resources.getString(R.string.personal_financial_management_application)
         val welcomeTo = requireContext().resources.getString(R.string.welcome_to)
-        val startManaging = requireContext().resources.getString(R.string.start_managing_your_money_by_entering_the_amount_you_have)
+        val startManaging =
+            requireContext().resources.getString(R.string.start_managing_your_money_by_entering_the_amount_you_have)
         val textMessage = "$welcomeTo $t $startManaging"
         val spannableString = SpannableString(textMessage)
         spannableString.setSpan(
@@ -92,14 +96,16 @@ class CreatsMoneyFragment : Fragment() {
                     Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-            if(country.idCountry == 0){
+            if (country.idCountry == 0) {
                 Toast.makeText(requireContext(),
                     requireContext().getString(R.string.please_select_currency),
                     Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
             try {
-                val moneyAccount = MoneyAccount(
+                binding.pressedLoading.visibility = View.VISIBLE
+                checkAccount()
+                var moneyAccount = MoneyAccount(
                     0,
                     requireContext().getString(R.string.main_account),
                     temp.toFloat(),
@@ -107,10 +113,10 @@ class CreatsMoneyFragment : Fragment() {
                     1,
                     2,
                     country.idCountry,
-                    1
+                    dataViewMode.createAccount.idAccount
                 )
-                dataViewMode.addMoneyAccount(moneyAccount)
 
+                dataViewMode.addMoneyAccount(moneyAccount)
                 country.selectCountry = true
                 dataViewMode.updateCountry(country)
 
@@ -120,16 +126,43 @@ class CreatsMoneyFragment : Fragment() {
                 val editor = sharedPreferences.edit()
                 editor.putBoolean("ck", true)
                 editor.commit()
+                updateAccountDefault(dataViewMode.createAccount.emailName!!,
+                    dataViewMode.listAccount)
 
-                val intent = Intent(requireActivity(), NDMainActivity::class.java)
-                startActivity(intent)
-                requireActivity().finish()
+                Handler().postDelayed({
+                    binding.pressedLoading.visibility = View.GONE
+                    val intent = Intent(requireActivity(), NDMainActivity::class.java)
+                    startActivity(intent)
+                    requireActivity().finish()
+                }, 1500)
+
             } catch (e: NumberFormatException) {
                 Toast.makeText(context,
                     requireContext().getString(R.string.please_enter_data),
                     Toast.LENGTH_SHORT).show()
             }
         }
+
+
+    }
+
+    private fun checkAccount() {
+        dataViewMode.readAllDataLiveAccount.observe(requireActivity()) {
+            dataViewMode.listAccount = it
+        }
+        val check = dataViewMode.checkInputScreenCreateMoney
+        if (check == 0) {
+            dataViewMode.createAccount = dataViewMode.listAccount[0]
+        } else if (check == 2) {
+            dataViewMode.createAccount = dataViewMode.listAccount.last()
+        }
+    }
+
+    fun updateAccountDefault(name: String, listAccount: List<Account>) {
+        for (i in listAccount) {
+            i.selectAccount = i.emailName == name
+        }
+        dataViewMode.updateListAccount(listAccount)
     }
 
 }

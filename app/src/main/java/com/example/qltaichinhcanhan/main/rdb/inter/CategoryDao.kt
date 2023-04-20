@@ -23,7 +23,6 @@ interface CategoryDao {
     @Query("SELECT * FROM category ORDER BY idCategory DESC ")
     fun getAllCategories(): List<Category>
 
-
     @Query("SELECT * FROM category WHERE idCategory=:categoryId")
     fun getCategoryById(categoryId: Int): LiveData<Category>
 

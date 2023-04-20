@@ -22,7 +22,10 @@ class AccountRepository(private val accountDao: AccountDao) {
         accountDao.update(account)
     }
 
-    fun getAccountById(accountId: Int): LiveData<Account> {
-        return accountDao.getAccountById(accountId)
+    fun getAccountBySelect(): Account {
+        return accountDao.getAccountBySelect()
+    }
+    fun getAccountByEmail(email: String): LiveData<Account> {
+        return accountDao.getAccountByEmail(email)
     }
 }

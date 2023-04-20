@@ -6,13 +6,12 @@ import android.text.TextUtils
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.example.qltaichinhcanhan.R
 import com.example.qltaichinhcanhan.databinding.ActivityOnBoardingScreenBinding
 import com.example.qltaichinhcanhan.main.inf.MyCallback
-import com.example.qltaichinhcanhan.main.model.Icon
+import com.example.qltaichinhcanhan.main.model.m_r.Account
 import java.util.*
 
 class OnBoardingScreenActivity : AppCompatActivity(), MyCallback {
@@ -44,6 +43,12 @@ class OnBoardingScreenActivity : AppCompatActivity(), MyCallback {
 
     override fun onCallbackUnLockedDrawers() {
     }
+
+    override fun onCallbackAccount(account: Account) {
+
+    }
+
+
     fun getCodeLanguage() {
         val preferencesL = PreferenceManager.getDefaultSharedPreferences(this)
         var localeStringL = preferencesL.getBoolean("updated_language", false)

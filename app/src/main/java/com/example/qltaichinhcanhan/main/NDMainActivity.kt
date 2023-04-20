@@ -5,7 +5,6 @@ import android.preference.PreferenceManager
 import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.appcompat.app.AppCompatActivity
@@ -14,14 +13,17 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.example.qltaichinhcanhan.R
 import com.example.qltaichinhcanhan.databinding.ActivityNdmainBinding
-import com.example.qltaichinhcanhan.databinding.NavHeaderNdmainBinding
 import com.example.qltaichinhcanhan.main.inf.MyCallback
-import com.example.qltaichinhcanhan.main.model.Icon
+import com.example.qltaichinhcanhan.main.model.m_r.Account
+import com.example.qltaichinhcanhan.main.model.m_r.NotificationInfo
+import com.example.qltaichinhcanhan.main.ui.reminder.NotificationHandler
 
 class NDMainActivity : AppCompatActivity(), MyCallback {
 
     private lateinit var binding: ActivityNdmainBinding
-
+    private lateinit var textNameAccount: TextView
+    private lateinit var imageAccount: ImageView
+    private  var account = Account()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -35,18 +37,35 @@ class NDMainActivity : AppCompatActivity(), MyCallback {
         binding.navView.setupWithNavController(navController)
 
         val headerView = binding.navView.getHeaderView(0)
-        val textNameAccount = headerView.findViewById<TextView>(R.id.text_name_account)
-        val imageAccount = headerView.findViewById<ImageView>(R.id.image_account)
+        textNameAccount = headerView.findViewById<TextView>(R.id.text_name_account)
+        imageAccount = headerView.findViewById<ImageView>(R.id.image_account)
         textNameAccount.text = resources.getText(R.string.login)
         imageAccount.setImageResource(R.drawable.ic_user_circle)
 
         textNameAccount.setOnClickListener {
-            findNavController(R.id.nav_host_fragment_content_ndmain).navigate(R.id.profileFragment)
-            binding.drawerLayout.closeDrawer(GravityCompat.START)
+            if(account.idAccount <=1){
+                navController.navigate(R.id.registerFragment)
+                binding.drawerLayout.closeDrawer(GravityCompat.START)
+            }else{
+                navController.navigate(R.id.profileFragment)
+                binding.drawerLayout.closeDrawer(GravityCompat.START)
+            }
+
+
+//            val notificationInfo = NotificationInfo(
+//                idNotification = 1,
+//                nameNotification = "Thông báo 1 lần",
+//                notificationFrequency = "Once",
+//                notificationReminderStartTime = System.currentTimeMillis(),
+//                notificationTime = System.currentTimeMillis() + 5000, // Thời điểm hiển thị thông báo: 5 giây sau thời điểm hiện tại
+//                notificationNote = "Đây là thông báo 1 lần"
+//            )
+//            val notificationHandler = NotificationHandler(this)
+//            notificationHandler.scheduleNotification(notificationInfo)
+
         }
 
     }
-
 
     fun setColorStatusbar() {
         val window = this.window
@@ -66,6 +85,15 @@ class NDMainActivity : AppCompatActivity(), MyCallback {
 
     override fun onCallbackUnLockedDrawers() {
         binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+    }
+
+    override fun onCallbackAccount(accountNew: Account) {
+        account = accountNew
+        if (accountNew.idAccount <=1) {
+            textNameAccount.text = resources.getText(R.string.login)
+        } else {
+            textNameAccount.text = accountNew.accountName
+        }
     }
 
     override fun onDestroy() {

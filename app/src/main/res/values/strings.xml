@@ -222,5 +222,10 @@
     <string name="text_amount_received">Số tiền nhận được</string>
     <string name="text_deposits">Số tiền cần gửi</string>
     <string name="text_amount_end">Số tiền muốn nhận cuối kỳ</string>
+    <string name="text_sign_up_to_save_your_info">Đăng ký để lưu thông tin của bạn</string>
+    <string name="error_first_name">Họ không được bỏ trống</string>
+    <string name="error_last_name">Tên không được bỏ trống</string>
+    <string name="mess_exit">Bạn có muốn rời khởi hồ sơ của mình?</string>
+    <string name="mess_confrim_deletedata">Xóa dữ liệu ứng dụng hiện tại</string>
 
 </resources>

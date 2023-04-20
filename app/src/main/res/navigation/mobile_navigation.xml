@@ -19,6 +19,12 @@
         <action
             android:id="@+id/action_nav_home_to_nav_accounts"
             app:destination="@id/nav_accounts" />
+        <action
+            android:id="@+id/action_nav_home_to_profileFragment"
+            app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_nav_home_to_registerFragment"
+            app:destination="@id/registerFragment" />
     </fragment>
 
     <fragment
@@ -197,5 +203,27 @@
         android:id="@+id/installmentDepositFragment"
         android:name="com.example.qltaichinhcanhan.main.ui.utilities.InstallmentDepositFragment"
         android:label="InstallmentDepositFragment" />
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="com.example.qltaichinhcanhan.main.ui.profile.RegisterFragment"
+        android:label="fragment_register"
+        tools:layout="@layout/fragment_register" >
+        <action
+            android:id="@+id/action_registerFragment_to_loginFragment2"
+            app:destination="@id/loginFragment2" />
+        <action
+            android:id="@+id/action_registerFragment_to_signUpFragment2"
+            app:destination="@id/signUpFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/loginFragment2"
+        android:name="com.example.qltaichinhcanhan.splash.fragment.login.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" />
+    <fragment
+        android:id="@+id/signUpFragment2"
+        android:name="com.example.qltaichinhcanhan.splash.fragment.login.SignUpFragment"
+        android:label="fragment_signup"
+        tools:layout="@layout/fragment_signup" />
 
 </navigation>

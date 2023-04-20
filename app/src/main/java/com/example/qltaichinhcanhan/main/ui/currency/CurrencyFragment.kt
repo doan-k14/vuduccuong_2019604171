@@ -91,7 +91,7 @@ class CurrencyFragment : BaseFragment() {
                 binding.rcvCategory.layoutManager?.scrollToPosition(position)
             }
         }
-        createDefaultAccount()
+//        createDefaultAccount()
 
         val sharedPreferences: SharedPreferences =
             requireActivity().getSharedPreferences("listCountry", Context.MODE_PRIVATE)
@@ -315,7 +315,7 @@ class CurrencyFragment : BaseFragment() {
         val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
         val isFirstTime = sharedPref.getBoolean("createDefaultAccount", true)
         if (isFirstTime) {
-            dataViewMode.addAccount(Account(0, "Default account", "00000", "null", true))
+            dataViewMode.addAccount(Account(0,"Default account" ,"Default account", "00000", "null", false))
             sharedPref.edit().putBoolean("createDefaultAccount", false).apply()
         }
     }

@@ -22,6 +22,9 @@ interface AccountDao {
     @Query("SELECT * FROM account")
     fun getAllAccounts(): List<Account>
 
-    @Query("SELECT * FROM account WHERE idAccount=:accountId")
-    fun getAccountById(accountId: Int): LiveData<Account>
+    @Query("SELECT * FROM account WHERE selectAccount = 1")
+    fun getAccountBySelect(): Account
+
+    @Query("SELECT * FROM account WHERE accountName=:email")
+    fun getAccountByEmail(email: String): LiveData<Account>
 }

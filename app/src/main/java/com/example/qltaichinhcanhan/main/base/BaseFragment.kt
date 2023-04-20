@@ -1,32 +1,24 @@
 package com.example.qltaichinhcanhan.main.base
 
-import android.app.Dialog
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.icu.text.SimpleDateFormat
 import android.os.Build
 import android.os.Environment
 import android.util.Log
-import android.view.Gravity
-import android.view.Window
-import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
-import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import com.example.qltaichinhcanhan.R
 import com.example.qltaichinhcanhan.main.inf.MyCallback
-import com.example.qltaichinhcanhan.main.model.Icon
 import com.example.qltaichinhcanhan.main.model.m.ConvertXML
 import com.example.qltaichinhcanhan.main.model.m.DefaultData
 import com.example.qltaichinhcanhan.main.model.m_convert.FilterTransactions
 import com.example.qltaichinhcanhan.main.model.m_convert.TransactionWithFullDetails
+import com.example.qltaichinhcanhan.main.model.m_r.Account
 import com.example.qltaichinhcanhan.main.model.m_r.Country
-import com.example.qltaichinhcanhan.main.model.query_model.TransactionWithDetails
 import com.opencsv.CSVWriter
 import jxl.Workbook
 import jxl.write.Label
@@ -50,7 +42,9 @@ abstract class BaseFragment : Fragment() {
     open fun onCallbackUnLockedDrawers() {
         myCallback?.onCallbackUnLockedDrawers()
     }
-
+    open fun onCallbackAccount(account: Account) {
+        myCallback?.onCallbackAccount(account)
+    }
     override fun onAttach(context: Context) {
         super.onAttach(context)
         try {
