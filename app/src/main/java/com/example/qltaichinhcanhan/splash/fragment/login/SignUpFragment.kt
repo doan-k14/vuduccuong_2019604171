@@ -1,7 +1,8 @@
 package com.example.qltaichinhcanhan.splash.fragment.login
 
-import android.content.Intent
 import android.os.Bundle
+import android.text.InputType
+import android.text.method.PasswordTransformationMethod
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -14,11 +15,7 @@ import com.example.qltaichinhcanhan.R
 import com.example.qltaichinhcanhan.databinding.FragmentSignupBinding
 import com.example.qltaichinhcanhan.main.model.m_r.Account
 import com.example.qltaichinhcanhan.main.rdb.vm_data.DataViewMode
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 
@@ -50,7 +47,7 @@ class SignUpFragment : Fragment() {
 
 
     private fun initView() {
-        val check = dataViewMode.checkInputScreenSigup
+        val check = dataViewMode.checkInputScreenSignUp
         if (check == 0) {
             binding.clActionBarTop.visibility = View.GONE
             binding.llHaveHad.visibility = View.VISIBLE
@@ -75,6 +72,23 @@ class SignUpFragment : Fragment() {
         }
         binding.txtLoginNow.setOnClickListener {
             findNavController().navigate(R.id.action_signUpFragment_to_loginFragment)
+        }
+
+        binding.edtPass.inputType =
+            InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+
+        val transformationMethod = PasswordTransformationMethod()
+
+        binding.edtPass.transformationMethod = transformationMethod
+        binding.imgEyePass.setOnClickListener {
+            if (binding.edtPass.transformationMethod == transformationMethod) {
+                binding.edtPass.transformationMethod = null
+                binding.imgEyePass.isActivated = false
+
+            } else {
+                binding.edtPass.transformationMethod = transformationMethod
+                binding.imgEyePass.isActivated = true
+            }
         }
 
         binding.btnSignUp.setOnClickListener {
@@ -132,15 +146,15 @@ class SignUpFragment : Fragment() {
                 if (task.isSuccessful) {
                     val name = "$firstName $lastName"
                     val account = Account(0, name, email, pass, "null", false)
-                    dataViewMode.checkInputScreenCreateMoney = 2
-                    if (dataViewMode.checkInputScreenSigup == 0) {
+                    if (dataViewMode.checkInputScreenSignUp == 0) {
                         dataViewMode.addAccount(account)
                         binding.pressedLoading.visibility = View.GONE
+                        dataViewMode.checkInputScreenCreateMoney = 1
                         findNavController().navigate(R.id.action_signUpFragment_to_creatsMoneyFragment)
                     } else {
                         account.selectAccount = true
                         dataViewMode.addAccount(account)
-                        dataViewMode.checkGetAccountDefault = 0
+                        dataViewMode.checkGetAccountLoginHome = 0
                         findNavController().popBackStack(R.id.nav_home, false)
                     }
                 } else {
@@ -155,7 +169,7 @@ class SignUpFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         resertView()
-        dataViewMode.checkInputScreenSigup = 0
+        dataViewMode.checkInputScreenSignUp = 0
     }
 
     fun resertView() {

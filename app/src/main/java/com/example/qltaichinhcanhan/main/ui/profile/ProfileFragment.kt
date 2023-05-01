@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.view.Gravity
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,6 +18,7 @@ import com.example.qltaichinhcanhan.main.base.BaseFragment
 import com.example.qltaichinhcanhan.main.library.CustomDialog
 import com.example.qltaichinhcanhan.main.model.m_r.Account
 import com.example.qltaichinhcanhan.main.rdb.vm_data.DataViewMode
+import com.example.qltaichinhcanhan.splash.OnBoardingScreenActivity
 
 
 class ProfileFragment : BaseFragment() {
@@ -45,7 +45,7 @@ class ProfileFragment : BaseFragment() {
     }
 
     private fun initView() {
-        val accountDefault = dataViewMode.createAccountDefault
+        val accountDefault = dataViewMode.accountLoginHome
         if (accountDefault.idAccount != 0) {
             binding.textNameAccount.text = accountDefault.accountName
             binding.textNameEmail.text = accountDefault.emailName
@@ -65,8 +65,9 @@ class ProfileFragment : BaseFragment() {
                 resources.getString(R.string.text_ok),
                 {
                     customDialog.dismiss()
-                    var account = dataViewMode.createAccountDefault
+                    var account = dataViewMode.accountLoginHome
                     account.selectAccount = false
+                    dataViewMode.updateAccount(account)
                     createDialogConfirmDeleteData(account)
                 },
                 resources.getString(R.string.text_no),
@@ -86,10 +87,10 @@ class ProfileFragment : BaseFragment() {
         customDialog.showDialog(
             Gravity.CENTER,
             resources.getString(R.string.dialog_message),
-            resources.getString(R.string.mess_confrim_deletedata),
+            resources.getString(R.string.mess_confrim_delete_data),
             resources.getString(R.string.text_ok),
             {
-                Toast.makeText(requireActivity(),requireContext().resources.getString(R.string.future_update),Toast.LENGTH_SHORT).show()
+//                Toast.makeText(requireActivity(),requireContext().resources.getString(R.string.future_update),Toast.LENGTH_SHORT).show()
                 customDialog.dismiss()
                 deleteAccount(account)
             },
@@ -102,13 +103,9 @@ class ProfileFragment : BaseFragment() {
 
     }
     private fun deleteAccount(account: Account){
-        binding.pressedLoading.visibility = View.VISIBLE
-        dataViewMode.deleteAccount(account)
-        dataViewMode.checkGetAccountDefault = 0
-        Handler().postDelayed({
-            binding.pressedLoading.visibility = View.GONE
-            findNavController().popBackStack()
-        }, 1500)
+        val intent = Intent(requireActivity(), OnBoardingScreenActivity::class.java)
+        startActivity(intent)
+        requireActivity().finish()
     }
 
 }

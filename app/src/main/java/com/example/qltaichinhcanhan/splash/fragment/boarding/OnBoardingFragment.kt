@@ -3,6 +3,7 @@ package com.example.qltaichinhcanhan.splash.fragment.boarding
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.text.TextUtils
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -34,7 +35,7 @@ class OnBoardingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         dataViewMode = ViewModelProvider(requireActivity())[DataViewMode::class.java]
         initxData()
-        createDefaultAccount()
+//        createDefaultAccount()
         onBoardingPagerAdapter = OnBoardingPagerAdapter(requireActivity())
         binding.viewPagerLogin.adapter = onBoardingPagerAdapter
         binding.indicator.setViewPager(binding.viewPagerLogin)
@@ -46,7 +47,7 @@ class OnBoardingFragment : Fragment() {
             findNavController().navigate(R.id.action_onBoardingFragment_to_loginFragment)
         }
         binding.textNewStart.setOnClickListener {
-            dataViewMode.checkInputScreenCreateMoney = 0
+            dataViewMode.checkInputScreenCreateMoney = 2
             findNavController().navigate(R.id.action_onBoardingFragment_to_creatsMoneyFragment)
         }
         binding.textLanguage.setOnClickListener {
@@ -57,6 +58,9 @@ class OnBoardingFragment : Fragment() {
     private fun initxData() {
         dataViewMode.readAllDataLiveAccount.observe(requireActivity()){
             dataViewMode.listAccount = it
+            if(it.isNotEmpty()){
+                Log.d("aaa","size: ${it.size}")
+            }
         }
     }
 

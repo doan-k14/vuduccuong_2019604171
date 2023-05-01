@@ -25,7 +25,7 @@ class AccountRepository(private val accountDao: AccountDao) {
     fun getAccountBySelect(): Account {
         return accountDao.getAccountBySelect()
     }
-    fun getAccountByEmail(email: String): LiveData<Account> {
+    fun getAccountByEmail(email: String): Account {
         return accountDao.getAccountByEmail(email)
     }
 }

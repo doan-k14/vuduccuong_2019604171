@@ -18,6 +18,7 @@ import com.example.qltaichinhcanhan.splash.adapter.AdapterIConColor
 import com.example.qltaichinhcanhan.splash.adapter.AdapterIconCategory
 import com.example.qltaichinhcanhan.databinding.FragmentEditCategoryBinding
 import com.example.qltaichinhcanhan.main.base.BaseFragment
+import com.example.qltaichinhcanhan.main.library.CustomDialog
 import com.example.qltaichinhcanhan.main.library.MoneyTextWatcher
 import com.example.qltaichinhcanhan.main.model.m_r.Category
 import com.example.qltaichinhcanhan.main.model.DataColor
@@ -219,38 +220,22 @@ class EditCategoryFragment : BaseFragment() {
     }
 
     private fun createDialogDelete(gravity: Int, category: Category) {
-        val dialog = Dialog(requireActivity())
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setContentView(R.layout.custom_dialog_layout)
-
-        val window = dialog.window ?: return
-        window.setLayout(
-            WindowManager.LayoutParams.MATCH_PARENT,
-            WindowManager.LayoutParams.WRAP_CONTENT
+        val customDialog = CustomDialog(requireActivity())
+        customDialog.showDialog(
+            Gravity.CENTER,
+            resources.getString(R.string.dialog_message),
+            resources.getString(R.string.category_delete_confirmation),
+            resources.getString(R.string.text_ok),
+            {
+                dataViewMode.deleteCategory(category)
+                customDialog.dismiss()
+                findNavController().popBackStack()
+            },
+            resources.getString(R.string.text_no),
+            {
+                customDialog.dismiss()
+            }
         )
-        window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        val wLayoutParams = window.attributes
-        wLayoutParams.gravity = gravity
-        window.attributes = wLayoutParams
-
-        if (Gravity.BOTTOM == gravity) {
-            dialog.setCancelable(false)
-        } else {
-            dialog.setCancelable(false)
-        }
-        dialog.show()
-
-        val textCo = dialog.findViewById<TextView>(R.id.text_co)
-        val textKhong = dialog.findViewById<TextView>(R.id.text_khong)
-
-        textCo.setOnClickListener {
-            dataViewMode.deleteCategory(category)
-            dialog.dismiss()
-            findNavController().popBackStack()
-        }
-        textKhong.setOnClickListener {
-            dialog.dismiss()
-        }
     }
 
     private fun getTypeCategory(type: String): String {

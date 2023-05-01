@@ -17,6 +17,7 @@ import com.example.qltaichinhcanhan.splash.adapter.AdapterIConColor
 import com.example.qltaichinhcanhan.databinding.FragmentEditAccountBinding
 import com.example.qltaichinhcanhan.main.adapter.AdapterIconAccount
 import com.example.qltaichinhcanhan.main.base.BaseFragment
+import com.example.qltaichinhcanhan.main.library.CustomDialog
 import com.example.qltaichinhcanhan.main.library.MoneyTextWatcher
 import com.example.qltaichinhcanhan.main.model.m_r.MoneyAccount
 import com.example.qltaichinhcanhan.main.model.m.IconR
@@ -69,6 +70,7 @@ class EditMoneyAccountFragment : BaseFragment() {
         binding.edtTotal.addTextChangedListener(MoneyTextWatcher(binding.edtTotal))
 
         if (dataViewMode.editOrAddMoneyAccount.moneyAccount!!.idMoneyAccount == 0) {
+            binding.textTitleTotal.text = resources.getString(R.string.create_money_account)
             binding.textCreate.visibility = View.VISIBLE
             binding.llUpdate.visibility = View.GONE
             binding.edtTypeAccount.isEnabled = true
@@ -88,6 +90,8 @@ class EditMoneyAccountFragment : BaseFragment() {
             dataViewMode.editOrAddMoneyAccount.moneyAccount!!.selectMoneyAccount = false
 
         } else {
+            binding.textTitleTotal.text = resources.getString(R.string.edit_money_account)
+
             val moneyAccount = dataViewMode.editOrAddMoneyAccount.moneyAccount!!
             val country = dataViewMode.editOrAddMoneyAccount.country!!
             binding.textCreate.visibility = View.GONE
@@ -188,38 +192,22 @@ class EditMoneyAccountFragment : BaseFragment() {
     }
 
     private fun createDialogDelete(gravity: Int, moneyAccount: MoneyAccount) {
-        val dialog = Dialog(requireActivity())
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setContentView(R.layout.custom_dialog_layout)
-
-        val window = dialog.window ?: return
-        window.setLayout(
-            WindowManager.LayoutParams.MATCH_PARENT,
-            WindowManager.LayoutParams.WRAP_CONTENT
+        val customDialog = CustomDialog(requireActivity())
+        customDialog.showDialog(
+            Gravity.CENTER,
+            resources.getString(R.string.dialog_message),
+            resources.getString(R.string.money_account_delete_confirmation),
+            resources.getString(R.string.text_ok),
+            {
+                dataViewMode.deleteMoneyAccount(moneyAccount)
+                customDialog.dismiss()
+                findNavController().popBackStack()
+            },
+            resources.getString(R.string.text_no),
+            {
+                customDialog.dismiss()
+            }
         )
-        window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        val wLayoutParams = window.attributes
-        wLayoutParams.gravity = gravity
-        window.attributes = wLayoutParams
-
-        if (Gravity.BOTTOM == gravity) {
-            dialog.setCancelable(false)
-        } else {
-            dialog.setCancelable(false)
-        }
-        dialog.show()
-
-        val textCo = dialog.findViewById<TextView>(R.id.text_co)
-        val textKhong = dialog.findViewById<TextView>(R.id.text_khong)
-
-        textCo.setOnClickListener {
-            dataViewMode.deleteMoneyAccount(moneyAccount)
-            dialog.dismiss()
-            findNavController().popBackStack()
-        }
-        textKhong.setOnClickListener {
-            dialog.dismiss()
-        }
     }
 
     override fun onDestroy() {

@@ -96,6 +96,7 @@ class HomeFragment : BaseFragment() {
                 if (it.isNotEmpty()) {
                     dataViewMode.getAllMoneyAccountsWithDetails()
                 } else {
+                    dataViewMode.getAllMoneyAccountsWithDetails()
                     listTransactionWithFullDetails = listOf()
                     ChartUtils.pieChart(requireActivity(),
                         listOf(),
@@ -586,7 +587,7 @@ class HomeFragment : BaseFragment() {
 
     override fun onDestroy() {
         dataViewMode.resetCheckTypeTabLayoutHomeToAddTransaction()
-        dataViewMode.checkGetAccountDefault = 0
+        dataViewMode.checkGetAccountLoginHome = 0
         super.onDestroy()
     }
 
@@ -667,21 +668,21 @@ class HomeFragment : BaseFragment() {
     }
 
     private fun getAccountLogin(){
-        if(dataViewMode.checkGetAccountDefault == 0){
+        if(dataViewMode.checkGetAccountLoginHome == 0){
             dataViewMode.getAccountByDefault()
             dataViewMode.accountDefault.observe(requireActivity()){
-                dataViewMode.createAccountDefault = Account()
+                dataViewMode.accountLoginHome = Account()
                 if(it != null){
-                    dataViewMode.createAccountDefault = it
+                    dataViewMode.accountLoginHome = it
                 }else{
-                    dataViewMode.createAccountDefault = Account()
+                    dataViewMode.accountLoginHome = Account()
                 }
-                onCallbackAccount(dataViewMode.createAccountDefault)
+                onCallbackAccount(dataViewMode.accountLoginHome)
                 dataViewMode.readAllDataLiveAccount.observe(requireActivity()) {
                     dataViewMode.listAccount = it
+                    Log.e("ttt","${it.size}")
                 }
-                Log.e("ttt","${it.toString()}")
-                dataViewMode.checkGetAccountDefault = 1
+                dataViewMode.checkGetAccountLoginHome = 1
             }
         }
     }

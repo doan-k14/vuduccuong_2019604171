@@ -3,11 +3,9 @@ package com.example.qltaichinhcanhan.splash.fragment
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
 import android.os.Handler
-import android.text.Html
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
@@ -86,6 +84,8 @@ class CreatsMoneyFragment : Fragment() {
             binding.edtTypeAccount.text = country.currencyCode
         }
 
+        getAccountSelect()
+
         binding.startButton.setOnClickListener {
             val value =
                 MoneyTextWatcher.parseCurrencyValue(binding.edtInitialBalance.text.toString())
@@ -104,8 +104,9 @@ class CreatsMoneyFragment : Fragment() {
             }
             try {
                 binding.pressedLoading.visibility = View.VISIBLE
-                checkAccount()
-                var moneyAccount = MoneyAccount(
+                val accountLogin = dataViewMode.accountLogin
+
+                val moneyAccount = MoneyAccount(
                     0,
                     requireContext().getString(R.string.main_account),
                     temp.toFloat(),
@@ -113,21 +114,15 @@ class CreatsMoneyFragment : Fragment() {
                     1,
                     2,
                     country.idCountry,
-                    dataViewMode.createAccount.idAccount
+                    accountLogin.idAccount
                 )
+                Log.d("aaa", "${moneyAccount.toString()}")
 
                 dataViewMode.addMoneyAccount(moneyAccount)
                 country.selectCountry = true
                 dataViewMode.updateCountry(country)
-
-                val sharedPreferences: SharedPreferences =
-                    requireActivity().getSharedPreferences("default_account_initialization_check",
-                        Context.MODE_PRIVATE)
-                val editor = sharedPreferences.edit()
-                editor.putBoolean("ck", true)
-                editor.commit()
-                updateAccountDefault(dataViewMode.createAccount.emailName!!,
-                    dataViewMode.listAccount)
+                accountLogin.selectAccount = true
+                dataViewMode.updateAccount(accountLogin)
 
                 Handler().postDelayed({
                     binding.pressedLoading.visibility = View.GONE
@@ -142,27 +137,16 @@ class CreatsMoneyFragment : Fragment() {
                     Toast.LENGTH_SHORT).show()
             }
         }
-
-
     }
 
-    private fun checkAccount() {
-        dataViewMode.readAllDataLiveAccount.observe(requireActivity()) {
-            dataViewMode.listAccount = it
-        }
-        val check = dataViewMode.checkInputScreenCreateMoney
-        if (check == 0) {
-            dataViewMode.createAccount = dataViewMode.listAccount[0]
-        } else if (check == 2) {
-            dataViewMode.createAccount = dataViewMode.listAccount.last()
+    private fun getAccountSelect() {
+        if(dataViewMode.checkInputScreenCreateMoney == 1){
+            dataViewMode.getAccountByDefault()
+            dataViewMode.accountDefault.observe(requireActivity()) {
+                if (it != null) {
+                    dataViewMode.accountLogin = it
+                }
+            }
         }
     }
-
-    fun updateAccountDefault(name: String, listAccount: List<Account>) {
-        for (i in listAccount) {
-            i.selectAccount = i.emailName == name
-        }
-        dataViewMode.updateListAccount(listAccount)
-    }
-
 }

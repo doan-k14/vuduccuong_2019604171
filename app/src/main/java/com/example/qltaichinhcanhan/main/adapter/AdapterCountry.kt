@@ -81,7 +81,8 @@ class AdapterCountry(
                     }
 
                     binding.textNameCategory.text =
-                        item.countryName + " - " + item.exchangeRate.toString()
+                        item.countryName
+//                    + " - " + item.exchangeRate.toString()
                     binding.textValueCategory.text = item.currencyCode
 
                     binding.root.setOnClickListener {

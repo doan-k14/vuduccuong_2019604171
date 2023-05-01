@@ -202,7 +202,7 @@ class CurrencyFragment : BaseFragment() {
         if (daysDifference >= 1 || lastUpdateDate == Date(0)) {
 //            getExchangeRate(listCountry)
             // 12h
-            Toast.makeText(requireActivity(),"Cập nhập tỉ giá",Toast.LENGTH_LONG).show()
+//            Toast.makeText(requireActivity(),"Cập nhập tỉ giá",Toast.LENGTH_LONG).show()
             val editor = sharedPreferences.edit()
             editor.putLong("LastUpdateDate", currentDate.time)
             editor.apply()

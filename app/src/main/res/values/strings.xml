@@ -63,7 +63,7 @@
     <string name="icon">Hình ảnh</string>
     <string name="color">Màu sắc</string>
     <string name="delete_category">Xóa</string>
-    <string name="icon_catalog">Icon Catalog</string>
+    <string name="icon_catalog">Danh mục biểu tượng</string>
     <string name="category_name">Tên danh mục</string>
     <string name="text_planned">Nhập hạn mức</string>
     <string name="create_category">Tạo danh mục</string>
@@ -83,7 +83,7 @@
     <string name="currency_exchange1">Tuy nhiên , số tiền giao dịch sẽ không được quy đổi dựa trên tỷ giá hối đoái.</string>
     <string name="edit_money_account">Chỉnh sửa tài khoản</string>
     <string name="select_moth">Chọn tháng</string>
-    <string name="text_ok">OK</string>
+    <string name="text_ok">Có</string>
     <string name="amount_of_money">Số tiền</string>
     <string name="money_account">Tài khoản</string>
     <string name="day">Ngày</string>
@@ -226,6 +226,11 @@
     <string name="error_first_name">Họ không được bỏ trống</string>
     <string name="error_last_name">Tên không được bỏ trống</string>
     <string name="mess_exit">Bạn có muốn rời khởi hồ sơ của mình?</string>
-    <string name="mess_confrim_deletedata">Xóa dữ liệu ứng dụng hiện tại</string>
-
+    <string name="mess_confrim_delete_data">Xóa dữ liệu ứng dụng hiện tại</string>
+    <string name="money_account_name">Nhập tên tài khoản</string>
+    <string name="create_money_account">Tạo tài khoản tiền</string>
+    <string name="title_money_account">Tên tài khoản tiền</string>
+    <string name="money_account_delete_confirmation">Bạn có chắc chắn muốn xóa tài khoản tiền không?</string>
+    <string name="select_time">Chọn thời gian</string>
+    <string name="category_delete_confirmation">Bạn có chắc chắn muốn xóa danh mục không?</string>
 </resources>

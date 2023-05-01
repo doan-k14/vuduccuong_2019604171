@@ -1,21 +1,26 @@
 package com.example.qltaichinhcanhan.splash.fragment.login
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.InputType
 import android.text.method.PasswordTransformationMethod
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.qltaichinhcanhan.R
 import com.example.qltaichinhcanhan.databinding.FragmentLoginBinding
+import com.example.qltaichinhcanhan.main.NDMainActivity
 import com.example.qltaichinhcanhan.main.model.m_r.Account
 import com.example.qltaichinhcanhan.main.rdb.vm_data.DataViewMode
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.coroutines.newFixedThreadPoolContext
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 class LoginFragment : Fragment() {
@@ -132,28 +137,34 @@ class LoginFragment : Fragment() {
             .addOnCompleteListener(requireActivity()) { task ->
                 if (task.isSuccessful) {
                     val name = email.split("@")[0]
-                    val accountNew = Account(0, name, email, pass, "null", false)
+                    val accountNew = Account(1, name, email, pass, "null", false)
                     val list = dataViewMode.listAccount
-
-                    val account = list.find { it.accountName == email }
+                    val account = list.find { it.emailName == email }
 
                     binding.edtAccount.setText("")
                     binding.edtPass.setText("")
                     if (dataViewMode.checkInputScreenLogin == 0) {
                         if (account != null) {
-                            dataViewMode.createAccount = account
-                            dataViewMode.checkInputScreenCreateMoney = 1
+                            account.selectAccount = true
+                            dataViewMode.updateAccount(account)
+                            lifecycleScope.launch {
+                                delay(100)
+                                val intent = Intent(requireActivity(), NDMainActivity::class.java)
+                                startActivity(intent)
+                                requireActivity().finish()
+                            }
                         } else {
+                            dataViewMode.accountLogin = accountNew
                             dataViewMode.addAccount(accountNew)
-                            dataViewMode.checkInputScreenCreateMoney = 2
+                            dataViewMode.checkInputScreenCreateMoney = 0
+                            binding.pressedLoading.visibility = View.GONE
+                            findNavController().navigate(R.id.action_loginFragment_to_creatsMoneyFragment)
                         }
-                        binding.pressedLoading.visibility = View.GONE
-                        findNavController().navigate(R.id.action_loginFragment_to_creatsMoneyFragment)
                     } else {
                         accountNew.selectAccount = true
                         dataViewMode.addAccount(accountNew)
                         binding.pressedLoading.visibility = View.GONE
-                        dataViewMode.checkGetAccountDefault = 0
+                        dataViewMode.checkGetAccountLoginHome = 1
                         findNavController().popBackStack(R.id.nav_home, false)
                     }
                 } else {
@@ -167,5 +178,24 @@ class LoginFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         dataViewMode.checkInputScreenLogin = 0
+    }
+
+    private fun checkCreateMoneyAccount(account: Account) {
+        dataViewMode.getMoneyAccountMainByIdAccount(account.idAccount)
+        dataViewMode.moneyAccountMainByIdAccount.observe(requireActivity()) {
+            if (it != null) {
+                lifecycleScope.launch {
+                    delay(10)
+                    val intent = Intent(requireActivity(), NDMainActivity::class.java)
+                    startActivity(intent)
+                    requireActivity().finish()
+                }
+            } else {
+                lifecycleScope.launch {
+                    delay(10)
+                    findNavController().navigate(R.id.action_loginFragment_to_creatsMoneyFragment)
+                }
+            }
+        }
     }
 }

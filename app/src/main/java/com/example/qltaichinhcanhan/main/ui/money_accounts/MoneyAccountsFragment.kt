@@ -86,8 +86,10 @@ class MoneyAccountsFragment : BaseFragment() {
 
         dataViewMode.moneyAccountsWithDetails.observe(requireActivity()) {
             adapterMoneyAccount.updateData(it)
-            countryDefault = it[0].country!!
-            
+            if(it.isNotEmpty()){
+                countryDefault = it[0].country!!
+            }
+
             var totalAmount = 0.0
             for (i in it) {
                 totalAmount += i.moneyAccount!!.amountMoneyAccount!!.toFloat() / i.country!!.exchangeRate!!.toFloat()

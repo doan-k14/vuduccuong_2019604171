@@ -26,5 +26,5 @@ interface AccountDao {
     fun getAccountBySelect(): Account
 
     @Query("SELECT * FROM account WHERE accountName=:email")
-    fun getAccountByEmail(email: String): LiveData<Account>
+    fun getAccountByEmail(email: String): Account
 }

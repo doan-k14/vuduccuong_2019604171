@@ -10,7 +10,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.qltaichinhcanhan.R
 import com.example.qltaichinhcanhan.databinding.FragmentRegisterBinding
-import com.example.qltaichinhcanhan.databinding.FragmentRemindersBinding
 import com.example.qltaichinhcanhan.main.rdb.vm_data.DataViewMode
 
 
@@ -45,7 +44,7 @@ class RegisterFragment : Fragment() {
             findNavController().navigate(R.id.action_registerFragment_to_loginFragment2)
         }
         binding.textSignUp.setOnClickListener {
-            dataViewMode.checkInputScreenSigup = 1
+            dataViewMode.checkInputScreenSignUp = 1
             findNavController().navigate(R.id.action_registerFragment_to_signUpFragment2)
         }
     }

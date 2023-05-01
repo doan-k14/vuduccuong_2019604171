@@ -21,12 +21,8 @@ class MoneyAccountRepository(private val moneyAccountDao: MoneyAccountDao) {
         moneyAccountDao.update(moneyAccount)
     }
 
-    fun getAccountById(accountId: Int): LiveData<MoneyAccount> {
-        return moneyAccountDao.getAccountById(accountId)
-    }
-
-    fun getMoneyAccountWithDetails(accountId: Int): MoneyAccountWithDetails {
-        return moneyAccountDao.getMoneyAccountWithDetails(accountId)
+    fun getMoneyAccountMainByIdAccount(accountId: Int): MoneyAccount {
+        return moneyAccountDao.getMoneyAccountMainByIdAccount(accountId)
     }
 
      fun getAllMoneyAccountsWithDetails(): List<MoneyAccountWithDetails> {

@@ -25,6 +25,11 @@ interface MoneyAccountDao {
     @Query("SELECT * FROM moneyAccount WHERE idMoneyAccount=:accountId")
     fun getAccountById(accountId: Int): LiveData<MoneyAccount>
 
+    @Query("SELECT * FROM moneyAccount WHERE idAccount=:accountId AND selectMoneyAccount = 1")
+    fun getMoneyAccountMainByIdAccount(accountId: Int): MoneyAccount
+
+
+
     @Query("SELECT * FROM moneyAccount " +
             "INNER JOIN country ON moneyAccount.idCountry = country.idCountry " +
             "INNER JOIN account ON moneyAccount.idAccount = account.idAccount " +

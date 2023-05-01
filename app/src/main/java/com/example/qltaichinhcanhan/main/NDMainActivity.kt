@@ -43,7 +43,7 @@ class NDMainActivity : AppCompatActivity(), MyCallback {
         imageAccount.setImageResource(R.drawable.ic_user_circle)
 
         textNameAccount.setOnClickListener {
-            if(account.idAccount <=1){
+            if(account.idAccount == 0){
                 navController.navigate(R.id.registerFragment)
                 binding.drawerLayout.closeDrawer(GravityCompat.START)
             }else{
@@ -89,7 +89,7 @@ class NDMainActivity : AppCompatActivity(), MyCallback {
 
     override fun onCallbackAccount(accountNew: Account) {
         account = accountNew
-        if (accountNew.idAccount <=1) {
+        if (accountNew.idAccount == 0) {
             textNameAccount.text = resources.getText(R.string.login)
         } else {
             textNameAccount.text = accountNew.accountName

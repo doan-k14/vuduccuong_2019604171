@@ -65,25 +65,29 @@ class DataViewMode(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    private val _accountByEMail = MutableLiveData<Account>()
+    val accountByEMail: LiveData<Account>
+        get() = _accountByEMail
 
-    val accountByEmailLiveData = MutableLiveData<Account>()
     fun getAccountByEMail(email: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            accountByEmailLiveData.postValue(accountRepository.getAccountByEmail(email).value)
+        viewModelScope.launch {
+            val result = accountRepository.getAccountByEmail(email)
+            _accountByEMail.postValue(result)
         }
     }
-    var checkGetAccountDefault = 0
-    var createAccountDefault = Account()
+
+    var checkGetAccountLoginHome = 0
+    var accountLoginHome = Account()
 
 
-    var createAccount = Account()
+    var accountLogin = Account()
     var checkInputScreenCreateMoney = 0
 
     var listAccount = listOf<Account>()
 
 
     var checkInputScreenLogin = 0
-    var checkInputScreenSigup = 0
+    var checkInputScreenSignUp = 0
 
     //    --------------------------Country ---------------------------
     private var countryDao = db.countryDao()
@@ -153,49 +157,35 @@ class DataViewMode(application: Application) : AndroidViewModel(application) {
 
 //    -------------------------------Money Account------------------------------
 
-    private var moneyAccountRepository = db.moneyAccountDao()
-    private val repository: MoneyAccountRepository = MoneyAccountRepository(moneyAccountRepository)
-    val readAllDataLiveMoneyAccount = repository.allAccountsLive
-    val readAllDataMoneyAccount = repository.allMoneyAccounts
+    private var moneyAccountDao = db.moneyAccountDao()
+    private val moneyAccountRepository: MoneyAccountRepository = MoneyAccountRepository(moneyAccountDao)
 
     fun addMoneyAccount(moneyAccount: MoneyAccount) {
         viewModelScope.launch(Dispatchers.IO) {
-            moneyAccountRepository.insert(moneyAccount)
-        }
-    }
-
-    fun addListMoneyAccount(list: ArrayList<MoneyAccount>) {
-        viewModelScope.launch(Dispatchers.IO) {
-            for (i in list) {
-                moneyAccountRepository.insert(i)
-            }
+            moneyAccountDao.insert(moneyAccount)
         }
     }
 
     fun updateMoneyAccount(moneyAccount: MoneyAccount) {
         viewModelScope.launch(Dispatchers.IO) {
-            moneyAccountRepository.update(moneyAccount)
+            moneyAccountDao.update(moneyAccount)
         }
     }
 
     fun deleteMoneyAccount(moneyAccount: MoneyAccount) {
         viewModelScope.launch(Dispatchers.IO) {
-            moneyAccountRepository.delete(moneyAccount)
+            moneyAccountDao.delete(moneyAccount)
         }
     }
 
-    val moneyAccountLiveData = MutableLiveData<MoneyAccount>()
-    fun getMoneyAccountById(it: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
-            moneyAccountLiveData.postValue(repository.getAccountById(it).value)
-        }
-    }
+    private val _moneyAccountMainByIdAccount = MutableLiveData<MoneyAccount>()
+    val moneyAccountMainByIdAccount: LiveData<MoneyAccount>
+        get() = _moneyAccountMainByIdAccount
 
-    val moneyAccountWithDetailsId = MutableLiveData<MoneyAccountWithDetails>()
-    fun getMoneyAccountWithDetails(it: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
-            val result = repository.getMoneyAccountWithDetails(it)
-            moneyAccountWithDetailsId.postValue(result)
+    fun getMoneyAccountMainByIdAccount(it: Int) {
+        viewModelScope.launch {
+            val result = moneyAccountRepository.getMoneyAccountMainByIdAccount(it)
+            _moneyAccountMainByIdAccount.postValue(result)
         }
     }
 
@@ -205,7 +195,7 @@ class DataViewMode(application: Application) : AndroidViewModel(application) {
 
     fun getAllMoneyAccountsWithDetails() {
         viewModelScope.launch {
-            val result = repository.getAllMoneyAccountsWithDetails()
+            val result = moneyAccountRepository.getAllMoneyAccountsWithDetails()
             _moneyAccountsWithDetails.postValue(result)
         }
     }
@@ -223,7 +213,7 @@ class DataViewMode(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch(Dispatchers.IO) {
             countryRepository.update(country!!)
             accountRepository.update(account!!)
-            moneyAccountRepository.update(moneyAccount!!)
+            moneyAccountDao.update(moneyAccount!!)
         }
 
         // Thực hiện update thông tin cho các entity liên quan

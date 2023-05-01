@@ -30,7 +30,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:text="@string/export_data"
+            android:text="@string/select_time"
             android:textColor="@color/white"
             android:textSize="18sp"
             android:textStyle="bold"
