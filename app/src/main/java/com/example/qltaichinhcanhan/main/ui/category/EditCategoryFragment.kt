@@ -37,6 +37,8 @@ class EditCategoryFragment : BaseFragment() {
 
     private lateinit var dataViewMode: DataViewMode
     var editOrAddCategory = Category()
+    var listCategory = listOf<Category>()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -80,7 +82,22 @@ class EditCategoryFragment : BaseFragment() {
         checkEditOrAddCategory(editOrAddCategory)
         checkSelectIconCategory()
 
+        dataViewMode.readAllDataLive.observe(requireActivity()) {
+            if(it.isNotEmpty()){
+                listCategory = it
+            }
+        }
+
     }
+
+    private fun checkCategory(nameNew:String):Boolean{
+        val check = listCategory.any { it.categoryName == nameNew }
+        if(check){
+            Toast.makeText(requireActivity(),resources.getString(R.string.category_boss),Toast.LENGTH_SHORT).show()
+        }
+        return !check
+    }
+
 
     private fun checkSelectIconCategory() {
         val ck = dataViewMode.selectIconR.id
@@ -156,10 +173,18 @@ class EditCategoryFragment : BaseFragment() {
             binding.llTypeCategory.visibility = View.VISIBLE
             if (category.type == CategoryType.EXPENSE) {
                 binding.imgExpense.isActivated = true
+                binding.imgExpense.visibility = View.VISIBLE
+                binding.textExpense.visibility = View.VISIBLE
+                binding.imgInCome.visibility = View.GONE
+                binding.textInCome.visibility = View.GONE
                 binding.imgInCome.isActivated = false
             } else if (category.type == CategoryType.INCOME) {
                 binding.imgExpense.isActivated = false
                 binding.imgInCome.isActivated = true
+                binding.imgExpense.visibility = View.GONE
+                binding.textExpense.visibility = View.GONE
+                binding.imgInCome.visibility = View.VISIBLE
+                binding.textInCome.visibility = View.VISIBLE
             }
             binding.imgIconCategory.setBackgroundResource(IconR.getIconById(requireContext(),
                 1,
@@ -215,6 +240,7 @@ class EditCategoryFragment : BaseFragment() {
                     Toast.LENGTH_SHORT).show()
                 return false
             }
+            return checkCategory(textName.toString())
         }
         return true
     }

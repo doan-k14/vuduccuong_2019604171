@@ -40,7 +40,7 @@ class AddTransactionFragment : BaseFragment() {
 
     var countryDefault = Country()
     var countrySelect = Country()
-
+    var typeCategory = 0
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -324,14 +324,17 @@ class AddTransactionFragment : BaseFragment() {
                 if (!dataViewMode.checkTypeTabLayoutHomeTransaction) {
                     binding.tabLayout.selectTab(binding.tabLayout.getTabAt(0))
                     dataViewMode.getListCategoryByType(CategoryType.EXPENSE.toString())
+                    typeCategory = 0
                 } else {
                     binding.tabLayout.selectTab(binding.tabLayout.getTabAt(1))
                     dataViewMode.getListCategoryByType(CategoryType.INCOME.toString())
+                    typeCategory = 1
                 }
 
             } else {
                 binding.tabLayout.selectTab(binding.tabLayout.getTabAt(1))
                 dataViewMode.getListCategoryByType(CategoryType.INCOME.toString())
+                typeCategory = 1
             }
 
         } else if (type == 1) {
@@ -341,9 +344,11 @@ class AddTransactionFragment : BaseFragment() {
             if (typeTransaction == CategoryType.EXPENSE.toString()) {
                 binding.tabLayout.selectTab(binding.tabLayout.getTabAt(0))
                 dataViewMode.getListCategoryByType(CategoryType.EXPENSE.toString())
+                typeCategory = 0
             } else {
                 binding.tabLayout.selectTab(binding.tabLayout.getTabAt(1))
                 dataViewMode.getListCategoryByType(CategoryType.INCOME.toString())
+                typeCategory = 1
             }
 
             binding.textCreate.text = resources.getText(R.string.text_save)
@@ -360,10 +365,12 @@ class AddTransactionFragment : BaseFragment() {
                     dataViewMode.getListCategoryByType(CategoryType.EXPENSE.toString())
                     dataViewMode.checkTypeTabLayoutAddTransaction = false
                     dataViewMode.checkTypeTabLayoutHomeTransaction = false
+                    typeCategory = 0
                 } else if (position == 1) {
                     dataViewMode.getListCategoryByType(CategoryType.INCOME.toString())
                     dataViewMode.checkTypeTabLayoutAddTransaction = true
                     dataViewMode.checkTypeTabLayoutHomeTransaction = true
+                    typeCategory = 1
                 }
             }
 
@@ -584,7 +591,13 @@ class AddTransactionFragment : BaseFragment() {
 
         var moneyAccount = MoneyAccount()
         val money = moneyAccountSelect.moneyAccount?.amountMoneyAccount
-        val moneyNew = money!! - dataViewMode.transaction.transactionAmount!!
+        var moneyNew = 0F
+
+        if(typeCategory == 0){
+            moneyNew= money!! - dataViewMode.transaction.transactionAmount!!
+        }else{
+            moneyNew= money!! + dataViewMode.transaction.transactionAmount!!
+        }
 
         moneyAccount = moneyAccountSelect.moneyAccount!!
         moneyAccount.amountMoneyAccount = moneyNew

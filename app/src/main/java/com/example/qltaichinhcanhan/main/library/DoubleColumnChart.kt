@@ -20,6 +20,7 @@ class DoubleColumnChart {
             titles: ArrayList<String>,
             data1: ArrayList<Float>,
             data2: ArrayList<Float>,
+            t1:String,t2:String,
         ){
             barChart.setDrawBarShadow(false)
             barChart.setDrawValueAboveBar(true)
@@ -39,11 +40,11 @@ class DoubleColumnChart {
                 data2Entries.add(BarEntry(i.toFloat(), data2[i].toFloat()))
             }
 
-            val barDataSet1 = BarDataSet(data1Entries, "Data 1")
+            val barDataSet1 = BarDataSet(data1Entries, t1)
             barDataSet1.color = Color.RED
             barDataSet1.setDrawValues(false)
 
-            val barDataSet2 = BarDataSet(data2Entries, "Data 2")
+            val barDataSet2 = BarDataSet(data2Entries, t2)
             barDataSet2.color = Color.GRAY
             barDataSet2.setDrawValues(false)
 
@@ -77,8 +78,8 @@ class DoubleColumnChart {
 
             // Khởi tạo danh sách chú thích
             val entries = listOf(
-                LegendEntry("Data 1", Legend.LegendForm.CIRCLE, 14f, 8f, null, Color.RED),
-                LegendEntry("Data 2", Legend.LegendForm.CIRCLE, 14f, 8f, null, Color.GRAY)
+                LegendEntry(t1, Legend.LegendForm.CIRCLE, 14f, 8f, null, Color.RED),
+                LegendEntry(t2, Legend.LegendForm.CIRCLE, 14f, 8f, null, Color.GRAY)
             )
 
             // Khởi tạo đối tượng Legend

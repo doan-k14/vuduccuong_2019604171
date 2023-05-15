@@ -150,10 +150,10 @@ class CurrencyFragment : BaseFragment() {
 
         }
 
-        binding.imgClose.setOnClickListener {
-            binding.edtSearch.setText("")
-            hideKeyboard(binding.edtSearch)
-        }
+            binding.imgClose.setOnClickListener {
+                binding.edtSearch.setText("")
+                hideKeyboard(binding.edtSearch)
+            }
 
         binding.edtSearch.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {

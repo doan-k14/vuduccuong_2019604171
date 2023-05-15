@@ -233,4 +233,14 @@
     <string name="money_account_delete_confirmation">お金のアカウントを削除してもよろしいですか?</string>
     <string name="select_time">時間を選択</string>
     <string name="category_delete_confirmation">カテゴリを削除してもよろしいですか?</string>
+    <string name="money_account_boss">マネーアカウントはすでに存在します。 別のお金口座を作成しましょう</string>
+    <string name="category_boss">カテゴリはすでに存在します。 別のカテゴリのアカウントを作成してください</string>
+    <string name="tieng_anh">英語</string>
+    <string name="tieng_trung">中国語 (簡体字)</string>
+    <string name="tieng_an_do">インド人</string>
+    <string name="tieng_lao">ラオス語</string>
+    <string name="tieng_han">韓国語</string>
+    <string name="tieng_duc">ドイツ語</string>
+    <string name="tieng_nhat">日本語</string>
+    <string name="tieng_phap">フランス語</string>
 </resources>

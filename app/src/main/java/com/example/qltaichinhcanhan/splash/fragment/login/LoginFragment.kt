@@ -141,8 +141,6 @@ class LoginFragment : Fragment() {
                     val list = dataViewMode.listAccount
                     val account = list.find { it.emailName == email }
 
-                    binding.edtAccount.setText("")
-                    binding.edtPass.setText("")
                     if (dataViewMode.checkInputScreenLogin == 0) {
                         if (account != null) {
                             account.selectAccount = true
@@ -177,6 +175,8 @@ class LoginFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        binding.edtAccount.setText("")
+        binding.edtPass.setText("")
         dataViewMode.checkInputScreenLogin = 0
     }
 

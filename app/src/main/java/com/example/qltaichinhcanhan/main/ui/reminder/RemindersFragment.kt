@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.ViewModelProvider
@@ -49,9 +50,21 @@ class RemindersFragment : BaseFragment() {
         binding.llCreateNotification.setOnClickListener {
             dataViewMode.selectNotificationInfoReminderToEdit = NotificationInfo()
             findNavController().navigate(R.id.action_nav_reminders_to_editNotificationFragment)
+
+//            val notificationInfo = NotificationInfo(
+//                idNotification = 1,
+//                nameNotification = "Thông báo 1 lần",
+//                notificationFrequency = "Once",
+//                notificationReminderStartTime = System.currentTimeMillis(),
+//                notificationTime = System.currentTimeMillis() + 500, // Thời điểm hiển thị thông báo: 5 giây sau thời điểm hiện tại
+//                notificationNote = "Đây là thông báo 1 lần"
+//            )
+//            val notificationHandler = NotificationHandler(requireActivity())
+//            notificationHandler.scheduleNotification(notificationInfo)
         }
         initView()
     }
+
 
     override fun onStart() {
         super.onStart()
@@ -78,6 +91,7 @@ class RemindersFragment : BaseFragment() {
             dataViewMode.updateNotificationInfo(it)
             val notificationHandler = NotificationHandler(requireActivity())
             if (it.isNotificationSelected!!) {
+                Toast.makeText(requireActivity(),resources.getString(R.string.future_update), Toast.LENGTH_SHORT).show()
                 notificationHandler.scheduleNotification(it)
             } else {
                 notificationHandler.cancelScheduledNotification(it.idNotification)

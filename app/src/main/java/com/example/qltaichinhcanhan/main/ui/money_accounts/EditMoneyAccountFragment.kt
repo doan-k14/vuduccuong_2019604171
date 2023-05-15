@@ -33,7 +33,7 @@ class EditMoneyAccountFragment : BaseFragment() {
 
     private lateinit var adapterIConColor: AdapterIConColor
     private lateinit var adapterIconAccount: AdapterIconAccount
-
+    var listMoneyAccount = listOf<MoneyAccountWithDetails>()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -48,6 +48,11 @@ class EditMoneyAccountFragment : BaseFragment() {
         initView()
         initEvent()
 
+        dataViewMode.moneyAccountsWithDetails.observe(requireActivity()) {
+            if(it.isNotEmpty()){
+                listMoneyAccount = it
+            }
+        }
     }
 
     private fun initView() {
@@ -186,10 +191,21 @@ class EditMoneyAccountFragment : BaseFragment() {
 
         if (typeClick == 2) {
             dataViewMode.editOrAddMoneyAccount.moneyAccount!!.idMoneyAccount = 0
+            return checkMoneyAccount(textName)
         }
 
         return true
     }
+
+    private fun checkMoneyAccount(nameNew:String):Boolean{
+        val check = listMoneyAccount.any { it.moneyAccount!!.moneyAccountName == nameNew }
+        if(check){
+            Toast.makeText(requireActivity(),resources.getString(R.string.money_account_boss),Toast.LENGTH_SHORT).show()
+        }
+        return !check
+    }
+
+
 
     private fun createDialogDelete(gravity: Int, moneyAccount: MoneyAccount) {
         val customDialog = CustomDialog(requireActivity())

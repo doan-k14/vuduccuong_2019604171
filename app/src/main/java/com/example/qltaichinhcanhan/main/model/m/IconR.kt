@@ -38,6 +38,13 @@ data class IconR(
         val listIconRCategory = listOf<IconR>(
             IconR(1, "ic_add", 0, false, 3),
             IconR(2, "ic_more_horiz", 0, false, 1),
+            IconR(12, "ic_k1", 0, false, 3),
+            IconR(13, "ic_k2", 0, false, 1),
+            IconR(14, "ic_k3", 0, false, 1),
+            IconR(15, "ic_k4", 0, false, 1),
+            IconR(18, "ic_k9", 0, false, 1),
+            IconR(16, "ic_k5", 0, false, 1),
+            IconR(17, "ic_k6", 0, false, 1),
             IconR(3, "ic_ms2", 0, false, 2),
             IconR(4, "ic_ms3", 0, false, 4),
             IconR(5, "ic_gt", 0, false, 5),
@@ -62,7 +69,7 @@ data class IconR(
             )
         }
 
-        fun getListColor() : List<ColorR>{
+        fun getListColor(): List<ColorR> {
             return listOf(
                 ColorR(0, "bg_color"),
                 ColorR(1, "color1"),
@@ -75,7 +82,7 @@ data class IconR(
             )
         }
 
-        fun getListColorIconR() : List<ColorR>{
+        fun getListColorIconR(): List<ColorR> {
             return listOf(
                 ColorR(0, "color_icon_br"),
                 ColorR(1, "color_icon_1"),
@@ -89,21 +96,19 @@ data class IconR(
         }
 
 
-
-
         fun showBackgroundColorCircle(context: Context, name: String): Int {
             val resources = context.resources
             return resources.getIdentifier(name, "drawable", context.packageName)
         }
 
-        fun getIconById(context: Context, id: Int,listIconR:List<IconR>): Int {
+        fun getIconById(context: Context, id: Int, listIconR: List<IconR>): Int {
             val urlIconR = listIconR.find { it.id == id }
             val resources = context.resources
             return resources.getIdentifier(urlIconR!!.iconName, "drawable", context.packageName)
         }
 
 
-        fun getColorById(context: Context, id: Int,listIconR:List<ColorR>): Int {
+        fun getColorById(context: Context, id: Int, listIconR: List<ColorR>): Int {
             val urlIconR = listIconR.find { it.id == id }
             val resources = context.resources
             return resources.getIdentifier(urlIconR!!.colorName, "drawable", context.packageName)

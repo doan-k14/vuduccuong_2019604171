@@ -41,7 +41,14 @@
         android:id="@+id/nav_slideshow"
         android:name="com.example.qltaichinhcanhan.main.ui.slideshow.SlideshowFragment"
         android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
+        tools:layout="@layout/fragment_slideshow" >
+        <action
+            android:id="@+id/action_nav_slideshow_to_nav_accounts"
+            app:destination="@id/nav_accounts" />
+        <action
+            android:id="@+id/action_nav_slideshow_to_transactionByCategoryFragment"
+            app:destination="@id/transactionByCategoryFragment" />
+    </fragment>
     <fragment
         android:id="@+id/nav_category"
         android:name="com.example.qltaichinhcanhan.main.ui.category.CategoryFragment"

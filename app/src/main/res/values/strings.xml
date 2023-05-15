@@ -125,7 +125,7 @@
     <string name="exchange_rate_update_successful">Cập nhật tỷ giá thành công</string>
     <string name="utilities">Tiện ích</string>
     <string name="text_select_language">Lựa chọn ngôn ngữ</string>
-    <string name="tieng_viet">Vietnamese</string>
+    <string name="tieng_viet">Tiếng Việt</string>
     <string name="vn">Tiếng Việt</string>
     <string name="gb">English</string>
     <string name="cn">中国人</string>
@@ -232,5 +232,15 @@
     <string name="title_money_account">Tên tài khoản tiền</string>
     <string name="money_account_delete_confirmation">Bạn có chắc chắn muốn xóa tài khoản tiền không?</string>
     <string name="select_time">Chọn thời gian</string>
-    <string name="category_delete_confirmation">Bạn có chắc chắn muốn xóa danh mục không?</string>
+    <string name="category_delete_confirmation">Các giao dịch với danh mục sẽ mất. Bạn có chắc chắn muốn xóa danh mục không?</string>
+    <string name="money_account_boss">Tài khoản tiền đã tồn tại. Hãy tạo tài khoản tiền khác</string>
+    <string name="category_boss">Danh mục đã tồn tại. Hãy tạo tài danh mục khác</string>
+    <string name="tieng_anh">Tiếng Anh</string>
+    <string name="tieng_trung">Tiếng Trung (Giản thể)</string>
+    <string name="tieng_an_do">Tiếng Ấn Độ</string>
+    <string name="tieng_lao">Tiếng Lao</string>
+    <string name="tieng_han">Tiếng Hàn</string>
+    <string name="tieng_duc">Tiếng Đức</string>
+    <string name="tieng_nhat">Tiếng Nhật</string>
+    <string name="tieng_phap">Tiếng Pháp</string>
 </resources>

@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.qltaichinhcanhan.R
 import com.example.qltaichinhcanhan.databinding.FragmentSlideshowBinding
@@ -18,10 +19,12 @@ import com.example.qltaichinhcanhan.main.adapter.AdapterTransaction
 import com.example.qltaichinhcanhan.main.base.BaseFragment
 import com.example.qltaichinhcanhan.main.library.ChartUtils
 import com.example.qltaichinhcanhan.main.library.ColumnChartUtils
+import com.example.qltaichinhcanhan.main.library.DoubleColumnChart
 import com.example.qltaichinhcanhan.main.model.m_convert.FilterSlidesTransactions
 import com.example.qltaichinhcanhan.main.model.m_convert.FilterTransactions
 import com.example.qltaichinhcanhan.main.model.m_convert.TransactionWithFullDetails
 import com.example.qltaichinhcanhan.main.model.m_r.CategoryType
+import com.example.qltaichinhcanhan.main.model.m_r.Country
 import com.example.qltaichinhcanhan.main.model.query_model.MoneyAccountWithDetails
 import com.example.qltaichinhcanhan.main.model.query_model.TransactionWithDetails
 import com.example.qltaichinhcanhan.main.rdb.vm_data.DataViewMode
@@ -46,6 +49,9 @@ class SlideshowFragment : BaseFragment() {
 
     var checkScreenSliderShow = false
     var listTransactionWithFullDetails = listOf<TransactionWithFullDetails>()
+    var listFilterSlide = listOf<FilterSlidesTransactions>()
+    var listMoneyAccountsWithDetails = listOf<MoneyAccountWithDetails>()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -117,21 +123,31 @@ class SlideshowFragment : BaseFragment() {
                 }
             }
         }
-        var listMoneyAccountsWithDetails = listOf<MoneyAccountWithDetails>()
+
         dataViewMode.moneyAccountsWithDetails.observe(requireActivity()) {
             if (checkScreenSliderShow) {
+                Log.e("test1","sile")
+
                 listMoneyAccountsWithDetails = listOf()
                 listMoneyAccountsWithDetails = it
-                if (listMoneyAccountsWithDetails.isNotEmpty() && listTransactionWithDetails.isNotEmpty()) {
-                    mergeTransactionWithMoneyAccount(listTransactionWithDetails,
-                        listMoneyAccountsWithDetails)
+                val moneyAccount = dataViewMode.selectMoneyAccountFilterHome
+                if (moneyAccount.moneyAccount != null) {
+                    mergeTransactionWithSelectMoneyAccount(listTransactionWithDetails, moneyAccount)
+                } else {
+                    if (listTransactionWithDetails.isNotEmpty() && listMoneyAccountsWithDetails.isNotEmpty()) {
+                        mergeTransactionWithMoneyAccount(listTransactionWithDetails,
+                            listMoneyAccountsWithDetails)
+                    }
                 }
+
             }
         }
+
     }
 
     private fun initEvent() {
         binding.btnNavigation.setOnClickListener {
+            dataViewMode.selectMoneyAccountFilterHome = MoneyAccountWithDetails()
             onCallback()
         }
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
@@ -139,12 +155,13 @@ class SlideshowFragment : BaseFragment() {
                 when (tab?.position) {
                     0 -> {
                         dataViewMode.selectTabLayoutSlidesShow = 0
-
+                        test2()
+                        adapterTransaction.updateData(listOf())
+                        getAllTransaction()
                     }
                     1 -> {
                         dataViewMode.selectTabLayoutSlidesShow = 1
                         dataViewMode.getAllTransactionWithDetailsByTypeCategory(CategoryType.EXPENSE.toString())
-
                     }
                     2 -> {
                         dataViewMode.selectTabLayoutSlidesShow = 2
@@ -161,35 +178,41 @@ class SlideshowFragment : BaseFragment() {
             }
         })
 
-        var listFilterSlide = listOf<FilterSlidesTransactions>()
         binding.tabLayoutChart.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
-                when (tab?.position) {
+                when (dataViewMode.selectTabLayoutSlidesShow) {
                     0 -> {
-                        dataViewMode.selectTabLayoutStyleSlidesShow = 0
-                        adapterTransaction.updateData(listOf())
-                        listFilterSlide = listOf()
-                        listFilterSlide =
-                            filterTransactionsByTimeType(listTransactionWithFullDetails, 0)
-                        convertDataToChart(listFilterSlide, 0)
-                    }
-                    1 -> {
-                        dataViewMode.selectTabLayoutStyleSlidesShow = 1
-                        adapterTransaction.updateData(listOf())
 
-                        listFilterSlide = listOf()
-                        listFilterSlide =
-                            filterTransactionsByTimeType(listTransactionWithFullDetails, 1)
-                        convertDataToChart(listFilterSlide, 1)
                     }
-                    2 -> {
-                        dataViewMode.selectTabLayoutStyleSlidesShow = 2
-                        adapterTransaction.updateData(listOf())
+                    1, 2 -> {
+                        when (tab?.position) {
+                            0 -> {
+                                dataViewMode.selectTabLayoutStyleSlidesShow = 0
+                                adapterTransaction.updateData(listOf())
+                                listFilterSlide = listOf()
+                                listFilterSlide =
+                                    filterTransactionsByTimeType(listTransactionWithFullDetails, 0)
+                                convertDataToChart(listFilterSlide, 0)
+                            }
+                            1 -> {
+                                dataViewMode.selectTabLayoutStyleSlidesShow = 1
+                                adapterTransaction.updateData(listOf())
 
-                        listFilterSlide = listOf()
-                        listFilterSlide =
-                            filterTransactionsByTimeType(listTransactionWithFullDetails, 2)
-                        convertDataToChart(listFilterSlide, 2)
+                                listFilterSlide = listOf()
+                                listFilterSlide =
+                                    filterTransactionsByTimeType(listTransactionWithFullDetails, 1)
+                                convertDataToChart(listFilterSlide, 1)
+                            }
+                            2 -> {
+                                dataViewMode.selectTabLayoutStyleSlidesShow = 2
+                                adapterTransaction.updateData(listOf())
+
+                                listFilterSlide = listOf()
+                                listFilterSlide =
+                                    filterTransactionsByTimeType(listTransactionWithFullDetails, 2)
+                                convertDataToChart(listFilterSlide, 2)
+                            }
+                        }
                     }
                 }
             }
@@ -216,12 +239,13 @@ class SlideshowFragment : BaseFragment() {
         })
         binding.barChart1.setOnChartValueSelectedListener(object : OnChartValueSelectedListener {
             override fun onValueSelected(e: Entry?, h: Highlight?) {
-                val index = e?.x?.toInt() ?: return
-                val filterSlidesTransactions = listFilterSlide[index]
-                chartClickType(filterSlidesTransactions)
-                binding.barChart0.highlightValues(null)
-                binding.barChart2.highlightValues(null)
-
+                if (listFilterSlide.isNotEmpty()) {
+                    val index = e?.x?.toInt() ?: return
+                    val filterSlidesTransactions = listFilterSlide[index]
+                    chartClickType(filterSlidesTransactions)
+                    binding.barChart0.highlightValues(null)
+                    binding.barChart2.highlightValues(null)
+                }
             }
 
             override fun onNothingSelected() {
@@ -239,6 +263,83 @@ class SlideshowFragment : BaseFragment() {
             override fun onNothingSelected() {
             }
         })
+
+        binding.imgMoneyBag.setOnClickListener {
+            dataViewMode.checkInputScreenMoneyAccount = 2
+            findNavController().navigate(R.id.action_nav_slideshow_to_nav_accounts)
+        }
+
+        adapterTransaction.setClickItemSelect {
+            dataViewMode.filterTransactions = it
+            findNavController().navigate(R.id.action_nav_slideshow_to_transactionByCategoryFragment)
+        }
+    }
+
+    private fun getAllTransaction() {
+        var listAllTransaction = listOf<TransactionWithDetails>()
+        dataViewMode.getAllTransactionWithDetails()
+        dataViewMode.listTransactionWithDetailsLiveAllData.observe(requireActivity()) {
+            if (it.isNotEmpty()) {
+                listAllTransaction = listOf()
+                listAllTransaction = it
+                splitListByType(listAllTransaction)
+            }
+        }
+    }
+
+    private fun splitListByType(listTransaction: List<TransactionWithDetails>) {
+        val type1List: MutableList<TransactionWithDetails> = mutableListOf()
+        val type2List: MutableList<TransactionWithDetails> = mutableListOf()
+
+        for (transactionWithDetails in listTransaction) {
+            if (transactionWithDetails.category!!.type == CategoryType.INCOME) {
+                type1List.add(transactionWithDetails)
+            } else {
+                type2List.add(transactionWithDetails)
+            }
+        }
+
+    }
+
+    private fun test2() {
+        binding.barChart0.visibility = View.GONE
+        binding.barChart2.visibility = View.GONE
+        binding.barChart1.visibility = View.VISIBLE
+        val defaultColors = arrayListOf<String>(
+            "T12/2021",
+            "T10/2022",
+            "T11/2022",
+            "T12/2022",
+            "T3/2023",
+            "T4/2023",
+            "T5/2023",
+        )
+        val data1 = arrayListOf<Float>(
+            23F,
+            43F,
+            83F,
+            13F,
+            83F,
+            23F,
+            33F,
+        )
+        val data2 = arrayListOf<Float>(
+            33F,
+            33F,
+            23F,
+            53F,
+            23F,
+            63F,
+            63F,
+        )
+        DoubleColumnChart.createBarChart(
+            binding.barChart1,
+            defaultColors,
+            data1,
+            data2,
+            requireContext().resources.getString(R.string.expense),
+            requireContext().resources.getString(R.string.in_come),
+        )
     }
 
     private fun chartClickType(filterSlidesTransactions: FilterSlidesTransactions) {
@@ -375,73 +476,124 @@ class SlideshowFragment : BaseFragment() {
         listTransactionWithFullDetails = listOf()
         listTransactionWithFullDetails = transactionWithFullDetailsList
         Log.e("data", "Hop nhat dữ liệu")
+        checkShowData()
     }
 
+    private fun mergeTransactionWithSelectMoneyAccount(
+        listTransactionWithDetails: List<TransactionWithDetails>,
+        moneyAccountWithDetails: MoneyAccountWithDetails,
+    ) {
 
+        val transactionWithFullDetailsList = mutableListOf<TransactionWithFullDetails>()
 
+        for (transactionWithDetails in listTransactionWithDetails) {
+            if (transactionWithDetails.moneyAccount?.idMoneyAccount == moneyAccountWithDetails.moneyAccount!!.idMoneyAccount) {
+                val transactionWithFullDetails = TransactionWithFullDetails(
+                    transactionWithDetails = transactionWithDetails,
+                    moneyAccountWithDetails = moneyAccountWithDetails
+                )
+                transactionWithFullDetailsList.add(transactionWithFullDetails)
+            }
+        }
+        listTransactionWithFullDetails = listOf()
+        listTransactionWithFullDetails = transactionWithFullDetailsList
+        checkShowData()
+    }
+
+    private fun checkShowData() {
+        val typeTransaction = dataViewMode.selectTabLayoutSlidesShow
+        val typeFilter = dataViewMode.selectTabLayoutStyleSlidesShow
+        when (typeTransaction) {
+            0 -> {
+                test2()
+            }
+            1, 2 -> {
+                when (typeFilter) {
+                    0 -> {
+                        adapterTransaction.updateData(listOf())
+                        listFilterSlide = listOf()
+                        listFilterSlide =
+                            filterTransactionsByTimeType(listTransactionWithFullDetails, 0)
+                        convertDataToChart(listFilterSlide, 0)
+                    }
+                    1 -> {
+                        adapterTransaction.updateData(listOf())
+
+                        listFilterSlide = listOf()
+                        listFilterSlide =
+                            filterTransactionsByTimeType(listTransactionWithFullDetails, 1)
+                        convertDataToChart(listFilterSlide, 1)
+                    }
+                    2 -> {
+                        adapterTransaction.updateData(listOf())
+
+                        listFilterSlide = listOf()
+                        listFilterSlide =
+                            filterTransactionsByTimeType(listTransactionWithFullDetails, 2)
+                        convertDataToChart(listFilterSlide, 2)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun mergeAllTransactionWithMoneyAccount(
+        listTransactionWithDetails: List<TransactionWithDetails>,
+        listMoneyAccountWithDetails: List<MoneyAccountWithDetails>,
+    ) {
+
+        val transactionWithFullDetailsList = mutableListOf<TransactionWithFullDetails>()
+
+        for (transactionWithDetails in listTransactionWithDetails) {
+            val moneyAccountWithDetails = listMoneyAccountWithDetails.find {
+                it.moneyAccount?.idMoneyAccount == transactionWithDetails.moneyAccount?.idMoneyAccount
+            }
+            val transactionWithFullDetails = TransactionWithFullDetails(
+                transactionWithDetails = transactionWithDetails,
+                moneyAccountWithDetails = moneyAccountWithDetails
+            )
+            transactionWithFullDetailsList.add(transactionWithFullDetails)
+        }
+        listTransactionWithFullDetails = listOf()
+        listTransactionWithFullDetails = transactionWithFullDetailsList
+        Log.e("data", "Hop nhat dữ liệu")
+        checkShowAllData()
+    }
+
+    private fun checkShowAllData() {
+        val typeFilter = dataViewMode.selectTabLayoutStyleSlidesShow
+        when (typeFilter) {
+            0 -> {
+                adapterTransaction.updateData(listOf())
+                listFilterSlide = listOf()
+                listFilterSlide =
+                    filterTransactionsByTimeType(listTransactionWithFullDetails, 0)
+                convertDataToChart(listFilterSlide, 0)
+            }
+            1 -> {
+                adapterTransaction.updateData(listOf())
+
+                listFilterSlide = listOf()
+                listFilterSlide =
+                    filterTransactionsByTimeType(listTransactionWithFullDetails, 1)
+                convertDataToChart(listFilterSlide, 1)
+            }
+            2 -> {
+                adapterTransaction.updateData(listOf())
+
+                listFilterSlide = listOf()
+                listFilterSlide =
+                    filterTransactionsByTimeType(listTransactionWithFullDetails, 2)
+                convertDataToChart(listFilterSlide, 2)
+            }
+        }
+    }
 
     override fun onDestroy() {
         super.onDestroy()
-        dataViewMode.selectTabLayoutSlidesShow = 0
+        dataViewMode.selectTabLayoutSlidesShow = 1
         dataViewMode.selectTabLayoutStyleSlidesShow = 1
-    }
-
-
-    fun c() {
-        val titles = arrayOf(
-            "T 01/22",
-            "T 2/22",
-            "T 3/22",
-            "T 4/22",
-            "T 5/22",
-            "T 6/22",
-            "T 7/22",
-            "T 8/22",
-            "T 9/22",
-            "T 10/22",
-            "T 11/22",
-            "T 12/22",
-        )
-        val data = arrayOf(7.0,
-            6.9,
-            9.5,
-            14.5,
-            18.2,
-            21.5,
-            25.2,
-            26.5,
-            23.3,
-            18.3,
-            13.9,
-            9.6)
-        // Khai báo chart và set các thuộc tính
-        val chart = binding.chart
-        chart.setTouchEnabled(true)
-        chart.setPinchZoom(true)
-
-// Khởi tạo các entry và định dạng data set
-        val entries = mutableListOf<Entry>()
-        for (i in data.indices) {
-            entries.add(Entry(i.toFloat(), data[i].toFloat()))
-        }
-        val dataSet = LineDataSet(entries, "Title")
-        dataSet.color = ContextCompat.getColor(requireActivity(), R.color.red)
-        dataSet.setDrawValues(false)
-
-// Định dạng trục x và trục y
-        val xAxis = chart.xAxis
-        xAxis.valueFormatter = IndexAxisValueFormatter(titles)
-        xAxis.position = XAxis.XAxisPosition.BOTTOM
-        xAxis.granularity = 1f
-
-        val yAxis = chart.axisLeft
-        yAxis.granularity = 1f
-
-// Set data cho biểu đồ và invalidate để vẽ lại
-        val lineData = LineData(dataSet)
-        chart.data = lineData
-        chart.invalidate()
-
+        dataViewMode.selectMoneyAccountFilterHome = MoneyAccountWithDetails()
     }
 
     override fun onStop() {

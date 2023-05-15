@@ -145,7 +145,7 @@ class SignUpFragment : Fragment() {
             .addOnCompleteListener(requireActivity()) { task ->
                 if (task.isSuccessful) {
                     val name = "$firstName $lastName"
-                    val account = Account(0, name, email, pass, "null", false)
+                    val account = Account(0, name, email, pass, "null", true)
                     if (dataViewMode.checkInputScreenSignUp == 0) {
                         dataViewMode.addAccount(account)
                         binding.pressedLoading.visibility = View.GONE

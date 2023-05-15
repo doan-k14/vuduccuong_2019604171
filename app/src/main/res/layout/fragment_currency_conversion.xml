@@ -163,7 +163,6 @@
     </LinearLayout>
 
     <LinearLayout
-        android:visibility="gone"
         android:id="@+id/text_message_loading_data"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
@@ -172,6 +171,7 @@
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingHorizontal="20dp"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cl_action_bar_top">
@@ -191,17 +191,23 @@
             android:textSize="18sp" />
     </LinearLayout>
 
-
-    <ProgressBar
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/pressed_loading"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:background="@drawable/custom_text_exchange"
-        android:indeterminateTint="@android:color/white"
-        android:padding="5dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@null"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/custom_text_exchange"
+            android:indeterminateTint="@android:color/white"
+            android:padding="5dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

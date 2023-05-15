@@ -151,6 +151,9 @@ class CurrencyConversionFragment : BaseFragment() {
             }, 1500)
         }
 
+        binding.pressedLoading.setOnClickListener {
+
+        }
     }
 
     private fun filterList(query: String, listCountry: List<Country>): ArrayList<Country> {

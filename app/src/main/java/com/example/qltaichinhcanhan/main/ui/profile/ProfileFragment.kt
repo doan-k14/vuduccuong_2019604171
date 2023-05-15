@@ -68,7 +68,10 @@ class ProfileFragment : BaseFragment() {
                     var account = dataViewMode.accountLoginHome
                     account.selectAccount = false
                     dataViewMode.updateAccount(account)
-                    createDialogConfirmDeleteData(account)
+
+                    val intent = Intent(requireActivity(), OnBoardingScreenActivity::class.java)
+                    startActivity(intent)
+                    requireActivity().finish()
                 },
                 resources.getString(R.string.text_no),
                 {
@@ -78,11 +81,13 @@ class ProfileFragment : BaseFragment() {
         }
 
         binding.textDeleteAccount.setOnClickListener {
-            Toast.makeText(requireActivity(),requireContext().resources.getString(R.string.future_update),Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireActivity(),
+                requireContext().resources.getString(R.string.future_update),
+                Toast.LENGTH_SHORT).show()
         }
     }
 
-    private fun createDialogConfirmDeleteData(account:Account){
+    private fun createDialogConfirmDeleteData(account: Account) {
         val customDialog = CustomDialog(requireActivity())
         customDialog.showDialog(
             Gravity.CENTER,
@@ -102,7 +107,8 @@ class ProfileFragment : BaseFragment() {
         )
 
     }
-    private fun deleteAccount(account: Account){
+
+    private fun deleteAccount(account: Account) {
         val intent = Intent(requireActivity(), OnBoardingScreenActivity::class.java)
         startActivity(intent)
         requireActivity().finish()

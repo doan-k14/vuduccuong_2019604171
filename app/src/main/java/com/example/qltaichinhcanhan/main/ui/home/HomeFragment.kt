@@ -116,6 +116,7 @@ class HomeFragment : BaseFragment() {
 
         dataViewMode.moneyAccountsWithDetails.observe(requireActivity()) {
             if (checkScreenHome) {
+                Log.e("test1","home")
                 listMoneyAccountWithDetails = listOf()
                 listMoneyAccountWithDetails = it
                 val moneyAccount = dataViewMode.selectMoneyAccountFilterHome
@@ -583,11 +584,13 @@ class HomeFragment : BaseFragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         checkScreenHome = false
+
     }
 
     override fun onDestroy() {
         dataViewMode.resetCheckTypeTabLayoutHomeToAddTransaction()
         dataViewMode.checkGetAccountLoginHome = 0
+        dataViewMode.selectMoneyAccountFilterHome = MoneyAccountWithDetails()
         super.onDestroy()
     }
 

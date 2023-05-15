@@ -226,23 +226,5 @@ class NotificationHandler(private val context: Context) {
             return calendar.timeInMillis
         }
 
-//        Để lên lịch thông báo đầu tiên
-        fun scheduleNotification(context: Context, notification: NotificationInfo) {
-            val reminderStartTime = notification.notificationReminderStartTime ?: 0
-            val nextNotificationTime =
-                getNextNotificationTime(notification.notificationFrequency, reminderStartTime)
-            if (nextNotificationTime != null) {
-                val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-                val pendingIntent = createNotificationIntent(context, notification)
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    alarmManager.setExactAndAllowWhileIdle(
-                        AlarmManager.RTC_WAKEUP,
-                        nextNotificationTime,
-                        pendingIntent
-                    )
-                }
-
-            }
-        }
     }
 }

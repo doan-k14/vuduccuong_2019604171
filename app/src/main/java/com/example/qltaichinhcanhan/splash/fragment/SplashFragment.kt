@@ -29,26 +29,6 @@ class SplashFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         dataViewMode = ViewModelProvider(this)[DataViewMode::class.java]
 
-
-//        val sharedPreferences: SharedPreferences =
-//            requireActivity().getSharedPreferences("default_account_initialization_check",
-//                Context.MODE_PRIVATE)
-//        val checkData = sharedPreferences.getBoolean("ck", false)
-
-//        if (!checkData) {
-//            lifecycleScope.launch {
-//                delay(500)
-//                findNavController().navigate(R.id.action_splashFragment_to_onBoardingFragment)
-//            }
-//
-//        } else {
-//            lifecycleScope.launch {
-//                delay(500)
-//                val intent = Intent(requireActivity(), NDMainActivity::class.java)
-//                startActivity(intent)
-//                requireActivity().finish()
-//            }
-//        }
         getAccountLogin()
     }
 

@@ -410,7 +410,7 @@ class DataViewMode(application: Application) : AndroidViewModel(application) {
 
     // check sliderSow
 
-    var selectTabLayoutSlidesShow = 0
+    var selectTabLayoutSlidesShow = 1
     var selectTabLayoutStyleSlidesShow = 1
 
 

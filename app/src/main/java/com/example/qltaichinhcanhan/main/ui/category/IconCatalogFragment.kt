@@ -47,7 +47,6 @@ class IconCatalogFragment : BaseFragment(), IconClickListener {
     }
 
     override fun onIconClick(iconR: IconR) {
-        Toast.makeText(context, "Selected icon: ${iconR.iconName}", Toast.LENGTH_SHORT).show()
         dataViewMode.selectIconR.id = iconR.id
         findNavController().popBackStack()
     }
