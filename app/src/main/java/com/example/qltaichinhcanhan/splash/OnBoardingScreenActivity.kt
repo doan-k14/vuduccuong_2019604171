@@ -22,7 +22,7 @@ class OnBoardingScreenActivity : AppCompatActivity(), MyCallback {
         super.onCreate(savedInstanceState)
         binding = ActivityOnBoardingScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        getCodeLanguage()
+//        getCodeLanguage()
         navController = Navigation.findNavController(this, R.id.nav_host_fragment)
         setColorStatusbar()
     }

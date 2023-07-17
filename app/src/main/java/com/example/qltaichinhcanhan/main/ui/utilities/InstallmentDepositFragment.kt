@@ -110,11 +110,11 @@ class InstallmentDepositFragment : BaseFragment() {
         val txtRate = binding.edtInterestRate.text.toString()
         try {
             val principal = txtMoney.toDouble()
-            val months = txtMonth.toDouble()
-            val interestRate = txtRate.toInt()
+            val months = txtMonth.toInt()
+            val interestRate = txtRate.toDouble()
 
             if (type == 0) {
-                val r = calculateSavingsAmount(principal, months, interestRate)
+                val r = calculateSavingsAmount(principal, interestRate,months )
                 binding.llCalculateAmountAtEnd.visibility = View.VISIBLE
                 binding.llCalculateAmountEveryMonth.visibility = View.GONE
                 binding.txtAmountReceived.text = convertFloatToString(r.toFloat())
@@ -122,7 +122,7 @@ class InstallmentDepositFragment : BaseFragment() {
                 binding.txtInterest.text = convertFloatToString((r - principal).toFloat())
 
             } else {
-                val r = calculateRequiredSavingsAmount(principal, months, interestRate)
+                val r = calculateRequiredSavingsAmount(principal,interestRate, months)
                 binding.llCalculateAmountAtEnd.visibility = View.GONE
                 binding.llCalculateAmountEveryMonth.visibility = View.VISIBLE
                 binding.txtAmountToDepositMonthly.text = convertFloatToString(r.toFloat())
@@ -138,16 +138,25 @@ class InstallmentDepositFragment : BaseFragment() {
         val monthlyInterestRate = (interestRate / 100) / 12.0
         return principal * (1 + monthlyInterestRate).pow(months.toDouble())
     }
+//
+//    fun calculateRequiredSavingsAmount(
+//        desiredAmount: Double,
+//        interestRate: Double,
+//        timePeriod: Int,
+//    ): Double {
+//        val power = (1.0 + (interestRate / 100)).pow(timePeriod.toDouble())
+//        return desiredAmount * power
+//    }
 
     fun calculateRequiredSavingsAmount(
         desiredAmount: Double,
         interestRate: Double,
-        timePeriod: Int,
+        timePeriod: Int
     ): Double {
-        val power = (1.0 + (interestRate / 100)).pow(timePeriod.toDouble())
+        val monthlyInterestRate = (interestRate / 100) / 12.0
+        val power = (1 + monthlyInterestRate).pow(timePeriod.toDouble())
         return desiredAmount / power
     }
-
 
     private fun initEvent() {
 
