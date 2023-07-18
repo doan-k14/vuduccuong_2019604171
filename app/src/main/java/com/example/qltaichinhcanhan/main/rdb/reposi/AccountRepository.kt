@@ -28,4 +28,8 @@ class AccountRepository(private val accountDao: AccountDao) {
     fun getAccountByEmail(email: String): Account {
         return accountDao.getAccountByEmail(email)
     }
+
+    fun deleteAll(){
+        accountDao.deleteAll()
+    }
 }

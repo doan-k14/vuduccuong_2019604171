@@ -27,4 +27,7 @@ class CountryRepository(private val countryDao: CountryDao) {
     fun getCountryBySelect(): Country {
         return countryDao.getCountryBySelect()
     }
+    fun deleteAll(){
+        countryDao.deleteAll()
+    }
 }

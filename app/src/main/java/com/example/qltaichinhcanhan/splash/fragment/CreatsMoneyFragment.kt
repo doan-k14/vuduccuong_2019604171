@@ -27,6 +27,8 @@ import com.example.qltaichinhcanhan.main.model.m_r.Account
 import com.example.qltaichinhcanhan.main.model.m_r.Country
 import com.example.qltaichinhcanhan.main.model.m_r.MoneyAccount
 import com.example.qltaichinhcanhan.main.rdb.vm_data.DataViewMode
+import com.example.qltaichinhcanhan.utils.Constant
+import com.example.qltaichinhcanhan.utils.Utils
 
 
 class CreatsMoneyFragment : Fragment() {
@@ -57,10 +59,12 @@ class CreatsMoneyFragment : Fragment() {
             welcomeTo.length + t.length,
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         )
-        spannableString.setSpan(StyleSpan(Typeface.BOLD),
+        spannableString.setSpan(
+            StyleSpan(Typeface.BOLD),
             welcomeTo.length,
             welcomeTo.length + t.length,
-            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
 
         binding.txtTitleMoney.text = spannableString
 
@@ -91,15 +95,19 @@ class CreatsMoneyFragment : Fragment() {
                 MoneyTextWatcher.parseCurrencyValue(binding.edtInitialBalance.text.toString())
             val temp = value.toString()
             if (binding.edtInitialBalance.text.isEmpty()) {
-                Toast.makeText(requireContext(),
+                Toast.makeText(
+                    requireContext(),
                     requireContext().getString(R.string.please_enter_data),
-                    Toast.LENGTH_SHORT).show()
+                    Toast.LENGTH_SHORT
+                ).show()
                 return@setOnClickListener
             }
             if (country.idCountry == 0) {
-                Toast.makeText(requireContext(),
+                Toast.makeText(
+                    requireContext(),
                     requireContext().getString(R.string.please_select_currency),
-                    Toast.LENGTH_SHORT).show()
+                    Toast.LENGTH_SHORT
+                ).show()
                 return@setOnClickListener
             }
             try {
@@ -114,10 +122,9 @@ class CreatsMoneyFragment : Fragment() {
                     1,
                     2,
                     country.idCountry,
-                    accountLogin.idAccount
+                    1
                 )
-                Log.d("aaa", "${moneyAccount.toString()}")
-
+                Utils.putBoolean(requireContext(), Constant.CREATE_MONEY_ACCOUNT, true);
                 dataViewMode.addMoneyAccount(moneyAccount)
                 country.selectCountry = true
                 dataViewMode.updateCountry(country)
@@ -132,15 +139,17 @@ class CreatsMoneyFragment : Fragment() {
                 }, 1500)
 
             } catch (e: NumberFormatException) {
-                Toast.makeText(context,
+                Toast.makeText(
+                    context,
                     requireContext().getString(R.string.please_enter_data),
-                    Toast.LENGTH_SHORT).show()
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
 
     private fun getAccountSelect() {
-        if(dataViewMode.checkInputScreenCreateMoney == 1){
+        if (dataViewMode.checkInputScreenCreateMoney == 1) {
             dataViewMode.getAccountByDefault()
             dataViewMode.accountDefault.observe(requireActivity()) {
                 if (it != null) {

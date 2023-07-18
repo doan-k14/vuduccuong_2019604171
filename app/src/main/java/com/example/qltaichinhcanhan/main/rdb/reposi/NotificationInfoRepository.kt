@@ -20,4 +20,8 @@ class NotificationInfoRepository(private val notificationInfoDao: NotificationIn
     suspend fun update(notificationInfo: NotificationInfo) {
         notificationInfoDao.update(notificationInfo)
     }
+
+    fun deleteAll(){
+        notificationInfoDao.deleteAll()
+    }
 }

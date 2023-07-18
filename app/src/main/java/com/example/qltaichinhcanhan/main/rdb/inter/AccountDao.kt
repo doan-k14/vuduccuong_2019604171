@@ -27,4 +27,7 @@ interface AccountDao {
 
     @Query("SELECT * FROM account WHERE accountName=:email")
     fun getAccountByEmail(email: String): Account
+
+    @Query("DELETE FROM account")
+    fun deleteAll()
 }

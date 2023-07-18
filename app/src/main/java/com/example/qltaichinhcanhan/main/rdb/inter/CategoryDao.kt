@@ -38,4 +38,6 @@ interface CategoryDao {
             "WHERE type = :type ORDER BY idCategory DESC")
     fun getAllCategoryDetailsByType(type: Int): List<CategoryWithDetails>
 
+    @Query("DELETE FROM category")
+    fun deleteAll()
 }

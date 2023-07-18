@@ -13,6 +13,8 @@ import com.example.qltaichinhcanhan.R
 import com.example.qltaichinhcanhan.main.NDMainActivity
 import com.example.qltaichinhcanhan.main.model.m_r.Account
 import com.example.qltaichinhcanhan.main.rdb.vm_data.DataViewMode
+import com.example.qltaichinhcanhan.utils.Constant
+import com.example.qltaichinhcanhan.utils.Utils
 import kotlinx.coroutines.*
 
 
@@ -28,40 +30,21 @@ class SplashFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         dataViewMode = ViewModelProvider(this)[DataViewMode::class.java]
-
-        getAccountLogin()
+        checkCreateMoneyAccount()
     }
 
-    private fun getAccountLogin() {
-
-        dataViewMode.getAccountByDefault()
-        dataViewMode.accountDefault.observe(requireActivity()) {
-            if (it != null) {
-                checkCreateMoneyAccount(it)
-            } else {
-                lifecycleScope.launch {
-                    delay(100)
-                    findNavController().navigate(R.id.action_splashFragment_to_onBoardingFragment)
-                }
+    private fun checkCreateMoneyAccount() {
+        if (Utils.getBoolean(requireContext(), Constant.CREATE_MONEY_ACCOUNT, false)) {
+            lifecycleScope.launch {
+                delay(10)
+                val intent = Intent(requireActivity(), NDMainActivity::class.java)
+                startActivity(intent)
+                requireActivity().finish()
             }
-        }
-    }
-
-    private fun checkCreateMoneyAccount(account: Account) {
-        dataViewMode.getMoneyAccountMainByIdAccount(account.idAccount)
-        dataViewMode.moneyAccountMainByIdAccount.observe(requireActivity()) {
-            if (it != null) {
-                lifecycleScope.launch {
-                    delay(10)
-                    val intent = Intent(requireActivity(), NDMainActivity::class.java)
-                    startActivity(intent)
-                    requireActivity().finish()
-                }
-            } else {
-                lifecycleScope.launch {
-                    delay(10)
-                    findNavController().navigate(R.id.action_splashFragment_to_onBoardingFragment)
-                }
+        } else {
+            lifecycleScope.launch {
+                delay(10)
+                findNavController().navigate(R.id.action_splashFragment_to_onBoardingFragment)
             }
         }
     }

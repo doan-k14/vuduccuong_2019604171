@@ -25,9 +25,11 @@ class TransactionRepository(private val transactionDao: TransactionDao) {
         return transactionDao.getTransactionById(transactionId)
     }
 
-    val allTransactionWithDetails: LiveData<List<TransactionWithDetails>> = transactionDao.getAllLiveTransactionWithDetailsByDesc()
+    val allTransactionWithDetails: LiveData<List<TransactionWithDetails>> =
+        transactionDao.getAllLiveTransactionWithDetailsByDesc()
 
-    val allTransactionWithDetails1: List<TransactionWithDetails> = transactionDao.getAllTransactionWithDetailsByDesc()
+    val allTransactionWithDetails1: List<TransactionWithDetails> =
+        transactionDao.getAllTransactionWithDetailsByDesc()
 
     fun getAllTransactionWithDetailsByTypeCategory(type: String): List<TransactionWithDetails> {
         return transactionDao.getAllTransactionWithDetailsByTypeCategory(type)
@@ -37,4 +39,7 @@ class TransactionRepository(private val transactionDao: TransactionDao) {
         return transactionDao.getAllTransactionWithDetails()
     }
 
+    fun deleteAll() {
+        transactionDao.deleteAll()
+    }
 }

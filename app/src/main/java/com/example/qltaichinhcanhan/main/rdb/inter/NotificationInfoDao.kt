@@ -23,4 +23,6 @@ interface NotificationInfoDao {
     @Query("SELECT * FROM notificationInfo")
     fun getAllNotificationInfo(): List<NotificationInfo>
 
+    @Query("DELETE FROM notificationInfo")
+    fun deleteAll()
 }

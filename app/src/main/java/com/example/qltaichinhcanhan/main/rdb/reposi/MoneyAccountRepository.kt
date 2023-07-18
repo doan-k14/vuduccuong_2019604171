@@ -29,4 +29,7 @@ class MoneyAccountRepository(private val moneyAccountDao: MoneyAccountDao) {
         return moneyAccountDao.getAllMoneyAccounts()
     }
 
+    fun deleteAll(){
+        moneyAccountDao.deleteAll()
+    }
 }

@@ -226,7 +226,7 @@
     <string name="error_first_name">Họ không được bỏ trống</string>
     <string name="error_last_name">Tên không được bỏ trống</string>
     <string name="mess_exit">Bạn có muốn rời khởi hồ sơ của mình?</string>
-    <string name="mess_confrim_delete_data">Xóa dữ liệu ứng dụng hiện tại</string>
+    <string name="mess_confrim_delete_data">Khi thoát, toàn bộ dữ liệu của bạn sẽ bị xóa và không thể khôi phục nhằm mục đích bảo vệ dữ liệu. Hãy cân nhắc!</string>
     <string name="money_account_name">Nhập tên tài khoản</string>
     <string name="create_money_account">Tạo tài khoản tiền</string>
     <string name="title_money_account">Tên tài khoản tiền</string>

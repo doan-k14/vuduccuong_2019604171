@@ -46,20 +46,16 @@ class OnBoardingFragment : Fragment() {
         binding.textLogin.setOnClickListener {
             findNavController().navigate(R.id.action_onBoardingFragment_to_loginFragment)
         }
-        binding.textNewStart.setOnClickListener {
-            dataViewMode.checkInputScreenCreateMoney = 2
-            findNavController().navigate(R.id.action_onBoardingFragment_to_creatsMoneyFragment)
-        }
         binding.textLanguage.setOnClickListener {
             findNavController().navigate(R.id.action_onBoardingFragment_to_languageFragment2)
         }
     }
 
     private fun initxData() {
-        dataViewMode.readAllDataLiveAccount.observe(requireActivity()){
+        dataViewMode.readAllDataLiveAccount.observe(requireActivity()) {
             dataViewMode.listAccount = it
-            if(it.isNotEmpty()){
-                Log.d("aaa","size: ${it.size}")
+            if (it.isNotEmpty()) {
+                Log.d("aaa", "size: ${it.size}")
             }
         }
     }
@@ -68,7 +64,16 @@ class OnBoardingFragment : Fragment() {
         val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
         val isFirstTime = sharedPref.getBoolean("createDefaultAccount", true)
         if (isFirstTime) {
-            dataViewMode.addAccount(Account(0, "Default account","Default account", "00000", "null", false))
+            dataViewMode.addAccount(
+                Account(
+                    0,
+                    "Default account",
+                    "Default account",
+                    "00000",
+                    "null",
+                    false
+                )
+            )
             sharedPref.edit().putBoolean("createDefaultAccount", false).apply()
         }
     }

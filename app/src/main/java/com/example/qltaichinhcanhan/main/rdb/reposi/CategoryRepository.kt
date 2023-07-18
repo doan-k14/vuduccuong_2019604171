@@ -28,4 +28,7 @@ class CategoryRepository(private val categoryDao: CategoryDao) {
         return categoryDao.getCategoryByType(type)
     }
 
+    fun deleteAll(){
+        categoryDao.deleteAll()
+    }
 }

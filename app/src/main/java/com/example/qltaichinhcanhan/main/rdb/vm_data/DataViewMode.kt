@@ -19,6 +19,15 @@ import kotlin.collections.ArrayList
 
 class DataViewMode(application: Application) : AndroidViewModel(application) {
 
+    fun deleteAllData() {
+        accountRepository.deleteAll()
+        categoryRepository.deleteAll()
+        countryRepository.deleteAll()
+        moneyAccountRepository.deleteAll()
+        notificationInfoRepository.deleteAll()
+        transactionRepository.deleteAll()
+    }
+
     private var db = AppDatabase.getInstance(application)
 
     // Account
@@ -40,6 +49,7 @@ class DataViewMode(application: Application) : AndroidViewModel(application) {
             accountRepository.update(account)
         }
     }
+
     fun updateListAccount(list: List<Account>) {
         viewModelScope.launch(Dispatchers.IO) {
             for (i in list) {
@@ -158,7 +168,8 @@ class DataViewMode(application: Application) : AndroidViewModel(application) {
 //    -------------------------------Money Account------------------------------
 
     private var moneyAccountDao = db.moneyAccountDao()
-    private val moneyAccountRepository: MoneyAccountRepository = MoneyAccountRepository(moneyAccountDao)
+    private val moneyAccountRepository: MoneyAccountRepository =
+        MoneyAccountRepository(moneyAccountDao)
 
     fun addMoneyAccount(moneyAccount: MoneyAccount) {
         viewModelScope.launch(Dispatchers.IO) {

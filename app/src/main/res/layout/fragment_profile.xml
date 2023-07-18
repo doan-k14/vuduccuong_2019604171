@@ -104,16 +104,8 @@
             android:text="@string/exit"
             android:textColor="@color/red"
             android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/text_delete_account"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="@string/delete_profile"
-            android:textColor="@color/red"
-            android:textSize="18sp" />
     </LinearLayout>
+
     <ProgressBar
         android:id="@+id/pressed_loading"
         android:layout_width="40dp"

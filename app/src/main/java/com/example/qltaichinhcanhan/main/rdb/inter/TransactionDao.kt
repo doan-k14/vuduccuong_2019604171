@@ -54,5 +54,7 @@ interface TransactionDao {
     )
     fun getAllTransactionWithDetails(): List<TransactionWithDetails>
 
+    @Query("DELETE FROM `transaction`")
+    fun deleteAll()
 
 }

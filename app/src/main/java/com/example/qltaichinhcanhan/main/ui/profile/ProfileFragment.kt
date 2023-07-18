@@ -19,6 +19,8 @@ import com.example.qltaichinhcanhan.main.library.CustomDialog
 import com.example.qltaichinhcanhan.main.model.m_r.Account
 import com.example.qltaichinhcanhan.main.rdb.vm_data.DataViewMode
 import com.example.qltaichinhcanhan.splash.OnBoardingScreenActivity
+import com.example.qltaichinhcanhan.utils.Constant
+import com.example.qltaichinhcanhan.utils.Utils
 
 
 class ProfileFragment : BaseFragment() {
@@ -65,13 +67,7 @@ class ProfileFragment : BaseFragment() {
                 resources.getString(R.string.text_ok),
                 {
                     customDialog.dismiss()
-                    var account = dataViewMode.accountLoginHome
-                    account.selectAccount = false
-                    dataViewMode.updateAccount(account)
-
-                    val intent = Intent(requireActivity(), OnBoardingScreenActivity::class.java)
-                    startActivity(intent)
-                    requireActivity().finish()
+                    createDialogConfirmDeleteData();
                 },
                 resources.getString(R.string.text_no),
                 {
@@ -80,14 +76,9 @@ class ProfileFragment : BaseFragment() {
             )
         }
 
-        binding.textDeleteAccount.setOnClickListener {
-            Toast.makeText(requireActivity(),
-                requireContext().resources.getString(R.string.future_update),
-                Toast.LENGTH_SHORT).show()
-        }
     }
 
-    private fun createDialogConfirmDeleteData(account: Account) {
+    private fun createDialogConfirmDeleteData() {
         val customDialog = CustomDialog(requireActivity())
         customDialog.showDialog(
             Gravity.CENTER,
@@ -95,14 +86,19 @@ class ProfileFragment : BaseFragment() {
             resources.getString(R.string.mess_confrim_delete_data),
             resources.getString(R.string.text_ok),
             {
-//                Toast.makeText(requireActivity(),requireContext().resources.getString(R.string.future_update),Toast.LENGTH_SHORT).show()
+                // xoa all data lên cần nhập mk
                 customDialog.dismiss()
-                deleteAccount(account)
+
+                Utils.putBoolean(requireContext(), Constant.CREATE_MONEY_ACCOUNT, false)
+                dataViewMode.deleteAllData()
+
+                val intent = Intent(requireActivity(), OnBoardingScreenActivity::class.java)
+                startActivity(intent)
+                requireActivity().finish()
             },
             resources.getString(R.string.text_no),
             {
                 customDialog.dismiss()
-                deleteAccount(account)
             }
         )
 

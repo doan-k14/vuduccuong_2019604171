@@ -38,5 +38,4 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun accountDao(): AccountDao
     abstract fun notificationInfoDao(): NotificationInfoDao
 
-
 }

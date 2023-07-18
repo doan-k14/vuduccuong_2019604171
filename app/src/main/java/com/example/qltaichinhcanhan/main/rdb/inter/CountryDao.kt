@@ -27,4 +27,6 @@ interface CountryDao {
     @Query("SELECT * FROM country WHERE `selectCountry`= 1")
     fun getCountryBySelect(): Country
 
+    @Query("DELETE FROM country")
+    fun deleteAll()
 }

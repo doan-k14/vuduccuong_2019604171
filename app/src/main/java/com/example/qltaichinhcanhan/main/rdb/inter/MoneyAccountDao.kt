@@ -47,4 +47,6 @@ interface MoneyAccountDao {
             "INNER JOIN account ON moneyAccount.idAccount = account.idAccount ")
     fun getAllMoneyAccounts(): List<MoneyAccountWithDetails>
 
+    @Query("DELETE FROM moneyAccount")
+    fun deleteAll()
 }
