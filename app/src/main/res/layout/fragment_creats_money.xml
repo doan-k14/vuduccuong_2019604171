@@ -41,7 +41,7 @@
             <EditText
                 android:id="@+id/edt_initial_balance"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="42dp"
                 android:layout_marginRight="5dp"
                 android:layout_weight="6"
                 android:background="@drawable/rounded_edittext"
@@ -58,7 +58,7 @@
             <TextView
                 android:id="@+id/edt_type_account"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="42dp"
                 android:layout_marginLeft="5dp"
                 android:layout_weight="4"
                 android:background="@drawable/rounded_edittext"
@@ -70,12 +70,12 @@
                 android:textSize="16sp" />
         </LinearLayout>
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/start_button"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="42dp"
             android:layout_marginTop="20dp"
-            android:background="@drawable/button_save_category"
+            android:background="@drawable/custom_button"
             android:gravity="center"
             android:text="@string/start"
             android:textColor="#FFFFFF" />

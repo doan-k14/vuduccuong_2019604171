@@ -33,27 +33,25 @@
             android:layout_height="48dp"
             app:ci_drawable="@drawable/custom_circle_indicator3" />
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/text_sign_up"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="46dp"
             android:layout_marginTop="16dp"
-            android:background="@drawable/custom_button_login"
+            android:background="@drawable/custom_button"
             android:gravity="center"
-            android:paddingVertical="12dp"
             android:text="@string/register_new_account"
             android:textAllCaps="true"
             android:textColor="@color/white"
             android:textSize="16sp" />
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/text_login"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="46dp"
             android:layout_marginTop="16dp"
-            android:background="@drawable/custom_button_white_login"
+            android:background="@null"
             android:gravity="center"
-            android:paddingVertical="12dp"
             android:text="@string/login"
             android:textAllCaps="true"
             android:textColor="@color/blu_mani"

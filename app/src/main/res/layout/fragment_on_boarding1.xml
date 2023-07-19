@@ -9,6 +9,8 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:layout_width="375dp"
+        android:visibility="invisible"
+
         android:layout_height="250dp"
         android:src="@drawable/bieu_do" />
 

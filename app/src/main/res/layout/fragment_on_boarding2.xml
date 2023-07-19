@@ -10,6 +10,7 @@
     <de.hdodenhof.circleimageview.CircleImageView
         android:layout_width="375dp"
         android:layout_height="250dp"
+        android:visibility="invisible"
         android:src="@drawable/search" />
 
     <TextView

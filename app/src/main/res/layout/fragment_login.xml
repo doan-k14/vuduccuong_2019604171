@@ -73,7 +73,8 @@
         <EditText
             android:id="@+id/edt_account"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="42dp"
+
             android:layout_marginTop="26dp"
             android:background="@drawable/rounded_edittext"
             android:hint="@string/number_phone_email"
@@ -83,7 +84,8 @@
         <EditText
             android:id="@+id/edt_pass"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="42dp"
+
             android:layout_marginTop="16dp"
             android:background="@drawable/rounded_edittext"
             android:hint="@string/pass"
@@ -101,12 +103,12 @@
             app:layout_constraintEnd_toEndOf="@id/edt_pass"
             app:layout_constraintTop_toTopOf="@id/edt_pass" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_login"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="42dp"
             android:layout_marginTop="18dp"
-            android:backgroundTint="@color/blu_mani"
+            android:background="@drawable/custom_button"
             android:text="@string/login"
             app:layout_constraintTop_toBottomOf="@id/edt_pass" />
 

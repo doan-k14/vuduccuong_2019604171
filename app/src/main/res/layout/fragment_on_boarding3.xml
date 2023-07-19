@@ -10,7 +10,9 @@
     <de.hdodenhof.circleimageview.CircleImageView
         android:layout_width="375dp"
         android:layout_height="250dp"
-        android:src="@drawable/ti_gia" />
+        android:src="@drawable/ti_gia"
+
+        android:visibility="invisible" />
 
     <TextView
         android:id="@+id/txt_title_money"
