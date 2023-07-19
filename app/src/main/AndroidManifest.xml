@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.qltaichinhcanhan">
+    package="com.cvd.qltaichinhcanhan">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"/>
+<!--    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"/>-->
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -29,14 +29,14 @@
 
         <activity
             android:screenOrientation="portrait"
-            android:name=".main.NDMainActivity"
+            android:name="com.cvd.qltaichinhcanhan.main.NDMainActivity"
             android:exported="true"
             android:label="@string/title_activity_ndmain"
             android:launchMode="singleTop"
             android:theme="@style/Theme.QLTaiChinhCaNhan.NoActionBar" />
         <activity
             android:screenOrientation="portrait"
-            android:name="com.example.qltaichinhcanhan.splash.OnBoardingScreenActivity"
+            android:name="com.cvd.qltaichinhcanhan.splash.OnBoardingScreenActivity"
             android:exported="true"
             android:theme="@style/SplashTheme">
             <intent-filter>
@@ -48,7 +48,7 @@
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.example.qltaichinhcanhan.fileprovider"
+            android:authorities="com.cvd.qltaichinhcanhan.fileprovider"
             android:grantUriPermissions="true"
             android:exported="false">
             <meta-data

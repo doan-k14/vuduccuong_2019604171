@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/splashFragment"
-        android:name="com.example.qltaichinhcanhan.splash.fragment.SplashFragment"
+        android:name="com.cvd.qltaichinhcanhan.splash.fragment.SplashFragment"
         android:label="fragment_splash"
         tools:layout="@layout/fragment_splash">
         <action
@@ -18,7 +18,7 @@
     </fragment>
     <fragment
         android:id="@+id/onBoardingFragment"
-        android:name="com.example.qltaichinhcanhan.splash.fragment.boarding.OnBoardingFragment"
+        android:name="com.cvd.qltaichinhcanhan.splash.fragment.boarding.OnBoardingFragment"
         android:label="fragment_on_boarding"
         tools:layout="@layout/fragment_on_boarding">
 
@@ -33,17 +33,17 @@
 
         <fragment
             android:id="@+id/onBoarding1Fragment"
-            android:name="com.example.qltaichinhcanhan.splash.fragment.boarding.OnBoarding1Fragment"
+            android:name="com.cvd.qltaichinhcanhan.splash.fragment.boarding.OnBoarding1Fragment"
             android:label="fragment_on_boarding1"
             tools:layout="@layout/fragment_on_boarding1" />
         <fragment
             android:id="@+id/onBoarding2Fragment"
-            android:name="com.example.qltaichinhcanhan.splash.fragment.boarding.OnBoarding2Fragment"
+            android:name="com.cvd.qltaichinhcanhan.splash.fragment.boarding.OnBoarding2Fragment"
             android:label="OnBoarding2Fragment" />
 
         <fragment
             android:id="@+id/onBoarding3Fragment"
-            android:name="com.example.qltaichinhcanhan.splash.fragment.boarding.OnBoarding3Fragment"
+            android:name="com.cvd.qltaichinhcanhan.splash.fragment.boarding.OnBoarding3Fragment"
             android:label="OnBoarding3Fragment" />
         <action
             android:id="@+id/action_onBoardingFragment_to_creatsMoneyFragment"
@@ -56,7 +56,7 @@
 
     <fragment
         android:id="@+id/signUpFragment"
-        android:name="com.example.qltaichinhcanhan.splash.fragment.login.SignUpFragment"
+        android:name="com.cvd.qltaichinhcanhan.splash.fragment.login.SignUpFragment"
         android:label="fragment_signup"
         tools:layout="@layout/fragment_signup">
         <action
@@ -70,7 +70,7 @@
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.example.qltaichinhcanhan.splash.fragment.login.LoginFragment"
+        android:name="com.cvd.qltaichinhcanhan.splash.fragment.login.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login">
         <action
@@ -83,7 +83,7 @@
 
     <fragment
         android:id="@+id/creatsMoneyFragment"
-        android:name="com.example.qltaichinhcanhan.splash.fragment.CreatsMoneyFragment"
+        android:name="com.cvd.qltaichinhcanhan.splash.fragment.CreatsMoneyFragment"
         android:label="fragment_creats_money"
         tools:layout="@layout/fragment_creats_money" >
         <action
@@ -92,12 +92,12 @@
     </fragment>
     <fragment
         android:id="@+id/currencyFragment"
-        android:name="com.example.qltaichinhcanhan.main.ui.currency.CurrencyFragment"
+        android:name="com.cvd.qltaichinhcanhan.main.ui.currency.CurrencyFragment"
         android:label="fragment_currency"
         tools:layout="@layout/fragment_currency" />
     <fragment
         android:id="@+id/languageFragment2"
-        android:name="com.example.qltaichinhcanhan.main.ui.setting.LanguageFragment"
+        android:name="com.cvd.qltaichinhcanhan.main.ui.setting.LanguageFragment"
         android:label="fragment_language"
         tools:layout="@layout/fragment_language" />
 </navigation>

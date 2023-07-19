@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">QLTaiChinhCaNhan</string>
+    <string name="app_name">Manager Money VC</string>
     <string name="hello_blank_fragment">ハローブランクフラグメント</string>
     <string name="add">追加</string>
     <string name="summary">グラフ</string>
