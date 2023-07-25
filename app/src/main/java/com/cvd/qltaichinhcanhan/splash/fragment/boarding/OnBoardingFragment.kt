@@ -1,6 +1,8 @@
 package com.cvd.qltaichinhcanhan.splash.fragment.boarding
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.preference.PreferenceManager
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -9,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.viewpager2.widget.ViewPager2
 import com.cvd.qltaichinhcanhan.R
 import com.cvd.qltaichinhcanhan.splash.adapter.OnBoardingPagerAdapter
 import com.cvd.qltaichinhcanhan.databinding.FragmentOnBoardingBinding
@@ -21,7 +24,8 @@ class OnBoardingFragment : Fragment() {
     lateinit var binding: FragmentOnBoardingBinding
     private lateinit var onBoardingPagerAdapter: OnBoardingPagerAdapter
     private lateinit var dataViewMode: DataViewMode
-
+    private lateinit var autoScrollHandler: Handler
+    private var currentPage = 0
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -33,47 +37,49 @@ class OnBoardingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         dataViewMode = ViewModelProvider(requireActivity())[DataViewMode::class.java]
-        initxData()
-//        createDefaultAccount()
+
+        initView()
+        initEvent()
+    }
+
+    private fun initView() {
         onBoardingPagerAdapter = OnBoardingPagerAdapter(requireActivity())
         binding.viewPagerLogin.adapter = onBoardingPagerAdapter
         binding.indicator.setViewPager(binding.viewPagerLogin)
+        binding.viewPagerLogin.registerOnPageChangeCallback(pageChangeCallback)
+        startAutoScroll()
+    }
 
-        binding.textSignUp.setOnClickListener {
-            findNavController().navigate(R.id.action_onBoardingFragment_to_signUpFragment)
-        }
-        binding.textLogin.setOnClickListener {
-            findNavController().navigate(R.id.action_onBoardingFragment_to_loginFragment)
+    private fun initEvent() {
+        binding.btnNewStart.setOnClickListener {
+            findNavController().navigate(R.id.action_onBoardingFragment_to_creatsMoneyFragment)
         }
         binding.textLanguage.setOnClickListener {
             findNavController().navigate(R.id.action_onBoardingFragment_to_languageFragment2)
         }
     }
 
-    private fun initxData() {
-        dataViewMode.readAllDataLiveAccount.observe(requireActivity()) {
-            dataViewMode.listAccount = it
-            if (it.isNotEmpty()) {
-                Log.d("aaa", "size: ${it.size}")
-            }
+    private val pageChangeCallback = object : ViewPager2.OnPageChangeCallback() {
+        override fun onPageSelected(position: Int) {
+            super.onPageSelected(position)
+            currentPage = position
         }
     }
 
-    private fun createDefaultAccount() {
-        val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
-        val isFirstTime = sharedPref.getBoolean("createDefaultAccount", true)
-        if (isFirstTime) {
-            dataViewMode.addAccount(
-                Account(
-                    0,
-                    "Default account",
-                    "Default account",
-                    "00000",
-                    "null",
-                    false
-                )
-            )
-            sharedPref.edit().putBoolean("createDefaultAccount", false).apply()
-        }
+    private fun startAutoScroll() {
+        val totalItems = onBoardingPagerAdapter.itemCount
+
+        autoScrollHandler = Handler(Looper.myLooper()!!)
+        autoScrollHandler.postDelayed({
+            currentPage = (currentPage + 1) % totalItems
+            binding.viewPagerLogin.setCurrentItem(currentPage, true)
+            startAutoScroll() // Recursive call to continue auto-scrolling
+        }, 3000) // Auto-scroll every 3 seconds (adjust as needed)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        autoScrollHandler.removeCallbacksAndMessages(null) // Don't forget to remove callbacks when the Fragment is destroyed
+        binding.viewPagerLogin.unregisterOnPageChangeCallback(pageChangeCallback) // Unregister the page change callback
     }
 }

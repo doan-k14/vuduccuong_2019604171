@@ -17,6 +17,10 @@ import com.cvd.qltaichinhcanhan.databinding.FragmentLoginBinding
 import com.cvd.qltaichinhcanhan.main.NDMainActivity
 import com.cvd.qltaichinhcanhan.main.model.m_r.Account
 import com.cvd.qltaichinhcanhan.main.rdb.vm_data.DataViewMode
+import com.cvd.qltaichinhcanhan.utils.Constant
+import com.cvd.qltaichinhcanhan.utils.ProgressDialog
+import com.cvd.qltaichinhcanhan.utils.Utils
+import com.cvd.qltaichinhcanhan.utils.UtilsDialog
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -116,15 +120,19 @@ class LoginFragment : Fragment() {
         val email = binding.edtAccount.text.toString()
         val pass = binding.edtPass.text.toString()
         if (email.isEmpty()) {
-            Toast.makeText(requireActivity(),
+            Toast.makeText(
+                requireActivity(),
                 requireActivity().resources.getString(R.string.please_enter_data),
-                Toast.LENGTH_LONG).show()
+                Toast.LENGTH_LONG
+            ).show()
             return
         }
         if (pass.isEmpty()) {
-            Toast.makeText(requireActivity(),
+            Toast.makeText(
+                requireActivity(),
                 requireActivity().resources.getString(R.string.please_enter_data),
-                Toast.LENGTH_LONG).show()
+                Toast.LENGTH_LONG
+            ).show()
             return
         }
         binding.pressedLoading.visibility = View.VISIBLE
@@ -132,44 +140,33 @@ class LoginFragment : Fragment() {
     }
 
     private fun login(email: String, pass: String) {
-        auth.signInWithEmailAndPassword(email, pass)
-            .addOnCompleteListener(requireActivity()) { task ->
-                if (task.isSuccessful) {
-                    val name = email.split("@")[0]
-                    val accountNew = Account(1, name, email, pass, "null", false)
-                    val list = dataViewMode.listAccount
-                    val account = list.find { it.emailName == email }
-
-                    if (dataViewMode.checkInputScreenLogin == 0) {
-                        if (account != null) {
-                            account.selectAccount = true
-                            dataViewMode.updateAccount(account)
-                            lifecycleScope.launch {
-                                delay(100)
-                                val intent = Intent(requireActivity(), NDMainActivity::class.java)
-                                startActivity(intent)
-                                requireActivity().finish()
-                            }
-                        } else {
-                            dataViewMode.accountLogin = accountNew
-                            dataViewMode.addAccount(accountNew)
-                            dataViewMode.checkInputScreenCreateMoney = 0
-                            binding.pressedLoading.visibility = View.GONE
-                            findNavController().navigate(R.id.action_loginFragment_to_creatsMoneyFragment)
-                        }
-                    } else {
-                        accountNew.selectAccount = true
-                        dataViewMode.addAccount(accountNew)
-                        binding.pressedLoading.visibility = View.GONE
-                        dataViewMode.checkGetAccountLoginHome = 1
-                        findNavController().popBackStack(R.id.nav_home, false)
-                    }
-                } else {
-                    Toast.makeText(requireActivity(), "Đăng nhập thất bại!", Toast.LENGTH_SHORT)
-                        .show()
-                    binding.pressedLoading.visibility = View.GONE
-                }
-            }
+       UtilsDialog.LoadingDialog(requireContext()).showLoading()
+//        auth.signInWithEmailAndPassword(email, pass)
+//            .addOnCompleteListener(requireActivity()) { task ->
+//                if (task.isSuccessful) {
+//                    val name = email.split("@")[0]
+//                    val accountNew = Account(1, name, email, pass, "null", false)
+//                    dataViewMode.loginAccount = accountNew;
+//
+//                    if (Utils.getBoolean(requireContext(), Constant.CREATE_MONEY_ACCOUNT)) {
+//                        lifecycleScope.launch {
+//                            delay(100)
+//                            ProgressDialog.hide()
+//                            val intent = Intent(requireActivity(), NDMainActivity::class.java)
+//                            startActivity(intent)
+//                            requireActivity().finish()
+//                        }
+//                    } else {
+//                        dataViewMode.checkInputScreenCreateMoney = 0
+//                        ProgressDialog.hide()
+//                        findNavController().navigate(R.id.action_loginFragment_to_creatsMoneyFragment)
+//                    }
+//
+//                } else {
+//                    Toast.makeText(requireActivity(), "Đăng nhập thất bại! Hãy đăng nhập lại!", Toast.LENGTH_SHORT).show()
+//                    binding.pressedLoading.visibility = View.GONE
+//                }
+//            }
     }
 
     override fun onDestroyView() {
@@ -177,24 +174,5 @@ class LoginFragment : Fragment() {
         binding.edtAccount.setText("")
         binding.edtPass.setText("")
         dataViewMode.checkInputScreenLogin = 0
-    }
-
-    private fun checkCreateMoneyAccount(account: Account) {
-        dataViewMode.getMoneyAccountMainByIdAccount(account.idAccount)
-        dataViewMode.moneyAccountMainByIdAccount.observe(requireActivity()) {
-            if (it != null) {
-                lifecycleScope.launch {
-                    delay(10)
-                    val intent = Intent(requireActivity(), NDMainActivity::class.java)
-                    startActivity(intent)
-                    requireActivity().finish()
-                }
-            } else {
-                lifecycleScope.launch {
-                    delay(10)
-                    findNavController().navigate(R.id.action_loginFragment_to_creatsMoneyFragment)
-                }
-            }
-        }
     }
 }

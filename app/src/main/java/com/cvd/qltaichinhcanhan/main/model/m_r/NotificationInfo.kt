@@ -29,5 +29,7 @@ data class NotificationInfo(
     var notificationNote: String? = null,
     var isNotificationSelected: Boolean? = null,
     var idAccount: Int? = null,
-) : Parcelable
+) : Parcelable{
+
+}
 

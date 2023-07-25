@@ -112,11 +112,11 @@ class EditMoneyAccountFragment : BaseFragment() {
             binding.edtTypeAccount.isEnabled = false
         }
 
-        if (dataViewMode.country.idCountry != 0) {
-            binding.edtTypeAccount.text = dataViewMode.country.currencyCode
-            dataViewMode.editOrAddMoneyAccount.country = dataViewMode.country
+        if (dataViewMode.selectCountry.idCountry != 0) {
+            binding.edtTypeAccount.text = dataViewMode.selectCountry.currencyCode
+            dataViewMode.editOrAddMoneyAccount.country = dataViewMode.selectCountry
             dataViewMode.editOrAddMoneyAccount.moneyAccount!!.idCountry =
-                dataViewMode.country.idCountry
+                dataViewMode.selectCountry.idCountry
         }
     }
 
@@ -156,7 +156,7 @@ class EditMoneyAccountFragment : BaseFragment() {
         }
 
         binding.edtTypeAccount.setOnClickListener {
-            dataViewMode.checkInputScreenCurrency = 1
+            dataViewMode.checkOpenScreenCurrency = 1
             findNavController().navigate(R.id.action_editAccountFragment_to_nav_currency)
         }
 
@@ -224,7 +224,7 @@ class EditMoneyAccountFragment : BaseFragment() {
 
     override fun onDestroy() {
         // select country
-        dataViewMode.country = Country()
+        dataViewMode.selectCountry = Country()
         dataViewMode.editOrAddMoneyAccount =
             MoneyAccountWithDetails(MoneyAccount(), Country(), Account())
         super.onDestroy()

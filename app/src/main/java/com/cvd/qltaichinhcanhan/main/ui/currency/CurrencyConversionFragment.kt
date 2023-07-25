@@ -53,7 +53,7 @@ class CurrencyConversionFragment : BaseFragment() {
         dataViewMode.countryDefault.observe(requireActivity()) {
             countryDefault = it
         }
-        var countryNew = dataViewMode.country
+        var countryNew = dataViewMode.selectCountry
         if (countryNew.idCountry != 0) {
             binding.textTypeMoney.text = countryNew.currencyCode
             binding.textCurrencySymbol.text = countryNew.currencySymbol
@@ -129,7 +129,7 @@ class CurrencyConversionFragment : BaseFragment() {
             }
         }
         binding.textTypeMoney.setOnClickListener {
-            dataViewMode.checkInputScreenCurrency = 1
+            dataViewMode.checkOpenScreenCurrency = 0
             findNavController().navigate(R.id.action_currencyConversionFragment_to_nav_currency)
         }
 
@@ -174,8 +174,8 @@ class CurrencyConversionFragment : BaseFragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        dataViewMode.checkInputScreenCurrency = 0
-        dataViewMode.country = Country()
+        dataViewMode.checkOpenScreenCurrency = 0
+        dataViewMode.selectCountry = Country()
         dataViewMode.checkInputScreenCurrencyConversion = 0
     }
 

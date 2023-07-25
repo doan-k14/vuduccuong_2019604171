@@ -34,14 +34,14 @@
             app:ci_drawable="@drawable/custom_circle_indicator3" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/text_sign_up"
+            android:id="@+id/btn_new_start"
             android:layout_width="match_parent"
             android:layout_height="46dp"
             android:layout_marginTop="16dp"
             android:background="@drawable/custom_button"
             android:gravity="center"
-            android:text="@string/register_new_account"
-            android:textAllCaps="true"
+            android:text="@string/new_start"
+            android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="16sp" />
 
@@ -55,7 +55,8 @@
             android:text="@string/login"
             android:textAllCaps="true"
             android:textColor="@color/blu_mani"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:visibility="invisible" />
 
     </LinearLayout>
 

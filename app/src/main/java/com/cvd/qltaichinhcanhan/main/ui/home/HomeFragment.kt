@@ -33,6 +33,8 @@ import com.cvd.qltaichinhcanhan.main.model.m_r.NotificationInfo
 import com.cvd.qltaichinhcanhan.main.model.query_model.MoneyAccountWithDetails
 import com.cvd.qltaichinhcanhan.main.model.query_model.TransactionWithDetails
 import com.cvd.qltaichinhcanhan.main.rdb.vm_data.DataViewMode
+import com.cvd.qltaichinhcanhan.utils.Constant
+import com.cvd.qltaichinhcanhan.utils.Utils
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.tabs.TabLayout
 import java.util.*
@@ -79,9 +81,6 @@ class HomeFragment : BaseFragment() {
     }
 
     private fun initData() {
-        getAccountLogin()
-        // khởi tạo các category mặc định ban đầu
-        createDataCategory()
 
         // lấy ra loại tiền mặc định
         getDataCountryDefault()
@@ -197,28 +196,6 @@ class HomeFragment : BaseFragment() {
             findNavController().navigate(R.id.action_nav_home_to_nav_accounts)
         }
 
-    }
-
-
-    private fun createDataCategory() {
-        val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
-        val isFirstTime = sharedPref.getBoolean("createDataCategory", true)
-        if (isFirstTime) {
-            dataViewMode.addListCategory(DefaultData.getListCategoryCreateData(requireContext()))
-
-            val today = Calendar.getInstance()
-            today.timeInMillis = System.currentTimeMillis()
-            val currentTime = Calendar.getInstance().time.time
-            dataViewMode.addNotificationInfo(NotificationInfo(0,
-                resources.getString(R.string.remind),
-                resources.getString(R.string.menu_daily),
-                today.timeInMillis,
-                currentTime,
-                resources.getString(R.string.reminde_notes),
-                false,
-                1))
-            sharedPref.edit().putBoolean("createDataCategory", false).apply()
-        }
     }
 
     private fun setTextTotalMoney(l: List<MoneyAccountWithDetails>, country: Country) {
@@ -639,26 +616,6 @@ class HomeFragment : BaseFragment() {
         }
         textCancel.setOnClickListener {
             dialog.dismiss()
-        }
-    }
-
-    private fun getAccountLogin(){
-        if(dataViewMode.checkGetAccountLoginHome == 0){
-            dataViewMode.getAccountByDefault()
-            dataViewMode.accountDefault.observe(requireActivity()){
-                dataViewMode.accountLoginHome = Account()
-                if(it != null){
-                    dataViewMode.accountLoginHome = it
-                }else{
-                    dataViewMode.accountLoginHome = Account()
-                }
-                onCallbackAccount(dataViewMode.accountLoginHome)
-                dataViewMode.readAllDataLiveAccount.observe(requireActivity()) {
-                    dataViewMode.listAccount = it
-                    Log.e("ttt","${it.size}")
-                }
-                dataViewMode.checkGetAccountLoginHome = 1
-            }
         }
     }
 }

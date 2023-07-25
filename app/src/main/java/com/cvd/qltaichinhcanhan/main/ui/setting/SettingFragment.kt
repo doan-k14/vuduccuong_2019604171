@@ -10,16 +10,21 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.cvd.qltaichinhcanhan.R
 import com.cvd.qltaichinhcanhan.databinding.FragmentSettingBinding
 import com.cvd.qltaichinhcanhan.main.base.BaseFragment
 import com.cvd.qltaichinhcanhan.main.library.CustomDialog
 import com.cvd.qltaichinhcanhan.main.rdb.datab.AppDatabase
+import com.cvd.qltaichinhcanhan.main.rdb.vm_data.DataViewMode
 import com.cvd.qltaichinhcanhan.splash.OnBoardingScreenActivity
+import com.cvd.qltaichinhcanhan.utils.Constant
+import com.cvd.qltaichinhcanhan.utils.Utils
 
 
 class SettingFragment : BaseFragment() {
+    lateinit var dataViewMode: DataViewMode
     private lateinit var binding: FragmentSettingBinding
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,7 +36,7 @@ class SettingFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        dataViewMode = ViewModelProvider(requireActivity())[DataViewMode::class.java]
         initView()
         initEvent()
 
@@ -106,25 +111,25 @@ class SettingFragment : BaseFragment() {
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(uri)))
         }
         binding.llDeleteData.setOnClickListener {
-            val customDialog = CustomDialog(requireActivity())
-            customDialog.showDialog(
-                Gravity.CENTER,
-                resources.getString(R.string.dialog_message),
-                resources.getString(R.string.mess_delete_all_data),
-                resources.getString(R.string.text_ok),
-                {
-                    Toast.makeText(requireActivity(),
-                        requireContext().resources.getString(R.string.error_occurred),
-                        Toast.LENGTH_LONG).show()
-                    customDialog.dismiss()
-
-                },
-                resources.getString(R.string.text_no),
-                {
-                    customDialog.dismiss()
-                }
-            )
-
+//            val customDialog = CustomDialog(requireActivity())
+//            customDialog.showDialog(
+//                Gravity.CENTER,
+//                resources.getString(R.string.dialog_message),
+//                resources.getString(R.string.mess_delete_all_data),
+//                resources.getString(R.string.text_ok),
+//                {
+//                    Toast.makeText(requireActivity(),
+//                        requireContext().resources.getString(R.string.error_occurred),
+//                        Toast.LENGTH_LONG).show()
+//                    customDialog.dismiss()
+//
+//                },
+//                resources.getString(R.string.text_no),
+//                {
+//                    customDialog.dismiss()
+//                }
+//            )
+            createDialogConfirmDeleteData()
         }
     }
 
@@ -169,5 +174,31 @@ class SettingFragment : BaseFragment() {
     override fun onStop() {
         super.onStop()
         onCallbackLockedDrawers()
+    }
+
+    private fun createDialogConfirmDeleteData() {
+        val customDialog = CustomDialog(requireActivity())
+        customDialog.showDialog(
+            Gravity.CENTER,
+            resources.getString(R.string.dialog_message),
+            resources.getString(R.string.mess_confrim_delete_data),
+            resources.getString(R.string.text_ok),
+            {
+                // xoa all data lên cần nhập mk
+                customDialog.dismiss()
+
+                Utils.putBoolean(requireContext(), Constant.CREATE_MONEY_ACCOUNT, false)
+                dataViewMode.deleteAllData()
+
+                val intent = Intent(requireActivity(), OnBoardingScreenActivity::class.java)
+                startActivity(intent)
+                requireActivity().finish()
+            },
+            resources.getString(R.string.text_no),
+            {
+                customDialog.dismiss()
+            }
+        )
+
     }
 }

@@ -26,6 +26,8 @@ import com.cvd.qltaichinhcanhan.main.model.m_api.CurrencyDataAPI
 import com.cvd.qltaichinhcanhan.main.model.m_r.Account
 import com.cvd.qltaichinhcanhan.main.rdb.vm_data.DataViewMode
 import com.cvd.qltaichinhcanhan.main.retrofit.CountryService
+import com.cvd.qltaichinhcanhan.utils.Constant
+import com.cvd.qltaichinhcanhan.utils.Utils
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -61,25 +63,37 @@ class CurrencyFragment : BaseFragment() {
         dataViewMode = ViewModelProvider(requireActivity())[DataViewMode::class.java]
 
         initView()
+        initData()
         initEvent()
     }
 
     private fun initView() {
-
-        if (dataViewMode.checkInputScreenCurrency == 0) {
-            binding.btnNavigation.isActivated = false
-            binding.textCurrencyConversion.visibility = View.VISIBLE
-            binding.textTitleAccount.setText(R.string.menu_currency)
-        } else if (dataViewMode.checkInputScreenCurrency == 1) {
+        // 0 khi lần đầu vào app tạo tài khoản tiền
+        if (dataViewMode.checkOpenScreenCurrency == 0) {
             binding.btnNavigation.isActivated = true
             binding.textCurrencyConversion.visibility = View.GONE
             binding.textTitleAccount.setText(R.string.text_sreach)
+        } else if (dataViewMode.checkOpenScreenCurrency == 1) {
+            binding.btnNavigation.isActivated = false
+            binding.textCurrencyConversion.visibility = View.VISIBLE
+            binding.textTitleAccount.setText(R.string.menu_currency)
         }
         val country = Country()
         adapterCountry = AdapterCountry(requireActivity(), arrayListOf(),AdapterCountry.LayoutType.TYPE1,country,country,0F)
         binding.rcvCategory.adapter = adapterCountry
-        binding.rcvCategory.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        binding.rcvCategory.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+    }
+
+    private fun initData() {
+        val checkData = Utils.getBoolean(requireContext(), Constant.CREATE_MONEY_ACCOUNT)
+        if (!checkData) {
+            binding.pressedLoading.visibility = View.VISIBLE
+            binding.rcvCategory.visibility = View.INVISIBLE
+            callAPIDataCountry()
+        } else {
+            binding.pressedLoading.visibility = View.GONE
+            binding.rcvCategory.visibility = View.VISIBLE
+        }
 
         dataViewMode.readAllDataLiveCountry.observe(viewLifecycleOwner) {
             Log.e("data", "check size country: ${it.size}")
@@ -90,23 +104,8 @@ class CurrencyFragment : BaseFragment() {
                 binding.rcvCategory.layoutManager?.scrollToPosition(position)
             }
         }
-//        createDefaultAccount()
 
-        val sharedPreferences: SharedPreferences =
-            requireActivity().getSharedPreferences("listCountry", Context.MODE_PRIVATE)
-        val checkData = sharedPreferences.getBoolean("ck", false)
-
-        if (!checkData) {
-            Log.e("data", "list: null")
-            binding.pressedLoading.visibility = View.VISIBLE
-            binding.rcvCategory.visibility = View.INVISIBLE
-            initData()
-        } else {
-            Log.e("data", "list: true")
-            binding.pressedLoading.visibility = View.GONE
-            binding.rcvCategory.visibility = View.VISIBLE
-        }
-        if(position !=-1){
+        if (position != -1) {
             updateExchangeRateByDay()
         }
     }
@@ -114,9 +113,9 @@ class CurrencyFragment : BaseFragment() {
     private fun initEvent() {
 
         binding.btnNavigation.setOnClickListener {
-            if (dataViewMode.checkInputScreenCurrency == 0) {
+            if (dataViewMode.checkOpenScreenCurrency == 0) {
                 onCallback()
-            } else if (dataViewMode.checkInputScreenCurrency == 1) {
+            } else if (dataViewMode.checkOpenScreenCurrency == 1) {
                 findNavController().popBackStack()
             }
         }
@@ -138,29 +137,32 @@ class CurrencyFragment : BaseFragment() {
         }
 
         binding.imgArrowBack.setOnClickListener {
-            if (dataViewMode.checkInputScreenCurrency == 0) {
+            if (dataViewMode.checkOpenScreenCurrency == 0) {
                 binding.clSearch.visibility = View.GONE
                 binding.clActionBarTop.visibility = View.VISIBLE
                 binding.edtSearch.setText("")
                 hideKeyboard(binding.edtSearch)
-            } else if (dataViewMode.checkInputScreenCurrency == 1) {
+            } else if (dataViewMode.checkOpenScreenCurrency == 1) {
                 findNavController().popBackStack()
             }
-
         }
 
-            binding.imgClose.setOnClickListener {
-                binding.edtSearch.setText("")
-                hideKeyboard(binding.edtSearch)
-            }
+        binding.imgClose.setOnClickListener {
+            binding.edtSearch.setText("")
+            hideKeyboard(binding.edtSearch)
+        }
 
         binding.edtSearch.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                adapterCountry.updateData(filterList(s.toString(),
-                    listCountry as ArrayList<Country>))
+                adapterCountry.updateData(
+                    filterList(
+                        s.toString(),
+                        listCountry as ArrayList<Country>
+                    )
+                )
                 if (s!!.isEmpty()) {
                     binding.imgClose.visibility = View.GONE
                     binding.rcvCategory.layoutManager?.scrollToPosition(position)
@@ -175,12 +177,11 @@ class CurrencyFragment : BaseFragment() {
         })
 
         adapterCountry.setClickItemSelect {
-            if (dataViewMode.checkInputScreenCurrency == 0) {
-                createDialogCurrencyExchange(Gravity.CENTER, listCountry[position], it)
-
-            } else if (dataViewMode.checkInputScreenCurrency == 1) {
-                dataViewMode.country = it
+            if (dataViewMode.checkOpenScreenCurrency == 0) {
+                dataViewMode.selectCountry = it
                 findNavController().popBackStack()
+            } else if (dataViewMode.checkOpenScreenCurrency == 1) {
+                createDialogCurrencyExchange(Gravity.CENTER, listCountry[position], it)
             }
         }
 
@@ -193,8 +194,9 @@ class CurrencyFragment : BaseFragment() {
         }
     }
 
-    private fun updateExchangeRateByDay(){
-        val sharedPreferences = requireActivity().getSharedPreferences("MyPreferences", Context.MODE_PRIVATE)
+    private fun updateExchangeRateByDay() {
+        val sharedPreferences =
+            requireActivity().getSharedPreferences("MyPreferences", Context.MODE_PRIVATE)
         val currentDate = Calendar.getInstance().time
         val lastUpdateDate = Date(sharedPreferences.getLong("LastUpdateDate", 0))
         val daysDifference = TimeUnit.MILLISECONDS.toDays(currentDate.time - lastUpdateDate.time)
@@ -216,7 +218,7 @@ class CurrencyFragment : BaseFragment() {
                 i.currencyCode?.toLowerCase()?.contains(searchText) == true ||
                 i.currencyName?.toLowerCase()?.contains(searchText) == true ||
                 i.currencySymbol?.toLowerCase()?.contains(searchText) == true
-            ){
+            ) {
                 filteredList.add(i)
             }
         }
@@ -228,7 +230,7 @@ class CurrencyFragment : BaseFragment() {
         return filteredList
     }
 
-    private fun initData() {
+    private fun callAPIDataCountry() {
         val countryService = Retrofit.Builder()
             .baseUrl("https://restcountries.com/")
             .addConverterFactory(GsonConverterFactory.create())
@@ -245,17 +247,21 @@ class CurrencyFragment : BaseFragment() {
                         Log.e("data", "Số lượng quốc gia: ${country.size}")
                         for (i in country) {
                             if (i.currencies != null) {
-                                listCountryNew.add(Country(0,
-                                    i.name,
-                                    i.currencies[0].code,
-                                    i.currencies[0].name,
-                                    i.currencies[0].symbol,
-                                    i.flag, 1F, false))
+                                listCountryNew.add(
+                                    Country(
+                                        0,
+                                        i.name,
+                                        i.currencies[0].code,
+                                        i.currencies[0].name,
+                                        i.currencies[0].symbol,
+                                        i.flag, 1F, false
+                                    )
+                                )
                             }
                         }
                         Log.e("data", "Số lượng quốc gia đã được conver: ${listCountryNew.size}")
                         if (listCountryNew.size != 0) {
-                            if(listCountryNew[0].currencyCode == "AFN"){
+                            if (listCountryNew[0].currencyCode == "AFN") {
                                 listCountryNew.removeAt(0)
                             }
                             dataViewMode.addListCountry(listCountryNew)
@@ -309,16 +315,6 @@ class CurrencyFragment : BaseFragment() {
         }
     }
 
-
-    private fun createDefaultAccount() {
-        val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
-        val isFirstTime = sharedPref.getBoolean("createDefaultAccount", true)
-        if (isFirstTime) {
-            dataViewMode.addAccount(Account(0,"Default account" ,"Default account", "00000", "null", false))
-            sharedPref.edit().putBoolean("createDefaultAccount", false).apply()
-        }
-    }
-
     private fun createDialogCurrencyExchange(gravity: Int, type1: Country, type2: Country) {
         val dialog = Dialog(requireActivity())
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -362,11 +358,10 @@ class CurrencyFragment : BaseFragment() {
         }
     }
 
-
     // https://openexchangerates.org/api/currencies.json
     override fun onDestroy() {
         Log.e("data", "currency: onDestroy")
-        dataViewMode.checkInputScreenCurrency = 0
+        dataViewMode.checkOpenScreenCurrency = 0
         super.onDestroy()
     }
 }

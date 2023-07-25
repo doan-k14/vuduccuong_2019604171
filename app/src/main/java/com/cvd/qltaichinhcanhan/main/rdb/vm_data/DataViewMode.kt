@@ -27,6 +27,7 @@ class DataViewMode(application: Application) : AndroidViewModel(application) {
         notificationInfoRepository.deleteAll()
         transactionRepository.deleteAll()
     }
+    var loginAccount = Account();
 
     private var db = AppDatabase.getInstance(application)
 
@@ -158,10 +159,10 @@ class DataViewMode(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    var checkInputScreenCurrency = 0
+    var checkOpenScreenCurrency = 0
 
     // country lấy cờ
-    var country = Country()
+    var selectCountry = Country()
     var checkInputScreenCurrencyConversion = 0
 
 

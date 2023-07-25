@@ -161,7 +161,7 @@ class AddTransactionFragment : BaseFragment() {
             }
         }
 
-        val country = dataViewMode.country
+        val country = dataViewMode.selectCountry
         if (country.idCountry == 0) {
             binding.layoutAmount0.visibility = View.VISIBLE
             binding.layoutAmount1.visibility = View.GONE
@@ -189,13 +189,13 @@ class AddTransactionFragment : BaseFragment() {
 
         binding.edtTypeAmountTransaction0.setOnClickListener {
             if(dataViewMode.checkInputScreenAddTransaction == 0){
-                dataViewMode.checkInputScreenCurrency = 1
+                dataViewMode.checkOpenScreenCurrency = 1
                 findNavController().navigate(R.id.action_addTransactionFragment_to_nav_currency)
             }
         }
 
         binding.edtTypeAmountTransaction1.setOnClickListener {
-            dataViewMode.checkInputScreenCurrency = 1
+            dataViewMode.checkOpenScreenCurrency = 1
             findNavController().navigate(R.id.action_addTransactionFragment_to_nav_currency)
         }
 
@@ -537,7 +537,7 @@ class AddTransactionFragment : BaseFragment() {
     }
 
     private fun checkDataAddOrEditTransaction(typeClick: Int): Boolean {
-        if (dataViewMode.country.idCountry == 0) {
+        if (dataViewMode.selectCountry.idCountry == 0) {
             val value = MoneyTextWatcher.parseCurrencyValue(binding.edtAmount0.text.toString())
             val temp = value.toString()
             if (binding.edtAmount0.text.isEmpty()) {
@@ -704,8 +704,8 @@ class AddTransactionFragment : BaseFragment() {
 
     override fun onDestroy() {
         dataViewMode.resetCheckTypeTabLayoutTransaction()
-        dataViewMode.checkInputScreenCurrency = 0
-        dataViewMode.country = Country()
+        dataViewMode.checkOpenScreenCurrency = 0
+        dataViewMode.selectCountry = Country()
         dataViewMode.transaction = Transaction()
         dataViewMode.moneyAccountWithDetailsSelect.postValue(MoneyAccountWithDetails(MoneyAccount()))
         dataViewMode.categorySelectAddCategoryByAddTransaction = Category()
