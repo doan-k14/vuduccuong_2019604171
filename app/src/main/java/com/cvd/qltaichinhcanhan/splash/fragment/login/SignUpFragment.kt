@@ -3,7 +3,6 @@ package com.cvd.qltaichinhcanhan.splash.fragment.login
 import android.os.Bundle
 import android.text.InputType
 import android.text.method.PasswordTransformationMethod
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,19 +12,18 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.cvd.qltaichinhcanhan.R
 import com.cvd.qltaichinhcanhan.databinding.FragmentSignupBinding
-import com.cvd.qltaichinhcanhan.main.model.m_r.Account
 import com.cvd.qltaichinhcanhan.main.rdb.vm_data.DataViewMode
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.cvd.qltaichinhcanhan.utils.LoadingDialog
+import com.cvd.qltaichinhcanhan.utils.Utils
+import com.cvd.qltaichinhcanhan.utils.UtilsDialog
+import com.cvd.qltaichinhcanhan.utils.UtilsFireStore
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.GoogleAuthProvider
 
 
 class SignUpFragment : Fragment() {
-
+    val TAG: String = "SignUpFragment"
     private lateinit var binding: FragmentSignupBinding
-    private lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var mAuth: FirebaseAuth
-    private val RC_SIGN_IN = 9001
     private lateinit var dataViewMode: DataViewMode
 
     override fun onCreateView(
@@ -47,23 +45,6 @@ class SignUpFragment : Fragment() {
 
 
     private fun initView() {
-        val check = dataViewMode.checkInputScreenSignUp
-        if (check == 0) {
-            binding.clActionBarTop.visibility = View.GONE
-            binding.llHaveHad.visibility = View.VISIBLE
-            binding.llOrLogin.visibility = View.VISIBLE
-            binding.llOtherLogin.visibility = View.VISIBLE
-            binding.imageLogo.visibility = View.VISIBLE
-            binding.textName.visibility = View.VISIBLE
-
-        } else {
-            binding.clActionBarTop.visibility = View.VISIBLE
-            binding.llHaveHad.visibility = View.GONE
-            binding.llOrLogin.visibility = View.GONE
-            binding.llOtherLogin.visibility = View.GONE
-            binding.imageLogo.visibility = View.GONE
-            binding.textName.visibility = View.INVISIBLE
-        }
     }
 
     private fun initEvent() {
@@ -96,153 +77,82 @@ class SignUpFragment : Fragment() {
         }
 
         binding.imgFb.setOnClickListener {
-            Toast.makeText(requireActivity(),
+            Toast.makeText(
+                requireActivity(),
                 requireActivity().resources.getString(R.string.future_update),
-                Toast.LENGTH_LONG).show()
+                Toast.LENGTH_LONG
+            ).show()
         }
         binding.imgGoogle.setOnClickListener {
-            Toast.makeText(requireActivity(),
+            Toast.makeText(
+                requireActivity(),
                 requireActivity().resources.getString(R.string.future_update),
-                Toast.LENGTH_LONG).show()
+                Toast.LENGTH_LONG
+            ).show()
         }
     }
 
     private fun checkDataSinUp() {
         val email = binding.edtEmail.text.toString()
         val pass = binding.edtPass.text.toString()
-        val firstName = binding.edtFirstName.text.toString()
-        val lastName = binding.edtLastName.text.toString()
         if (email.isEmpty()) {
-            Toast.makeText(requireActivity(),
+            Toast.makeText(
+                requireActivity(),
                 requireActivity().resources.getString(R.string.please_enter_data),
-                Toast.LENGTH_LONG).show()
+                Toast.LENGTH_LONG
+            ).show()
             return
         }
         if (pass.isEmpty()) {
-            Toast.makeText(requireActivity(),
+            Toast.makeText(
+                requireActivity(),
                 requireActivity().resources.getString(R.string.please_enter_data),
-                Toast.LENGTH_LONG).show()
+                Toast.LENGTH_LONG
+            ).show()
             return
         }
-        if (firstName.isEmpty()) {
-            Toast.makeText(requireActivity(),
-                requireActivity().resources.getString(R.string.error_first_name),
-                Toast.LENGTH_LONG).show()
-            return
-        }
-        if (lastName.isEmpty()) {
-            Toast.makeText(requireActivity(),
-                requireActivity().resources.getString(R.string.error_last_name),
-                Toast.LENGTH_LONG).show()
-            return
-        }
-        binding.pressedLoading.visibility = View.VISIBLE
-        createAccount(email, pass, firstName, lastName)
+        clickCreateAccount(email, pass)
     }
 
-    fun createAccount(email: String, pass: String, firstName: String, lastName: String) {
+    private fun clickCreateAccount(email: String, pass: String) {
         mAuth.createUserWithEmailAndPassword(email, pass)
             .addOnCompleteListener(requireActivity()) { task ->
                 if (task.isSuccessful) {
-                    val name = "$firstName $lastName"
-                    val account = Account(0, name, email, pass, "null", true)
-                    if (dataViewMode.checkInputScreenSignUp == 0) {
-                        dataViewMode.addAccount(account)
-                        binding.pressedLoading.visibility = View.GONE
-                        dataViewMode.checkInputScreenCreateMoney = 1
-                        findNavController().navigate(R.id.action_signUpFragment_to_creatsMoneyFragment)
-                    } else {
-                        account.selectAccount = true
-                        dataViewMode.addAccount(account)
-                        dataViewMode.checkGetAccountLoginHome = 0
-                        findNavController().popBackStack(R.id.nav_home, false)
-                    }
+                    createUserAccount(email)
                 } else {
-                    binding.pressedLoading.visibility = View.GONE
-                    Toast.makeText(requireActivity(),
-                        "Tạo tài khoản thành công thất bại!",
-                        Toast.LENGTH_SHORT).show()
+                    Utils.showToast(requireContext(), "Tạo tài khoản thành công thất bại!")
                 }
             }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        resertView()
-        dataViewMode.checkInputScreenSignUp = 0
-    }
+    private fun createUserAccount(email: String) {
+        val utilsFireStore = UtilsFireStore()
 
-    fun resertView() {
-        binding.edtEmail.setText("")
-        binding.edtPass.setText("")
-        binding.edtFirstName.setText("")
-        binding.edtLastName.setText("")
-        binding.edtPhoneNumber.setText("")
-        binding.pressedLoading.visibility = View.GONE
-    }
-
-    // Đăng nhập Firebase bằng token của Google
-    private fun firebaseAuthWithGoogle(idToken: String) {
-        val credential = GoogleAuthProvider.getCredential(idToken, null)
-        mAuth.signInWithCredential(credential)
-            .addOnCompleteListener(requireActivity()) { task ->
-                if (task.isSuccessful) {
-                    // Đăng nhập thành công
-                    Log.e("ttt", "signInWithCredential:success")
-                    val user = mAuth.currentUser
-                    // Cập nhật UI với thông tin người dùng đăng nhập thành công
-                } else {
-                    // Đăng nhập thất bại
-                    Log.e("ttt", "signInWithCredential:failure", task.exception)
-                    Toast.makeText(requireActivity(), "Đăng nhập thất bại!", Toast.LENGTH_SHORT)
-                        .show()
-                }
+        utilsFireStore.setCallBackCreateAccountUser(object :
+            UtilsFireStore.CallBackCreateAccountUser {
+            override fun createSuccess(idUserAccount: String) {
+                getAccountMoneyByEmail(idUserAccount)
             }
+
+            override fun createFailed() {
+
+            }
+        })
+
+        utilsFireStore.createUserAccount(email)
     }
 
+    private fun getAccountMoneyByEmail(idAccount: String) {
+        val utilsFireStore = UtilsFireStore()
+        utilsFireStore.setCBAccountMoneyByEmail(object : UtilsFireStore.CBAccountMoneyByEmail {
+            override fun getSuccess() {
+            }
 
-//    // đăng nhập
-//    private fun signInWithGoogle() {
-//        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-//            .requestIdToken(getString(R.string.default_web_client_id))
-//            .requestEmail()
-//            .build()
-//        val mGoogleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
-//
-//        val signInIntent = mGoogleSignInClient.signInIntent
-//        startActivityForResult(signInIntent, RC_SIGN_IN)
-//    }
+            override fun getFailed() {
+                findNavController().navigate(R.id.action_signUpFragment_to_creatsMoneyFragment)
+            }
+        })
 
-
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        super.onActivityResult(requestCode, resultCode, data)
-//        if (requestCode == RC_SIGN_IN) {
-//            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-//            try {
-//                // Đăng nhập Google thành công
-//                val account = task.getResult(ApiException::class.java)
-//                val credential = GoogleAuthProvider.getCredential(account!!.idToken, null)
-//                mAuth.signInWithCredential(credential)
-//                    .addOnCompleteListener(requireActivity()) { task ->
-//                        if (task.isSuccessful) {
-//                            // Đăng nhập Firebase thành công
-//                            val user = mAuth.currentUser
-//                            // Tiến hành xử lý tiếp
-//                            Toast.makeText(requireActivity(), "Đăng nhập ", Toast.LENGTH_SHORT).show()
-//
-//                        } else {
-//                            // Đăng nhập Firebase thất bại
-//                            Toast.makeText(requireActivity(), "Đăng nhập thất bại1", Toast.LENGTH_SHORT).show()
-//                        }
-//                    }
-//            } catch (e: ApiException) {
-//                // Đăng nhập Google thất bại
-//                Log.e("ttt", "Đăng nhập Google thất bại: " + e.statusCode)
-//                Toast.makeText(requireActivity(), "Đăng nhập thất bại2", Toast.LENGTH_SHORT).show()
-//            }
-//
-//        }
-//    }
-
-
+        utilsFireStore.getAccountMoneyByEmail(idAccount)
+    }
 }

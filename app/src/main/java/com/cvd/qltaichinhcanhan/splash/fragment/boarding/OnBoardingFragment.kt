@@ -52,7 +52,7 @@ class OnBoardingFragment : Fragment() {
 
     private fun initEvent() {
         binding.btnNewStart.setOnClickListener {
-            findNavController().navigate(R.id.action_onBoardingFragment_to_creatsMoneyFragment)
+            findNavController().navigate(R.id.action_onBoardingFragment_to_loginFragment)
         }
         binding.textLanguage.setOnClickListener {
             findNavController().navigate(R.id.action_onBoardingFragment_to_languageFragment2)

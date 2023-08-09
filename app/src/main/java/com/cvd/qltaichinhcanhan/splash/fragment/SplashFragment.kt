@@ -33,7 +33,7 @@ class SplashFragment : Fragment() {
     }
 
     private fun checkCreateMoneyAccount() {
-        if (Utils.getBoolean(requireContext(), Constant.CREATE_MONEY_ACCOUNT)) {
+        if (Utils.getBoolean(requireContext(), Constant.FIRST_OPEN_APP)) {
             lifecycleScope.launch {
                 delay(10)
                 val intent = Intent(requireActivity(), NDMainActivity::class.java)

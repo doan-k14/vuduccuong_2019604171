@@ -14,8 +14,8 @@ android {
         applicationId "com.cvd.qltaichinhcanhan"
         minSdk 21
         targetSdk 32
-        versionCode 5
-        versionName "1.0.4"
+        versionCode 6
+        versionName "1.0.5"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -46,6 +46,8 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'com.google.firebase:firebase-auth:19.2.0'
     implementation 'com.google.firebase:firebase-auth-ktx:21.3.0'
+    implementation 'com.google.firebase:firebase-database-ktx:20.2.2'
+    implementation 'com.google.firebase:firebase-firestore-ktx:24.7.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.4'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
@@ -92,8 +94,8 @@ dependencies {
 
 //    implementation 'com.github.AAChartModel:AAChartCore-Kotlin:2.8.5'
 
-    implementation 'com.github.bumptech.glide:glide:4.12.0'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
+    implementation 'com.github.bumptech.glide:glide:4.14.2'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.14.2'
     implementation 'com.caverock:androidsvg-aar:1.4'
 
     implementation 'com.squareup.picasso:picasso:2.71828'
@@ -107,6 +109,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-crashlytics-ktx'
     implementation 'com.google.firebase:firebase-analytics-ktx'
 
-    implementation 'com.google.android.gms:play-services-auth:20.5.0'
+//    implementation 'com.google.android.gms:play-services-oss-licenses:21.0.0' // Đảm bảo rằng bạn đã có dependency này
+//    implementation 'com.google.android.gms:play-services-safetynet:18.0.1' // Phiên bản mới nhất của Play Integrity API
+//
 
 }

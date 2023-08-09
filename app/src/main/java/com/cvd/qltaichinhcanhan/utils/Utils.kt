@@ -4,8 +4,11 @@ import android.app.Activity
 import android.content.Context
 import android.content.SharedPreferences
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.cvd.qltaichinhcanhan.R
+import java.util.regex.Matcher
+import java.util.regex.Pattern
 
 object Utils {
     private const val KEY_PREF = "CVD_2023"
@@ -43,5 +46,16 @@ object Utils {
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         window.statusBarColor = ContextCompat.getColor(activity, R.color.blu_mani)
         window.navigationBarColor = activity.resources.getColor(R.color.blu_mani)
+    }
+
+    fun isValidGmail(email: String?): Boolean {
+        val gmailPattern = "^[a-zA-Z0-9._%+-]+@gmail\\.com$"
+        val pattern: Pattern = Pattern.compile(gmailPattern)
+        val matcher: Matcher = pattern.matcher(email)
+        return matcher.matches()
+    }
+
+    fun showToast(context: Context, message: String) {
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
 }

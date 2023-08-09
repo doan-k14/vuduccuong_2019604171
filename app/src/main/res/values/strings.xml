@@ -243,4 +243,5 @@
     <string name="tieng_duc">Tiếng Đức</string>
     <string name="tieng_nhat">Tiếng Nhật</string>
     <string name="tieng_phap">Tiếng Pháp</string>
+    <string name="enter_email">Hãy nhập đúng định dạng Gmail</string>
 </resources>

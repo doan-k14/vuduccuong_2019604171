@@ -65,26 +65,6 @@ class LoginFragment : Fragment() {
                 binding.imgEyePass.isActivated = true
             }
         }
-
-        val check = dataViewMode.checkInputScreenLogin
-        if (check == 0) {
-            binding.clActionBarTop.visibility = View.GONE
-            binding.textForgotPass.visibility = View.VISIBLE
-            binding.textSignUp.visibility = View.VISIBLE
-            binding.llOrLogin.visibility = View.VISIBLE
-            binding.llOtherLogin.visibility = View.VISIBLE
-            binding.imageLogo.visibility = View.VISIBLE
-            binding.textName.visibility = View.VISIBLE
-        } else {
-            binding.clActionBarTop.visibility = View.VISIBLE
-            binding.textForgotPass.visibility = View.GONE
-            binding.textSignUp.visibility = View.GONE
-            binding.llOrLogin.visibility = View.GONE
-            binding.llOtherLogin.visibility = View.GONE
-            binding.imageLogo.visibility = View.GONE
-            binding.textName.visibility = View.INVISIBLE
-
-        }
     }
 
     private fun initEvent() {
@@ -119,10 +99,10 @@ class LoginFragment : Fragment() {
     private fun checkDataLogin() {
         val email = binding.edtAccount.text.toString()
         val pass = binding.edtPass.text.toString()
-        if (email.isEmpty()) {
+        if (email.isEmpty() || !Utils.isValidGmail(email)) {
             Toast.makeText(
                 requireActivity(),
-                requireActivity().resources.getString(R.string.please_enter_data),
+                requireActivity().resources.getString(R.string.enter_email),
                 Toast.LENGTH_LONG
             ).show()
             return
@@ -135,38 +115,38 @@ class LoginFragment : Fragment() {
             ).show()
             return
         }
-        binding.pressedLoading.visibility = View.VISIBLE
         login(email, pass)
     }
 
     private fun login(email: String, pass: String) {
        UtilsDialog.LoadingDialog(requireContext()).showLoading()
-//        auth.signInWithEmailAndPassword(email, pass)
-//            .addOnCompleteListener(requireActivity()) { task ->
-//                if (task.isSuccessful) {
-//                    val name = email.split("@")[0]
-//                    val accountNew = Account(1, name, email, pass, "null", false)
-//                    dataViewMode.loginAccount = accountNew;
-//
-//                    if (Utils.getBoolean(requireContext(), Constant.CREATE_MONEY_ACCOUNT)) {
-//                        lifecycleScope.launch {
-//                            delay(100)
-//                            ProgressDialog.hide()
-//                            val intent = Intent(requireActivity(), NDMainActivity::class.java)
-//                            startActivity(intent)
-//                            requireActivity().finish()
-//                        }
-//                    } else {
-//                        dataViewMode.checkInputScreenCreateMoney = 0
-//                        ProgressDialog.hide()
-//                        findNavController().navigate(R.id.action_loginFragment_to_creatsMoneyFragment)
-//                    }
-//
-//                } else {
-//                    Toast.makeText(requireActivity(), "Đăng nhập thất bại! Hãy đăng nhập lại!", Toast.LENGTH_SHORT).show()
-//                    binding.pressedLoading.visibility = View.GONE
-//                }
-//            }
+        auth.signInWithEmailAndPassword(email, pass)
+            .addOnCompleteListener(requireActivity()) { task ->
+                if (task.isSuccessful) {
+                   Utils.putBoolean(requireContext(),Constant.LOGIN_SUCCESS,true)
+
+                    // get data firebase: list MoneyAccount by Id user
+
+
+                    if (Utils.getBoolean(requireContext(), Constant.CREATE_MONEY_ACCOUNT)) {
+                        lifecycleScope.launch {
+                            UtilsDialog.LoadingDialog(requireContext()).hideLoading()
+                            delay(100)
+                            val intent = Intent(requireActivity(), NDMainActivity::class.java)
+                            startActivity(intent)
+                            requireActivity().finish()
+                        }
+                    } else {
+                        //
+                        dataViewMode.checkInputScreenCreateMoney = 0
+                        findNavController().navigate(R.id.action_loginFragment_to_creatsMoneyFragment)
+                    }
+
+                } else {
+                    Toast.makeText(requireActivity(), "Đăng nhập thất bại! Hãy đăng nhập lại!", Toast.LENGTH_SHORT).show()
+                    binding.pressedLoading.visibility = View.GONE
+                }
+            }
     }
 
     override fun onDestroyView() {

@@ -13,6 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@drawable/custom_layout_top"
+        android:visibility="gone"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
@@ -79,6 +80,7 @@
             android:background="@drawable/rounded_edittext"
             android:hint="@string/text_last_name"
             android:padding="10dp"
+            android:visibility="gone"
             app:layout_constraintEnd_toStartOf="@id/edt_first_name"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/text_name" />
@@ -91,6 +93,7 @@
             android:background="@drawable/rounded_edittext"
             android:hint="@string/text_first_name"
             android:padding="10dp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@id/edt_last_name"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/edt_last_name"
@@ -241,18 +244,5 @@
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <ProgressBar
-        android:id="@+id/pressed_loading"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:background="@drawable/custom_text_exchange"
-        android:indeterminateTint="@android:color/white"
-        android:padding="5dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
