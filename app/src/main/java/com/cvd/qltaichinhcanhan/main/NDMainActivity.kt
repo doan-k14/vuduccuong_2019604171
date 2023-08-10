@@ -15,13 +15,13 @@ import com.cvd.qltaichinhcanhan.R
 import com.cvd.qltaichinhcanhan.databinding.ActivityNdmainBinding
 import com.cvd.qltaichinhcanhan.main.inf.MyCallback
 import com.cvd.qltaichinhcanhan.main.model.m_r.Account
+import com.cvd.qltaichinhcanhan.utils.Utils
 
 class NDMainActivity : AppCompatActivity(), MyCallback {
 
     private lateinit var binding: ActivityNdmainBinding
     private lateinit var textNameAccount: TextView
     private lateinit var imageAccount: ImageView
-    private var account = Account()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -37,30 +37,15 @@ class NDMainActivity : AppCompatActivity(), MyCallback {
         val headerView = binding.navView.getHeaderView(0)
         textNameAccount = headerView.findViewById<TextView>(R.id.text_name_account)
         imageAccount = headerView.findViewById<ImageView>(R.id.image_account)
-        textNameAccount.text = resources.getText(R.string.login)
+
+        val userAccount = Utils.getUserAccountLogin(this)
+
+        textNameAccount.text = userAccount.email
         imageAccount.setImageResource(R.drawable.ic_user_circle)
 
         textNameAccount.setOnClickListener {
-            if (account.idAccount == 0) {
-                navController.navigate(R.id.registerFragment)
-                binding.drawerLayout.closeDrawer(GravityCompat.START)
-            } else {
-                navController.navigate(R.id.profileFragment)
-                binding.drawerLayout.closeDrawer(GravityCompat.START)
-            }
-
-
-//            val notificationInfo = NotificationInfo(
-//                idNotification = 1,
-//                nameNotification = "Thông báo 1 lần",
-//                notificationFrequency = "Once",
-//                notificationReminderStartTime = System.currentTimeMillis(),
-//                notificationTime = System.currentTimeMillis() + 5000, // Thời điểm hiển thị thông báo: 5 giây sau thời điểm hiện tại
-//                notificationNote = "Đây là thông báo 1 lần"
-//            )
-//            val notificationHandler = NotificationHandler(this)
-//            notificationHandler.scheduleNotification(notificationInfo)
-
+            navController.navigate(R.id.profileFragment)
+            binding.drawerLayout.closeDrawer(GravityCompat.START)
         }
 
     }
@@ -86,12 +71,12 @@ class NDMainActivity : AppCompatActivity(), MyCallback {
     }
 
     override fun onCallbackAccount(accountNew: Account) {
-        account = accountNew
-        if (accountNew.idAccount == 0) {
-            textNameAccount.text = resources.getText(R.string.login)
-        } else {
-            textNameAccount.text = accountNew.accountName
-        }
+//        account = accountNew
+//        if (accountNew.idAccount == 0) {
+//            textNameAccount.text = resources.getText(R.string.login)
+//        } else {
+//            textNameAccount.text = accountNew.accountName
+//        }
     }
 
     override fun onDestroy() {

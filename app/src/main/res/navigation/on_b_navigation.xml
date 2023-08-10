@@ -15,6 +15,12 @@
             app:destination="@id/onBoardingFragment"
             app:popUpTo="@id/splashFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_splashFragment_to_creatsMoneyFragment"
+            app:destination="@id/creatsMoneyFragment" />
+        <action
+            android:id="@+id/action_splashFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
     </fragment>
     <fragment
         android:id="@+id/onBoardingFragment"
@@ -91,13 +97,12 @@
             app:destination="@id/currencyFragment" />
     </fragment>
     <fragment
-        android:id="@+id/currencyFragment"
-        android:name="com.cvd.qltaichinhcanhan.main.ui.currency.CurrencyFragment"
-        android:label="fragment_currency"
-        tools:layout="@layout/fragment_currency" />
-    <fragment
         android:id="@+id/languageFragment2"
         android:name="com.cvd.qltaichinhcanhan.main.ui.setting.LanguageFragment"
         android:label="fragment_language"
         tools:layout="@layout/fragment_language" />
+    <fragment
+        android:id="@+id/currencyFragment"
+        android:name="com.cvd.qltaichinhcanhan.splash.fragment.CurrencyFragment"
+        android:label="CurrencyFragment" />
 </navigation>

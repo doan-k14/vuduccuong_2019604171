@@ -7,6 +7,8 @@ import android.view.WindowManager
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.cvd.qltaichinhcanhan.R
+import com.cvd.qltaichinhcanhan.main.model.m_new.UserAccount
+import com.google.gson.Gson
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
@@ -18,7 +20,7 @@ object Utils {
     }
 
     fun putBoolean(context: Context, key: String?, value: Boolean) {
-        val sharedPreferences = context.getSharedPreferences(KEY_PREF, Context.MODE_PRIVATE)
+        val sharedPreferences: SharedPreferences = context?.let { getSharedPreference(it) }!!
         sharedPreferences.edit().putBoolean(key, value).apply()
     }
 
@@ -57,5 +59,17 @@ object Utils {
 
     fun showToast(context: Context, message: String) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+    }
+
+    fun saveUserAccountLogin(context: Context,userAccount: UserAccount){
+        val gson = Gson()
+        val stringUserAccount = gson.toJson(userAccount)
+        putString(context,Constant.USER_LOGIN_SUCCESS,stringUserAccount)
+    }
+
+    fun getUserAccountLogin(context: Context): UserAccount {
+        val stringUserAccount = getString(context, Constant.USER_LOGIN_SUCCESS)
+        val gson = Gson()
+        return gson.fromJson(stringUserAccount, UserAccount::class.java)
     }
 }

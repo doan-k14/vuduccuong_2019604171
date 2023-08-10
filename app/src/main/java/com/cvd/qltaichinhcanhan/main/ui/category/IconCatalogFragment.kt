@@ -13,7 +13,7 @@ import com.cvd.qltaichinhcanhan.main.base.BaseFragment
 import com.cvd.qltaichinhcanhan.main.inf.IconClickListener
 import com.cvd.qltaichinhcanhan.main.model.m.DefaultData
 import com.cvd.qltaichinhcanhan.main.model.m.IconR
-import com.cvd.qltaichinhcanhan.main.rdb.vm_data.DataViewMode
+import com.cvd.qltaichinhcanhan.main.vm.DataViewMode
 
 
 class IconCatalogFragment : BaseFragment(), IconClickListener {
@@ -46,7 +46,7 @@ class IconCatalogFragment : BaseFragment(), IconClickListener {
     }
 
     override fun onIconClick(iconR: IconR) {
-        dataViewMode.selectIconR.id = iconR.id
+        dataViewMode.selectIconR = iconR.iconName.toString()
         findNavController().popBackStack()
     }
 

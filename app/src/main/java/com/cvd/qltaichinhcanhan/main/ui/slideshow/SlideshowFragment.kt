@@ -23,9 +23,7 @@ import com.cvd.qltaichinhcanhan.main.model.query_model.MoneyAccountWithDetails
 import com.cvd.qltaichinhcanhan.main.model.query_model.TransactionWithDetails
 import com.cvd.qltaichinhcanhan.main.rdb.vm_data.DataViewMode
 //import com.github.aachartmodel.aainfographics.aachartcreator.*
-import com.github.mikephil.charting.data.*
-import com.github.mikephil.charting.highlight.Highlight
-import com.github.mikephil.charting.listener.OnChartValueSelectedListener
+
 import com.google.android.material.tabs.TabLayout
 import java.util.*
 
@@ -213,44 +211,44 @@ class SlideshowFragment : BaseFragment() {
         })
 
 
-        binding.barChart0.setOnChartValueSelectedListener(object : OnChartValueSelectedListener {
-            override fun onValueSelected(e: Entry?, h: Highlight?) {
-                val index = e?.x?.toInt() ?: return
-                val filterSlidesTransactions = listFilterSlide[index]
-                chartClickType(filterSlidesTransactions)
-                binding.barChart1.highlightValues(null)
-                binding.barChart2.highlightValues(null)
-            }
-
-            override fun onNothingSelected() {
-            }
-        })
-        binding.barChart1.setOnChartValueSelectedListener(object : OnChartValueSelectedListener {
-            override fun onValueSelected(e: Entry?, h: Highlight?) {
-                if (listFilterSlide.isNotEmpty()) {
-                    val index = e?.x?.toInt() ?: return
-                    val filterSlidesTransactions = listFilterSlide[index]
-                    chartClickType(filterSlidesTransactions)
-                    binding.barChart0.highlightValues(null)
-                    binding.barChart2.highlightValues(null)
-                }
-            }
-
-            override fun onNothingSelected() {
-            }
-        })
-        binding.barChart2.setOnChartValueSelectedListener(object : OnChartValueSelectedListener {
-            override fun onValueSelected(e: Entry?, h: Highlight?) {
-                val index = e?.x?.toInt() ?: return
-                val filterSlidesTransactions = listFilterSlide[index]
-                chartClickType(filterSlidesTransactions)
-                binding.barChart0.highlightValues(null)
-                binding.barChart1.highlightValues(null)
-            }
-
-            override fun onNothingSelected() {
-            }
-        })
+//        binding.barChart0.setOnChartValueSelectedListener(object : OnChartValueSelectedListener {
+//            override fun onValueSelected(e: Entry?, h: Highlight?) {
+//                val index = e?.x?.toInt() ?: return
+//                val filterSlidesTransactions = listFilterSlide[index]
+//                chartClickType(filterSlidesTransactions)
+//                binding.barChart1.highlightValues(null)
+//                binding.barChart2.highlightValues(null)
+//            }
+//
+//            override fun onNothingSelected() {
+//            }
+//        })
+//        binding.barChart1.setOnChartValueSelectedListener(object : OnChartValueSelectedListener {
+//            override fun onValueSelected(e: Entry?, h: Highlight?) {
+//                if (listFilterSlide.isNotEmpty()) {
+//                    val index = e?.x?.toInt() ?: return
+//                    val filterSlidesTransactions = listFilterSlide[index]
+//                    chartClickType(filterSlidesTransactions)
+//                    binding.barChart0.highlightValues(null)
+//                    binding.barChart2.highlightValues(null)
+//                }
+//            }
+//
+//            override fun onNothingSelected() {
+//            }
+//        })
+//        binding.barChart2.setOnChartValueSelectedListener(object : OnChartValueSelectedListener {
+//            override fun onValueSelected(e: Entry?, h: Highlight?) {
+//                val index = e?.x?.toInt() ?: return
+//                val filterSlidesTransactions = listFilterSlide[index]
+//                chartClickType(filterSlidesTransactions)
+//                binding.barChart0.highlightValues(null)
+//                binding.barChart1.highlightValues(null)
+//            }
+//
+//            override fun onNothingSelected() {
+//            }
+//        })
 
         binding.imgMoneyBag.setOnClickListener {
             dataViewMode.checkInputScreenMoneyAccount = 2
@@ -290,9 +288,9 @@ class SlideshowFragment : BaseFragment() {
     }
 
     private fun test2() {
-        binding.barChart0.visibility = View.GONE
-        binding.barChart2.visibility = View.GONE
-        binding.barChart1.visibility = View.VISIBLE
+//        binding.barChart0.visibility = View.GONE
+//        binding.barChart2.visibility = View.GONE
+//        binding.barChart1.visibility = View.VISIBLE
         val defaultColors = arrayListOf<String>(
             "T12/2021",
             "T10/2022",
@@ -320,14 +318,14 @@ class SlideshowFragment : BaseFragment() {
             63F,
             63F,
         )
-        DoubleColumnChart.createBarChart(
-            binding.barChart1,
-            defaultColors,
-            data1,
-            data2,
-            requireContext().resources.getString(R.string.expense),
-            requireContext().resources.getString(R.string.in_come),
-        )
+//        DoubleColumnChart.createBarChart(
+//            binding.barChart1,
+//            defaultColors,
+//            data1,
+//            data2,
+//            requireContext().resources.getString(R.string.expense),
+//            requireContext().resources.getString(R.string.in_come),
+//        )
     }
 
     private fun chartClickType(filterSlidesTransactions: FilterSlidesTransactions) {
@@ -364,33 +362,33 @@ class SlideshowFragment : BaseFragment() {
                 listColor.add(i.transaction.transactionWithDetails?.category?.color!!)
             }
             when (type) {
-                0 -> {
-                    binding.barChart0.visibility = View.VISIBLE
-                    binding.barChart1.visibility = View.GONE
-                    binding.barChart2.visibility = View.GONE
-                    ColumnChartUtils.createBarChart(binding.barChart0,
-                        listColor,
-                        listTime,
-                        listTransactionAmount)
-                }
-                1 -> {
-                    binding.barChart1.visibility = View.VISIBLE
-                    binding.barChart0.visibility = View.GONE
-                    binding.barChart2.visibility = View.GONE
-                    ColumnChartUtils.createBarChart(binding.barChart1,
-                        listColor,
-                        listTime,
-                        listTransactionAmount)
-                }
-                2 -> {
-                    binding.barChart2.visibility = View.VISIBLE
-                    binding.barChart0.visibility = View.GONE
-                    binding.barChart1.visibility = View.GONE
-                    ColumnChartUtils.createBarChart(binding.barChart2,
-                        listColor,
-                        listTime,
-                        listTransactionAmount)
-                }
+//                0 -> {
+//                    binding.barChart0.visibility = View.VISIBLE
+//                    binding.barChart1.visibility = View.GONE
+//                    binding.barChart2.visibility = View.GONE
+//                    ColumnChartUtils.createBarChart(binding.barChart0,
+//                        listColor,
+//                        listTime,
+//                        listTransactionAmount)
+//                }
+//                1 -> {
+//                    binding.barChart1.visibility = View.VISIBLE
+//                    binding.barChart0.visibility = View.GONE
+//                    binding.barChart2.visibility = View.GONE
+//                    ColumnChartUtils.createBarChart(binding.barChart1,
+//                        listColor,
+//                        listTime,
+//                        listTransactionAmount)
+//                }
+//                2 -> {
+//                    binding.barChart2.visibility = View.VISIBLE
+//                    binding.barChart0.visibility = View.GONE
+//                    binding.barChart1.visibility = View.GONE
+//                    ColumnChartUtils.createBarChart(binding.barChart2,
+//                        listColor,
+//                        listTime,
+//                        listTransactionAmount)
+//                }
             }
         } else {
             binding.textNotData.visibility = View.VISIBLE

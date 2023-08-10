@@ -189,17 +189,4 @@
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-    <ProgressBar
-        android:id="@+id/pressed_loading"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:background="@drawable/custom_text_exchange"
-        android:indeterminateTint="@android:color/white"
-        android:padding="5dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

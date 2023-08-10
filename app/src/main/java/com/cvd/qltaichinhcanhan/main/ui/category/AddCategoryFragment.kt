@@ -12,16 +12,24 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.cvd.qltaichinhcanhan.R
 import com.cvd.qltaichinhcanhan.databinding.FragmentAddCategoryBinding
-import com.cvd.qltaichinhcanhan.splash.adapter.AdapterIconCategory
-import com.cvd.qltaichinhcanhan.main.model.m_r.Category
-import com.cvd.qltaichinhcanhan.main.model.m_r.CategoryType
-import com.cvd.qltaichinhcanhan.main.rdb.vm_data.DataViewMode
+import com.cvd.qltaichinhcanhan.main.model.m_new.Category
+import com.cvd.qltaichinhcanhan.main.model.m_new.UserAccount
+import com.cvd.qltaichinhcanhan.main.model.m_new.getListCategoryCreateData
+import com.cvd.qltaichinhcanhan.main.n_adapter.AdapterIconCategory
+import com.cvd.qltaichinhcanhan.main.vm.DataViewMode
+import com.cvd.qltaichinhcanhan.utils.Utils
+import com.cvd.qltaichinhcanhan.utils.UtilsFireStore
 
 
 class AddCategoryFragment : Fragment() {
     lateinit var binding: FragmentAddCategoryBinding
     private lateinit var adapterIconCategory: AdapterIconCategory
     private lateinit var dataViewMode: DataViewMode
+
+    var mListCategory = listOf<Category>()
+    private lateinit var utilsFireStore: UtilsFireStore
+    private lateinit var userAccount: UserAccount
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -33,14 +41,36 @@ class AddCategoryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         dataViewMode = ViewModelProvider(requireActivity())[DataViewMode::class.java]
+
+        initData()
         initView()
         initEvent()
     }
 
+    private fun initData() {
+        userAccount = Utils.getUserAccountLogin(requireContext())
+        val listCategory =
+            getListCategoryCreateData(requireContext(), userAccount.idUserAccount.toString())
+        utilsFireStore = UtilsFireStore()
+
+        utilsFireStore.setCBListCategory(object : UtilsFireStore.CBListCategory {
+            override fun getListSuccess(list: List<Category>) {
+                mListCategory = list
+                adapterIconCategory.updateData(mListCategory)
+            }
+
+            override fun getListFailed() {
+                utilsFireStore.pushListCategory(listCategory)
+            }
+        })
+    }
+
 
     private fun initView() {
-        adapterIconCategory = AdapterIconCategory(requireContext(), arrayListOf(),
-            AdapterIconCategory.LayoutType.TYPE4)
+        adapterIconCategory = AdapterIconCategory(
+            requireContext(), arrayListOf(),
+            AdapterIconCategory.LayoutType.TYPE4
+        )
 
         binding.rcvIconCategory.adapter = adapterIconCategory
 
@@ -50,20 +80,10 @@ class AddCategoryFragment : Fragment() {
 
 
         if (!dataViewMode.checkTypeTabLayoutAddTransaction) {
-            dataViewMode.getListCategoryByType(CategoryType.EXPENSE.toString())
+            utilsFireStore.getListCategory(userAccount.idUserAccount.toString(), 1)
         } else {
-            dataViewMode.getListCategoryByType(CategoryType.INCOME.toString())
+            utilsFireStore.getListCategory(userAccount.idUserAccount.toString(), 2)
         }
-
-        dataViewMode.listCategoryByTypeLiveData.observe(requireActivity()) {
-            adapterIconCategory.updateData(it as ArrayList<Category>)
-            Log.e("data","update select: add category")
-        }
-
-//        if (categoryViewModel.category.idCategory != 0) {
-//            adapterIconCategory.updateSelect(categoryViewModel.category.idCategory)
-//        }
-
     }
 
     private fun initEvent() {
@@ -71,13 +91,13 @@ class AddCategoryFragment : Fragment() {
             findNavController().popBackStack()
         }
         adapterIconCategory.setClickItemSelect {
-            if (it.idCategory <= 2) {
-                dataViewMode.editOrAddCategory = it
-                findNavController().navigate(R.id.action_addCategoryFragment_to_editCategoryFragment)
-            } else {
-                dataViewMode.categorySelectAddCategoryByAddTransaction = it
-                findNavController().popBackStack()
-            }
+//            if (it.idCategory <= 2) {
+//                dataViewMode.editOrAddCategory = it
+//                findNavController().navigate(R.id.action_addCategoryFragment_to_editCategoryFragment)
+//            } else {
+//                dataViewMode.categorySelectAddCategoryByAddTransaction = it
+//                findNavController().popBackStack()
+//            }
         }
     }
 

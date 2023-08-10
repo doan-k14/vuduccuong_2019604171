@@ -9,12 +9,15 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.cvd.qltaichinhcanhan.R
-import com.cvd.qltaichinhcanhan.splash.adapter.AdapterIconCategory
 import com.cvd.qltaichinhcanhan.databinding.FragmentCategoryBinding
 import com.cvd.qltaichinhcanhan.main.base.BaseFragment
-import com.cvd.qltaichinhcanhan.main.model.m_r.Category
-import com.cvd.qltaichinhcanhan.main.model.m_r.CategoryType
-import com.cvd.qltaichinhcanhan.main.rdb.vm_data.DataViewMode
+import com.cvd.qltaichinhcanhan.main.model.m_new.Category
+import com.cvd.qltaichinhcanhan.main.model.m_new.UserAccount
+import com.cvd.qltaichinhcanhan.main.model.m_new.getListCategoryCreateData
+import com.cvd.qltaichinhcanhan.main.n_adapter.AdapterIconCategory
+import com.cvd.qltaichinhcanhan.main.vm.DataViewMode
+import com.cvd.qltaichinhcanhan.utils.Utils
+import com.cvd.qltaichinhcanhan.utils.UtilsFireStore
 import com.google.android.material.tabs.TabLayout
 
 
@@ -22,8 +25,9 @@ class CategoryFragment : BaseFragment() {
     lateinit var binding: FragmentCategoryBinding
     private lateinit var adapterIconCategory: AdapterIconCategory
     private lateinit var dataViewMode: DataViewMode
-    var list = listOf<Category>()
-
+    var mListCategory = listOf<Category>()
+    private lateinit var utilsFireStore: UtilsFireStore
+    private lateinit var userAccount: UserAccount
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -37,10 +41,28 @@ class CategoryFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         dataViewMode = ViewModelProvider(requireActivity())[DataViewMode::class.java]
 
+        initData()
         initView()
-
         initEvent()
+    }
 
+    private fun initData() {
+        userAccount = Utils.getUserAccountLogin(requireContext())
+        val listCategory =
+            getListCategoryCreateData(requireContext(), userAccount.idUserAccount.toString())
+        utilsFireStore = UtilsFireStore()
+
+        utilsFireStore.setCBListCategory(object : UtilsFireStore.CBListCategory {
+            override fun getListSuccess(list: List<Category>) {
+                mListCategory = list
+                dataViewMode.listCategoryByType = list
+                adapterIconCategory.updateData(mListCategory)
+            }
+
+            override fun getListFailed() {
+                utilsFireStore.pushListCategory(listCategory)
+            }
+        })
     }
 
     override fun onStart() {
@@ -52,25 +74,23 @@ class CategoryFragment : BaseFragment() {
 
         if (!dataViewMode.checkTypeTabLayoutCategory) {
             binding.tabLayout.selectTab(binding.tabLayout.getTabAt(0))
-            dataViewMode.getListCategoryByType(CategoryType.EXPENSE.toString())
-
+            utilsFireStore.getListCategory(userAccount.idUserAccount.toString(), 1)
         } else {
             binding.tabLayout.selectTab(binding.tabLayout.getTabAt(1))
-            dataViewMode.getListCategoryByType(CategoryType.INCOME.toString())
+            utilsFireStore.getListCategory(userAccount.idUserAccount.toString(), 2)
         }
 
 
-        adapterIconCategory = AdapterIconCategory(requireContext(), arrayListOf(),
-            AdapterIconCategory.LayoutType.TYPE1)
+        adapterIconCategory = AdapterIconCategory(
+            requireContext(), listOf(),
+            AdapterIconCategory.LayoutType.TYPE1
+        )
 
         binding.rcvIconCategory.adapter = adapterIconCategory
 
         binding.rcvIconCategory.layoutManager =
             GridLayoutManager(requireContext(), 3, RecyclerView.VERTICAL, false)
 
-        dataViewMode.listCategoryByTypeLiveData.observe(requireActivity()) {
-            adapterIconCategory.updateData(it as ArrayList<Category>)
-        }
     }
 
     private fun initEvent() {
@@ -79,6 +99,7 @@ class CategoryFragment : BaseFragment() {
         }
 
         adapterIconCategory.setClickItemSelect {
+            dataViewMode.checkEditOrCreateCategory = it.categoryName == "Thêm" // thay thành idIcon
             findNavController().navigate(R.id.actionExpenseToEditCategoryFragment)
             dataViewMode.editOrAddCategory = it
         }
@@ -87,11 +108,9 @@ class CategoryFragment : BaseFragment() {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 val position = tab?.position
                 if (position == 0) {
-                    dataViewMode.getListCategoryByType(CategoryType.EXPENSE.toString())
-                    dataViewMode.checkTypeTabLayoutCategory = false
+                    utilsFireStore.getListCategory(userAccount.idUserAccount.toString(), 1)
                 } else if (position == 1) {
-                    dataViewMode.getListCategoryByType(CategoryType.INCOME.toString())
-                    dataViewMode.checkTypeTabLayoutCategory = true
+                    utilsFireStore.getListCategory(userAccount.idUserAccount.toString(), 2)
                 }
             }
 
@@ -103,7 +122,6 @@ class CategoryFragment : BaseFragment() {
                 // Xử lý khi một tab đã được chọn lại
             }
         })
-//https://viblo.asia/p/navigation-architecture-component-phan-i-gAm5yX9Vldb
     }
 
     override fun onStop() {

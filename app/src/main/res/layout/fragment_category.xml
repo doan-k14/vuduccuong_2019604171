@@ -60,14 +60,14 @@
         app:tabTextAppearance="@style/MyTabLayoutTextAppearance"
         app:tabTextColor="@color/white_50" >
         <com.google.android.material.tabs.TabItem
-            android:text="@string/expense"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:text="@string/expense" />
 
         <com.google.android.material.tabs.TabItem
-            android:text="@string/in_come"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:text="@string/in_come" />
     </com.google.android.material.tabs.TabLayout>
 
     <androidx.recyclerview.widget.RecyclerView

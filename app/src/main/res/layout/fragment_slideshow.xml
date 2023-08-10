@@ -146,20 +146,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="220dp">
 
-                <com.github.mikephil.charting.charts.BarChart
-                    android:id="@+id/bar_chart0"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+<!--                <com.github.mikephil.charting.charts.BarChart-->
+<!--                    android:id="@+id/bar_chart0"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent" />-->
 
-                <com.github.mikephil.charting.charts.BarChart
-                    android:id="@+id/bar_chart1"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+<!--                <com.github.mikephil.charting.charts.BarChart-->
+<!--                    android:id="@+id/bar_chart1"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent" />-->
 
-                <com.github.mikephil.charting.charts.BarChart
-                    android:id="@+id/bar_chart2"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+<!--                <com.github.mikephil.charting.charts.BarChart-->
+<!--                    android:id="@+id/bar_chart2"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent" />-->
 
                 <TextView
                     android:id="@+id/text_not_data"
@@ -175,11 +175,11 @@
 
         </LinearLayout>
 
-        <com.github.mikephil.charting.charts.LineChart
-            android:id="@+id/chart"
-            android:layout_width="match_parent"
-            android:layout_height="220dp"
-            android:visibility="gone" />
+<!--        <com.github.mikephil.charting.charts.LineChart-->
+<!--            android:id="@+id/chart"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="220dp"-->
+<!--            android:visibility="gone" />-->
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rcv_m"

@@ -163,6 +163,7 @@ class DataViewMode(application: Application) : AndroidViewModel(application) {
 
     // country lấy cờ
     var selectCountry = Country()
+    var selectCountryToCreateMoneyAccount = Country()
     var checkInputScreenCurrencyConversion = 0
 
 

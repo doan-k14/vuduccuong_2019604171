@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Manager Money VC</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="add">Thêm</string>
+    <string name="add">Thêm</string> // sua ADD
     <string name="summary">Biểu đồ</string>
     <string name="report">Tổng Quan</string>
     <string name="type_currencies">Loại tiền tệ</string>

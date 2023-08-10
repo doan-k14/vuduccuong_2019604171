@@ -97,18 +97,18 @@ class HomeFragment : BaseFragment() {
                 } else {
                     dataViewMode.getAllMoneyAccountsWithDetails()
                     listTransactionWithFullDetails = listOf()
-                    ChartUtils.pieChart(requireActivity(),
-                        listOf(),
-                        binding.barChart,
-                        currencySymbol)
-                    adapterTransaction.updateData(listOf())
+//                    ChartUtils.pieChart(requireActivity(),
+//                        listOf(),
+//                        binding.barChart,
+//                        currencySymbol)
+//                    adapterTransaction.updateData(listOf())
                 }
             }
         }
 
         var country = Country()
         dataViewMode.countryDefault.observe(requireActivity()) {
-            country = it
+//            country = it
         }
         var listMoneyAccountWithDetails = listOf<MoneyAccountWithDetails>()
         // lắng nghe list moneyAccount lấy từ csdl
@@ -288,7 +288,7 @@ class HomeFragment : BaseFragment() {
                             filterTransactionsByDay(timeDay,
                                 listTransactionWithFullDetails)
                         adapterTransaction.updateData(l)
-                        ChartUtils.pieChart(requireActivity(), l, binding.barChart, currencySymbol)
+//                        ChartUtils.pieChart(requireActivity(), l, binding.barChart, currencySymbol)
 
                     }
                     1 -> {
@@ -296,7 +296,7 @@ class HomeFragment : BaseFragment() {
                         checkShowOrHideTextTime(false)
                         val l = filterTransactionsByMoth(timeMonth, listTransactionWithFullDetails)
                         adapterTransaction.updateData(l)
-                        ChartUtils.pieChart(requireActivity(), l, binding.barChart, currencySymbol)
+//                        ChartUtils.pieChart(requireActivity(), l, binding.barChart, currencySymbol)
 
                     }
                     2 -> {
@@ -305,7 +305,7 @@ class HomeFragment : BaseFragment() {
                         val l = filterTransactionsByYear(dataViewMode.timeSelectYear.toString(),
                             listTransactionWithFullDetails)
                         adapterTransaction.updateData(l)
-                        ChartUtils.pieChart(requireActivity(), l, binding.barChart, currencySymbol)
+//                        ChartUtils.pieChart(requireActivity(), l, binding.barChart, currencySymbol)
                     }
                     3 -> {
                         checkShowOrHideTextTime(false)
@@ -317,7 +317,7 @@ class HomeFragment : BaseFragment() {
                             today.timeInMillis,
                             listTransactionWithFullDetails)
                         adapterTransaction.updateData(l)
-                        ChartUtils.pieChart(requireActivity(), l, binding.barChart, currencySymbol)
+//                        ChartUtils.pieChart(requireActivity(), l, binding.barChart, currencySymbol)
                     }
                 }
             }
@@ -344,9 +344,9 @@ class HomeFragment : BaseFragment() {
         dataViewMode.getCountryBySelect()
 
         dataViewMode.countryDefault.observe(requireActivity()) {
-            adapterTransaction.updateCurrencyCode(it.currencySymbol!!)
-            currencySymbol = it.currencySymbol!!
-            countryDefault = it
+//            adapterTransaction.updateCurrencyCode(it.currencySymbol!!)
+//            currencySymbol = it.currencySymbol!!
+//            countryDefault = it
         }
     }
 
@@ -367,24 +367,24 @@ class HomeFragment : BaseFragment() {
             0 -> {
                 val l = filterTransactionsByDay(timeDay, listTransactionWithDetails)
                 adapterTransaction.updateData(l)
-                ChartUtils.pieChart(requireActivity(), l, binding.barChart, currencySymbol)
+//                ChartUtils.pieChart(requireActivity(), l, binding.barChart, currencySymbol)
             }
             1 -> {
                 val l = filterTransactionsByMoth(timeMonth, listTransactionWithFullDetails)
                 adapterTransaction.updateData(l)
-                ChartUtils.pieChart(requireActivity(), l, binding.barChart, currencySymbol)
+//                ChartUtils.pieChart(requireActivity(), l, binding.barChart, currencySymbol)
             }
             2 -> {
                 val l = filterTransactionsByYear(timeYear, listTransactionWithFullDetails)
                 adapterTransaction.updateData(l)
-                ChartUtils.pieChart(requireActivity(), l, binding.barChart, currencySymbol)
+//                ChartUtils.pieChart(requireActivity(), l, binding.barChart, currencySymbol)
             }
             3 -> {
                 val l = filterTransactionsByPeriod(startDate.timeInMillis,
                     today.timeInMillis,
                     listTransactionWithFullDetails)
                 adapterTransaction.updateData(l)
-                ChartUtils.pieChart(requireActivity(), l, binding.barChart, currencySymbol)
+//                ChartUtils.pieChart(requireActivity(), l, binding.barChart, currencySymbol)
             }
         }
     }
@@ -402,7 +402,7 @@ class HomeFragment : BaseFragment() {
             binding.textTimePieChart.text = timeDay
             val l = filterTransactionsByDay(timeDay, listTransactionWithFullDetails)
             adapterTransaction.updateData(l)
-            ChartUtils.pieChart(requireActivity(), l, binding.barChart, currencySymbol)
+//            ChartUtils.pieChart(requireActivity(), l, binding.barChart, currencySymbol)
 
 
         }, today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH))
@@ -424,7 +424,7 @@ class HomeFragment : BaseFragment() {
                 val l = (filterTransactionsByMoth(dataViewMode.timeSelectMoth,
                     listTransactionWithFullDetails))
                 adapterTransaction.updateData(l)
-                ChartUtils.pieChart(requireActivity(), l, binding.barChart, currencySymbol)
+//                ChartUtils.pieChart(requireActivity(), l, binding.barChart, currencySymbol)
             }
         }
     }
@@ -438,7 +438,7 @@ class HomeFragment : BaseFragment() {
             val l = (filterTransactionsByYear(dataViewMode.timeSelectYear.toString(),
                 listTransactionWithFullDetails))
             adapterTransaction.updateData(l)
-            ChartUtils.pieChart(requireActivity(), l, binding.barChart, currencySymbol)
+//            ChartUtils.pieChart(requireActivity(), l, binding.barChart, currencySymbol)
         }
         binding.imgRight.setOnClickListener {
             ++dataViewMode.timeSelectYear
@@ -446,7 +446,7 @@ class HomeFragment : BaseFragment() {
             val l = (filterTransactionsByYear(dataViewMode.timeSelectYear.toString(),
                 listTransactionWithFullDetails))
             adapterTransaction.updateData(l)
-            ChartUtils.pieChart(requireActivity(), l, binding.barChart, currencySymbol)
+//            ChartUtils.pieChart(requireActivity(), l, binding.barChart, currencySymbol)
         }
     }
 
@@ -475,7 +475,7 @@ class HomeFragment : BaseFragment() {
             binding.textTimePieChart.text = "$d1 - $d2"
             val l = filterTransactionsByPeriod(startDate, endDate, listTransactionWithFullDetails)
             adapterTransaction.updateData(l)
-            ChartUtils.pieChart(requireActivity(), l, binding.barChart, currencySymbol)
+//            ChartUtils.pieChart(requireActivity(), l, binding.barChart, currencySymbol)
         }
         picker.show(requireActivity().supportFragmentManager, picker.toString())
     }

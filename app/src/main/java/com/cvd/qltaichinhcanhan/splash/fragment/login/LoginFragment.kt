@@ -10,20 +10,14 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.cvd.qltaichinhcanhan.R
 import com.cvd.qltaichinhcanhan.databinding.FragmentLoginBinding
 import com.cvd.qltaichinhcanhan.main.NDMainActivity
-import com.cvd.qltaichinhcanhan.main.model.m_r.Account
+import com.cvd.qltaichinhcanhan.main.model.m_new.UserAccount
 import com.cvd.qltaichinhcanhan.main.rdb.vm_data.DataViewMode
-import com.cvd.qltaichinhcanhan.utils.Constant
-import com.cvd.qltaichinhcanhan.utils.ProgressDialog
-import com.cvd.qltaichinhcanhan.utils.Utils
-import com.cvd.qltaichinhcanhan.utils.UtilsDialog
+import com.cvd.qltaichinhcanhan.utils.*
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 
 class LoginFragment : Fragment() {
@@ -31,7 +25,7 @@ class LoginFragment : Fragment() {
     private lateinit var binding: FragmentLoginBinding
     private lateinit var auth: FirebaseAuth
     private lateinit var dataViewMode: DataViewMode
-
+    private lateinit var loadingDialog: LoadingDialog
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -44,6 +38,7 @@ class LoginFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         dataViewMode = ViewModelProvider(requireActivity())[DataViewMode::class.java]
 
+        loadingDialog = LoadingDialog(requireContext())
         initView()
         initEvent()
     }
@@ -80,19 +75,25 @@ class LoginFragment : Fragment() {
         }
 
         binding.imgFb.setOnClickListener {
-            Toast.makeText(requireActivity(),
+            Toast.makeText(
+                requireActivity(),
                 requireActivity().resources.getString(R.string.future_update),
-                Toast.LENGTH_LONG).show()
+                Toast.LENGTH_LONG
+            ).show()
         }
         binding.imgGoogle.setOnClickListener {
-            Toast.makeText(requireActivity(),
+            Toast.makeText(
+                requireActivity(),
                 requireActivity().resources.getString(R.string.future_update),
-                Toast.LENGTH_LONG).show()
+                Toast.LENGTH_LONG
+            ).show()
         }
         binding.textForgotPass.setOnClickListener {
-            Toast.makeText(requireActivity(),
+            Toast.makeText(
+                requireActivity(),
                 requireActivity().resources.getString(R.string.future_update),
-                Toast.LENGTH_LONG).show()
+                Toast.LENGTH_LONG
+            ).show()
         }
     }
 
@@ -119,32 +120,49 @@ class LoginFragment : Fragment() {
     }
 
     private fun login(email: String, pass: String) {
-       UtilsDialog.LoadingDialog(requireContext()).showLoading()
+        loadingDialog.showLoading()
         auth.signInWithEmailAndPassword(email, pass)
             .addOnCompleteListener(requireActivity()) { task ->
                 if (task.isSuccessful) {
-                   Utils.putBoolean(requireContext(),Constant.LOGIN_SUCCESS,true)
+                    Utils.putBoolean(requireContext(), Constant.LOGIN_SUCCESS, true)
 
-                    // get data firebase: list MoneyAccount by Id user
+                    val utilsFireStore = UtilsFireStore()
+                    utilsFireStore.setCBUserAccountLogin(object :
+                        UtilsFireStore.CBUserAccountLogin {
+                        override fun getSuccess(userAccount: UserAccount) {
+                            Utils.saveUserAccountLogin(requireContext(),userAccount)
+                            utilsFireStore.getAccountMoneyByEmail(userAccount.idUserAccount.toString())
+                        }
 
+                        override fun getFailed() {
+                            loadingDialog.hideLoading()
+                        }
+                    })
+                    utilsFireStore.getUserAccountLogin(email)
 
-                    if (Utils.getBoolean(requireContext(), Constant.CREATE_MONEY_ACCOUNT)) {
-                        lifecycleScope.launch {
-                            UtilsDialog.LoadingDialog(requireContext()).hideLoading()
-                            delay(100)
+                    utilsFireStore.setCBAccountMoneyByEmail(object :
+                        UtilsFireStore.CBAccountMoneyByEmail {
+                        override fun getSuccess() {
+                            loadingDialog.hideLoading()
                             val intent = Intent(requireActivity(), NDMainActivity::class.java)
                             startActivity(intent)
                             requireActivity().finish()
                         }
-                    } else {
-                        //
-                        dataViewMode.checkInputScreenCreateMoney = 0
-                        findNavController().navigate(R.id.action_loginFragment_to_creatsMoneyFragment)
-                    }
+
+                        override fun getFailed() {
+                            loadingDialog.hideLoading()
+                            findNavController().navigate(R.id.action_splashFragment_to_creatsMoneyFragment)
+                        }
+                    })
 
                 } else {
-                    Toast.makeText(requireActivity(), "Đăng nhập thất bại! Hãy đăng nhập lại!", Toast.LENGTH_SHORT).show()
-                    binding.pressedLoading.visibility = View.GONE
+
+                    loadingDialog.hideLoading()
+                    Toast.makeText(
+                        requireActivity(),
+                        "Đăng nhập thất bại! Hãy đăng nhập lại!",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
     }

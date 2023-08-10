@@ -15,7 +15,7 @@ import com.cvd.qltaichinhcanhan.main.model.m_r.Country
 
 class AdapterCountry(
     var context: Context,
-    var listCategory: ArrayList<Country>,
+    var listCategory: List<Country>,
     var layoutType: LayoutType,
     var countryDefault: Country? = null,
     var countryNew: Country? = null,
@@ -147,7 +147,7 @@ class AdapterCountry(
         return listCategory.size
     }
 
-    fun updateData(newList: ArrayList<Country>) {
+    fun updateData(newList: List<Country>) {
         this.listCategory = newList
         reloadData()
     }

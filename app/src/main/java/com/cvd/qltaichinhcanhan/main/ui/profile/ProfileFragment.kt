@@ -18,6 +18,7 @@ import com.cvd.qltaichinhcanhan.main.rdb.vm_data.DataViewMode
 import com.cvd.qltaichinhcanhan.splash.OnBoardingScreenActivity
 import com.cvd.qltaichinhcanhan.utils.Constant
 import com.cvd.qltaichinhcanhan.utils.Utils
+import okhttp3.internal.Util
 
 
 class ProfileFragment : BaseFragment() {
@@ -44,10 +45,9 @@ class ProfileFragment : BaseFragment() {
     }
 
     private fun initView() {
-        val accountDefault = dataViewMode.accountLoginHome
-        if (accountDefault.idAccount != 0) {
-            binding.textNameAccount.text = accountDefault.accountName
-            binding.textNameEmail.text = accountDefault.emailName
+        val userAccount = Utils.getUserAccountLogin(requireContext())
+        if (userAccount.idUserAccount != null) {
+            binding.textNameEmail.text = userAccount.email
         }
     }
 
@@ -64,7 +64,10 @@ class ProfileFragment : BaseFragment() {
                 resources.getString(R.string.text_ok),
                 {
                     customDialog.dismiss()
-                    createDialogConfirmDeleteData();
+                    Utils.putBoolean(requireContext(), Constant.LOGIN_SUCCESS, false)
+                    val intent = Intent(requireActivity(), OnBoardingScreenActivity::class.java)
+                    startActivity(intent)
+                    requireActivity().finish()
                 },
                 resources.getString(R.string.text_no),
                 {

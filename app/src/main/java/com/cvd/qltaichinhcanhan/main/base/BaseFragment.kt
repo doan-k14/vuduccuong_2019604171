@@ -19,10 +19,10 @@ import com.cvd.qltaichinhcanhan.main.model.m_convert.FilterTransactions
 import com.cvd.qltaichinhcanhan.main.model.m_convert.TransactionWithFullDetails
 import com.cvd.qltaichinhcanhan.main.model.m_r.Account
 import com.cvd.qltaichinhcanhan.main.model.m_r.Country
-import com.opencsv.CSVWriter
-import jxl.Workbook
-import jxl.write.Label
-import org.apache.commons.lang3.StringUtils
+//import com.opencsv.CSVWriter
+//import jxl.Workbook
+//import jxl.write.Label
+//import org.apache.commons.lang3.StringUtils
 import java.io.File
 import java.io.FileWriter
 import java.text.DecimalFormat
@@ -269,28 +269,28 @@ abstract class BaseFragment : Fragment() {
         val folder = File(folderName).apply { mkdirs() }
         val fileName = "${createFileName()}.xls"
         val file = File(folder, fileName)
-
-        val workbook = Workbook.createWorkbook(file)
-        val sheet = workbook.createSheet("Data", 0)
-        val header = DefaultData.headerFileXlsAndCSV
-        for (i in header.indices) {
-            val cell = Label(i, 0, header[i])
-            sheet.addCell(cell)
-        }
-        var row = 1
-        for (convertXML in convertXMLList) {
-            sheet.addCell(Label(0, row, convertXML.date ?: ""))
-            sheet.addCell(Label(1, row, convertXML.categoryName ?: ""))
-            sheet.addCell(Label(2, row, convertXML.moneyAccount ?: ""))
-            sheet.addCell(Label(3, row, convertXML.transactionAmountDefault ?: ""))
-            sheet.addCell(Label(4, row, convertXML.currencyCodeDefault ?: ""))
-            sheet.addCell(Label(5, row, convertXML.transactionAmount ?: ""))
-            sheet.addCell(Label(6, row, convertXML.currencyCode ?: ""))
-            sheet.addCell(Label(7, row, convertXML.transactionComment ?: ""))
-            row++
-        }
-        workbook.write()
-        workbook.close()
+//
+//        val workbook = Workbook.createWorkbook(file)
+//        val sheet = workbook.createSheet("Data", 0)
+//        val header = DefaultData.headerFileXlsAndCSV
+//        for (i in header.indices) {
+//            val cell = Label(i, 0, header[i])
+//            sheet.addCell(cell)
+//        }
+//        var row = 1
+//        for (convertXML in convertXMLList) {
+//            sheet.addCell(Label(0, row, convertXML.date ?: ""))
+//            sheet.addCell(Label(1, row, convertXML.categoryName ?: ""))
+//            sheet.addCell(Label(2, row, convertXML.moneyAccount ?: ""))
+//            sheet.addCell(Label(3, row, convertXML.transactionAmountDefault ?: ""))
+//            sheet.addCell(Label(4, row, convertXML.currencyCodeDefault ?: ""))
+//            sheet.addCell(Label(5, row, convertXML.transactionAmount ?: ""))
+//            sheet.addCell(Label(6, row, convertXML.currencyCode ?: ""))
+//            sheet.addCell(Label(7, row, convertXML.transactionComment ?: ""))
+//            row++
+//        }
+//        workbook.write()
+//        workbook.close()
         return file
     }
 
@@ -299,27 +299,27 @@ abstract class BaseFragment : Fragment() {
         val folder = File(folderName).apply { mkdirs() }
         val fileName = "${createFileName()}.csv"
         val file = File(folder, fileName)
-        val writer = CSVWriter(FileWriter(file))
-        val title = resources.getString(R.string.announcement_title)
-        val header = DefaultData.headerFileXlsAndCSV
-        val headerLength = header.joinToString("").length
-        val titlePadding = StringUtils.repeat(" ", (headerLength - title.length) / 2)
-        writer.writeNext(arrayOf(titlePadding + title))
-        writer.writeNext(header)
-        for (convertXML in convertXMLList) {
-            val row = arrayOf(
-                convertXML.date?: "",
-                convertXML.categoryName ?: "",
-                convertXML.moneyAccount ?: "",
-                convertXML.transactionAmountDefault ?: "",
-                convertXML.currencyCodeDefault ?: "",
-                convertXML.transactionAmount ?: "",
-                convertXML.currencyCode ?: "",
-                convertXML.transactionComment ?: ""
-            )
-            writer.writeNext(row)
-        }
-        writer.close()
+//        val writer = CSVWriter(FileWriter(file))
+//        val title = resources.getString(R.string.announcement_title)
+//        val header = DefaultData.headerFileXlsAndCSV
+//        val headerLength = header.joinToString("").length
+//        val titlePadding = StringUtils.repeat(" ", (headerLength - title.length) / 2)
+//        writer.writeNext(arrayOf(titlePadding + title))
+//        writer.writeNext(header)
+//        for (convertXML in convertXMLList) {
+//            val row = arrayOf(
+//                convertXML.date?: "",
+//                convertXML.categoryName ?: "",
+//                convertXML.moneyAccount ?: "",
+//                convertXML.transactionAmountDefault ?: "",
+//                convertXML.currencyCodeDefault ?: "",
+//                convertXML.transactionAmount ?: "",
+//                convertXML.currencyCode ?: "",
+//                convertXML.transactionComment ?: ""
+//            )
+//            writer.writeNext(row)
+//        }
+//        writer.close()
         return file
     }
 

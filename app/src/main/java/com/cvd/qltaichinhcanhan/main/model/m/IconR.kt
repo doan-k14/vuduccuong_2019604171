@@ -103,6 +103,11 @@ data class IconR(
             return resources.getIdentifier(urlIconR!!.iconName, "drawable", context.packageName)
         }
 
+        fun showIconByName(context: Context, iconName: String): Int {
+            val resources = context.resources
+            return resources.getIdentifier(iconName, "drawable", context.packageName)
+        }
+
 
         fun getColorById(context: Context, id: Int, listIconR: List<ColorR>): Int {
             val urlIconR = listIconR.find { it.id == id }

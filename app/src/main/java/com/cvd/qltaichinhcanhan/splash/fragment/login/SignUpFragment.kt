@@ -12,12 +12,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.cvd.qltaichinhcanhan.R
 import com.cvd.qltaichinhcanhan.databinding.FragmentSignupBinding
+import com.cvd.qltaichinhcanhan.main.model.m_new.UserAccount
 import com.cvd.qltaichinhcanhan.main.rdb.vm_data.DataViewMode
-import com.cvd.qltaichinhcanhan.utils.LoadingDialog
-import com.cvd.qltaichinhcanhan.utils.Utils
-import com.cvd.qltaichinhcanhan.utils.UtilsDialog
-import com.cvd.qltaichinhcanhan.utils.UtilsFireStore
+import com.cvd.qltaichinhcanhan.utils.*
 import com.google.firebase.auth.FirebaseAuth
+import com.google.gson.Gson
 
 
 class SignUpFragment : Fragment() {
@@ -25,7 +24,7 @@ class SignUpFragment : Fragment() {
     private lateinit var binding: FragmentSignupBinding
     private lateinit var mAuth: FirebaseAuth
     private lateinit var dataViewMode: DataViewMode
-
+    private lateinit var loadingDialog: LoadingDialog
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -41,6 +40,7 @@ class SignUpFragment : Fragment() {
         initView()
         initEvent()
         mAuth = FirebaseAuth.getInstance()
+        loadingDialog = LoadingDialog(requireContext())
     }
 
 
@@ -115,11 +115,13 @@ class SignUpFragment : Fragment() {
     }
 
     private fun clickCreateAccount(email: String, pass: String) {
+        loadingDialog.showLoading()
         mAuth.createUserWithEmailAndPassword(email, pass)
             .addOnCompleteListener(requireActivity()) { task ->
                 if (task.isSuccessful) {
                     createUserAccount(email)
                 } else {
+                    loadingDialog.hideLoading()
                     Utils.showToast(requireContext(), "Tạo tài khoản thành công thất bại!")
                 }
             }
@@ -131,8 +133,16 @@ class SignUpFragment : Fragment() {
         utilsFireStore.setCallBackCreateAccountUser(object :
             UtilsFireStore.CallBackCreateAccountUser {
             override fun createSuccess(idUserAccount: String) {
+
+                val userAccount = UserAccount(idUserAccount,email)
+                val gson = Gson()
+                val stringUserAccount = gson.toJson(userAccount)
+                Utils.putString(requireContext(),Constant.USER_LOGIN_SUCCESS,stringUserAccount)
+                Utils.putBoolean(requireContext(),Constant.LOGIN_SUCCESS,true)
+
                 getAccountMoneyByEmail(idUserAccount)
             }
+
 
             override fun createFailed() {
 
@@ -149,6 +159,7 @@ class SignUpFragment : Fragment() {
             }
 
             override fun getFailed() {
+                loadingDialog.hideLoading()
                 findNavController().navigate(R.id.action_signUpFragment_to_creatsMoneyFragment)
             }
         })

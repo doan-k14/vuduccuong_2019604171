@@ -21,14 +21,12 @@ import com.cvd.qltaichinhcanhan.R
 import com.cvd.qltaichinhcanhan.databinding.FragmentCreatsMoneyBinding
 import com.cvd.qltaichinhcanhan.main.NDMainActivity
 import com.cvd.qltaichinhcanhan.main.model.m.DefaultData
+import com.cvd.qltaichinhcanhan.main.model.m_new.MoneyAccount
 import com.cvd.qltaichinhcanhan.main.model.m_r.Account
 import com.cvd.qltaichinhcanhan.main.model.m_r.Country
-import com.cvd.qltaichinhcanhan.main.model.m_r.MoneyAccount
 import com.cvd.qltaichinhcanhan.main.model.m_r.NotificationInfo
 import com.cvd.qltaichinhcanhan.main.rdb.vm_data.DataViewMode
-import com.cvd.qltaichinhcanhan.utils.Constant
-import com.cvd.qltaichinhcanhan.utils.Utils
-import com.cvd.qltaichinhcanhan.utils.UtilsDialog
+import com.cvd.qltaichinhcanhan.utils.*
 import kotlinx.coroutines.newFixedThreadPoolContext
 import java.util.*
 
@@ -54,9 +52,11 @@ class CreatsMoneyFragment : Fragment() {
     }
 
     private fun initView() {
-        val t = requireContext().resources.getString(R.string.personal_financial_management_application)
+        val t =
+            requireContext().resources.getString(R.string.personal_financial_management_application)
         val welcomeTo = requireContext().resources.getString(R.string.welcome_to)
-        val startManaging = requireContext().resources.getString(R.string.start_managing_your_money_by_entering_the_amount_you_have)
+        val startManaging =
+            requireContext().resources.getString(R.string.start_managing_your_money_by_entering_the_amount_you_have)
         val textMessage = "$welcomeTo $t $startManaging"
         val spannableString = SpannableString(textMessage)
         spannableString.setSpan(
@@ -79,7 +79,7 @@ class CreatsMoneyFragment : Fragment() {
     }
 
     private fun initData() {
-        val country = dataViewMode.selectCountry
+        val country = dataViewMode.selectCountryToCreateMoneyAccount
         if (country.idCountry != 0) {
             binding.edtTypeAccount.text = country.currencyCode
         }
@@ -95,9 +95,10 @@ class CreatsMoneyFragment : Fragment() {
 
 
         binding.startButton.setOnClickListener {
-            val value = MoneyTextWatcher.parseCurrencyValue(binding.edtInitialBalance.text.toString())
+            val value =
+                MoneyTextWatcher.parseCurrencyValue(binding.edtInitialBalance.text.toString())
             val temp = value.toString()
-            checkDataMoneyAccount(temp,dataViewMode.selectCountry)
+            checkDataMoneyAccount(temp, dataViewMode.selectCountryToCreateMoneyAccount)
         }
     }
 
@@ -119,29 +120,35 @@ class CreatsMoneyFragment : Fragment() {
             return
         }
         try {
-            UtilsDialog.LoadingDialog(requireContext()).showLoading()
-            createDataApp()
+            val loadingDialog = LoadingDialog(requireContext())
+            loadingDialog.showLoading()
+            val userAccount = Utils.getUserAccountLogin(requireContext())
+
             val moneyAccount = MoneyAccount(
-                0,
+                "",
                 requireContext().getString(R.string.main_account),
                 temp.toFloat(),
                 true,
                 1,
-                2,
                 country.idCountry,
-                1
+                userAccount.idUserAccount
             )
-            Utils.putBoolean(requireContext(), Constant.CREATE_MONEY_ACCOUNT, true);
-            dataViewMode.addMoneyAccount(moneyAccount)
-            country.selectCountry = true
-            dataViewMode.updateCountry(country)
 
-            Handler().postDelayed({
-                UtilsDialog.LoadingDialog(requireContext()).hideLoading()
-                val intent = Intent(requireActivity(), NDMainActivity::class.java)
-                startActivity(intent)
-                requireActivity().finish()
-            }, 1500)
+            val utilsFireStore = UtilsFireStore()
+            utilsFireStore.setCallBackCreateMoneyAccount(object :
+                UtilsFireStore.CallBackCreateMoneyAccount {
+                override fun createSuccess(idUserAccount: String) {
+                    loadingDialog.hideLoading()
+                    val intent = Intent(requireActivity(), NDMainActivity::class.java)
+                    startActivity(intent)
+                    requireActivity().finish()
+                }
+
+                override fun createFailed() {
+                    loadingDialog.hideLoading()
+                }
+            })
+            utilsFireStore.createMoneyAccount(moneyAccount)
 
         } catch (e: NumberFormatException) {
             Toast.makeText(
@@ -150,27 +157,5 @@ class CreatsMoneyFragment : Fragment() {
                 Toast.LENGTH_SHORT
             ).show()
         }
-    }
-
-    private fun createDataApp() {
-        dataViewMode.addAccount(Account(1))
-        dataViewMode.addListCategory(DefaultData.getListCategoryCreateData(requireContext()))
-
-
-        val today = Calendar.getInstance()
-        today.timeInMillis = System.currentTimeMillis()
-        val currentTime = Calendar.getInstance().time.time
-        dataViewMode.addNotificationInfo(
-            NotificationInfo(
-                0,
-                resources.getString(R.string.remind),
-                resources.getString(R.string.menu_daily),
-                today.timeInMillis,
-                currentTime,
-                resources.getString(R.string.reminde_notes),
-                false,
-                1
-            )
-        )
     }
 }

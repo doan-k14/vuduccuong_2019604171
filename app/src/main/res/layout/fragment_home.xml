@@ -234,11 +234,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="10dp">
 
-                <com.github.mikephil.charting.charts.PieChart
-                    android:id="@+id/bar_chart"
-                    android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    app:layout_constraintTop_toTopOf="parent" />
+<!--                <com.github.mikephil.charting.charts.PieChart-->
+<!--                    android:id="@+id/bar_chart"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="200dp"-->
+<!--                    app:layout_constraintTop_toTopOf="parent" />-->
 
                 <ImageView
                     android:id="@+id/img_add_1"
