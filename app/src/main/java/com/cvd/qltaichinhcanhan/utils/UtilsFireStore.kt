@@ -6,10 +6,7 @@ import com.cvd.qltaichinhcanhan.main.model.m_new.UserAccount
 import com.cvd.qltaichinhcanhan.main.model.m_new.MoneyAccount
 import com.cvd.qltaichinhcanhan.main.model.m_r.Country
 import com.cvd.qltaichinhcanhan.main.model.m_r.countries
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 
 class UtilsFireStore {
     val TAG: String = "UtilsFireStore"
@@ -192,6 +189,91 @@ class UtilsFireStore {
             newCategoryRef.setValue(category)
         }
     }
+
+    // create 1 category
+    interface CBCreateCategory{
+        fun createSuccess()
+        fun createFailed()
+    }
+
+    private lateinit var cbCreateCategory:CBCreateCategory
+
+    fun setCBCreateCategory(cbCreateCategory: CBCreateCategory) {
+        this.cbCreateCategory = cbCreateCategory
+    }
+
+    fun createCategory(category: Category){
+        val database = FirebaseDatabase.getInstance().reference
+        val newCategoryReference = database.child("categories").push()
+        newCategoryReference.addListenerForSingleValueEvent(object :ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val newId = snapshot.key
+                if(newId != null){
+                    category.idCategory = newId
+                    newCategoryReference.setValue(category)
+                    cbCreateCategory.createSuccess()
+                }else{
+                    cbCreateCategory.createFailed()
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+
+            }
+        })
+    }
+
+    interface CBDeleteCategory {
+        fun deleteSuccess()
+        fun deleteFailed()
+    }
+
+    private lateinit var cBDeleteCategory: CBDeleteCategory
+
+    fun setCBDeleteCategory(cBDeleteCategory: CBDeleteCategory) {
+        this.cBDeleteCategory = cBDeleteCategory
+    }
+
+    fun deleteCategoryById(idCategory: String){
+        val database = FirebaseDatabase.getInstance().reference
+        val categoryReference = database.child("categories").child(idCategory)
+
+        categoryReference.removeValue()
+            .addOnSuccessListener {
+                cBDeleteCategory.deleteSuccess()
+            }
+            .addOnFailureListener {
+                cBDeleteCategory.deleteFailed()
+            }
+    }
+    interface CBUpdateCategory {
+        fun updateSuccess()
+        fun updateFailed()
+    }
+
+    private lateinit var cBUpdateCategory: CBUpdateCategory
+
+    fun setCBUpdateCategory(cBUpdateCategory: CBUpdateCategory) {
+        this.cBUpdateCategory = cBUpdateCategory
+    }
+
+    fun updateCategoryById(idCategory: String,updatedCategory: Category){
+        val database = FirebaseDatabase.getInstance().reference
+        val categoryReference = database.child("categories").child(idCategory)
+
+        categoryReference.setValue(updatedCategory)
+            .addOnSuccessListener {
+                cBUpdateCategory.updateSuccess()
+            }
+            .addOnFailureListener {
+                cBUpdateCategory.updateFailed()
+            }
+    }
+
+
+
+
+
     interface CBListCategory {
         fun getListSuccess(list: List<Category>)
         fun getListFailed()

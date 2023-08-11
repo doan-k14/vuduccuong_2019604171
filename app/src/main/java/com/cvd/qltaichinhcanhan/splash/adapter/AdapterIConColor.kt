@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.cvd.qltaichinhcanhan.databinding.ItemColorBinding
 import com.cvd.qltaichinhcanhan.main.model.m.IconR
+import com.cvd.qltaichinhcanhan.utils.UtilsColor
 
 class AdapterIConColor(
     var context: Context,
@@ -29,9 +30,7 @@ class AdapterIConColor(
         val item = listIConColor[position]
         with(holder) {
             binding.imgIconColor.isActivated = item.select == true
-            binding.imgIconColor.setImageResource(IconR.getIconById(context,
-                item.id,
-                IconR.getListIconCheckCircle()))
+            binding.imgIconColor.setImageResource(UtilsColor.setCheckCircleById(context, item.id))
 
             binding.root.setOnClickListener {
                 clickItemSelect?.let {

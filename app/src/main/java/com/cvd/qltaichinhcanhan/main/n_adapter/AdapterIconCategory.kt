@@ -12,6 +12,8 @@ import com.cvd.qltaichinhcanhan.main.model.DataColor
 import androidx.core.content.ContextCompat
 import com.cvd.qltaichinhcanhan.main.model.m.IconR
 import com.cvd.qltaichinhcanhan.main.model.m_new.Category
+import com.cvd.qltaichinhcanhan.utils.Utils
+import com.cvd.qltaichinhcanhan.utils.UtilsColor
 
 class AdapterIconCategory(
     var context: Context,
@@ -63,13 +65,11 @@ class AdapterIconCategory(
             when (layoutType) {
                 LayoutType.TYPE1 -> {
                     binding as ItemIconCategoryBinding
-                    binding.imgIcon.setImageResource(IconR.showIconByName(context, item.idIcon.toString()))
+                    binding.imgIcon.setImageResource(UtilsColor.setImageByName(context, item.idIcon.toString()))
                     binding.textNameCategory.text = item.categoryName
-                    binding.imgIcon.setBackgroundResource(DataColor.setCustomBackgroundColorCircleById(
-                        context,
-                        item.idColor!!))
-                    binding.textNameCategory.setTextColor(ContextCompat.getColor(binding.textNameCategory.context,
-                        DataColor.setColorById(item.idColor!!)))
+
+                    binding.imgIcon.setBackgroundResource(UtilsColor.setBackgroundCircleCategoryById(context, item.idColor!!))
+                    binding.textNameCategory.setTextColor(ContextCompat.getColor(binding.textNameCategory.context,UtilsColor.setTextColor(item.idColor!!)))
 
                     binding.root.setOnClickListener {
                         clickItemSelect?.let {
@@ -111,11 +111,8 @@ class AdapterIconCategory(
                     binding.imgIcon.setImageResource(IconR.showIconByName(context, item.idIcon.toString()))
 
                     binding.textNameCategory.text = item.categoryName
-                    binding.imgIcon.setBackgroundResource(DataColor.setCustomBackgroundColorCircleById(
-                        context,
-                        item.idColor!!))
-                    binding.textNameCategory.setTextColor(ContextCompat.getColor(binding.textNameCategory.context,
-                        DataColor.setColorById(item.idColor!!)))
+                    binding.imgIcon.setBackgroundResource(UtilsColor.setBackgroundCircleCategoryById(context, item.idColor!!))
+                    binding.textNameCategory.setTextColor(ContextCompat.getColor(binding.textNameCategory.context,UtilsColor.setTextColor(item.idColor!!)))
 
                     if (item.selectCategory == true) {
                         binding.root.setBackgroundResource(R.drawable.custom_icon_while)
@@ -140,11 +137,8 @@ class AdapterIconCategory(
                     binding.imgIcon.setImageResource(IconR.showIconByName(context, item.idIcon.toString()))
 
                     binding.textNameCategory.text = item.categoryName
-                    binding.imgIcon.setBackgroundResource(DataColor.setCustomBackgroundColorCircleById(
-                        context,
-                        item.idColor!!))
-                    binding.textNameCategory.setTextColor(ContextCompat.getColor(binding.textNameCategory.context,
-                        DataColor.setColorById(item.idColor!!)))
+                    binding.imgIcon.setBackgroundResource(UtilsColor.setBackgroundCircleCategoryById(context, item.idColor!!))
+                    binding.textNameCategory.setTextColor(ContextCompat.getColor(binding.textNameCategory.context,UtilsColor.setTextColor(item.idColor!!)))
 
                     binding.root.setOnClickListener {
                         clickItemSelect?.let {

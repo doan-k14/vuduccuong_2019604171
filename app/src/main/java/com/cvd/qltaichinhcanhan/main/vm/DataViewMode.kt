@@ -9,16 +9,19 @@ class DataViewMode(application: Application) : AndroidViewModel(application) {
 
     var checkTypeTabLayoutAddTransaction = false
     var checkTypeTabLayoutCategory = false
-    var editOrAddCategory = Category()
-    var checkEditOrCreateCategory = false
+
+    var editCategory = Category()
+    var editDefaultCategory = Category()
+
     var listCategoryByType: List<Category> = listOf()
+
+    var createCategory = Category()
+
 
     fun resetDataCategory() {
         checkTypeTabLayoutCategory = false
-        editOrAddCategory = Category()
+        editCategory = Category()
+        editDefaultCategory = Category()
+        createCategory = Category()
     }
-
-    var selectIconR = ""
-    var idColor = 1
-
 }

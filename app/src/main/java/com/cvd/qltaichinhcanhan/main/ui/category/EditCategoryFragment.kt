@@ -18,15 +18,18 @@ import com.cvd.qltaichinhcanhan.main.model.m_new.Category
 import com.cvd.qltaichinhcanhan.main.model.m_r.CategoryType
 import com.cvd.qltaichinhcanhan.main.n_adapter.AdapterIconCategory
 import com.cvd.qltaichinhcanhan.main.vm.DataViewMode
+import com.cvd.qltaichinhcanhan.utils.LoadingDialog
+import com.cvd.qltaichinhcanhan.utils.Utils
+import com.cvd.qltaichinhcanhan.utils.UtilsColor
+import com.cvd.qltaichinhcanhan.utils.UtilsFireStore
 
 
 class EditCategoryFragment : BaseFragment() {
     lateinit var binding: FragmentEditCategoryBinding
-    private lateinit var adapterIconCategory: AdapterIconCategory
     private lateinit var adapterIConColor: AdapterIConColor
 
     private lateinit var dataViewMode: DataViewMode
-    var editOrAddCategory = Category()
+    var mEditCategory = Category()
     var listCategory = listOf<Category>()
 
     override fun onCreateView(
@@ -41,31 +44,42 @@ class EditCategoryFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         dataViewMode = ViewModelProvider(requireActivity())[DataViewMode::class.java]
 
+        mEditCategory = dataViewMode.editCategory
+
         initView()
         initEvent()
-
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        Log.e("TAG", "onDestroyView: ", )
-    }
+
     private fun initView() {
         adapterIConColor = AdapterIConColor(requireContext(), IconR.getListIconCheckCircle())
         binding.rcvColor.adapter = adapterIConColor
         binding.rcvColor.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
 
-
-        if(dataViewMode.selectIconR != ""){
-            binding.imgIconCategory.setImageResource(IconR.showIconByName(requireContext(), dataViewMode.selectIconR))
-            adapterIConColor.updateSelectColor(dataViewMode.idColor)
-        }
+        adapterIConColor.updateSelectColor(mEditCategory.idColor!!)
 
         binding.edtPlannedOutlay.addTextChangedListener(MoneyTextWatcher(binding.edtPlannedOutlay))
 
-        editOrAddCategory = dataViewMode.editOrAddCategory
-        checkEditOrAddCategory(editOrAddCategory)
+        binding.edtNameCategory.setText(mEditCategory.categoryName)
+        binding.edtPlannedOutlay.setText(convertFloatToString(mEditCategory.moneyLimit!!))
+        binding.llUpdateCategory.visibility = View.VISIBLE
+        binding.txtTypeCategory.visibility = View.VISIBLE
+        binding.llTypeCategory.visibility = View.GONE
+        binding.txtTypeCategory.text = getTypeCategory(mEditCategory.type!!)
+
+        binding.imgIconCategory.setImageResource(
+            UtilsColor.setImageByName(
+                requireContext(),
+                mEditCategory.idIcon.toString()
+            )
+        )
+        binding.imgIconCategory.setBackgroundResource(
+            UtilsColor.setBackgroundCircleCategoryById(
+                requireContext(),
+                mEditCategory.idColor!!
+            )
+        )
 
     }
 
@@ -79,83 +93,60 @@ class EditCategoryFragment : BaseFragment() {
         }
 
         adapterIConColor.setClickItemSelect {
-            binding.imgIconCategory.setBackgroundResource(IconR.getIconById(requireContext(), it.idColorR!!, IconR.getListIconCheckCircle()))
-            dataViewMode.editOrAddCategory.idColor = it.idColorR
-            dataViewMode.idColor = it.idColorR!!
+            binding.imgIconCategory.setBackgroundResource(
+                IconR.getIconById(
+                    requireContext(),
+                    it.idColorR!!,
+                    IconR.getListIconCheckCircle()
+                )
+            )
+            dataViewMode.editCategory.idColor = it.idColorR
         }
 
-        val listCategory = dataViewMode.listCategoryByType
         binding.textSaveCategory.setOnClickListener {
-            Log.e("TAG", "initEvent: "+checkData(listCategory) )
-            if (checkData(listCategory)) { // check xem đã nhập hết các thông số chưa
-                // với category name check xem đã tồn tại trên fire base chưa
-//                dataViewMode.updateCategory(category = editOrAddCategory)
-                findNavController().popBackStack()
-            }
-        }
-
-        binding.textCreateCategory.setOnClickListener {
-//            if (checkData()) {
-//                Log.e("data", "class category save: ${dataViewMode.editOrAddCategory.toString()}")
-////                dataViewMode.addCategory(category = editOrAddCategory)
+            if (checkData(dataViewMode.listCategoryByType)) {
+                updateCategory()
+                Utils.showToast(requireContext(), "Cập nhật thành công")
+            } else {
 //                findNavController().popBackStack()
-//            }
-            Log.e("TAG", "initEvent: "+checkData(listCategory) )
-
+            }
         }
 
         binding.textDeleteCategory.setOnClickListener {
-            createDialogDelete(Gravity.CENTER, category = editOrAddCategory)
+            createDialogDelete(Gravity.CENTER, category = mEditCategory)
         }
     }
 
-    private fun checkEditOrAddCategory(category: Category) {
+    private fun updateCategory() {
+        val loadingDialog = LoadingDialog(requireContext())
+        loadingDialog.showLoading()
 
-        if (category.categoryName == "Thêm") {
-            binding.textTitleTotal.setText(R.string.create_category)
-            binding.llUpdateCategory.visibility = View.GONE
-            binding.txtTypeCategory.visibility = View.GONE
-            binding.textCreateCategory.visibility = View.VISIBLE
-            binding.llTypeCategory.visibility = View.VISIBLE
-            if (category.type == 1) {
-                binding.imgExpense.isActivated = true
-                binding.imgExpense.visibility = View.VISIBLE
-                binding.textExpense.visibility = View.VISIBLE
-                binding.imgInCome.visibility = View.GONE
-                binding.textInCome.visibility = View.GONE
-                binding.imgInCome.isActivated = false
-            } else if (category.type == 2) {
-                binding.imgExpense.isActivated = false
-                binding.imgInCome.isActivated = true
-                binding.imgExpense.visibility = View.GONE
-                binding.textExpense.visibility = View.GONE
-                binding.imgInCome.visibility = View.VISIBLE
-                binding.textInCome.visibility = View.VISIBLE
+        val utilsFireStore = UtilsFireStore()
+        utilsFireStore.setCBUpdateCategory(object : UtilsFireStore.CBUpdateCategory {
+            override fun updateSuccess() {
+                loadingDialog.hideLoading()
+                mEditCategory = Category()
+                dataViewMode.editCategory = Category()
+                findNavController().popBackStack()
             }
-            binding.imgIconCategory.setBackgroundResource(IconR.getIconById(requireContext(), category.idColor!!, IconR.getListIconCheckCircle()))
-        } else {
-            binding.edtNameCategory.setText(category.categoryName)
-            binding.edtPlannedOutlay.setText(convertFloatToString(category.moneyLimit!!))
-            binding.llUpdateCategory.visibility = View.VISIBLE
-            binding.txtTypeCategory.visibility = View.VISIBLE
-            binding.textCreateCategory.visibility = View.GONE
-            binding.llTypeCategory.visibility = View.GONE
-            binding.txtTypeCategory.text = getTypeCategory(category.type.toString())
-            adapterIConColor.updateSelectColor(category.idColor!!)
-            adapterIconCategory.updateColor(category.idColor!!)
-            binding.imgIconCategory.setImageResource(IconR.showIconByName(requireContext(), category.idIcon!!))
-            binding.imgIconCategory.setBackgroundResource(IconR.getIconById(requireContext(), 1, IconR.getListIconCheckCircle()))
-        }
 
+            override fun updateFailed() {
+                loadingDialog.hideLoading()
+                Utils.showToast(requireContext(), "Create category failed")
+            }
+        })
 
+        utilsFireStore.updateCategoryById(mEditCategory.idCategory, mEditCategory)
     }
 
     private fun checkData(list: List<Category>): Boolean {
         val textName = binding.edtNameCategory.text
         if (textName.isEmpty()) {
-            Toast.makeText(requireContext(),
+            Utils.showToast(
+                requireContext(),
                 requireContext().resources.getString(R.string.category_names_cannot_be_left_blank),
-                Toast.LENGTH_SHORT).show()
+            )
+
             return false
         }
 
@@ -167,31 +158,52 @@ class EditCategoryFragment : BaseFragment() {
                 val number = temp.toFloat()
                 plannedOutlay = number
             } catch (e: NumberFormatException) {
-                Toast.makeText(requireContext(),
-                    requireContext().resources.getString(R.string.you_entered_the_wrong_format),
-                    Toast.LENGTH_SHORT)
-                    .show()
+                Utils.showToast(
+                    requireContext(),
+                    requireContext().resources.getString(R.string.you_entered_the_wrong_format)
+                )
+                return false
             }
         } else {
             plannedOutlay = 0F
         }
 
-        var idIcon = ""
-        var idColor = 0
-        if(dataViewMode.selectIconR != ""){
-            idIcon = dataViewMode.selectIconR
-            idColor = dataViewMode.idColor
-        }else{
+        if (mEditCategory.categoryName == textName.toString() && mEditCategory.moneyLimit == plannedOutlay
+            && mEditCategory.idIcon == dataViewMode.editDefaultCategory.idIcon
+            && mEditCategory.idColor == dataViewMode.editDefaultCategory.idColor
+        ) {
+            Utils.showToast(
+                requireContext(),
+                "Cập nhật thành công"
+            )
+            findNavController().popBackStack()
             return false
         }
-        for(category in list){
-            if(category.categoryName == textName.toString()){
+
+
+        for (category in list) {
+            if (category.categoryName == textName.toString()) {
+                Utils.showToast(
+                    requireContext(),
+                    "Tên danh mục đã tồn tại trong danh sách, hay thay mới"
+                )
                 return false
             }
         }
 
+        mEditCategory = Category(
+            mEditCategory.idCategory,
+            textName.toString(),
+            mEditCategory.type,
+            plannedOutlay,
+            false,
+            mEditCategory.idIcon,
+            mEditCategory.idColor,
+            mEditCategory.idUserAccount,
+        )
         return true
     }
+
 
     private fun createDialogDelete(gravity: Int, category: Category) {
         val customDialog = CustomDialog(requireActivity())
@@ -201,9 +213,22 @@ class EditCategoryFragment : BaseFragment() {
             resources.getString(R.string.category_delete_confirmation),
             resources.getString(R.string.text_ok),
             {
-
+                val loadingDialog = LoadingDialog(requireContext())
+                loadingDialog.showLoading()
                 customDialog.dismiss()
-                findNavController().popBackStack()
+                val utilsFireStore = UtilsFireStore()
+                utilsFireStore.setCBDeleteCategory(object : UtilsFireStore.CBDeleteCategory {
+                    override fun deleteSuccess() {
+                        loadingDialog.hideLoading()
+                        findNavController().popBackStack()
+                    }
+
+                    override fun deleteFailed() {
+                        loadingDialog.hideLoading()
+                        Utils.showToast(requireContext(), "Delete category failed")
+                    }
+                })
+                utilsFireStore.deleteCategoryById(category.idCategory)
             },
             resources.getString(R.string.text_no),
             {
@@ -212,19 +237,12 @@ class EditCategoryFragment : BaseFragment() {
         )
     }
 
-    private fun getTypeCategory(type: String): String {
-        if (type == CategoryType.EXPENSE.toString()) {
+    private fun getTypeCategory(type: Int): String {
+        if (type == 1) {
             return requireContext().resources.getString(R.string.expense)
-        } else if (type == CategoryType.INCOME.toString()) {
+        } else if (type == 2) {
             return requireContext().resources.getString(R.string.in_come)
         }
         return ""
     }
-
-    override fun onDestroy() {
-        Log.e("test", "Edt: onDestroy")
-        dataViewMode.resetDataCategory()
-        super.onDestroy()
-    }
-
 }

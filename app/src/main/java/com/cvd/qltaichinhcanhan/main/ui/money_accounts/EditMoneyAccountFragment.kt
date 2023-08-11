@@ -27,7 +27,7 @@ class EditMoneyAccountFragment : BaseFragment() {
     lateinit var binding: FragmentEditAccountBinding
     lateinit var dataViewMode: DataViewMode
 
-    private lateinit var adapterIConColor: AdapterIConColor
+//    private lateinit var adapterIConColor: AdapterIConColor
     private lateinit var adapterIconAccount: AdapterIconAccount
     var listMoneyAccount = listOf<MoneyAccountWithDetails>()
     override fun onCreateView(
@@ -63,8 +63,8 @@ class EditMoneyAccountFragment : BaseFragment() {
             }
         binding.rcvIconCategory.layoutManager = myLinearLayoutManager1
 
-        adapterIConColor = AdapterIConColor(requireContext(), IconR.getListIconCheckCircle())
-        binding.rcvColor.adapter = adapterIConColor
+//        adapterIConColor = AdapterIConColor(requireContext(), IconR.getListIconCheckCircle())
+//        binding.rcvColor.adapter = adapterIConColor
         binding.rcvColor.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
 
@@ -107,7 +107,7 @@ class EditMoneyAccountFragment : BaseFragment() {
             binding.edtTypeAccount.text = country.currencyCode
             binding.edtTotal.setText(convertFloatToString(moneyAccount.amountMoneyAccount!!))
             adapterIconAccount.updateSelect(moneyAccount.icon!!)
-            adapterIConColor.updateSelectColor(moneyAccount.color!!)
+//            adapterIConColor.updateSelectColor(moneyAccount.color!!)
             adapterIconAccount.updateColor(moneyAccount.color!!)
             binding.edtTypeAccount.isEnabled = false
         }
@@ -127,10 +127,10 @@ class EditMoneyAccountFragment : BaseFragment() {
         adapterIconAccount.setClickItemSelect {
             dataViewMode.editOrAddMoneyAccount.moneyAccount!!.icon = it.id
         }
-        adapterIConColor.setClickItemSelect {
-            adapterIconAccount.updateColor(it.idColorR!!)
-            dataViewMode.editOrAddMoneyAccount.moneyAccount!!.color = it.id
-        }
+//        adapterIConColor.setClickItemSelect {
+//            adapterIconAccount.updateColor(it.idColorR!!)
+//            dataViewMode.editOrAddMoneyAccount.moneyAccount!!.color = it.id
+//        }
 
         binding.textSave.setOnClickListener {
             if (checkData(1)) {

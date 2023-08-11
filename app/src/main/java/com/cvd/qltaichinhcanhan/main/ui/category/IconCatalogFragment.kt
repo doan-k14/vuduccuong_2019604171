@@ -42,11 +42,11 @@ class IconCatalogFragment : BaseFragment(), IconClickListener {
         binding.btnNavigation.setOnClickListener {
             findNavController().popBackStack()
         }
-
     }
 
     override fun onIconClick(iconR: IconR) {
-        dataViewMode.selectIconR = iconR.iconName.toString()
+        dataViewMode.editCategory.idIcon = iconR.iconName.toString()
+        dataViewMode.createCategory.idIcon = iconR.iconName.toString()
         findNavController().popBackStack()
     }
 

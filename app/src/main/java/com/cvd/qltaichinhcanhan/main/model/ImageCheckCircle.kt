@@ -42,7 +42,8 @@ object DataColor {
         Color(4, "color4", R.color.color4),
         Color(5, "color5", R.color.color5),
         Color(6, "color6", R.color.color6),
-        Color(7, "color7", R.color.color7)
+        Color(7, "color7", R.color.color7),
+        Color(8, "color7", R.color.color7)
     )
 
     val listBackgroundColorCircle = arrayListOf<BackgroundColorCircle>(
@@ -53,7 +54,8 @@ object DataColor {
         BackgroundColorCircle(4, "color_icon_4", "color4", R.drawable.color_icon_4),
         BackgroundColorCircle(5, "color_icon_5", "color5", R.drawable.color_icon_5),
         BackgroundColorCircle(6, "color_icon_6", "color6", R.drawable.color_icon_6),
-        BackgroundColorCircle(7, "color_icon_7", "color7", R.drawable.color_icon_7)
+        BackgroundColorCircle(7, "color_icon_7", "color7", R.drawable.color_icon_7),
+        BackgroundColorCircle(8, "color_icon_1", "color1", R.drawable.color_icon_1),
     )
 
     fun showBackgroundColorCircle(context: Context, name: String): Int {

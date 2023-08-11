@@ -17,8 +17,8 @@ data class Category(
 )
 fun getListCategoryCreateData(context: Context,idUserAccount:String): List<Category> {
     return arrayListOf(
-        Category("", context.resources.getString(R.string.add), 1, 0F, false,"ic_add",0,idUserAccount),
-        Category("", context.resources.getString(R.string.add), 2, 0F, false,"ic_add",3,idUserAccount),
+        Category("", context.resources.getString(R.string.add), 1, 0F, false,"ic_add",8,idUserAccount),
+        Category("", context.resources.getString(R.string.add), 2, 0F, false,"ic_add",8,idUserAccount),
         Category("", context.resources.getString(R.string.family), 1, 0F, false,"ic_k1",3,idUserAccount),
         Category("", context.resources.getString(R.string.move), 1, 0F, false,"ic_k2",2,idUserAccount),
         Category("", context.resources.getString(R.string.health), 1, 0F, false,"ic_k2",5,idUserAccount),

@@ -99,17 +99,24 @@ class CategoryFragment : BaseFragment() {
         }
 
         adapterIconCategory.setClickItemSelect {
-            dataViewMode.checkEditOrCreateCategory = it.categoryName == "Thêm" // thay thành idIcon
-            findNavController().navigate(R.id.actionExpenseToEditCategoryFragment)
-            dataViewMode.editOrAddCategory = it
+            if (it.idColor == 8) {
+                dataViewMode.createCategory = Category(type = it.type,idIcon = "ic_question",idColor = 1)
+                findNavController().navigate(R.id.action_nav_category_to_createCategoryFragment)
+            } else {
+                dataViewMode.editCategory = it
+                dataViewMode.editDefaultCategory = it
+                findNavController().navigate(R.id.actionExpenseToEditCategoryFragment)
+            }
         }
 
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 val position = tab?.position
                 if (position == 0) {
+                    dataViewMode.checkTypeTabLayoutCategory = false
                     utilsFireStore.getListCategory(userAccount.idUserAccount.toString(), 1)
                 } else if (position == 1) {
+                    dataViewMode.checkTypeTabLayoutCategory = true
                     utilsFireStore.getListCategory(userAccount.idUserAccount.toString(), 2)
                 }
             }

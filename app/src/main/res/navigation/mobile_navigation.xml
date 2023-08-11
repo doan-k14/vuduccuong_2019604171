@@ -57,6 +57,9 @@
         <action
             android:id="@+id/actionExpenseToEditCategoryFragment"
             app:destination="@id/editCategoryFragment" />
+        <action
+            android:id="@+id/action_nav_category_to_createCategoryFragment"
+            app:destination="@id/createCategoryFragment" />
     </fragment>
 
     <fragment
@@ -232,5 +235,14 @@
         android:name="com.cvd.qltaichinhcanhan.splash.fragment.login.SignUpFragment"
         android:label="fragment_signup"
         tools:layout="@layout/fragment_signup" />
+    <fragment
+        android:id="@+id/createCategoryFragment"
+        android:name="com.cvd.qltaichinhcanhan.main.ui.category.CreateCategoryFragment"
+        android:label="fragment_create_category"
+        tools:layout="@layout/fragment_create_category" >
+        <action
+            android:id="@+id/action_createCategoryFragment_to_iconCatalogFragment"
+            app:destination="@id/iconCatalogFragment" />
+    </fragment>
 
 </navigation>
