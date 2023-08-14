@@ -35,6 +35,9 @@
         <action
             android:id="@+id/action_nav_accounts_to_editAccountFragment"
             app:destination="@id/editAccountFragment" />
+        <action
+            android:id="@+id/action_nav_accounts_to_createMoneyAccountFragment"
+            app:destination="@id/createMoneyAccountFragment" />
     </fragment>
 
     <fragment
@@ -81,28 +84,12 @@
         android:id="@+id/editAccountFragment"
         android:name="com.cvd.qltaichinhcanhan.main.ui.money_accounts.EditMoneyAccountFragment"
         android:label="fragment_edit_account"
-        tools:layout="@layout/fragment_edit_account">
-        <action
-            android:id="@+id/action_editAccountFragment_to_nav_currency"
-            app:destination="@id/nav_currency" />
-    </fragment>
-    <fragment
-        android:id="@+id/nav_currency"
-        android:name="com.cvd.qltaichinhcanhan.main.ui.currency.CurrencyFragment"
-        android:label="fragment_currency"
-        tools:layout="@layout/fragment_currency" >
-        <action
-            android:id="@+id/action_nav_currency_to_currencyConversionFragment"
-            app:destination="@id/currencyConversionFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_edit_account"/>
     <fragment
         android:id="@+id/addTransactionFragment"
         android:name="com.cvd.qltaichinhcanhan.main.ui.home.AddTransactionFragment"
         android:label="fragment_add_transaction"
         tools:layout="@layout/fragment_add_transaction">
-        <action
-            android:id="@+id/action_addTransactionFragment_to_nav_currency"
-            app:destination="@id/nav_currency" />
         <action
             android:id="@+id/action_addTransactionFragment_to_addCategoryFragment"
             app:destination="@id/addCategoryFragment" />
@@ -152,11 +139,7 @@
         android:id="@+id/currencyConversionFragment"
         android:name="com.cvd.qltaichinhcanhan.main.ui.currency.CurrencyConversionFragment"
         android:label="fragment_currency_conversion"
-        tools:layout="@layout/fragment_currency_conversion" >
-        <action
-            android:id="@+id/action_currencyConversionFragment_to_nav_currency"
-            app:destination="@id/nav_currency" />
-    </fragment>
+        tools:layout="@layout/fragment_currency_conversion" />
     <fragment
         android:id="@+id/nav_utilities"
         android:name="com.cvd.qltaichinhcanhan.main.ui.utilities.UtilitiesFragment"
@@ -244,5 +227,18 @@
             android:id="@+id/action_createCategoryFragment_to_iconCatalogFragment"
             app:destination="@id/iconCatalogFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/createMoneyAccountFragment"
+        android:name="com.cvd.qltaichinhcanhan.main.ui.money_accounts.CreateMoneyAccountFragment"
+        android:label="CreateMoneyAccountFragment" >
+        <action
+            android:id="@+id/action_createMoneyAccountFragment_to_currencyFragment"
+            app:destination="@id/currencyFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/currencyFragment"
+        android:name="com.cvd.qltaichinhcanhan.splash.fragment.CurrencyFragment"
+        android:label="fragment_currency"
+        tools:layout="@layout/fragment_currency" />
 
 </navigation>

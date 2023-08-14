@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.cvd.qltaichinhcanhan.AdminActivity
 import com.cvd.qltaichinhcanhan.R
 import com.cvd.qltaichinhcanhan.databinding.FragmentLoginBinding
 import com.cvd.qltaichinhcanhan.main.NDMainActivity
@@ -131,7 +132,15 @@ class LoginFragment : Fragment() {
                         UtilsFireStore.CBUserAccountLogin {
                         override fun getSuccess(userAccount: UserAccount) {
                             Utils.saveUserAccountLogin(requireContext(),userAccount)
-                            utilsFireStore.getAccountMoneyByEmail(userAccount.idUserAccount.toString())
+                            if(checkAdmin(userAccount)){
+                                loadingDialog.hideLoading()
+                                Utils.putBoolean(requireContext(),Constant.PERMISSION_ADMIN,true)
+                                val intent = Intent(requireActivity(), AdminActivity::class.java)
+                                startActivity(intent)
+                                requireActivity().finish()
+                            }else{
+                                utilsFireStore.getAccountMoneyByEmail(userAccount.idUserAccount.toString())
+                            }
                         }
 
                         override fun getFailed() {
@@ -151,7 +160,7 @@ class LoginFragment : Fragment() {
 
                         override fun getFailed() {
                             loadingDialog.hideLoading()
-                            findNavController().navigate(R.id.action_splashFragment_to_creatsMoneyFragment)
+                            findNavController().navigate(R.id.action_loginFragment_to_creatsMoneyFragment)
                         }
                     })
 
@@ -166,6 +175,14 @@ class LoginFragment : Fragment() {
                 }
             }
     }
+
+    private fun checkAdmin(userAccount: UserAccount): Boolean {
+        if(userAccount.email == "vuduccuong1503@gmail.com"){
+            return true
+        }
+        return  false
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

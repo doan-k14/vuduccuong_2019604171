@@ -1,9 +1,6 @@
 package com.cvd.qltaichinhcanhan.main.ui.category
 
 import android.os.Bundle
-import android.util.Log
-import android.view.Gravity
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,15 +10,12 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cvd.qltaichinhcanhan.R
 import com.cvd.qltaichinhcanhan.databinding.FragmentCreateCategoryBinding
-import com.cvd.qltaichinhcanhan.databinding.FragmentEditCategoryBinding
 import com.cvd.qltaichinhcanhan.main.base.BaseFragment
-import com.cvd.qltaichinhcanhan.main.library.CustomDialog
 import com.cvd.qltaichinhcanhan.main.library.MoneyTextWatcher
 import com.cvd.qltaichinhcanhan.main.model.m.IconR
 import com.cvd.qltaichinhcanhan.main.model.m_new.Category
-import com.cvd.qltaichinhcanhan.main.model.m_r.CategoryType
 import com.cvd.qltaichinhcanhan.main.vm.DataViewMode
-import com.cvd.qltaichinhcanhan.splash.adapter.AdapterIConColor
+import com.cvd.qltaichinhcanhan.splash.adapter.AdapterColor
 import com.cvd.qltaichinhcanhan.utils.LoadingDialog
 import com.cvd.qltaichinhcanhan.utils.Utils
 import com.cvd.qltaichinhcanhan.utils.UtilsColor
@@ -29,7 +23,7 @@ import com.cvd.qltaichinhcanhan.utils.UtilsFireStore
 
 class CreateCategoryFragment : BaseFragment() {
     lateinit var binding: FragmentCreateCategoryBinding
-    private lateinit var adapterIConColor: AdapterIConColor
+    private lateinit var adapterColor: AdapterColor
 
     private lateinit var dataViewMode: DataViewMode
     var mCreateCategory = Category()
@@ -53,8 +47,8 @@ class CreateCategoryFragment : BaseFragment() {
     }
 
     private fun initView() {
-        adapterIConColor = AdapterIConColor(requireContext(), IconR.getListIconCheckCircle())
-        binding.rcvColor.adapter = adapterIConColor
+        adapterColor = AdapterColor(requireContext(), IconR.getListIconCheckCircle())
+        binding.rcvColor.adapter = adapterColor
         binding.rcvColor.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
 
 
@@ -71,7 +65,7 @@ class CreateCategoryFragment : BaseFragment() {
             )
         )
 
-        adapterIConColor.updateSelectColor(dataViewMode.createCategory.idColor!!)
+        adapterColor.updateSelectColor(dataViewMode.createCategory.idColor!!)
 
         binding.edtPlannedOutlay.addTextChangedListener(MoneyTextWatcher(binding.edtPlannedOutlay))
 
@@ -107,7 +101,7 @@ class CreateCategoryFragment : BaseFragment() {
             findNavController().navigate(R.id.action_createCategoryFragment_to_iconCatalogFragment)
         }
 
-        adapterIConColor.setClickItemSelect {
+        adapterColor.setClickItemSelect {
             binding.imgIconCategory.setBackgroundResource(
                 IconR.getIconById(
                     requireContext(),

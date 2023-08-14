@@ -1,12 +1,7 @@
 package com.cvd.qltaichinhcanhan.splash.fragment
 
-import android.app.Dialog
 import android.content.Context
-import android.content.SharedPreferences
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -14,7 +9,6 @@ import android.view.*
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -22,29 +16,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.cvd.qltaichinhcanhan.R
 import com.cvd.qltaichinhcanhan.databinding.FragmentCurrencyBinding
 import com.cvd.qltaichinhcanhan.main.adapter.AdapterCountry
-import com.cvd.qltaichinhcanhan.main.base.BaseFragment
 import com.cvd.qltaichinhcanhan.main.model.m_r.Country
-import com.cvd.qltaichinhcanhan.main.model.m_api.CurrencyDataAPI
-import com.cvd.qltaichinhcanhan.main.model.m_r.Account
-import com.cvd.qltaichinhcanhan.main.rdb.vm_data.DataViewMode
-import com.cvd.qltaichinhcanhan.main.retrofit.CountryService
-import com.cvd.qltaichinhcanhan.main.ui.utilities.UtilitiesFragment
-import com.cvd.qltaichinhcanhan.utils.Constant
+import com.cvd.qltaichinhcanhan.main.vm.DataViewMode
 import com.cvd.qltaichinhcanhan.utils.LoadingDialog
-import com.cvd.qltaichinhcanhan.utils.Utils
 import com.cvd.qltaichinhcanhan.utils.UtilsFireStore
-import com.google.gson.Gson
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import java.util.*
-import java.util.concurrent.TimeUnit
-import kotlin.collections.ArrayList
 
 
 class CurrencyFragment : Fragment() {
@@ -177,9 +152,6 @@ class CurrencyFragment : Fragment() {
             findNavController().popBackStack()
         }
 
-        binding.textCurrencyConversion.setOnClickListener {
-            findNavController().navigate(R.id.action_nav_currency_to_currencyConversionFragment)
-        }
     }
 
 
@@ -215,12 +187,5 @@ class CurrencyFragment : Fragment() {
         val imm =
             requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(editText.windowToken, 0)
-    }
-
-    // https://openexchangerates.org/api/currencies.json
-    override fun onDestroy() {
-        Log.e("data", "currency: onDestroy")
-        dataViewMode.checkOpenScreenCurrency = 0
-        super.onDestroy()
     }
 }

@@ -130,7 +130,7 @@ class CurrencyConversionFragment : BaseFragment() {
         }
         binding.textTypeMoney.setOnClickListener {
             dataViewMode.checkOpenScreenCurrency = 0
-            findNavController().navigate(R.id.action_currencyConversionFragment_to_nav_currency)
+//            findNavController().navigate(R.id.action_currencyConversionFragment_to_nav_currency)
         }
 
         binding.imgResetMoney.setOnClickListener {

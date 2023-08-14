@@ -9,10 +9,10 @@ import com.cvd.qltaichinhcanhan.databinding.ItemColorBinding
 import com.cvd.qltaichinhcanhan.main.model.m.IconR
 import com.cvd.qltaichinhcanhan.utils.UtilsColor
 
-class AdapterIConColor(
+class AdapterColor(
     var context: Context,
     var listIConColor: List<IconR>,
-) : RecyclerView.Adapter<AdapterIConColor.ViewHolder>() {
+) : RecyclerView.Adapter<AdapterColor.ViewHolder>() {
     inner class ViewHolder(binding: ItemColorBinding) : RecyclerView.ViewHolder(binding.root) {
         internal val binding: ItemColorBinding
 

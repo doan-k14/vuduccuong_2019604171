@@ -1,22 +1,18 @@
 package com.cvd.qltaichinhcanhan.main.ui.category
 
 import android.os.Bundle
-import android.util.Log
 import android.view.*
-import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cvd.qltaichinhcanhan.R
-import com.cvd.qltaichinhcanhan.splash.adapter.AdapterIConColor
+import com.cvd.qltaichinhcanhan.splash.adapter.AdapterColor
 import com.cvd.qltaichinhcanhan.databinding.FragmentEditCategoryBinding
 import com.cvd.qltaichinhcanhan.main.base.BaseFragment
 import com.cvd.qltaichinhcanhan.main.library.CustomDialog
 import com.cvd.qltaichinhcanhan.main.library.MoneyTextWatcher
 import com.cvd.qltaichinhcanhan.main.model.m.IconR
 import com.cvd.qltaichinhcanhan.main.model.m_new.Category
-import com.cvd.qltaichinhcanhan.main.model.m_r.CategoryType
-import com.cvd.qltaichinhcanhan.main.n_adapter.AdapterIconCategory
 import com.cvd.qltaichinhcanhan.main.vm.DataViewMode
 import com.cvd.qltaichinhcanhan.utils.LoadingDialog
 import com.cvd.qltaichinhcanhan.utils.Utils
@@ -26,7 +22,7 @@ import com.cvd.qltaichinhcanhan.utils.UtilsFireStore
 
 class EditCategoryFragment : BaseFragment() {
     lateinit var binding: FragmentEditCategoryBinding
-    private lateinit var adapterIConColor: AdapterIConColor
+    private lateinit var adapterColor: AdapterColor
 
     private lateinit var dataViewMode: DataViewMode
     var mEditCategory = Category()
@@ -52,12 +48,12 @@ class EditCategoryFragment : BaseFragment() {
 
 
     private fun initView() {
-        adapterIConColor = AdapterIConColor(requireContext(), IconR.getListIconCheckCircle())
-        binding.rcvColor.adapter = adapterIConColor
+        adapterColor = AdapterColor(requireContext(), IconR.getListIconCheckCircle())
+        binding.rcvColor.adapter = adapterColor
         binding.rcvColor.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
 
-        adapterIConColor.updateSelectColor(mEditCategory.idColor!!)
+        adapterColor.updateSelectColor(mEditCategory.idColor!!)
 
         binding.edtPlannedOutlay.addTextChangedListener(MoneyTextWatcher(binding.edtPlannedOutlay))
 
@@ -92,7 +88,7 @@ class EditCategoryFragment : BaseFragment() {
             findNavController().navigate(R.id.action_editCategoryFragment_to_iconCatalogFragment)
         }
 
-        adapterIConColor.setClickItemSelect {
+        adapterColor.setClickItemSelect {
             binding.imgIconCategory.setBackgroundResource(
                 IconR.getIconById(
                     requireContext(),

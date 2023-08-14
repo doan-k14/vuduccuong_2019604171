@@ -11,10 +11,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.navigation.fragment.findNavController
 import com.cvd.qltaichinhcanhan.R
 import com.cvd.qltaichinhcanhan.databinding.ActivityNdmainBinding
 import com.cvd.qltaichinhcanhan.main.inf.MyCallback
 import com.cvd.qltaichinhcanhan.main.model.m_r.Account
+import com.cvd.qltaichinhcanhan.utils.Constant
 import com.cvd.qltaichinhcanhan.utils.Utils
 
 class NDMainActivity : AppCompatActivity(), MyCallback {
@@ -30,7 +32,6 @@ class NDMainActivity : AppCompatActivity(), MyCallback {
         setColorStatusbar()
 
         setSupportActionBar(binding.appBarNdmain.toolbar)
-
         val navController = findNavController(R.id.nav_host_fragment_content_ndmain)
         binding.navView.setupWithNavController(navController)
 

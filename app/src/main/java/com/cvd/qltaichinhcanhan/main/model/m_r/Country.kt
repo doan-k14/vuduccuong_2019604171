@@ -8,7 +8,7 @@ import com.google.gson.annotations.SerializedName
 data class Country(
     @PrimaryKey(autoGenerate = true)
     @SerializedName("idCountry")
-    val idCountry: Int = 0,
+    val idCountry: Int? = 0,
     var countryName: String? = null,
     var currencyCode: String? = null,
     var currencyName: String? = null,

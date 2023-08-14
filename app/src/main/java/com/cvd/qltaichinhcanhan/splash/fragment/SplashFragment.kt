@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.cvd.qltaichinhcanhan.AdminActivity
 import com.cvd.qltaichinhcanhan.R
 import com.cvd.qltaichinhcanhan.main.NDMainActivity
 import com.cvd.qltaichinhcanhan.main.model.m_new.UserAccount
@@ -43,21 +44,26 @@ class SplashFragment : Fragment() {
                 val stringUserAccount = Utils.getString(requireContext(), Constant.USER_LOGIN_SUCCESS)
                 val gson = Gson()
                 val userAccount = gson.fromJson(stringUserAccount, UserAccount::class.java)
+                if(checkAdmin(userAccount)){
+                    Utils.putBoolean(requireContext(),Constant.PERMISSION_ADMIN,true)
+                    val intent = Intent(requireActivity(), AdminActivity::class.java)
+                    startActivity(intent)
+                    requireActivity().finish()
+                }else{
+                    val utilsFireStore = UtilsFireStore()
+                    utilsFireStore.setCBAccountMoneyByEmail(object : UtilsFireStore.CBAccountMoneyByEmail {
+                        override fun getSuccess() {
+                            val intent = Intent(requireActivity(), NDMainActivity::class.java)
+                            startActivity(intent)
+                            requireActivity().finish()
+                        }
 
-                Log.e("TAG", "checkLogin: "+userAccount.idUserAccount)
-                val utilsFireStore = UtilsFireStore()
-                utilsFireStore.setCBAccountMoneyByEmail(object : UtilsFireStore.CBAccountMoneyByEmail {
-                    override fun getSuccess() {
-                        val intent = Intent(requireActivity(), NDMainActivity::class.java)
-                        startActivity(intent)
-                        requireActivity().finish()
-                    }
-
-                    override fun getFailed() {
-                        findNavController().navigate(R.id.action_splashFragment_to_creatsMoneyFragment)
-                    }
-                })
-                utilsFireStore.getAccountMoneyByEmail(userAccount.idUserAccount.toString())
+                        override fun getFailed() {
+                            findNavController().navigate(R.id.action_splashFragment_to_creatsMoneyFragment)
+                        }
+                    })
+                    utilsFireStore.getAccountMoneyByEmail(userAccount.idUserAccount.toString())
+                }
             } else {
                 findNavController().navigate(R.id.action_splashFragment_to_loginFragment)
             }
@@ -73,3 +79,10 @@ class SplashFragment : Fragment() {
 
 
 }
+
+    private fun checkAdmin(userAccount: UserAccount): Boolean {
+        if(userAccount.email == "vuduccuong1503@gmail.com"){
+            return true
+        }
+        return  false
+    }

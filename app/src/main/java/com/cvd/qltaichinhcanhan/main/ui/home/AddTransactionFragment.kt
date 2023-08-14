@@ -190,13 +190,13 @@ class AddTransactionFragment : BaseFragment() {
         binding.edtTypeAmountTransaction0.setOnClickListener {
             if(dataViewMode.checkInputScreenAddTransaction == 0){
                 dataViewMode.checkOpenScreenCurrency = 1
-                findNavController().navigate(R.id.action_addTransactionFragment_to_nav_currency)
+//                findNavController().navigate(R.id.action_addTransactionFragment_to_nav_currency)
             }
         }
 
         binding.edtTypeAmountTransaction1.setOnClickListener {
             dataViewMode.checkOpenScreenCurrency = 1
-            findNavController().navigate(R.id.action_addTransactionFragment_to_nav_currency)
+//            findNavController().navigate(R.id.action_addTransactionFragment_to_nav_currency)
         }
 
         binding.edtAmount1.addTextChangedListener(object : TextWatcher {

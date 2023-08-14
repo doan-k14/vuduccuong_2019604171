@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.cvd.qltaichinhcanhan.R
-import com.cvd.qltaichinhcanhan.splash.adapter.AdapterIConColor
 import com.cvd.qltaichinhcanhan.databinding.FragmentEditAccountBinding
 import com.cvd.qltaichinhcanhan.main.adapter.AdapterIconAccount
 import com.cvd.qltaichinhcanhan.main.base.BaseFragment
@@ -73,7 +72,7 @@ class EditMoneyAccountFragment : BaseFragment() {
         if (dataViewMode.editOrAddMoneyAccount.moneyAccount!!.idMoneyAccount == 0) {
             binding.textTitleTotal.text = resources.getString(R.string.create_money_account)
             binding.textCreate.visibility = View.VISIBLE
-            binding.llUpdate.visibility = View.GONE
+//            binding.llUpdate.visibility = View.GONE
             binding.edtTypeAccount.isEnabled = true
             val drawable = resources.getDrawable(R.drawable.ic_arrow_drop_down, null)
             binding.edtTypeAccount.setCompoundDrawablesWithIntrinsicBounds(null,
@@ -96,13 +95,13 @@ class EditMoneyAccountFragment : BaseFragment() {
             val moneyAccount = dataViewMode.editOrAddMoneyAccount.moneyAccount!!
             val country = dataViewMode.editOrAddMoneyAccount.country!!
             binding.textCreate.visibility = View.GONE
-            if (moneyAccount.idMoneyAccount == 1) {
-                binding.llUpdate.visibility = View.GONE
-                binding.textSaveId1.visibility = View.VISIBLE
-            } else {
-                binding.llUpdate.visibility = View.VISIBLE
-                binding.textSaveId1.visibility = View.GONE
-            }
+//            if (moneyAccount.idMoneyAccount == 1) {
+//                binding.llUpdate.visibility = View.GONE
+//                binding.textSaveId1.visibility = View.VISIBLE
+//            } else {
+//                binding.llUpdate.visibility = View.VISIBLE
+//                binding.textSaveId1.visibility = View.GONE
+//            }
             binding.edtNameAccount.setText(moneyAccount.moneyAccountName)
             binding.edtTypeAccount.text = country.currencyCode
             binding.edtTotal.setText(convertFloatToString(moneyAccount.amountMoneyAccount!!))
@@ -132,32 +131,32 @@ class EditMoneyAccountFragment : BaseFragment() {
 //            dataViewMode.editOrAddMoneyAccount.moneyAccount!!.color = it.id
 //        }
 
-        binding.textSave.setOnClickListener {
-            if (checkData(1)) {
-                dataViewMode.updateMoneyAccount(dataViewMode.editOrAddMoneyAccount.moneyAccount!!)
-                findNavController().popBackStack()
-            }
-        }
-        binding.textSaveId1.setOnClickListener {
-            if (checkData(1)) {
-                dataViewMode.updateMoneyAccount(dataViewMode.editOrAddMoneyAccount.moneyAccount!!)
-                findNavController().popBackStack()
-            }
-        }
-
-        binding.textDelete.setOnClickListener {
-            createDialogDelete(Gravity.CENTER, dataViewMode.editOrAddMoneyAccount.moneyAccount!!)
-        }
-        binding.textCreate.setOnClickListener {
-            if (checkData(2)) {
-                dataViewMode.addMoneyAccount(dataViewMode.editOrAddMoneyAccount.moneyAccount!!)
-                findNavController().popBackStack()
-            }
-        }
+//        binding.textSave.setOnClickListener {
+//            if (checkData(1)) {
+//                dataViewMode.updateMoneyAccount(dataViewMode.editOrAddMoneyAccount.moneyAccount!!)
+//                findNavController().popBackStack()
+//            }
+//        }
+//        binding.textSaveId1.setOnClickListener {
+//            if (checkData(1)) {
+//                dataViewMode.updateMoneyAccount(dataViewMode.editOrAddMoneyAccount.moneyAccount!!)
+//                findNavController().popBackStack()
+//            }
+//        }
+//
+//        binding.textDelete.setOnClickListener {
+//            createDialogDelete(Gravity.CENTER, dataViewMode.editOrAddMoneyAccount.moneyAccount!!)
+//        }
+//        binding.textCreate.setOnClickListener {
+//            if (checkData(2)) {
+//                dataViewMode.addMoneyAccount(dataViewMode.editOrAddMoneyAccount.moneyAccount!!)
+//                findNavController().popBackStack()
+//            }
+//        }
 
         binding.edtTypeAccount.setOnClickListener {
             dataViewMode.checkOpenScreenCurrency = 1
-            findNavController().navigate(R.id.action_editAccountFragment_to_nav_currency)
+//            findNavController().navigate(R.id.action_editAccountFragment_to_nav_currency)
         }
 
     }

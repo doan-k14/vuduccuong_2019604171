@@ -2,11 +2,13 @@ package com.cvd.qltaichinhcanhan.utils
 
 import android.util.Log
 import com.cvd.qltaichinhcanhan.main.model.m_new.Category
+import com.cvd.qltaichinhcanhan.main.model.m_new.IConVD
 import com.cvd.qltaichinhcanhan.main.model.m_new.UserAccount
 import com.cvd.qltaichinhcanhan.main.model.m_new.MoneyAccount
 import com.cvd.qltaichinhcanhan.main.model.m_r.Country
 import com.cvd.qltaichinhcanhan.main.model.m_r.countries
 import com.google.firebase.database.*
+import com.google.gson.Gson
 
 class UtilsFireStore {
     val TAG: String = "UtilsFireStore"
@@ -46,6 +48,14 @@ class UtilsFireStore {
                 // Xử lý lỗi nếu cần
             }
         })
+    }
+
+    fun createTest(){
+        val userAccount = UserAccount("adsdasdas",email = "dsadsadasd") // Không cần đặt giá trị ID tại đây
+        val list = listOf<UserAccount>(UserAccount("dđ","dsdsd"), UserAccount("ssss","ssss"))
+        val database = FirebaseDatabase.getInstance().reference
+        database.child("node 1").child("mode 1_1").child("mode 1_1_1").setValue(userAccount)
+        database.child("node 1").child("mode 1_1").setValue(list)
     }
 
     interface CBUserAccountLogin {
@@ -106,7 +116,7 @@ class UtilsFireStore {
 
                     for (countrySnapshot in snapshot.children) {
                         accountExists = true
-                        val country = countrySnapshot.getValue(MoneyAccount::class.java)
+//                        val country = countrySnapshot.getValue(MoneyAccount::class.java)
                     }
 
                     if (accountExists) {
@@ -313,7 +323,7 @@ class UtilsFireStore {
 
     }
 
-    //
+    // money account
 
     interface CallBackCreateMoneyAccount {
         fun createSuccess(idUserAccount: String)
@@ -348,5 +358,66 @@ class UtilsFireStore {
                 // Xử lý lỗi nếu cần
             }
         })
+    }
+
+    interface CBListMoneyAccount {
+        fun getListSuccess(list: List<MoneyAccount>)
+        fun getListFailed()
+    }
+
+    private lateinit var cBListMoneyAccount: CBListMoneyAccount
+
+    fun setCBListMoneyAccount(cBListMoneyAccount: CBListMoneyAccount) {
+        this.cBListMoneyAccount = cBListMoneyAccount
+    }
+
+    fun getListMoneyAccount(idUserAccount:String) {
+        val database = FirebaseDatabase.getInstance()
+        val countriesReference = database.getReference("money_account").orderByChild("idUserAccount").equalTo(idUserAccount)
+
+        countriesReference.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val moneyAccountList = mutableListOf<MoneyAccount>()
+
+                for (countrySnapshot in snapshot.children) {
+
+                    val idMoneyAccount = countrySnapshot.child("idMoneyAccount").getValue(String::class.java)
+                    val moneyAccountName = countrySnapshot.child("moneyAccountName").getValue(String::class.java)
+                    val amountMoneyAccount = countrySnapshot.child("amountMoneyAccount").getValue(Float::class.java)
+                    val selectMoneyAccount = countrySnapshot.child("selectMoneyAccount").getValue(Boolean::class.java)
+                    val idUserAccount = countrySnapshot.child("idUserAccount").getValue(String::class.java)
+                    val icon = countrySnapshot.child("icon").getValue(IConVD::class.java)
+                    val country = countrySnapshot.child("country").getValue(Country::class.java)
+
+                    if (idMoneyAccount != null && moneyAccountName != null && amountMoneyAccount != null &&
+                        selectMoneyAccount != null && idUserAccount != null && icon != null && country != null) {
+
+                        val moneyAccount = MoneyAccount(
+                            idMoneyAccount,
+                            moneyAccountName,
+                            amountMoneyAccount,
+                            selectMoneyAccount,
+                            idUserAccount,
+                            icon,
+                            country
+                        )
+
+                        moneyAccountList.add(moneyAccount)
+                    }
+                }
+
+                if (moneyAccountList.size != 0) {
+                    cBListMoneyAccount.getListSuccess(moneyAccountList)
+                } else {
+                    cBListMoneyAccount.getListFailed()
+                }
+            }
+
+
+            override fun onCancelled(error: DatabaseError) {
+                // Xử lý lỗi nếu cần
+            }
+        })
+
     }
 }

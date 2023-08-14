@@ -3,7 +3,6 @@ package com.cvd.qltaichinhcanhan.splash.fragment
 import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
-import android.os.Handler
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
@@ -20,15 +19,12 @@ import com.cvd.qltaichinhcanhan.main.library.MoneyTextWatcher
 import com.cvd.qltaichinhcanhan.R
 import com.cvd.qltaichinhcanhan.databinding.FragmentCreatsMoneyBinding
 import com.cvd.qltaichinhcanhan.main.NDMainActivity
-import com.cvd.qltaichinhcanhan.main.model.m.DefaultData
+import com.cvd.qltaichinhcanhan.main.model.m_new.IConVD
 import com.cvd.qltaichinhcanhan.main.model.m_new.MoneyAccount
-import com.cvd.qltaichinhcanhan.main.model.m_r.Account
 import com.cvd.qltaichinhcanhan.main.model.m_r.Country
-import com.cvd.qltaichinhcanhan.main.model.m_r.NotificationInfo
-import com.cvd.qltaichinhcanhan.main.rdb.vm_data.DataViewMode
+import com.cvd.qltaichinhcanhan.main.vm.DataViewMode
 import com.cvd.qltaichinhcanhan.utils.*
-import kotlinx.coroutines.newFixedThreadPoolContext
-import java.util.*
+import com.google.gson.Gson
 
 
 class CreatsMoneyFragment : Fragment() {
@@ -87,12 +83,8 @@ class CreatsMoneyFragment : Fragment() {
 
     private fun initEvent() {
         binding.edtTypeAccount.setOnClickListener {
-            dataViewMode.checkOpenScreenCurrency = 0
-            dataViewMode.selectCountry = Country()
             findNavController().navigate(R.id.action_creatsMoneyFragment_to_currencyFragment)
         }
-
-
 
         binding.startButton.setOnClickListener {
             val value =
@@ -129,9 +121,9 @@ class CreatsMoneyFragment : Fragment() {
                 requireContext().getString(R.string.main_account),
                 temp.toFloat(),
                 true,
-                1,
-                country.idCountry,
-                userAccount.idUserAccount
+                userAccount.idUserAccount,
+                IConVD("ic_account1",2),
+                country,
             )
 
             val utilsFireStore = UtilsFireStore()
@@ -139,6 +131,7 @@ class CreatsMoneyFragment : Fragment() {
                 UtilsFireStore.CallBackCreateMoneyAccount {
                 override fun createSuccess(idUserAccount: String) {
                     loadingDialog.hideLoading()
+                    Utils.saveAccountDefault(requireContext(),country)
                     val intent = Intent(requireActivity(), NDMainActivity::class.java)
                     startActivity(intent)
                     requireActivity().finish()
@@ -158,4 +151,10 @@ class CreatsMoneyFragment : Fragment() {
             ).show()
         }
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        dataViewMode.selectCountryToCreateMoneyAccount = Country()
+    }
+
 }
