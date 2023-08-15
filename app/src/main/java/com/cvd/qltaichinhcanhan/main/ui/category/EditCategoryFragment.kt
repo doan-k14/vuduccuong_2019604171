@@ -164,28 +164,28 @@ class EditCategoryFragment : BaseFragment() {
             plannedOutlay = 0F
         }
 
-        if (mEditCategory.categoryName == textName.toString() && mEditCategory.moneyLimit == plannedOutlay
-            && mEditCategory.idIcon == dataViewMode.editDefaultCategory.idIcon
-            && mEditCategory.idColor == dataViewMode.editDefaultCategory.idColor
-        ) {
-            Utils.showToast(
-                requireContext(),
-                "Cập nhật thành công"
-            )
-            findNavController().popBackStack()
-            return false
-        }
-
-
-        for (category in list) {
-            if (category.categoryName == textName.toString()) {
-                Utils.showToast(
-                    requireContext(),
-                    "Tên danh mục đã tồn tại trong danh sách, hay thay mới"
-                )
-                return false
-            }
-        }
+//        if (mEditCategory.categoryName == textName.toString() && mEditCategory.moneyLimit == plannedOutlay
+//            && mEditCategory.idIcon == dataViewMode.editDefaultCategory.idIcon
+//            && mEditCategory.idColor == dataViewMode.editDefaultCategory.idColor
+//        ) {
+//            Utils.showToast(
+//                requireContext(),
+//                "Cập nhật thành công"
+//            )
+//            findNavController().popBackStack()
+//            return false
+//        }
+//
+//
+//        for (category in list) {
+//            if (category.categoryName == textName.toString()) {
+//                Utils.showToast(
+//                    requireContext(),
+//                    "Tên danh mục đã tồn tại trong danh sách, hay thay mới"
+//                )
+//                return false
+//            }
+//        }
 
         mEditCategory = Category(
             mEditCategory.idCategory,

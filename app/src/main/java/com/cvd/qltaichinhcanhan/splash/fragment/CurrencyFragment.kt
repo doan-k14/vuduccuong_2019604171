@@ -19,6 +19,7 @@ import com.cvd.qltaichinhcanhan.main.adapter.AdapterCountry
 import com.cvd.qltaichinhcanhan.main.model.m_r.Country
 import com.cvd.qltaichinhcanhan.main.vm.DataViewMode
 import com.cvd.qltaichinhcanhan.utils.LoadingDialog
+import com.cvd.qltaichinhcanhan.utils.Utils
 import com.cvd.qltaichinhcanhan.utils.UtilsFireStore
 
 
@@ -78,6 +79,9 @@ class CurrencyFragment : Fragment() {
                 listCountry = list
                 adapterCountry.updateData(list)
                 binding.textNotData.visibility = View.GONE
+                for(i in list){
+                    Log.e("TAG", "getListSuccess: "+i.toString())
+                }
             }
 
             override fun getListFailed() {
@@ -148,12 +152,18 @@ class CurrencyFragment : Fragment() {
         })
 
         adapterCountry.setClickItemSelect {
-            dataViewMode.selectCountryToCreateMoneyAccount = it
+            dataViewMode.selectCountryToCreateMoneyAccount = it//convertCurrencyBySelectedCountry(it)
+            dataViewMode.createMoneyAccount.country = it
             findNavController().popBackStack()
         }
-
     }
 
+    fun convertCurrencyBySelectedCountry(country: Country): Country {
+        // country default đc cập nhập exchangeRate khi có sự cập nhập của list country
+        val countryDefault = Utils.getCountryDefault(requireContext())
+        val convertedRate = country.exchangeRate!! / countryDefault.exchangeRate!!
+        return country.copy(exchangeRate = convertedRate)
+    }
 
     private fun filterList(query: String, listCountry: List<Country>): List<Country> {
         val filteredList = arrayListOf<Country>()

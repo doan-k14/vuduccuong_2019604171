@@ -3,8 +3,9 @@ package com.cvd.qltaichinhcanhan.main.model.m_new
 import com.cvd.qltaichinhcanhan.main.model.m.IconR
 
 data class IConVD(
-    val idIConVD: String? = null,
-    var idColor: Int? = null
+    var idIConVD: String? = null,
+    var idColor: Int? = null,
+    var selectIConVD: Boolean? = false
 ) {
     companion object {
         val listIconVDAccount = listOf<IConVD>(
@@ -30,5 +31,13 @@ data class IConVD(
             IConVD("ic_account20", 1),
             IConVD("ic_account21", 1),
         )
+        fun formatListIConVC(){
+            for(i in listIconVDAccount){
+                i.idColor = 1
+                i.selectIConVD = false
+            }
+        }
+
     }
+
 }

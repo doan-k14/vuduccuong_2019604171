@@ -7,6 +7,7 @@ import com.cvd.qltaichinhcanhan.main.model.m_new.UserAccount
 import com.cvd.qltaichinhcanhan.main.model.m_new.MoneyAccount
 import com.cvd.qltaichinhcanhan.main.model.m_r.Country
 import com.cvd.qltaichinhcanhan.main.model.m_r.countries
+import com.cvd.qltaichinhcanhan.main.model.m_r.countryList
 import com.google.firebase.database.*
 import com.google.gson.Gson
 
@@ -48,14 +49,6 @@ class UtilsFireStore {
                 // Xử lý lỗi nếu cần
             }
         })
-    }
-
-    fun createTest(){
-        val userAccount = UserAccount("adsdasdas",email = "dsadsadasd") // Không cần đặt giá trị ID tại đây
-        val list = listOf<UserAccount>(UserAccount("dđ","dsdsd"), UserAccount("ssss","ssss"))
-        val database = FirebaseDatabase.getInstance().reference
-        database.child("node 1").child("mode 1_1").child("mode 1_1_1").setValue(userAccount)
-        database.child("node 1").child("mode 1_1").setValue(list)
     }
 
     interface CBUserAccountLogin {
@@ -133,6 +126,37 @@ class UtilsFireStore {
     }
 
 
+
+
+   fun setStatusUpdateListCountry(checkUpdate: Boolean){
+       val database = FirebaseDatabase.getInstance()
+       val countriesReference = database.getReference("check_update_country")
+       countriesReference.setValue(checkUpdate)
+   }
+
+
+    fun getStatusUpdateListCountry(checkUpdate: Boolean){
+        val database = FirebaseDatabase.getInstance()
+        val checkUpdateReference = database.getReference("check_update")
+
+        checkUpdateReference.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val checkUpdate = snapshot.getValue(Boolean::class.java)
+                if (checkUpdate != null) {
+
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                // Xử lý lỗi nếu cần
+            }
+        })
+    }
+    // lúc tạo moneyaccount thì lấy luôn list đã conver, list conver lấy từ checkUpdate true
+    // lúc tạo moneyaccount thì lấy luôn list đã conver, list conver lấy từ checkUpdate true
+
+
+
     interface CBListCountry {
         fun getListSuccess(list: List<Country>)
         fun getListFailed()
@@ -174,7 +198,7 @@ class UtilsFireStore {
 
     fun pushListCountry() {
         val database = FirebaseDatabase.getInstance().reference
-        val countryList = countries
+        val countryList = countryList
         val countriesReference = database.child("countries")
         for (country in countryList) {
             countriesReference.child(country.idCountry.toString()).setValue(country)
@@ -359,6 +383,80 @@ class UtilsFireStore {
             }
         })
     }
+    interface CBUpdateMoneyAccount {
+        fun updateSuccess()
+        fun updateFailed()
+    }
+
+    private lateinit var cBUpdateMoneyAccount: CBUpdateMoneyAccount
+
+    fun setCBUpdateMoneyAccount(cBUpdateMoneyAccount: CBUpdateMoneyAccount) {
+        this.cBUpdateMoneyAccount = cBUpdateMoneyAccount
+    }
+
+    fun updateMoneyAccountById(idCategory: String,updatedMoneyAccount: MoneyAccount){
+        val database = FirebaseDatabase.getInstance().reference
+        val moneyAccountReference = database.child("money_account").child(idCategory)
+
+        moneyAccountReference.setValue(updatedMoneyAccount)
+            .addOnSuccessListener {
+                cBUpdateMoneyAccount.updateSuccess()
+            }
+            .addOnFailureListener {
+                cBUpdateMoneyAccount.updateFailed()
+            }
+    }
+    interface CBUpdateListMoneyAccount {
+        fun updateSuccess()
+        fun updateFailed()
+    }
+
+    private lateinit var cBUpdateListMoneyAccount: CBUpdateListMoneyAccount
+
+    fun setCBUpdateListMoneyAccount(cBUpdateListMoneyAccount: CBUpdateListMoneyAccount) {
+        this.cBUpdateListMoneyAccount = cBUpdateListMoneyAccount
+    }
+
+    fun updateMoneyAccountsOnFirebase(moneyAccountList: List<MoneyAccount>) {
+        val database = FirebaseDatabase.getInstance()
+        val moneyAccountsReference = database.getReference("money_account")
+
+        for (moneyAccount in moneyAccountList) {
+            val moneyAccountReference = moneyAccountsReference.child(moneyAccount.idMoneyAccount ?: "")
+            moneyAccountReference.setValue(moneyAccount) { databaseError, databaseReference ->
+                if (databaseError != null) {
+                    cBUpdateListMoneyAccount.updateFailed()
+
+                } else {
+                    cBUpdateListMoneyAccount.updateSuccess()
+                }
+            }
+        }
+    }
+
+    interface CBDeleteMoneyAccount {
+        fun deleteSuccess()
+        fun deleteFailed()
+    }
+
+    private lateinit var cBDeleteMoneyAccount: CBDeleteMoneyAccount
+
+    fun setCBDeleteMoneyAccount(cBDeleteMoneyAccount: CBDeleteMoneyAccount) {
+        this.cBDeleteMoneyAccount = cBDeleteMoneyAccount
+    }
+
+    fun deleteMoneyAccountById(id: String){
+        val database = FirebaseDatabase.getInstance().reference
+        val categoryReference = database.child("money_account").child(id)
+
+        categoryReference.removeValue()
+            .addOnSuccessListener {
+                cBDeleteMoneyAccount.deleteSuccess()
+            }
+            .addOnFailureListener {
+                cBDeleteMoneyAccount.deleteFailed()
+            }
+    }
 
     interface CBListMoneyAccount {
         fun getListSuccess(list: List<MoneyAccount>)
@@ -389,8 +487,7 @@ class UtilsFireStore {
                     val icon = countrySnapshot.child("icon").getValue(IConVD::class.java)
                     val country = countrySnapshot.child("country").getValue(Country::class.java)
 
-                    if (idMoneyAccount != null && moneyAccountName != null && amountMoneyAccount != null &&
-                        selectMoneyAccount != null && idUserAccount != null && icon != null && country != null) {
+                    if (idMoneyAccount != null && moneyAccountName != null && amountMoneyAccount != null && idUserAccount != null && icon != null && country != null) {
 
                         val moneyAccount = MoneyAccount(
                             idMoneyAccount,
@@ -420,4 +517,8 @@ class UtilsFireStore {
         })
 
     }
+
+
+
+
 }

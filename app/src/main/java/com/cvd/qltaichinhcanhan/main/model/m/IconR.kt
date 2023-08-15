@@ -55,7 +55,7 @@ data class IconR(
 
         fun getListIconCheckCircle(): List<IconR> {
             return listOf(
-                IconR(1, "click_color_1", 0, true, 1),
+                IconR(1, "click_color_1", 0, false, 1),
                 IconR(2, "click_color_2", 0, false, 2),
                 IconR(3, "click_color_3", 0, false, 3),
                 IconR(4, "click_color_4", 0, false, 4),

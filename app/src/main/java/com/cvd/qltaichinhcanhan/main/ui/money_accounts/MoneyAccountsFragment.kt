@@ -17,15 +17,13 @@ import com.cvd.qltaichinhcanhan.main.base.BaseFragment
 import com.cvd.qltaichinhcanhan.main.model.m_new.IConVD
 import com.cvd.qltaichinhcanhan.main.model.m_new.MoneyAccount
 import com.cvd.qltaichinhcanhan.main.model.m_r.Country
-import com.cvd.qltaichinhcanhan.main.model.query_model.MoneyAccountWithDetails
 import com.cvd.qltaichinhcanhan.main.n_adapter.AdapterMoneyAccount
-import com.cvd.qltaichinhcanhan.main.retrofit.ExchangeRateApi
+import com.cvd.qltaichinhcanhan.main.ui.utilities.UtilitiesFragment
 import com.cvd.qltaichinhcanhan.main.vm.DataViewMode
 import com.cvd.qltaichinhcanhan.utils.Utils
 import com.cvd.qltaichinhcanhan.utils.UtilsFireStore
 import kotlinx.coroutines.*
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+
 
 class MoneyAccountsFragment : BaseFragment() {
 
@@ -47,8 +45,23 @@ class MoneyAccountsFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         dataViewMode = ViewModelProvider(requireActivity())[DataViewMode::class.java]
 
+        val utilsFireStore = UtilsFireStore()
+        utilsFireStore.setCBListCountry(object : UtilsFireStore.CBListCountry {
+            override fun getListSuccess(list: List<Country>) {
+                dataViewMode.listCountry = list
+            }
+
+            override fun getListFailed() {
+
+            }
+        })
+
+        utilsFireStore.getListCountry()
+
         initView()
         initEvent()
+
+
     }
 
     override fun onStart() {
@@ -105,14 +118,52 @@ class MoneyAccountsFragment : BaseFragment() {
 
     }
 
-    private fun showSumMoney(list: List<MoneyAccount>) {
+    private fun showSumMoney(listMoneyAccount: List<MoneyAccount>) {
         countryDefault = Utils.getCountryDefault(requireContext())
 
+        var listMoneyAccountNew = listMoneyAccount
+
+        if(countryDefault.currencyCode != "USD"){
+
+            val countryList = convertCurrencyBySelectedCountry(dataViewMode.listCountry, countryDefault.idCountry!!)
+            for(i in countryList){
+                Log.e("TAG", "showSumMoney: "+i.currencyCode+": "+i.exchangeRate)
+            }
+            listMoneyAccountNew = updateCountry(listMoneyAccount,countryList)
+
+            val utilsFireStore = UtilsFireStore()
+            utilsFireStore.setCBUpdateListMoneyAccount(object :UtilsFireStore.CBUpdateListMoneyAccount{
+                override fun updateSuccess() {
+                    Log.e("TAG", "updateSuccess: ", )
+                }
+
+                override fun updateFailed() {
+                    Log.e("TAG", "updateFailed: ", )
+                }
+            })
+            utilsFireStore.updateMoneyAccountsOnFirebase(listMoneyAccountNew)
+        }
+
+
+
         var totalAmount = 0.0
-        for (i in list) {
+        for (i in listMoneyAccountNew) {
+            Log.e("TAG", "showSumMoney: "+i.country.exchangeRate )
             totalAmount += i.amountMoneyAccount!!.toFloat() / i.country!!.exchangeRate!!.toFloat()
         }
         binding.textValueTotal.text = "${converMoneyShow(totalAmount.toFloat())} ${countryDefault.currencySymbol}"
+    }
+
+    private fun updateCountry(listMoneyAccount: List<MoneyAccount>, listCountry: List<Country>): List<MoneyAccount> {
+        val updatedList = listMoneyAccount.map { moneyAccount ->
+            val matchingCountry = listCountry.find { it.idCountry == moneyAccount.country.idCountry }
+            if (matchingCountry != null) {
+                moneyAccount.copy(country = matchingCountry)
+            } else {
+                moneyAccount
+            }
+        }
+        return updatedList
     }
 
 
@@ -128,6 +179,7 @@ class MoneyAccountsFragment : BaseFragment() {
         adapterMoneyAccount.setClickItemSelect {
             when (dataViewMode.checkInputScreenMoneyAccount) {
                 0 -> {
+                    IConVD.formatListIConVC()
                     dataViewMode.createMoneyAccount = it
                     findNavController().navigate(R.id.action_nav_accounts_to_editAccountFragment)
                 }
@@ -143,7 +195,9 @@ class MoneyAccountsFragment : BaseFragment() {
         }
 
         binding.imgAddAccount.setOnClickListener {
-            dataViewMode.createMoneyAccount = MoneyAccount(icon = IConVD("ic_account1",1), country = Country())
+            IConVD.formatListIConVC()
+            val country = Utils.getCountryDefault(requireContext())
+            dataViewMode.createMoneyAccount = MoneyAccount(icon = IConVD(idColor = 1), country = country)
             findNavController().navigate(R.id.action_nav_accounts_to_createMoneyAccountFragment)
         }
 
@@ -173,21 +227,6 @@ class MoneyAccountsFragment : BaseFragment() {
         return displayAmount
     }
 
-    fun convertMoney(type1: String, type2: String) {
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://api.exchangerate-api.com/v4/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-
-        val exchangeRateApi = retrofit.create(ExchangeRateApi::class.java)
-
-        CoroutineScope(Dispatchers.IO).launch {
-            val exchangeRate = exchangeRateApi.getExchangeRate(type1)
-            val vndRate = exchangeRate.rates[type2]
-            Log.e("data", "tỉ giá ${vndRate}")
-        }
-    }
-
     override fun onStop() {
         super.onStop()
         onCallbackLockedDrawers()
@@ -197,5 +236,27 @@ class MoneyAccountsFragment : BaseFragment() {
         super.onDestroy()
         dataViewMode.checkInputScreenMoneyAccount = 0
     }
+
+    fun convertCurrencyBySelectedCountry(countryList: List<Country>, selectedCountryId: Int): List<Country> {
+        val selectedCountry = countryList.find { it.idCountry == selectedCountryId }
+
+        if (selectedCountry != null) {
+            val selectedExchangeRate = selectedCountry.exchangeRate ?: 1f
+
+            return countryList.map { country ->
+                val convertedRate = if (country.idCountry == selectedCountryId) {
+                    1f
+                } else {
+                    (country.exchangeRate ?: 1f) / selectedExchangeRate
+                }
+
+                country.copy(exchangeRate = convertedRate)
+            }
+        }
+
+        return countryList
+    }
+
+
 }
 

@@ -10,6 +10,7 @@ import com.cvd.qltaichinhcanhan.main.model.m_r.Country
 class DataViewMode(application: Application) : AndroidViewModel(application) {
 
 
+    var listCountry: List<Country> = listOf()
 
     // money account
     var checkInputScreenMoneyAccount: Int = 0

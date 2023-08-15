@@ -2,6 +2,7 @@ package com.cvd.qltaichinhcanhan.main.n_adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -41,22 +42,22 @@ class AdapterIconAccount(
         val item = listCategory[position]
         with(holder) {
             binding.imgIcon.setImageResource(UtilsColor.setImageByName(context,item.idIConVD.toString()))
-//            if (item.select == true) {
-//                binding.imgIcon.setBackgroundResource(IconR.getColorById(context, item.idColorR!!, IconR.getListColorIconR()))
-//                binding.root.setBackgroundResource(R.drawable.custom_icon_while)
-//            } else {
+            if (item.selectIConVD == true) {
+                binding.imgIcon.setBackgroundResource(UtilsColor.setBackgroundCircleCategoryById(context, item.idColor!!))
+                binding.root.setBackgroundResource(R.drawable.custom_icon_while)
+            } else {
                 binding.imgIcon.setBackgroundResource(R.drawable.color_icon_br)
                 binding.root.background = null
-//            }
+            }
 
             binding.root.setOnClickListener {
-//                clickItemSelect?.let {
-//                    for (i in 0 until listCategory.size - 1) {
-//                        listCategory[i].select = (i == position)
-//                    }
-//                    notifyDataSetChanged()
-//                    it(item)
-//                }
+                clickItemSelect?.let {
+                    for (i in 0 until listCategory.size - 1) {
+                        listCategory[i].selectIConVD = (i == position)
+                    }
+                    notifyDataSetChanged()
+                    it(item)
+                }
             }
         }
     }
@@ -77,11 +78,14 @@ class AdapterIconAccount(
         reloadData()
     }
 
-    fun updateSelect(idIcon: Int) {
-//        for (i in listCategory) {
-//            i.select = (i.id == idIcon)
-//        }
-//        reloadData()
+    fun updateSelect(iConVD: IConVD) {
+        for (i in listCategory) {
+            if(i.idIConVD == iConVD.idIConVD){
+                i.selectIConVD = true
+                i.idColor = iConVD.idColor
+            }
+        }
+        reloadData()
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -90,9 +94,9 @@ class AdapterIconAccount(
     }
 
 
-    private var clickItemSelect: ((IconR) -> Unit)? = null
+    private var clickItemSelect: ((IConVD) -> Unit)? = null
 
-    fun setClickItemSelect(listener: (IconR) -> Unit) {
+    fun setClickItemSelect(listener: (IConVD) -> Unit) {
         clickItemSelect = listener
     }
 }

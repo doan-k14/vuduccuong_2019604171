@@ -9,37 +9,47 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.cvd.qltaichinhcanhan.R
+import com.cvd.qltaichinhcanhan.databinding.FragmentCreateMoneyAccountBinding
+import com.cvd.qltaichinhcanhan.databinding.FragmentCreatsMoneyBinding
 import com.cvd.qltaichinhcanhan.databinding.FragmentEditAccountBinding
 import com.cvd.qltaichinhcanhan.main.base.BaseFragment
 import com.cvd.qltaichinhcanhan.main.library.MoneyTextWatcher
 import com.cvd.qltaichinhcanhan.main.model.m.IconR
 import com.cvd.qltaichinhcanhan.main.model.m_new.IConVD
 import com.cvd.qltaichinhcanhan.main.model.m_new.MoneyAccount
+import com.cvd.qltaichinhcanhan.main.model.m_r.Country
 import com.cvd.qltaichinhcanhan.main.n_adapter.AdapterIconAccount
 import com.cvd.qltaichinhcanhan.main.vm.DataViewMode
 import com.cvd.qltaichinhcanhan.splash.adapter.AdapterColor
+import com.cvd.qltaichinhcanhan.utils.LoadingDialog
 import com.cvd.qltaichinhcanhan.utils.Utils
+import com.cvd.qltaichinhcanhan.utils.UtilsFireStore
 
 
 class CreateMoneyAccountFragment : BaseFragment() {
-    lateinit var binding: FragmentEditAccountBinding
+    lateinit var binding: FragmentCreateMoneyAccountBinding
     lateinit var dataViewMode: DataViewMode
 
     private lateinit var adapterIconAccount: AdapterIconAccount
     private lateinit var adapterColor: AdapterColor
 
     var listMoneyAccount = listOf<MoneyAccount>()
+
+    private lateinit var mMoneyAccount: MoneyAccount
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        binding = FragmentEditAccountBinding.inflate(layoutInflater)
+        binding = FragmentCreateMoneyAccountBinding.inflate(layoutInflater)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         dataViewMode = ViewModelProvider(requireActivity())[DataViewMode::class.java]
+
+        mMoneyAccount = dataViewMode.createMoneyAccount
+
         initView()
         initEvent()
     }
@@ -55,14 +65,12 @@ class CreateMoneyAccountFragment : BaseFragment() {
                 }
             }
         binding.rcvIconCategory.layoutManager = myLinearLayoutManager1
-
         adapterColor = AdapterColor(requireContext(), IconR.getListIconCheckCircle())
         binding.rcvColor.adapter = adapterColor
         binding.rcvColor.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
 
         binding.edtTotal.addTextChangedListener(MoneyTextWatcher(binding.edtTotal))
-
         binding.textTitleTotal.text = resources.getString(R.string.create_money_account)
         binding.textCreate.visibility = View.VISIBLE
         binding.edtTypeAccount.isEnabled = true
@@ -74,9 +82,12 @@ class CreateMoneyAccountFragment : BaseFragment() {
             null
         )
 
-        adapterIconAccount.updateSelect(1)
-        val country = Utils.getCountryDefault(requireContext())
-        binding.edtTypeAccount.text = country!!.currencyCode
+        if (mMoneyAccount.icon.idIConVD != null) {
+            adapterIconAccount.updateSelect(mMoneyAccount.icon)
+        }
+        binding.edtTypeAccount.text = mMoneyAccount.country.currencyCode
+        adapterColor.updateSelectColor(mMoneyAccount.icon.idColor!!)
+
 
     }
 
@@ -85,16 +96,35 @@ class CreateMoneyAccountFragment : BaseFragment() {
             findNavController().popBackStack()
         }
         adapterIconAccount.setClickItemSelect {
-
+            dataViewMode.createMoneyAccount.icon.idIConVD = it.idIConVD
+            mMoneyAccount = dataViewMode.createMoneyAccount
         }
         adapterColor.setClickItemSelect {
             adapterIconAccount.updateColor(it.idColorR!!)
+            dataViewMode.createMoneyAccount.icon.idColor = it.idColorR
+            mMoneyAccount = dataViewMode.createMoneyAccount
         }
 
+        val utilsFireStore = UtilsFireStore()
+
+        val loadingDialog = LoadingDialog(requireContext())
 
         binding.textCreate.setOnClickListener {
-            if (checkData(2)) {
-                findNavController().popBackStack()
+            if (checkData()) {
+                loadingDialog.showLoading()
+                utilsFireStore.setCallBackCreateMoneyAccount(object :UtilsFireStore.CallBackCreateMoneyAccount{
+                    override fun createSuccess(idUserAccount: String) {
+                        dataViewMode.createMoneyAccount = MoneyAccount(icon = IConVD(idColor = 1), country = Country())
+                        loadingDialog.hideLoading()
+                        findNavController().popBackStack()
+                    }
+
+                    override fun createFailed() {
+                        loadingDialog.hideLoading()
+                    }
+                })
+                utilsFireStore.createMoneyAccount(mMoneyAccount)
+
             }
         }
 
@@ -104,7 +134,7 @@ class CreateMoneyAccountFragment : BaseFragment() {
 
     }
 
-    private fun checkData(typeClick: Int): Boolean {
+    private fun checkData(): Boolean {
         val textName = binding.edtNameAccount.text.toString()
         if (textName.isEmpty()) {
             Toast.makeText(
@@ -113,30 +143,28 @@ class CreateMoneyAccountFragment : BaseFragment() {
             ).show()
             return false
         }
-//        dataViewMode.editOrAddMoneyAccount.moneyAccount!!.moneyAccountName = textName
 
         val value = MoneyTextWatcher.parseCurrencyValue(binding.edtTotal.text.toString())
         val temp = value.toString()
+        var number = 0F
         if (binding.edtTotal.text.isEmpty()) {
-            Toast.makeText(
-                requireContext(),
-                resources.getString(R.string.please_enter_the_value),
-                Toast.LENGTH_SHORT
-            ).show()
+            Utils.showToast(requireContext(), resources.getString(R.string.please_enter_the_value))
             return false
         }
         try {
-            val number = temp.toFloat()
-//            dataViewMode.editOrAddMoneyAccount.moneyAccount!!.amountMoneyAccount = number
+            number = temp.toFloat()
         } catch (e: NumberFormatException) {
-            Toast.makeText(
-                requireContext(),
-                resources.getString(R.string.you_entered_the_wrong_format),
-                Toast.LENGTH_SHORT
-            )
-                .show()
+            Utils.showToast(requireContext(), resources.getString(R.string.you_entered_the_wrong_format))
+            return false
         }
 
+        mMoneyAccount.moneyAccountName = textName
+        mMoneyAccount.amountMoneyAccount = number
+
+        mMoneyAccount.idUserAccount = Utils.getUserAccountLogin(requireContext()).idUserAccount.toString()
+        if(mMoneyAccount.icon.idIConVD == null){
+            return false
+        }
 
         return true
     }

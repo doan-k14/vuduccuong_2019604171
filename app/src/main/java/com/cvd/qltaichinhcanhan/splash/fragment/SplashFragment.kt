@@ -34,6 +34,9 @@ class SplashFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         dataViewMode = ViewModelProvider(this)[DataViewMode::class.java]
+//        val utilsFireStore = UtilsFireStore()
+//            utilsFireStore.pushListCountry()
+
         checkLogin()
     }
 
