@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.InputType
 import android.text.method.PasswordTransformationMethod
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +16,8 @@ import com.cvd.qltaichinhcanhan.AdminActivity
 import com.cvd.qltaichinhcanhan.R
 import com.cvd.qltaichinhcanhan.databinding.FragmentLoginBinding
 import com.cvd.qltaichinhcanhan.main.NDMainActivity
+import com.cvd.qltaichinhcanhan.main.model.m_new.Country
+import com.cvd.qltaichinhcanhan.main.model.m_new.MoneyAccount
 import com.cvd.qltaichinhcanhan.main.model.m_new.UserAccount
 import com.cvd.qltaichinhcanhan.main.rdb.vm_data.DataViewMode
 import com.cvd.qltaichinhcanhan.utils.*
@@ -139,7 +142,16 @@ class LoginFragment : Fragment() {
                                 startActivity(intent)
                                 requireActivity().finish()
                             }else{
-                                utilsFireStore.getAccountMoneyByEmail(userAccount.idUserAccount.toString())
+                                if(userAccount.countryDefault!!.idCountry != 0){
+                                    Utils.saveAccountDefault(requireContext(), country = userAccount.countryDefault!!)
+                                    loadingDialog.hideLoading()
+                                    val intent = Intent(requireActivity(), NDMainActivity::class.java)
+                                    startActivity(intent)
+                                    requireActivity().finish()
+                                }else{
+                                    loadingDialog.hideLoading()
+                                    findNavController().navigate(R.id.action_loginFragment_to_creatsMoneyFragment)
+                                }
                             }
                         }
 
@@ -148,21 +160,6 @@ class LoginFragment : Fragment() {
                         }
                     })
                     utilsFireStore.getUserAccountLogin(email)
-
-                    utilsFireStore.setCBAccountMoneyByEmail(object :
-                        UtilsFireStore.CBAccountMoneyByEmail {
-                        override fun getSuccess() {
-                            loadingDialog.hideLoading()
-                            val intent = Intent(requireActivity(), NDMainActivity::class.java)
-                            startActivity(intent)
-                            requireActivity().finish()
-                        }
-
-                        override fun getFailed() {
-                            loadingDialog.hideLoading()
-                            findNavController().navigate(R.id.action_loginFragment_to_creatsMoneyFragment)
-                        }
-                    })
 
                 } else {
 

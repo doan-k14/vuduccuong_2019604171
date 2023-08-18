@@ -7,8 +7,8 @@ import android.view.WindowManager
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.cvd.qltaichinhcanhan.R
+import com.cvd.qltaichinhcanhan.main.model.m_new.Country
 import com.cvd.qltaichinhcanhan.main.model.m_new.UserAccount
-import com.cvd.qltaichinhcanhan.main.model.m_r.Country
 import com.google.gson.Gson
 import java.util.regex.Matcher
 import java.util.regex.Pattern
@@ -74,7 +74,7 @@ object Utils {
         return gson.fromJson(stringUserAccount, UserAccount::class.java)
     }
 
-    fun getCountryDefault(context: Context):Country{
+    fun getCountryDefault(context: Context): Country {
         val stringCountryDefault = getString(context,Constant.COUNTRY_DEFAULT)
         val gson = Gson()
         return gson.fromJson(stringCountryDefault,Country::class.java)

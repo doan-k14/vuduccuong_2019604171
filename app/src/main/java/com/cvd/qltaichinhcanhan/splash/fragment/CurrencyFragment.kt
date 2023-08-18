@@ -15,8 +15,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cvd.qltaichinhcanhan.R
 import com.cvd.qltaichinhcanhan.databinding.FragmentCurrencyBinding
-import com.cvd.qltaichinhcanhan.main.adapter.AdapterCountry
-import com.cvd.qltaichinhcanhan.main.model.m_r.Country
+import com.cvd.qltaichinhcanhan.main.model.m_new.Country
+import com.cvd.qltaichinhcanhan.main.n_adapter.AdapterCountry
 import com.cvd.qltaichinhcanhan.main.vm.DataViewMode
 import com.cvd.qltaichinhcanhan.utils.LoadingDialog
 import com.cvd.qltaichinhcanhan.utils.Utils
@@ -152,17 +152,10 @@ class CurrencyFragment : Fragment() {
         })
 
         adapterCountry.setClickItemSelect {
-            dataViewMode.selectCountryToCreateMoneyAccount = it//convertCurrencyBySelectedCountry(it)
+            dataViewMode.countryToCreateMoneyAccountDefault = it//convertCurrencyBySelectedCountry(it)
             dataViewMode.createMoneyAccount.country = it
             findNavController().popBackStack()
         }
-    }
-
-    fun convertCurrencyBySelectedCountry(country: Country): Country {
-        // country default đc cập nhập exchangeRate khi có sự cập nhập của list country
-        val countryDefault = Utils.getCountryDefault(requireContext())
-        val convertedRate = country.exchangeRate!! / countryDefault.exchangeRate!!
-        return country.copy(exchangeRate = convertedRate)
     }
 
     private fun filterList(query: String, listCountry: List<Country>): List<Country> {

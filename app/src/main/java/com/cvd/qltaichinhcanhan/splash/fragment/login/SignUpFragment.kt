@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.cvd.qltaichinhcanhan.R
 import com.cvd.qltaichinhcanhan.databinding.FragmentSignupBinding
+import com.cvd.qltaichinhcanhan.main.model.m_new.Country
 import com.cvd.qltaichinhcanhan.main.model.m_new.UserAccount
 import com.cvd.qltaichinhcanhan.main.rdb.vm_data.DataViewMode
 import com.cvd.qltaichinhcanhan.utils.*
@@ -133,14 +134,13 @@ class SignUpFragment : Fragment() {
         utilsFireStore.setCallBackCreateAccountUser(object :
             UtilsFireStore.CallBackCreateAccountUser {
             override fun createSuccess(idUserAccount: String) {
-
-                val userAccount = UserAccount(idUserAccount,email)
+                val userAccount = UserAccount(idUserAccount,email,countryDefault = Country())
                 val gson = Gson()
                 val stringUserAccount = gson.toJson(userAccount)
                 Utils.putString(requireContext(),Constant.USER_LOGIN_SUCCESS,stringUserAccount)
                 Utils.putBoolean(requireContext(),Constant.LOGIN_SUCCESS,true)
-
-                getAccountMoneyByEmail(idUserAccount)
+                loadingDialog.hideLoading()
+                findNavController().navigate(R.id.action_signUpFragment_to_creatsMoneyFragment)
             }
 
 
@@ -150,20 +150,5 @@ class SignUpFragment : Fragment() {
         })
 
         utilsFireStore.createUserAccount(email)
-    }
-
-    private fun getAccountMoneyByEmail(idAccount: String) {
-        val utilsFireStore = UtilsFireStore()
-        utilsFireStore.setCBAccountMoneyByEmail(object : UtilsFireStore.CBAccountMoneyByEmail {
-            override fun getSuccess() {
-            }
-
-            override fun getFailed() {
-                loadingDialog.hideLoading()
-                findNavController().navigate(R.id.action_signUpFragment_to_creatsMoneyFragment)
-            }
-        })
-
-        utilsFireStore.getAccountMoneyByEmail(idAccount)
     }
 }

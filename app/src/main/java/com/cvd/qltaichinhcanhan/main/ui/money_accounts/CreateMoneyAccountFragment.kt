@@ -15,9 +15,9 @@ import com.cvd.qltaichinhcanhan.databinding.FragmentEditAccountBinding
 import com.cvd.qltaichinhcanhan.main.base.BaseFragment
 import com.cvd.qltaichinhcanhan.main.library.MoneyTextWatcher
 import com.cvd.qltaichinhcanhan.main.model.m.IconR
+import com.cvd.qltaichinhcanhan.main.model.m_new.Country
 import com.cvd.qltaichinhcanhan.main.model.m_new.IConVD
 import com.cvd.qltaichinhcanhan.main.model.m_new.MoneyAccount
-import com.cvd.qltaichinhcanhan.main.model.m_r.Country
 import com.cvd.qltaichinhcanhan.main.n_adapter.AdapterIconAccount
 import com.cvd.qltaichinhcanhan.main.vm.DataViewMode
 import com.cvd.qltaichinhcanhan.splash.adapter.AdapterColor
@@ -32,8 +32,6 @@ class CreateMoneyAccountFragment : BaseFragment() {
 
     private lateinit var adapterIconAccount: AdapterIconAccount
     private lateinit var adapterColor: AdapterColor
-
-    var listMoneyAccount = listOf<MoneyAccount>()
 
     private lateinit var mMoneyAccount: MoneyAccount
     override fun onCreateView(

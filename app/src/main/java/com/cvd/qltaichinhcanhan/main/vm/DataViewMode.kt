@@ -3,9 +3,9 @@ package com.cvd.qltaichinhcanhan.main.vm
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import com.cvd.qltaichinhcanhan.main.model.m_new.Category
+import com.cvd.qltaichinhcanhan.main.model.m_new.Country
 import com.cvd.qltaichinhcanhan.main.model.m_new.IConVD
 import com.cvd.qltaichinhcanhan.main.model.m_new.MoneyAccount
-import com.cvd.qltaichinhcanhan.main.model.m_r.Country
 
 class DataViewMode(application: Application) : AndroidViewModel(application) {
 
@@ -15,7 +15,7 @@ class DataViewMode(application: Application) : AndroidViewModel(application) {
     // money account
     var checkInputScreenMoneyAccount: Int = 0
 
-    var selectCountryToCreateMoneyAccount = Country()
+    var countryToCreateMoneyAccountDefault = Country()
 
     var createMoneyAccount = MoneyAccount(icon = IConVD(), country = Country())
 

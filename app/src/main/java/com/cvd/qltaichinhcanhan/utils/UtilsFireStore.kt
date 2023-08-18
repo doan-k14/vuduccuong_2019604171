@@ -1,18 +1,14 @@
 package com.cvd.qltaichinhcanhan.utils
 
 import android.util.Log
-import com.cvd.qltaichinhcanhan.main.model.m_new.Category
-import com.cvd.qltaichinhcanhan.main.model.m_new.IConVD
-import com.cvd.qltaichinhcanhan.main.model.m_new.UserAccount
-import com.cvd.qltaichinhcanhan.main.model.m_new.MoneyAccount
-import com.cvd.qltaichinhcanhan.main.model.m_r.Country
-import com.cvd.qltaichinhcanhan.main.model.m_r.countries
+import com.cvd.qltaichinhcanhan.main.model.m_new.*
 import com.cvd.qltaichinhcanhan.main.model.m_r.countryList
 import com.google.firebase.database.*
 import com.google.gson.Gson
 
 class UtilsFireStore {
     val TAG: String = "UtilsFireStore"
+    // user account
 
     interface CallBackCreateAccountUser {
         fun createSuccess(idUserAccount: String)
@@ -27,7 +23,7 @@ class UtilsFireStore {
 
     fun createUserAccount(email: String) {
         val database = FirebaseDatabase.getInstance().reference
-        val userAccount = UserAccount(email = email) // Không cần đặt giá trị ID tại đây
+        val userAccount = UserAccount(email = email, countryDefault = Country()) // Không cần đặt giá trị ID tại đây
 
         val newAccountUserRef = database.child("user_account").push() // Tạo ID duy nhất
 
@@ -51,6 +47,30 @@ class UtilsFireStore {
         })
     }
 
+    interface CBUpdateUserAccount {
+        fun updateSuccess()
+        fun updateFailed()
+    }
+
+    private lateinit var cBUpdateUserAccount: CBUpdateUserAccount
+
+    fun setCBUpdateUserAccount(cBUpdateUserAccount: CBUpdateUserAccount) {
+        this.cBUpdateUserAccount = cBUpdateUserAccount
+    }
+
+    fun updateUserAccount(idUserAccount: String,userAccount: UserAccount) {
+        val database = FirebaseDatabase.getInstance().reference
+        val moneyAccountReference = database.child("user_account").child(idUserAccount)
+
+        moneyAccountReference.setValue(userAccount)
+            .addOnSuccessListener {
+                cBUpdateUserAccount.updateSuccess()
+            }
+            .addOnFailureListener {
+                cBUpdateUserAccount.updateFailed()
+            }
+    }
+
     interface CBUserAccountLogin {
         fun getSuccess(userAccount: UserAccount)
         fun getFailed()
@@ -71,8 +91,16 @@ class UtilsFireStore {
                     var accountExists = false // Biến để kiểm tra tồn tại của tài khoản
                     var userAccount = UserAccount()
                     for (countrySnapshot in snapshot.children) {
-                        accountExists = true
-                        userAccount = countrySnapshot.getValue(UserAccount::class.java)!!
+                        val idUserAccount = countrySnapshot.child("idUserAccount").getValue(String::class.java)
+                        val email = countrySnapshot.child("email").getValue(String::class.java)
+                        val country = countrySnapshot.child("countryDefault").getValue(Country::class.java)
+
+                        if (idUserAccount != null && email != null) {
+                            userAccount.idUserAccount = idUserAccount
+                            userAccount.email = email
+                            userAccount.countryDefault = country
+                            accountExists = true
+                        }
                     }
 
                     if (accountExists) {
@@ -106,13 +134,18 @@ class UtilsFireStore {
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     var accountExists = false // Biến để kiểm tra tồn tại của tài khoản
-
+                    var country = Country()
                     for (countrySnapshot in snapshot.children) {
-                        accountExists = true
-//                        val country = countrySnapshot.getValue(MoneyAccount::class.java)
+                        val selectMoneyAccount = countrySnapshot.child("selectMoneyAccount").getValue(Boolean::class.java)
+                        if(selectMoneyAccount == true){
+                            accountExists = true
+                            country = countrySnapshot.child("country").getValue(Country::class.java)!!
+                        }
                     }
 
                     if (accountExists) {
+                        val gson = Gson()
+                        val stringCountry = gson.toJson(country)
                         cBAccountMoneyByEmail.getSuccess()
                     } else {
                         cBAccountMoneyByEmail.getFailed()

@@ -19,12 +19,12 @@ import com.cvd.qltaichinhcanhan.main.library.MoneyTextWatcher
 import com.cvd.qltaichinhcanhan.R
 import com.cvd.qltaichinhcanhan.databinding.FragmentCreatsMoneyBinding
 import com.cvd.qltaichinhcanhan.main.NDMainActivity
+import com.cvd.qltaichinhcanhan.main.model.m_new.Country
 import com.cvd.qltaichinhcanhan.main.model.m_new.IConVD
 import com.cvd.qltaichinhcanhan.main.model.m_new.MoneyAccount
-import com.cvd.qltaichinhcanhan.main.model.m_r.Country
+import com.cvd.qltaichinhcanhan.main.model.m_new.UserAccount
 import com.cvd.qltaichinhcanhan.main.vm.DataViewMode
 import com.cvd.qltaichinhcanhan.utils.*
-import com.google.gson.Gson
 
 
 class CreatsMoneyFragment : Fragment() {
@@ -75,7 +75,7 @@ class CreatsMoneyFragment : Fragment() {
     }
 
     private fun initData() {
-        val country = dataViewMode.selectCountryToCreateMoneyAccount
+        val country = dataViewMode.countryToCreateMoneyAccountDefault
         if (country.idCountry != 0) {
             binding.edtTypeAccount.text = country.currencyCode
         }
@@ -90,7 +90,7 @@ class CreatsMoneyFragment : Fragment() {
             val value =
                 MoneyTextWatcher.parseCurrencyValue(binding.edtInitialBalance.text.toString())
             val temp = value.toString()
-            checkDataMoneyAccount(temp, dataViewMode.selectCountryToCreateMoneyAccount)
+            checkDataMoneyAccount(temp, dataViewMode.countryToCreateMoneyAccountDefault)
         }
     }
 
@@ -132,9 +132,8 @@ class CreatsMoneyFragment : Fragment() {
                 override fun createSuccess(idUserAccount: String) {
                     loadingDialog.hideLoading()
                     Utils.saveAccountDefault(requireContext(),country)
-                    val intent = Intent(requireActivity(), NDMainActivity::class.java)
-                    startActivity(intent)
-                    requireActivity().finish()
+                    val newUserAccount = UserAccount(idUserAccount = userAccount.idUserAccount, email = userAccount.email, countryDefault = country)
+                    utilsFireStore.updateUserAccount(userAccount.idUserAccount.toString(),newUserAccount)
                 }
 
                 override fun createFailed() {
@@ -142,6 +141,21 @@ class CreatsMoneyFragment : Fragment() {
                 }
             })
             utilsFireStore.createMoneyAccount(moneyAccount)
+
+            utilsFireStore.setCBUpdateUserAccount(object :UtilsFireStore.CBUpdateUserAccount{
+                override fun updateSuccess() {
+                    val intent = Intent(requireActivity(), NDMainActivity::class.java)
+                    startActivity(intent)
+                    requireActivity().finish()
+                }
+
+                override fun updateFailed() {
+                    TODO("Not yet implemented")
+                }
+            })
+
+
+
 
         } catch (e: NumberFormatException) {
             Toast.makeText(
@@ -154,7 +168,7 @@ class CreatsMoneyFragment : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        dataViewMode.selectCountryToCreateMoneyAccount = Country()
+        dataViewMode.countryToCreateMoneyAccountDefault = Country()
     }
 
 }
