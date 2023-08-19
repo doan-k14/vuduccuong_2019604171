@@ -16,7 +16,7 @@ import com.cvd.qltaichinhcanhan.main.model.m_new.UserAccount
 import com.cvd.qltaichinhcanhan.main.model.m_new.getListCategoryCreateData
 import com.cvd.qltaichinhcanhan.main.n_adapter.AdapterIconCategory
 import com.cvd.qltaichinhcanhan.main.vm.DataViewMode
-import com.cvd.qltaichinhcanhan.utils.Utils
+import com.cvd.qltaichinhcanhan.utils.UtilsSharedP
 import com.cvd.qltaichinhcanhan.utils.UtilsFireStore
 import com.google.android.material.tabs.TabLayout
 
@@ -47,7 +47,7 @@ class CategoryFragment : BaseFragment() {
     }
 
     private fun initData() {
-        userAccount = Utils.getUserAccountLogin(requireContext())
+        userAccount = UtilsSharedP.getUserAccountLogin(requireContext())
         val listCategory =
             getListCategoryCreateData(requireContext(), userAccount.idUserAccount.toString())
         utilsFireStore = UtilsFireStore()

@@ -12,7 +12,6 @@ import com.cvd.qltaichinhcanhan.main.model.DataColor
 import androidx.core.content.ContextCompat
 import com.cvd.qltaichinhcanhan.main.model.m.IconR
 import com.cvd.qltaichinhcanhan.main.model.m_new.Category
-import com.cvd.qltaichinhcanhan.utils.Utils
 import com.cvd.qltaichinhcanhan.utils.UtilsColor
 
 class AdapterIconCategory(

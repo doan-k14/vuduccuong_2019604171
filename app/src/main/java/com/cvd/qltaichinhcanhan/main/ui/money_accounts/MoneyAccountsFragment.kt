@@ -2,19 +2,14 @@ package com.cvd.qltaichinhcanhan.main.ui.money_accounts
 
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.android.billingclient.api.*
-import com.android.billingclient.api.BillingFlowParams.ProductDetailsParams
-import com.android.billingclient.api.QueryProductDetailsParams.Product
 import com.cvd.qltaichinhcanhan.R
 import com.cvd.qltaichinhcanhan.databinding.FragmentAccountsBinding
 import com.cvd.qltaichinhcanhan.main.base.BaseFragment
@@ -23,9 +18,9 @@ import com.cvd.qltaichinhcanhan.main.model.m_new.IConVD
 import com.cvd.qltaichinhcanhan.main.model.m_new.MoneyAccount
 import com.cvd.qltaichinhcanhan.main.n_adapter.AdapterMoneyAccount
 import com.cvd.qltaichinhcanhan.main.vm.DataViewMode
-import com.cvd.qltaichinhcanhan.utils.Utils
+import com.cvd.qltaichinhcanhan.utils.LoadingDialog
+import com.cvd.qltaichinhcanhan.utils.UtilsSharedP
 import com.cvd.qltaichinhcanhan.utils.UtilsFireStore
-import com.google.common.collect.ImmutableList
 
 
 class MoneyAccountsFragment : BaseFragment() {
@@ -61,15 +56,18 @@ class MoneyAccountsFragment : BaseFragment() {
     }
 
     fun loadDataCountry(){
+        val loadingDialog = LoadingDialog(requireContext())
+        loadingDialog.showLoading()
         val utilsFireStore = UtilsFireStore()
         utilsFireStore.setCBListCountry(object : UtilsFireStore.CBListCountry {
             override fun getListSuccess(list: List<Country>) {
                 dataViewMode.listCountry = list
-                val userAccount = Utils.getUserAccountLogin(requireContext())
+                val userAccount = UtilsSharedP.getUserAccountLogin(requireContext())
                 utilsFireStore.getListMoneyAccount(userAccount.idUserAccount.toString())
             }
 
             override fun getListFailed() {
+                loadingDialog.hideLoading()
             }
         })
 
@@ -79,13 +77,14 @@ class MoneyAccountsFragment : BaseFragment() {
             override fun getListSuccess(list: List<MoneyAccount>) {
                 adapterMoneyAccount.updateData(list)
 
-                val countryDefault = Utils.getCountryDefault(requireContext())
-                val listMoneyAccount = checkUpdateCountry(true,countryDefault,dataViewMode.listCountry,list)
-                showSumMoney(listMoneyAccount,countryDefault)
+                val countryDefault = UtilsSharedP.getCountryDefault(requireContext())
+//                val listMoneyAccount = checkUpdateCountry(true,countryDefault,dataViewMode.listCountry,list)
+                showSumMoney(list,countryDefault)
+                loadingDialog.hideLoading()
             }
 
             override fun getListFailed() {
-
+                loadingDialog.hideLoading()
             }
         })
     }
@@ -131,6 +130,7 @@ class MoneyAccountsFragment : BaseFragment() {
         binding.textValueTotal.text = "${converMoneyShow(totalAmount.toFloat())} ${countryDefault.currencySymbol}"
     }
 
+    // update khi có tỉ giá tiền mới
     fun checkUpdateCountry(
         checkUpdate: Boolean,
         countryDefault: Country,
@@ -142,12 +142,13 @@ class MoneyAccountsFragment : BaseFragment() {
                 convertCurrencyBySelectedCountry(listCountry, countryDefault.idCountry!!)
             } else {
                 listCountry
-            } // cập nhật lại list money account -> cập nhật xong thì mới show
+            } // cập nhật lại list money account ( trên realtime) lần sau  -> cập nhật xong thì mới show
             return updateMoneyByCountryNew(listMoneyAccount, listNewCountry)
         }
         return listMoneyAccount
     }
 
+    // chuyển đổi tiền tệ ngay khi vào màn hình contry khi đã tạo tài khoản tiền
     fun convertCurrencyBySelectedCountry(
         countryList: List<Country>,
         selectedCountryId: Int
@@ -213,7 +214,7 @@ class MoneyAccountsFragment : BaseFragment() {
 
         binding.imgAddAccount.setOnClickListener {
             IConVD.formatListIConVC()
-            val country = Utils.getCountryDefault(requireContext())
+            val country = UtilsSharedP.getCountryDefault(requireContext())
             dataViewMode.createMoneyAccount = MoneyAccount(icon = IConVD(idColor = 1), country = country)
             findNavController().navigate(R.id.action_nav_accounts_to_createMoneyAccountFragment)
         }

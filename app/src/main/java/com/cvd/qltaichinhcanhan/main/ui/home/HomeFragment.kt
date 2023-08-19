@@ -8,7 +8,6 @@ import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.util.Log
 import android.view.*
 import android.widget.RadioGroup
@@ -23,18 +22,12 @@ import com.cvd.qltaichinhcanhan.R
 import com.cvd.qltaichinhcanhan.databinding.FragmentHomeBinding
 import com.cvd.qltaichinhcanhan.main.adapter.AdapterTransaction
 import com.cvd.qltaichinhcanhan.main.base.BaseFragment
-import com.cvd.qltaichinhcanhan.main.library.ChartUtils
-import com.cvd.qltaichinhcanhan.main.model.m.DefaultData
 import com.cvd.qltaichinhcanhan.main.model.m_convert.TransactionWithFullDetails
-import com.cvd.qltaichinhcanhan.main.model.m_r.Account
 import com.cvd.qltaichinhcanhan.main.model.m_r.CategoryType
 import com.cvd.qltaichinhcanhan.main.model.m_r.Country
-import com.cvd.qltaichinhcanhan.main.model.m_r.NotificationInfo
 import com.cvd.qltaichinhcanhan.main.model.query_model.MoneyAccountWithDetails
 import com.cvd.qltaichinhcanhan.main.model.query_model.TransactionWithDetails
 import com.cvd.qltaichinhcanhan.main.rdb.vm_data.DataViewMode
-import com.cvd.qltaichinhcanhan.utils.Constant
-import com.cvd.qltaichinhcanhan.utils.Utils
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.tabs.TabLayout
 import java.util.*

@@ -15,7 +15,7 @@ import com.cvd.qltaichinhcanhan.main.model.m.IconR
 import com.cvd.qltaichinhcanhan.main.model.m_new.Category
 import com.cvd.qltaichinhcanhan.main.vm.DataViewMode
 import com.cvd.qltaichinhcanhan.utils.LoadingDialog
-import com.cvd.qltaichinhcanhan.utils.Utils
+import com.cvd.qltaichinhcanhan.utils.UtilsSharedP
 import com.cvd.qltaichinhcanhan.utils.UtilsColor
 import com.cvd.qltaichinhcanhan.utils.UtilsFireStore
 
@@ -102,7 +102,7 @@ class EditCategoryFragment : BaseFragment() {
         binding.textSaveCategory.setOnClickListener {
             if (checkData(dataViewMode.listCategoryByType)) {
                 updateCategory()
-                Utils.showToast(requireContext(), "Cập nhật thành công")
+                UtilsSharedP.showToast(requireContext(), "Cập nhật thành công")
             } else {
 //                findNavController().popBackStack()
             }
@@ -128,7 +128,7 @@ class EditCategoryFragment : BaseFragment() {
 
             override fun updateFailed() {
                 loadingDialog.hideLoading()
-                Utils.showToast(requireContext(), "Create category failed")
+                UtilsSharedP.showToast(requireContext(), "Create category failed")
             }
         })
 
@@ -138,7 +138,7 @@ class EditCategoryFragment : BaseFragment() {
     private fun checkData(list: List<Category>): Boolean {
         val textName = binding.edtNameCategory.text
         if (textName.isEmpty()) {
-            Utils.showToast(
+            UtilsSharedP.showToast(
                 requireContext(),
                 requireContext().resources.getString(R.string.category_names_cannot_be_left_blank),
             )
@@ -154,7 +154,7 @@ class EditCategoryFragment : BaseFragment() {
                 val number = temp.toFloat()
                 plannedOutlay = number
             } catch (e: NumberFormatException) {
-                Utils.showToast(
+                UtilsSharedP.showToast(
                     requireContext(),
                     requireContext().resources.getString(R.string.you_entered_the_wrong_format)
                 )
@@ -221,7 +221,7 @@ class EditCategoryFragment : BaseFragment() {
 
                     override fun deleteFailed() {
                         loadingDialog.hideLoading()
-                        Utils.showToast(requireContext(), "Delete category failed")
+                        UtilsSharedP.showToast(requireContext(), "Delete category failed")
                     }
                 })
                 utilsFireStore.deleteCategoryById(category.idCategory)

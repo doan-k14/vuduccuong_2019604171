@@ -9,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
-import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.cvd.qltaichinhcanhan.R
@@ -20,7 +19,7 @@ import com.cvd.qltaichinhcanhan.main.rdb.datab.AppDatabase
 import com.cvd.qltaichinhcanhan.main.rdb.vm_data.DataViewMode
 import com.cvd.qltaichinhcanhan.splash.OnBoardingScreenActivity
 import com.cvd.qltaichinhcanhan.utils.Constant
-import com.cvd.qltaichinhcanhan.utils.Utils
+import com.cvd.qltaichinhcanhan.utils.UtilsSharedP
 
 
 class SettingFragment : BaseFragment() {
@@ -187,7 +186,7 @@ class SettingFragment : BaseFragment() {
                 // xoa all data lên cần nhập mk
                 customDialog.dismiss()
 
-                Utils.putBoolean(requireContext(), Constant.CREATE_MONEY_ACCOUNT, false)
+                UtilsSharedP.putBoolean(requireContext(), Constant.CREATE_MONEY_ACCOUNT, false)
                 dataViewMode.deleteAllData()
 
                 val intent = Intent(requireActivity(), OnBoardingScreenActivity::class.java)

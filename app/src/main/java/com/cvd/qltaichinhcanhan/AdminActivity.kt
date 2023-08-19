@@ -4,9 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import com.cvd.qltaichinhcanhan.databinding.ActivityAdminBinding
-import com.cvd.qltaichinhcanhan.main.model.m_r.Country
-import com.cvd.qltaichinhcanhan.utils.Constant
-import com.cvd.qltaichinhcanhan.utils.Utils
+import com.cvd.qltaichinhcanhan.main.model.m_new.Country
 import com.cvd.qltaichinhcanhan.utils.UtilsFireStore
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -39,7 +37,7 @@ class AdminActivity : AppCompatActivity() {
             }
         })
 
-        utilsFireStore.getListCountry()
+//        utilsFireStore.getListCountry()
 
 
 

@@ -11,7 +11,7 @@ class UtilsFireStore {
     // user account
 
     interface CallBackCreateAccountUser {
-        fun createSuccess(idUserAccount: String)
+        fun createSuccess(userAccount: UserAccount)
         fun createFailed()
     }
 
@@ -35,7 +35,7 @@ class UtilsFireStore {
                 if (newAccountUserId != null) {
                     userAccount.idUserAccount = newAccountUserId // Gán ID mới cho accountUser
                     newAccountUserRef.setValue(userAccount) // Thêm dữ liệu vào cơ sở dữ liệu
-                    callBackCreateAccountUser.createSuccess(newAccountUserId)
+                    callBackCreateAccountUser.createSuccess(userAccount)
                 } else {
                     callBackCreateAccountUser.createFailed()
                 }

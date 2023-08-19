@@ -13,7 +13,7 @@ import com.google.gson.Gson
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
-object Utils {
+object UtilsSharedP {
     private const val KEY_PREF = "CVD_2023"
 
     private fun getSharedPreference(context: Context): SharedPreferences? {
@@ -79,7 +79,7 @@ object Utils {
         val gson = Gson()
         return gson.fromJson(stringCountryDefault,Country::class.java)
     }
-    fun saveAccountDefault(context: Context,country: Country) {
+    fun saveCountryDefault(context: Context, country: Country) {
         val gson = Gson()
         val stringAccount = gson.toJson(country)
         putString(context,Constant.COUNTRY_DEFAULT,stringAccount)

@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.InputType
 import android.text.method.PasswordTransformationMethod
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,8 +15,6 @@ import com.cvd.qltaichinhcanhan.AdminActivity
 import com.cvd.qltaichinhcanhan.R
 import com.cvd.qltaichinhcanhan.databinding.FragmentLoginBinding
 import com.cvd.qltaichinhcanhan.main.NDMainActivity
-import com.cvd.qltaichinhcanhan.main.model.m_new.Country
-import com.cvd.qltaichinhcanhan.main.model.m_new.MoneyAccount
 import com.cvd.qltaichinhcanhan.main.model.m_new.UserAccount
 import com.cvd.qltaichinhcanhan.main.rdb.vm_data.DataViewMode
 import com.cvd.qltaichinhcanhan.utils.*
@@ -104,7 +101,7 @@ class LoginFragment : Fragment() {
     private fun checkDataLogin() {
         val email = binding.edtAccount.text.toString()
         val pass = binding.edtPass.text.toString()
-        if (email.isEmpty() || !Utils.isValidGmail(email)) {
+        if (email.isEmpty() || !UtilsSharedP.isValidGmail(email)) {
             Toast.makeText(
                 requireActivity(),
                 requireActivity().resources.getString(R.string.enter_email),
@@ -128,22 +125,25 @@ class LoginFragment : Fragment() {
         auth.signInWithEmailAndPassword(email, pass)
             .addOnCompleteListener(requireActivity()) { task ->
                 if (task.isSuccessful) {
-                    Utils.putBoolean(requireContext(), Constant.LOGIN_SUCCESS, true)
+                    // đăng nhập thành công
+                    UtilsSharedP.putBoolean(requireContext(), Constant.LOGIN_SUCCESS, true)
 
                     val utilsFireStore = UtilsFireStore()
                     utilsFireStore.setCBUserAccountLogin(object :
                         UtilsFireStore.CBUserAccountLogin {
                         override fun getSuccess(userAccount: UserAccount) {
-                            Utils.saveUserAccountLogin(requireContext(),userAccount)
-                            if(checkAdmin(userAccount)){
+                            // lưu thông tin tài khoản
+                            UtilsSharedP.saveUserAccountLogin(requireContext(),userAccount)
+                            // lưu quyền tài khoản
+                            UtilsSharedP.putBoolean(requireContext(),Constant.PERMISSION_ADMIN,checkAdmin(userAccount))
+                            if(checkAdmin(userAccount)){ // check quyền tài khoản
                                 loadingDialog.hideLoading()
-                                Utils.putBoolean(requireContext(),Constant.PERMISSION_ADMIN,true)
                                 val intent = Intent(requireActivity(), AdminActivity::class.java)
                                 startActivity(intent)
                                 requireActivity().finish()
-                            }else{
+                            }else{ // người dùng (kiểm tra tài khoản đã tạo tài khoản tiền mặc định chưa)
                                 if(userAccount.countryDefault!!.idCountry != 0){
-                                    Utils.saveAccountDefault(requireContext(), country = userAccount.countryDefault!!)
+                                    UtilsSharedP.saveCountryDefault(requireContext(), country = userAccount.countryDefault!!)
                                     loadingDialog.hideLoading()
                                     val intent = Intent(requireActivity(), NDMainActivity::class.java)
                                     startActivity(intent)
@@ -162,13 +162,8 @@ class LoginFragment : Fragment() {
                     utilsFireStore.getUserAccountLogin(email)
 
                 } else {
-
                     loadingDialog.hideLoading()
-                    Toast.makeText(
-                        requireActivity(),
-                        "Đăng nhập thất bại! Hãy đăng nhập lại!",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    UtilsToast.toastLong(requireContext(), "Đăng nhập thất bại! Hãy đăng nhập lại!")
                 }
             }
     }

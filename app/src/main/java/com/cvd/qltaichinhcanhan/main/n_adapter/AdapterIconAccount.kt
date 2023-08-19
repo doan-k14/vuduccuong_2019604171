@@ -2,15 +2,12 @@ package com.cvd.qltaichinhcanhan.main.n_adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.cvd.qltaichinhcanhan.R
 import com.cvd.qltaichinhcanhan.databinding.*
-import com.cvd.qltaichinhcanhan.main.model.m.IconR
 import com.cvd.qltaichinhcanhan.main.model.m_new.IConVD
-import com.cvd.qltaichinhcanhan.utils.Utils
 import com.cvd.qltaichinhcanhan.utils.UtilsColor
 
 class AdapterIconAccount(

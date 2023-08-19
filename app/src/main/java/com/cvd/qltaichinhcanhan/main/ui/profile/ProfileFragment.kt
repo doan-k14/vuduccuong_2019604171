@@ -17,8 +17,7 @@ import com.cvd.qltaichinhcanhan.main.model.m_r.Account
 import com.cvd.qltaichinhcanhan.main.rdb.vm_data.DataViewMode
 import com.cvd.qltaichinhcanhan.splash.OnBoardingScreenActivity
 import com.cvd.qltaichinhcanhan.utils.Constant
-import com.cvd.qltaichinhcanhan.utils.Utils
-import okhttp3.internal.Util
+import com.cvd.qltaichinhcanhan.utils.UtilsSharedP
 
 
 class ProfileFragment : BaseFragment() {
@@ -45,7 +44,7 @@ class ProfileFragment : BaseFragment() {
     }
 
     private fun initView() {
-        val userAccount = Utils.getUserAccountLogin(requireContext())
+        val userAccount = UtilsSharedP.getUserAccountLogin(requireContext())
         if (userAccount.idUserAccount != null) {
             binding.textNameEmail.text = userAccount.email
         }
@@ -64,7 +63,7 @@ class ProfileFragment : BaseFragment() {
                 resources.getString(R.string.text_ok),
                 {
                     customDialog.dismiss()
-                    Utils.putBoolean(requireContext(), Constant.LOGIN_SUCCESS, false)
+                    UtilsSharedP.putBoolean(requireContext(), Constant.LOGIN_SUCCESS, false)
                     val intent = Intent(requireActivity(), OnBoardingScreenActivity::class.java)
                     startActivity(intent)
                     requireActivity().finish()
@@ -89,7 +88,7 @@ class ProfileFragment : BaseFragment() {
                 // xoa all data lên cần nhập mk
                 customDialog.dismiss()
 
-                Utils.putBoolean(requireContext(), Constant.CREATE_MONEY_ACCOUNT, false)
+                UtilsSharedP.putBoolean(requireContext(), Constant.CREATE_MONEY_ACCOUNT, false)
                 dataViewMode.deleteAllData()
 
                 val intent = Intent(requireActivity(), OnBoardingScreenActivity::class.java)

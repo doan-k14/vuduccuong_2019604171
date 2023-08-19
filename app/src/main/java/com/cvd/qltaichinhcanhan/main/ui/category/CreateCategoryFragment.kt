@@ -17,7 +17,7 @@ import com.cvd.qltaichinhcanhan.main.model.m_new.Category
 import com.cvd.qltaichinhcanhan.main.vm.DataViewMode
 import com.cvd.qltaichinhcanhan.splash.adapter.AdapterColor
 import com.cvd.qltaichinhcanhan.utils.LoadingDialog
-import com.cvd.qltaichinhcanhan.utils.Utils
+import com.cvd.qltaichinhcanhan.utils.UtilsSharedP
 import com.cvd.qltaichinhcanhan.utils.UtilsColor
 import com.cvd.qltaichinhcanhan.utils.UtilsFireStore
 
@@ -117,7 +117,7 @@ class CreateCategoryFragment : BaseFragment() {
             if (checkData(dataViewMode.listCategoryByType)) {
                 createCategory()
             } else {
-                Utils.showToast(requireContext(), "Vui lòng nhập dữ liệu đúng định dạng")
+                UtilsSharedP.showToast(requireContext(), "Vui lòng nhập dữ liệu đúng định dạng")
             }
         }
     }
@@ -125,7 +125,7 @@ class CreateCategoryFragment : BaseFragment() {
     private fun createCategory() {
         val loadingDialog = LoadingDialog(requireContext())
         loadingDialog.showLoading()
-        val userAccount = Utils.getUserAccountLogin(requireContext())
+        val userAccount = UtilsSharedP.getUserAccountLogin(requireContext())
         mCreateCategory.idUserAccount = userAccount.idUserAccount
 
         val utilsFireStore = UtilsFireStore()
@@ -139,7 +139,7 @@ class CreateCategoryFragment : BaseFragment() {
 
             override fun createFailed() {
                 loadingDialog.hideLoading()
-                Utils.showToast(requireContext(), "Create category failed")
+                UtilsSharedP.showToast(requireContext(), "Create category failed")
             }
 
         })

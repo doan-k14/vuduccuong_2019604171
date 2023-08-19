@@ -1,7 +1,6 @@
 package com.cvd.qltaichinhcanhan.main.ui.category
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,14 +9,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.cvd.qltaichinhcanhan.R
 import com.cvd.qltaichinhcanhan.databinding.FragmentAddCategoryBinding
 import com.cvd.qltaichinhcanhan.main.model.m_new.Category
 import com.cvd.qltaichinhcanhan.main.model.m_new.UserAccount
 import com.cvd.qltaichinhcanhan.main.model.m_new.getListCategoryCreateData
 import com.cvd.qltaichinhcanhan.main.n_adapter.AdapterIconCategory
 import com.cvd.qltaichinhcanhan.main.vm.DataViewMode
-import com.cvd.qltaichinhcanhan.utils.Utils
+import com.cvd.qltaichinhcanhan.utils.UtilsSharedP
 import com.cvd.qltaichinhcanhan.utils.UtilsFireStore
 
 
@@ -48,7 +46,7 @@ class AddCategoryFragment : Fragment() {
     }
 
     private fun initData() {
-        userAccount = Utils.getUserAccountLogin(requireContext())
+        userAccount = UtilsSharedP.getUserAccountLogin(requireContext())
         val listCategory =
             getListCategoryCreateData(requireContext(), userAccount.idUserAccount.toString())
         utilsFireStore = UtilsFireStore()

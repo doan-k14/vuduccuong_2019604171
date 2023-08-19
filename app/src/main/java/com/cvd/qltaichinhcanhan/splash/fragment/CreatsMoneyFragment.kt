@@ -87,8 +87,7 @@ class CreatsMoneyFragment : Fragment() {
         }
 
         binding.startButton.setOnClickListener {
-            val value =
-                MoneyTextWatcher.parseCurrencyValue(binding.edtInitialBalance.text.toString())
+            val value = MoneyTextWatcher.parseCurrencyValue(binding.edtInitialBalance.text.toString())
             val temp = value.toString()
             checkDataMoneyAccount(temp, dataViewMode.countryToCreateMoneyAccountDefault)
         }
@@ -96,25 +95,17 @@ class CreatsMoneyFragment : Fragment() {
 
     private fun checkDataMoneyAccount(temp: String, country: Country) {
         if (binding.edtInitialBalance.text.isEmpty()) {
-            Toast.makeText(
-                requireContext(),
-                requireContext().getString(R.string.please_enter_data),
-                Toast.LENGTH_SHORT
-            ).show()
+            UtilsToast.toastLong( requireContext(), requireContext().getString(R.string.please_enter_data))
             return
         }
         if (country.idCountry == 0) {
-            Toast.makeText(
-                requireContext(),
-                requireContext().getString(R.string.please_select_currency),
-                Toast.LENGTH_SHORT
-            ).show()
+            UtilsToast.toastLong( requireContext(),requireContext().getString(R.string.please_select_currency),)
             return
         }
         try {
             val loadingDialog = LoadingDialog(requireContext())
             loadingDialog.showLoading()
-            val userAccount = Utils.getUserAccountLogin(requireContext())
+            val userAccount = UtilsSharedP.getUserAccountLogin(requireContext())
 
             val moneyAccount = MoneyAccount(
                 "",
@@ -130,8 +121,7 @@ class CreatsMoneyFragment : Fragment() {
             utilsFireStore.setCallBackCreateMoneyAccount(object :
                 UtilsFireStore.CallBackCreateMoneyAccount {
                 override fun createSuccess(idUserAccount: String) {
-                    loadingDialog.hideLoading()
-                    Utils.saveAccountDefault(requireContext(),country)
+                    UtilsSharedP.saveCountryDefault(requireContext(),country)
                     val newUserAccount = UserAccount(idUserAccount = userAccount.idUserAccount, email = userAccount.email, countryDefault = country)
                     utilsFireStore.updateUserAccount(userAccount.idUserAccount.toString(),newUserAccount)
                 }
@@ -144,18 +134,16 @@ class CreatsMoneyFragment : Fragment() {
 
             utilsFireStore.setCBUpdateUserAccount(object :UtilsFireStore.CBUpdateUserAccount{
                 override fun updateSuccess() {
+                    loadingDialog.hideLoading()
                     val intent = Intent(requireActivity(), NDMainActivity::class.java)
                     startActivity(intent)
                     requireActivity().finish()
                 }
 
                 override fun updateFailed() {
-                    TODO("Not yet implemented")
+                    loadingDialog.hideLoading()
                 }
             })
-
-
-
 
         } catch (e: NumberFormatException) {
             Toast.makeText(

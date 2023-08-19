@@ -123,29 +123,27 @@ class SignUpFragment : Fragment() {
                     createUserAccount(email)
                 } else {
                     loadingDialog.hideLoading()
-                    Utils.showToast(requireContext(), "Tạo tài khoản thành công thất bại!")
+                    UtilsToast.toastLong(requireContext(), "Tạo tài khoản thành công thất bại!")
                 }
             }
     }
 
     private fun createUserAccount(email: String) {
         val utilsFireStore = UtilsFireStore()
-
         utilsFireStore.setCallBackCreateAccountUser(object :
             UtilsFireStore.CallBackCreateAccountUser {
-            override fun createSuccess(idUserAccount: String) {
-                val userAccount = UserAccount(idUserAccount,email,countryDefault = Country())
+            override fun createSuccess(userAccount: UserAccount) {
                 val gson = Gson()
                 val stringUserAccount = gson.toJson(userAccount)
-                Utils.putString(requireContext(),Constant.USER_LOGIN_SUCCESS,stringUserAccount)
-                Utils.putBoolean(requireContext(),Constant.LOGIN_SUCCESS,true)
+                UtilsSharedP.putString(requireContext(),Constant.USER_LOGIN_SUCCESS,stringUserAccount)
+                UtilsSharedP.putBoolean(requireContext(),Constant.LOGIN_SUCCESS,true)
                 loadingDialog.hideLoading()
                 findNavController().navigate(R.id.action_signUpFragment_to_creatsMoneyFragment)
             }
 
-
             override fun createFailed() {
-
+                loadingDialog.hideLoading()
+                UtilsSharedP.putBoolean(requireContext(),Constant.LOGIN_SUCCESS,false)
             }
         })
 

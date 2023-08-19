@@ -11,13 +11,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.navigation.fragment.findNavController
 import com.cvd.qltaichinhcanhan.R
 import com.cvd.qltaichinhcanhan.databinding.ActivityNdmainBinding
 import com.cvd.qltaichinhcanhan.main.inf.MyCallback
 import com.cvd.qltaichinhcanhan.main.model.m_r.Account
-import com.cvd.qltaichinhcanhan.utils.Constant
-import com.cvd.qltaichinhcanhan.utils.Utils
+import com.cvd.qltaichinhcanhan.utils.UtilsSharedP
 
 class NDMainActivity : AppCompatActivity(), MyCallback {
 
@@ -39,7 +37,7 @@ class NDMainActivity : AppCompatActivity(), MyCallback {
         textNameAccount = headerView.findViewById<TextView>(R.id.text_name_account)
         imageAccount = headerView.findViewById<ImageView>(R.id.image_account)
 
-        val userAccount = Utils.getUserAccountLogin(this)
+        val userAccount = UtilsSharedP.getUserAccountLogin(this)
 
         textNameAccount.text = userAccount.email
         imageAccount.setImageResource(R.drawable.ic_user_circle)

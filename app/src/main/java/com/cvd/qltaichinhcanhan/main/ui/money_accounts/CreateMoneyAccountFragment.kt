@@ -10,8 +10,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.cvd.qltaichinhcanhan.R
 import com.cvd.qltaichinhcanhan.databinding.FragmentCreateMoneyAccountBinding
-import com.cvd.qltaichinhcanhan.databinding.FragmentCreatsMoneyBinding
-import com.cvd.qltaichinhcanhan.databinding.FragmentEditAccountBinding
 import com.cvd.qltaichinhcanhan.main.base.BaseFragment
 import com.cvd.qltaichinhcanhan.main.library.MoneyTextWatcher
 import com.cvd.qltaichinhcanhan.main.model.m.IconR
@@ -22,7 +20,7 @@ import com.cvd.qltaichinhcanhan.main.n_adapter.AdapterIconAccount
 import com.cvd.qltaichinhcanhan.main.vm.DataViewMode
 import com.cvd.qltaichinhcanhan.splash.adapter.AdapterColor
 import com.cvd.qltaichinhcanhan.utils.LoadingDialog
-import com.cvd.qltaichinhcanhan.utils.Utils
+import com.cvd.qltaichinhcanhan.utils.UtilsSharedP
 import com.cvd.qltaichinhcanhan.utils.UtilsFireStore
 
 
@@ -146,20 +144,20 @@ class CreateMoneyAccountFragment : BaseFragment() {
         val temp = value.toString()
         var number = 0F
         if (binding.edtTotal.text.isEmpty()) {
-            Utils.showToast(requireContext(), resources.getString(R.string.please_enter_the_value))
+            UtilsSharedP.showToast(requireContext(), resources.getString(R.string.please_enter_the_value))
             return false
         }
         try {
             number = temp.toFloat()
         } catch (e: NumberFormatException) {
-            Utils.showToast(requireContext(), resources.getString(R.string.you_entered_the_wrong_format))
+            UtilsSharedP.showToast(requireContext(), resources.getString(R.string.you_entered_the_wrong_format))
             return false
         }
 
         mMoneyAccount.moneyAccountName = textName
         mMoneyAccount.amountMoneyAccount = number
 
-        mMoneyAccount.idUserAccount = Utils.getUserAccountLogin(requireContext()).idUserAccount.toString()
+        mMoneyAccount.idUserAccount = UtilsSharedP.getUserAccountLogin(requireContext()).idUserAccount.toString()
         if(mMoneyAccount.icon.idIConVD == null){
             return false
         }
