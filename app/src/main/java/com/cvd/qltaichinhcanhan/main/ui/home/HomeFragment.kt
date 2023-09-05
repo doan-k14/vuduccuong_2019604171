@@ -22,12 +22,14 @@ import com.cvd.qltaichinhcanhan.R
 import com.cvd.qltaichinhcanhan.databinding.FragmentHomeBinding
 import com.cvd.qltaichinhcanhan.main.adapter.AdapterTransaction
 import com.cvd.qltaichinhcanhan.main.base.BaseFragment
+import com.cvd.qltaichinhcanhan.main.library.ChartUtils
 import com.cvd.qltaichinhcanhan.main.model.m_convert.TransactionWithFullDetails
 import com.cvd.qltaichinhcanhan.main.model.m_r.CategoryType
 import com.cvd.qltaichinhcanhan.main.model.m_r.Country
 import com.cvd.qltaichinhcanhan.main.model.query_model.MoneyAccountWithDetails
 import com.cvd.qltaichinhcanhan.main.model.query_model.TransactionWithDetails
 import com.cvd.qltaichinhcanhan.main.rdb.vm_data.DataViewMode
+import com.cvd.qltaichinhcanhan.utils.LoadingData
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.tabs.TabLayout
 import java.util.*
@@ -75,61 +77,24 @@ class HomeFragment : BaseFragment() {
 
     private fun initData() {
 
-        // lấy ra loại tiền mặc định
-        getDataCountryDefault()
+        val loadingData = LoadingData()
+        loadingData.setCBListCountry(object :LoadingData.CBListCountry{
+            override fun getListSuccess(list: List<com.cvd.qltaichinhcanhan.main.model.m_new.Country>) {
 
-        var listTransactionWithDetails = listOf<TransactionWithDetails>()
+            }
+
+            override fun getListFailed() {
+
+            }
+        })
+        loadingData.loadingCountry(requireContext())
+
         // lắng nghe list transaction lấy từ csdl
-        dataViewMode.listTransactionWithDetailsByTypeLiveData.observe(requireActivity()) {
-            if (checkScreenHome) {
-//                Log.e("view"," initData home: ${it.size}")
-                listTransactionWithDetails = listOf()
-                listTransactionWithDetails = it
-                if (it.isNotEmpty()) {
-                    dataViewMode.getAllMoneyAccountsWithDetails()
-                } else {
-                    dataViewMode.getAllMoneyAccountsWithDetails()
-                    listTransactionWithFullDetails = listOf()
 //                    ChartUtils.pieChart(requireActivity(),
 //                        listOf(),
 //                        binding.barChart,
 //                        currencySymbol)
 //                    adapterTransaction.updateData(listOf())
-                }
-            }
-        }
-
-        var country = Country()
-        dataViewMode.countryDefault.observe(requireActivity()) {
-//            country = it
-        }
-        var listMoneyAccountWithDetails = listOf<MoneyAccountWithDetails>()
-        // lắng nghe list moneyAccount lấy từ csdl
-
-        dataViewMode.moneyAccountsWithDetails.observe(requireActivity()) {
-            if (checkScreenHome) {
-                Log.e("test1","home")
-                listMoneyAccountWithDetails = listOf()
-                listMoneyAccountWithDetails = it
-                val moneyAccount = dataViewMode.selectMoneyAccountFilterHome
-
-                if (moneyAccount.moneyAccount != null) {
-                    mergeTransactionWithSelectMoneyAccount(listTransactionWithDetails,
-                        moneyAccount)
-                    binding.textTitleTotal.text = moneyAccount.moneyAccount.moneyAccountName
-                    binding.textTotalMoney.text =
-                        "${convertFloatToString((moneyAccount.moneyAccount.amountMoneyAccount!!) / (moneyAccount.country?.exchangeRate!!))} ${country.currencySymbol}"
-                } else {
-                    setTextTotalMoney(listMoneyAccountWithDetails, country)
-                    if (listTransactionWithDetails.isNotEmpty() && listMoneyAccountWithDetails.isNotEmpty()) {
-                        // hợp nhất để tạo ra class transaction với đầy đủ các thông tin liên quan qua khóa ngoài
-                        mergeTransactionWithMoneyAccount(listTransactionWithDetails,
-                            listMoneyAccountWithDetails)
-                    }
-                }
-
-            }
-        }
     }
 
     private fun initEvent() {
@@ -138,7 +103,7 @@ class HomeFragment : BaseFragment() {
         }
 
         binding.imgAdd1.setOnClickListener {
-            dataViewMode.checkInputScreenAddTransaction = 0
+
             findNavController().navigate(R.id.action_nav_home_to_addTransactionFragment)
         }
 
@@ -203,10 +168,10 @@ class HomeFragment : BaseFragment() {
     private fun createTabLayoutIOrE() {
         if (!dataViewMode.checkTypeTabLayoutHomeTransaction) {
             binding.tabLayout.selectTab(binding.tabLayout.getTabAt(0))
-            dataViewMode.getAllTransactionWithDetailsByTypeCategory(CategoryType.EXPENSE.toString())
+            // get transaction = ex
         } else {
             binding.tabLayout.selectTab(binding.tabLayout.getTabAt(1))
-            dataViewMode.getAllTransactionWithDetailsByTypeCategory(CategoryType.INCOME.toString())
+            // get transaction = in
         }
 
         binding.tabLayout.addOnTabSelectedListener(
@@ -215,10 +180,10 @@ class HomeFragment : BaseFragment() {
                     val position = tab?.position
                     if (position == 0) {
                         dataViewMode.checkTypeTabLayoutHomeTransaction = false
-                        dataViewMode.getAllTransactionWithDetailsByTypeCategory(CategoryType.EXPENSE.toString())
+
                     } else if (position == 1) {
                         dataViewMode.checkTypeTabLayoutHomeTransaction = true
-                        dataViewMode.getAllTransactionWithDetailsByTypeCategory(CategoryType.INCOME.toString())
+
                     }
                 }
 

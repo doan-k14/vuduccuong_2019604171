@@ -10,12 +10,20 @@ import com.cvd.qltaichinhcanhan.main.model.m_new.MoneyAccount
 class DataViewMode(application: Application) : AndroidViewModel(application) {
 
 
+    var checkCallCountry: Boolean = false
+    var checkTypeTabLayoutHomeTransaction: Boolean = false
+
+
     var listCountry: List<Country> = listOf()
 
     // money account
     var checkInputScreenMoneyAccount: Int = 0
 
     var countryToCreateMoneyAccountDefault = Country()
+
+    var checkCallMoneyAccount: Boolean = false
+
+    var listMoneyAccount:List<MoneyAccount> = listOf()
 
     var createMoneyAccount = MoneyAccount(icon = IConVD(), country = Country())
 

@@ -77,7 +77,7 @@ object UtilsSharedP {
     fun getCountryDefault(context: Context): Country {
         val stringCountryDefault = getString(context,Constant.COUNTRY_DEFAULT)
         val gson = Gson()
-        return gson.fromJson(stringCountryDefault,Country::class.java)
+        return gson.fromJson(stringCountryDefault,Country::class.java)?: Country()
     }
     fun saveCountryDefault(context: Context, country: Country) {
         val gson = Gson()

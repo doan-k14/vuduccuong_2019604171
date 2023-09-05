@@ -142,7 +142,7 @@ class LoginFragment : Fragment() {
                                 startActivity(intent)
                                 requireActivity().finish()
                             }else{ // người dùng (kiểm tra tài khoản đã tạo tài khoản tiền mặc định chưa)
-                                if(userAccount.countryDefault!!.idCountry != 0){
+                                if(userAccount.countryDefault != null){
                                     UtilsSharedP.saveCountryDefault(requireContext(), country = userAccount.countryDefault!!)
                                     loadingDialog.hideLoading()
                                     val intent = Intent(requireActivity(), NDMainActivity::class.java)

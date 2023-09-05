@@ -57,29 +57,16 @@ class MoneyAccountsFragment : BaseFragment() {
 
     fun loadDataCountry(){
         val loadingDialog = LoadingDialog(requireContext())
-        loadingDialog.showLoading()
         val utilsFireStore = UtilsFireStore()
-        utilsFireStore.setCBListCountry(object : UtilsFireStore.CBListCountry {
-            override fun getListSuccess(list: List<Country>) {
-                dataViewMode.listCountry = list
-                val userAccount = UtilsSharedP.getUserAccountLogin(requireContext())
-                utilsFireStore.getListMoneyAccount(userAccount.idUserAccount.toString())
-            }
-
-            override fun getListFailed() {
-                loadingDialog.hideLoading()
-            }
-        })
-
-        utilsFireStore.getListCountry()
+        val countryDefault = UtilsSharedP.getCountryDefault(requireContext())
 
         utilsFireStore.setCBListMoneyAccount(object : UtilsFireStore.CBListMoneyAccount {
             override fun getListSuccess(list: List<MoneyAccount>) {
+                showSumMoney(list,countryDefault)
+                dataViewMode.listMoneyAccount = list
                 adapterMoneyAccount.updateData(list)
 
-                val countryDefault = UtilsSharedP.getCountryDefault(requireContext())
-//                val listMoneyAccount = checkUpdateCountry(true,countryDefault,dataViewMode.listCountry,list)
-                showSumMoney(list,countryDefault)
+                dataViewMode.checkCallMoneyAccount = true
                 loadingDialog.hideLoading()
             }
 
@@ -87,6 +74,16 @@ class MoneyAccountsFragment : BaseFragment() {
                 loadingDialog.hideLoading()
             }
         })
+        if(!dataViewMode.checkCallMoneyAccount){
+            val userAccount =UtilsSharedP.getUserAccountLogin(requireContext())
+            userAccount.idUserAccount?.let {
+                utilsFireStore.getListMoneyAccount(it)
+                loadingDialog.showLoading()
+            }
+        }else{
+            adapterMoneyAccount.updateData(dataViewMode.listMoneyAccount)
+            showSumMoney(dataViewMode.listMoneyAccount,countryDefault)
+        }
     }
 
     private fun initView() {
@@ -125,65 +122,10 @@ class MoneyAccountsFragment : BaseFragment() {
     private fun showSumMoney(listMoneyAccount: List<MoneyAccount>,countryDefault: Country) {
         var totalAmount = 0.0
         for (i in listMoneyAccount) {
-            totalAmount += i.amountMoneyAccount!!.toFloat() / i.country!!.exchangeRate!!.toFloat()
+            totalAmount += i.amountMoneyAccount!!.toFloat() * i.country!!.exchangeRate!!.toFloat()
         }
         binding.textValueTotal.text = "${converMoneyShow(totalAmount.toFloat())} ${countryDefault.currencySymbol}"
     }
-
-    // update khi có tỉ giá tiền mới
-    fun checkUpdateCountry(
-        checkUpdate: Boolean,
-        countryDefault: Country,
-        listCountry: List<Country>,
-        listMoneyAccount: List<MoneyAccount>
-    ): List<MoneyAccount> {
-        if (checkUpdate) {
-            var listNewCountry = if (countryDefault.currencyCode != "USD") {
-                convertCurrencyBySelectedCountry(listCountry, countryDefault.idCountry!!)
-            } else {
-                listCountry
-            } // cập nhật lại list money account ( trên realtime) lần sau  -> cập nhật xong thì mới show
-            return updateMoneyByCountryNew(listMoneyAccount, listNewCountry)
-        }
-        return listMoneyAccount
-    }
-
-    // chuyển đổi tiền tệ ngay khi vào màn hình contry khi đã tạo tài khoản tiền
-    fun convertCurrencyBySelectedCountry(
-        countryList: List<Country>,
-        selectedCountryId: Int
-    ): List<Country> {
-        val selectedCountry = countryList.find { it.idCountry == selectedCountryId }
-
-        if (selectedCountry != null) {
-            val selectedExchangeRate = selectedCountry.exchangeRate ?: 1f
-
-            return countryList.map { country ->
-                val convertedRate = if (country.idCountry == selectedCountryId) {
-                    1f
-                } else {
-                    (country.exchangeRate ?: 1f) / selectedExchangeRate
-                }
-
-                country.copy(exchangeRate = convertedRate)
-            }
-        }
-
-        return countryList
-    }
-
-    private fun updateMoneyByCountryNew(listMoneyAccount: List<MoneyAccount>, listCountry: List<Country>): List<MoneyAccount> {
-        val updatedList = listMoneyAccount.map { moneyAccount ->
-            val matchingCountry = listCountry.find { it.idCountry == moneyAccount.country.idCountry }
-            if (matchingCountry != null) {
-                moneyAccount.copy(country = matchingCountry)
-            } else {
-                moneyAccount
-            }
-        }
-        return updatedList
-    }
-
 
     private fun initEvent() {
         binding.btnNavigation.setOnClickListener {

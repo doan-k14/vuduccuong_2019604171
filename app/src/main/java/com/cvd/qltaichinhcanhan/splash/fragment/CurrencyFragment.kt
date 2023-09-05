@@ -18,6 +18,7 @@ import com.cvd.qltaichinhcanhan.databinding.FragmentCurrencyBinding
 import com.cvd.qltaichinhcanhan.main.model.m_new.Country
 import com.cvd.qltaichinhcanhan.main.n_adapter.AdapterCountry
 import com.cvd.qltaichinhcanhan.main.vm.DataViewMode
+import com.cvd.qltaichinhcanhan.utils.LoadingData
 import com.cvd.qltaichinhcanhan.utils.LoadingDialog
 import com.cvd.qltaichinhcanhan.utils.UtilsFireStore
 import com.cvd.qltaichinhcanhan.utils.UtilsSharedP
@@ -29,7 +30,7 @@ class CurrencyFragment : Fragment() {
     lateinit var dataViewMode: DataViewMode
 
 
-    var listCountry = listOf<Country>()
+    var mListCountry = listOf<Country>()
     var position = 0
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -69,16 +70,16 @@ class CurrencyFragment : Fragment() {
     }
 
     private fun initData() {
-        val country = UtilsSharedP.getCountryDefault(requireContext())
         val loadingDialog = LoadingDialog(requireContext())
-        loadingDialog.showLoading()
-
-        val utilsFireStore = UtilsFireStore()
-        utilsFireStore.setCBListCountry(object : UtilsFireStore.CBListCountry {
+        val loadingData = LoadingData()
+        loadingData.setCBListCountry(object : LoadingData.CBListCountry{
             override fun getListSuccess(list: List<Country>) {
                 loadingDialog.hideLoading()
+                dataViewMode.checkCallCountry = true
+                dataViewMode.listCountry = list
+                mListCountry = list
                 binding.textNotData.visibility = View.GONE
-                checkConvertExchangeRate(list,country)
+                adapterCountry.updateData(list)
             }
 
             override fun getListFailed() {
@@ -86,8 +87,13 @@ class CurrencyFragment : Fragment() {
                 binding.textNotData.visibility = View.VISIBLE
             }
         })
-
-        utilsFireStore.getListCountry()
+        if(!dataViewMode.checkCallCountry){
+            loadingData.loadingCountry(requireContext())
+            loadingDialog.showLoading()
+        }else{
+            mListCountry = dataViewMode.listCountry
+            adapterCountry.updateData(mListCountry)
+        }
     }
 
     private fun initEvent() {
@@ -132,7 +138,7 @@ class CurrencyFragment : Fragment() {
                 adapterCountry.updateData(
                     filterList(
                         s.toString(),
-                        listCountry
+                        mListCountry
                     )
                 )
                 if (s!!.isEmpty()) {
@@ -188,38 +194,4 @@ class CurrencyFragment : Fragment() {
             requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(editText.windowToken, 0)
     }
-
-    private fun checkConvertExchangeRate(list: List<Country>, country: Country) {
-        if(country.idCountry != null){
-            val listNewCountry = convertCurrencyBySelectedCountry(list, country.idCountry)
-            listCountry = listNewCountry
-        }else{
-            listCountry = list
-        }
-        adapterCountry.updateData(listCountry)
-    }
-    private fun convertCurrencyBySelectedCountry(
-        countryList: List<Country>,
-        selectedCountryId: Int
-    ): List<Country> {
-        val selectedCountry = countryList.find { it.idCountry == selectedCountryId }
-
-        if (selectedCountry != null) {
-            val selectedExchangeRate = selectedCountry.exchangeRate ?: 1f
-
-            return countryList.map { country ->
-                val convertedRate = if (country.idCountry == selectedCountryId) {
-                    1f
-                } else {
-                    (country.exchangeRate ?: 1f) / selectedExchangeRate
-                }
-
-                country.copy(exchangeRate = convertedRate)
-            }
-        }
-
-        return countryList
-    }
-
-
 }
